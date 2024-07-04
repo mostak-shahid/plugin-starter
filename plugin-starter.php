@@ -13,9 +13,9 @@
  * @package           Plugin_Starter
  *
  * @wordpress-plugin
- * Plugin Name:       Ultimate Quick View for WooCommerce
+ * Plugin Name:       Plugin Starter
  * Plugin URI:        https://https://www.programmelab.com/plugin-starter/
- * Description:       Ultimate Quick View Plugin for WooCommerce
+ * Description:       Plugin starter boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Programmelab
  * Author URI:        https://www.programmelab.com//
@@ -36,7 +36,7 @@ if (!defined('WPINC')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
-define('PLUGIN_STARTER_NAME', __('Ultimate Quick View for WooCommerce', 'plugin-starter'));
+define('PLUGIN_STARTER_NAME', __('Plugin Starter', 'plugin-starter'));
 define('PLUGIN_STARTER_PATH', plugin_dir_url(__FILE__));
 
 /**
@@ -62,7 +62,7 @@ function plugin_starter_deactivate()
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
-require plugin_dir_path(__FILE__) . '/vendor/autoload.php';
+// require plugin_dir_path(__FILE__) . '/vendor/autoload.php';
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
@@ -78,10 +78,44 @@ require plugin_dir_path(__FILE__) . 'includes/class-plugin-starter.php';
  *
  * @since    1.0.0
  */
-function plugin_starter_run()
-{
+// function plugin_starter_run()
+// {
 
-	$plugin = new Plugin_Starter();
-	$plugin->run();
+// 	$plugin = new Plugin_Starter();
+// 	$plugin->run();
+// }
+// plugin_starter_run();
+
+
+require_once( 'plugin_starter_registry.php' );
+$registry = Plugin_Starter_Registry::get_instance();
+$registry->add( 'plugin_starter', new Plugin_Starter() );
+$registry->get( 'plugin_starter' )->run();
+
+
+
+/**
+ * Now you can access to your plugin/functions.
+ * Example:
+ */
+////////////////////////////////////////////////
+// ADD TO FILE -> anywhere after "plugins_loaded"
+// @link: http://rachievee.com/the-wordpress-hooks-firing-sequence/
+
+// ...
+
+// ACCESS FROM ADMIN FROM PUBLIC
+function access_test() {
+
+    $registry = Plugin_Starter_Registry::get_instance();
+    $plugin_starter = $registry->get( 'plugin_starter' );
+
+    $test_function_from_main = $plugin_starter->your_function_from_main();
+    // - OR -
+    $test_function_from_main = $registry->get( 'plugin_starter' )->your_function_from_main();
+
+    // - MORE EXAPLES -
+    $test_function_from_admin = $plugin_starter->admin->your_function_from_admin();
+    $test_function_from_public = $plugin_starter->public->your_function_from_public();
+
 }
-plugin_starter_run();

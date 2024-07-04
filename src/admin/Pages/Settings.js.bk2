@@ -186,7 +186,7 @@ const Settings = () => {
                                                                                 <img src={options._shop_page_banner_internal_image.thumbnail} className="option-image" />
                                                                             </span>
                                                                             <span 
-                                                                                className="store-banner-remove-image" 
+                                                                                className="plugin-starter-remove-image" 
                                                                                 data-base={noImageAvailable}
 
                                                                                 ></span>

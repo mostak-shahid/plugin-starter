@@ -1,5 +1,5 @@
 {
-  "name": "ultimate-quick-view-for-woocommerce",
+  "name": "plugin-starter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,14 +21,24 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "^19.2.4",
+    "@wordpress/scripts": "^26.0.0",
     "@wordpress/babel-plugin-makepot": "^6.1.0",
     "autoprefixer": "^10.4.7",
     "ncp": "^2.0.0",
     "npm-run-all": "^4.1.5",
-    "replace-in-file": "^7.2.0"
+    "replace-in-file": "^7.2.0",
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "babel-loader": "^9.1.3",
+    "buffer": "^6.0.3",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "process": "^0.11.10",
+    "style-loader": "^4.0.0"
   },
   "dependencies": {
+    "@wordpress/url": "^4.1.0",
     "@wordpress/components": "^28.2.0",
     "@wordpress/element": "^6.2.0",
     "@wordpress/media-utils": "^5.2.0",
@@ -37,6 +47,7 @@
     "react-bootstrap": "^2.10.3",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.24.0",
-    "@wordpress/url": "^4.1.0"
+    "react-select": "^5.8.0",
+    "react-toastify": "^10.0.5"
   }
 }

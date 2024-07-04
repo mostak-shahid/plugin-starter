@@ -3,7 +3,7 @@ const {render} = wp.element;
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App';
+import App from './admin/App';
 /*
 if (document.getElementById('plugin-starter-settings')) {
   render(<App/>, document.getElementById('plugin-starter-settings'));

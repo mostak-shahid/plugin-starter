@@ -12,13 +12,13 @@ const App = () => (
     <div>
       <nav>
         <ul>
-          <li><Link to="?page=store-banner">Home</Link></li>
+          <li><Link to="?page=plugin-starter">Home</Link></li>
           <li><Link to="/settings">Settings</Link></li>
           <li><Link to="/about">About</Link></li>
         </ul>
       </nav>
       <Routes>
-        <Route path="?page=store-banner" element={<Home />} />
+        <Route path="?page=plugin-starter" element={<Home />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/about" element={<About />} />
       </Routes>
@@ -30,9 +30,9 @@ export default App;
 */
 import React from "react";
 import {
-  NavLink,
-  BrowserRouter as Router,
-  useLocation
+    NavLink,
+    BrowserRouter as Router,
+    useLocation
 } from "react-router-dom";
 
 
@@ -90,7 +90,7 @@ function LoadSettingsPages() {
         <ul>
           <li>
             <NavLink 
-            to="?page=store-banner"
+            to="?page=plugin-starter"
             className={({ isActive, isPending, isTransitioning }) =>
               [
                 isPending ? "pending" : "",
@@ -102,7 +102,7 @@ function LoadSettingsPages() {
           </li>
           <li>
             <NavLink 
-            to="?page=store-banner&path=settings"
+            to="?page=plugin-starter&path=settings"
             className={({ isActive, isPending, isTransitioning }) =>
               [
                 isPending ? "pending" : "",
@@ -114,7 +114,7 @@ function LoadSettingsPages() {
           </li>
           <li>
             <NavLink 
-            to="?page=store-banner&path=elements"
+            to="?page=plugin-starter&path=elements"
             className={({ isActive, isPending, isTransitioning }) =>
               [
                 isPending ? "pending" : "",
@@ -126,7 +126,7 @@ function LoadSettingsPages() {
           </li>
           <li>
             <NavLink 
-            to="?page=store-banner&path=image"
+            to="?page=plugin-starter&path=image"
             className={({ isActive, isPending, isTransitioning }) =>
               [
                 isPending ? "pending" : "",

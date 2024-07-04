@@ -1,11 +1,11 @@
 {
-    "name": "ptsl/ultimate-quick-view-for-woocommerce",
-    "description": "Ultimate Quick View Plugin for WooCommerce",
+    "name": "ptsl/plugin-starter",
+    "description": "Plugin starter boilerplate for WordPress",
     "type": "wordpress-plugin",
     "license": "GPLv2",
     "autoload": {
         "psr-4": {
-            "Ptsl\\UltimateQuickViewForWoocommerce\\": "src/"
+            "Ptsl\\PluginStarter\\": "src/"
         }
     },
     "authors": [

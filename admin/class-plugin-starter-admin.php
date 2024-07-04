@@ -22,6 +22,13 @@
  */
 class Plugin_Starter_Admin
 {
+	/**
+	 * Store plugin main class to allow public access.
+	 *
+	 * @since    1.0.0
+	 * @var object      The main class.
+	 */
+	public $main;
 
 	/**
 	 * The ID of this plugin.
@@ -48,8 +55,10 @@ class Plugin_Starter_Admin
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct($plugin_name, $version)
+	public function __construct( $plugin_name, $version, $plugin_main ) 
 	{
+
+		$this->main = $plugin_main;
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
@@ -111,8 +120,8 @@ class Plugin_Starter_Admin
 			wp_enqueue_media();
 			$plugin_url  = plugin_dir_url(__DIR__);
 			wp_enqueue_script(
-				'react-store-banner',
-				$plugin_url . 'build/index.js',
+				'react-plugin-starter',
+				$plugin_url . 'build/admin/admin.js',
 				array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
 				$this->version,
 				true
@@ -237,8 +246,8 @@ class Plugin_Starter_Admin
 	public function plugin_starter_admin_menu()
 	{
 		add_menu_page(
-			esc_html__('Quick View', 'plugin-starter'),
-			esc_html('Quick View', 'plugin-starter'),
+			esc_html(PLUGIN_STARTER_NAME),
+			esc_html(PLUGIN_STARTER_NAME),
 			'manage_options',
 			$this->plugin_name,
 			array($this, 'plugin_starter_dashboard_page_html'),
@@ -247,16 +256,16 @@ class Plugin_Starter_Admin
 		);
 		// add_submenu_page(
 		// 	$this->plugin_name,
-		// 	esc_html__('Welcome', 'store-banner'),
-		// 	esc_html__('Welcome', 'store-banner'),
+		// 	esc_html__('Welcome', 'plugin-starter'),
+		// 	esc_html__('Welcome', 'plugin-starter'),
 		// 	'manage_options',
 		// 	$this->plugin_name,
 		// 	array($this, 'plugin_starter_dashboard_page_html')
 		// );
 		// add_submenu_page(
 		// 	$this->plugin_name,
-		// 	esc_html__('Settings', 'store-banner'),
-		// 	esc_html__('Settings', 'store-banner'),
+		// 	esc_html__('Settings', 'plugin-starter'),
+		// 	esc_html__('Settings', 'plugin-starter'),
 		// 	'manage_options',
 		// 	$this->plugin_name . '&path=settings',
 		// 	array($this, 'plugin_starter_dashboard_page_html')
@@ -309,7 +318,7 @@ class Plugin_Starter_Admin
 		// var_dump($current_screen->id);
 		// toplevel_page_plugin-starter
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
-			$classes .= ' ' . $this->plugin_name . '-settings-template';
+			$classes .= ' ' . $this->plugin_name . '-settings-template ';
 		}
 		return $classes;
 	}
@@ -339,5 +348,89 @@ class Plugin_Starter_Admin
 			remove_all_actions('user_admin_notices');
 			remove_all_actions('admin_notices');
 		}
+	}
+
+	/*
+	* Add custom routes to the Rest API
+	*
+	* @since    1.0.0
+	*/
+	public function plugin_starter_rest_api_register_route()
+	{
+
+		//Add the GET 'plugin_starter/v1/options' endpoint to the Rest API
+		register_rest_route(
+			'plugin_starter/v1',
+			'/options',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'rest_api_plugin_starter_read_options_callback'],
+				'permission_callback' => '__return_true'
+			)
+		);
+
+		//Add the POST 'plugin_starter/v1/options' endpoint to the Rest API
+		register_rest_route(
+			'plugin_starter/v1',
+			'/options',
+			array(
+				'methods'             => 'POST',
+				'callback'            => [$this, 'rest_api_plugin_starter_update_options_callback'],
+				'permission_callback' => '__return_true'
+			)
+		);
+	}
+	/*
+	* Callback for the GET 'plugin_starter/v1/options' endpoint of the Rest API
+	*/
+	public function rest_api_plugin_starter_read_options_callback($data)
+	{
+
+		//Check the capability
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_read_error',
+				'Sorry, you are not allowed to view the options.',
+				array('status' => 403)
+			);
+		}
+
+		//Generate the response
+		$response = [];
+		// $response['plugin_option_1'] = get_option('plugin_option_1');
+		// $response['plugin_option_2'] = get_option('plugin_option_2');
+		$response['plugin_starter_options'] = get_option('plugin_starter_options', []);
+
+
+		//Prepare the response
+		$response = new WP_REST_Response($response);
+
+		return $response;
+	}
+	public function rest_api_plugin_starter_update_options_callback($request)
+	{
+
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_update_error',
+				'Sorry, you are not allowed to update the DAEXT UI Test options.',
+				array('status' => 403)
+			);
+		}
+
+		//Get the data and sanitize
+		//Note: In a real-world scenario, the sanitization function should be based on the option type.
+		// $plugin_option_1 = sanitize_text_field($request->get_param('plugin_option_1'));
+		// $plugin_option_2 = sanitize_text_field($request->get_param('plugin_option_2'));
+		$plugin_starter_options = $request->get_param('plugin_starter_options');
+
+		//Update the options
+		// update_option('plugin_option_1', $plugin_option_1);
+		// update_option('plugin_option_2', $plugin_option_2);
+		update_option('plugin_starter_options', $plugin_starter_options);
+
+		$response = new WP_REST_Response('Data successfully added.', '200');
+
+		return $response;
 	}
 }
