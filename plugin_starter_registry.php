@@ -18,52 +18,52 @@
  *   $my_plugin = $registry->get( 'my_plugin' );
  */
 
-if ( ! class_exists( 'Plugin_Starter_Registry' ) ) :
+if ( ! class_exists( 'Plugin_Starter_Registry' ) ) {
 
-class Plugin_Starter_Registry {
+    class Plugin_Starter_Registry {
 
-    private static $instances;
+        private static $instances;
 
-    private static $instance = null;
+        private static $instance = null;
 
-    private function __construct() {
-        self::$instances = array();
-    }
-
-    public static function get_instance() {
-
-        if ( null === self::$instance ) {
-            self::$instance = new self;
+        private function __construct() {
+            self::$instances = array();
         }
 
-        return self::$instance;
+        public static function get_instance() {
 
-    }
+            if ( null === self::$instance ) {
+                self::$instance = new self;
+            }
 
-    public function add( $key, $plugin_instance ) {
+            return self::$instance;
 
-        if ( ! isset( self::$instances[ $key ] ) ) {
-            self::$instances[ $key ] = $plugin_instance;
         }
 
-    }
+        public function add( $key, $plugin_instance ) {
 
-    public function get( $key ) {
-        return self::$instances[ $key ];
-    }
+            if ( ! isset( self::$instances[ $key ] ) ) {
+                self::$instances[ $key ] = $plugin_instance;
+            }
 
-    public function remove( $key ) {
-
-        if ( ! isset( self::$instances[ $key ] ) ) {
-            unset( self::$instances[ $key ] );
         }
 
-    }
+        public function get( $key ) {
+            return self::$instances[ $key ];
+        }
 
-    public function has( $key ) {
-        return ( isset( self::$instances[ $key ] ) );
+        public function remove( $key ) {
+
+            if ( ! isset( self::$instances[ $key ] ) ) {
+                unset( self::$instances[ $key ] );
+            }
+
+        }
+
+        public function has( $key ) {
+            return ( isset( self::$instances[ $key ] ) );
+        }
+
     }
 
 }
-
-endif;

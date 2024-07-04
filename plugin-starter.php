@@ -37,7 +37,9 @@ if (!defined('WPINC')) {
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
 define('PLUGIN_STARTER_NAME', __('Plugin Starter', 'plugin-starter'));
-define('PLUGIN_STARTER_PATH', plugin_dir_url(__FILE__));
+
+define( 'PLUGIN_STARTER_PATH', plugin_dir_path( __FILE__ ) );
+define( 'PLUGIN_STARTER_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.
@@ -45,7 +47,7 @@ define('PLUGIN_STARTER_PATH', plugin_dir_url(__FILE__));
  */
 function plugin_starter_activate()
 {
-	require_once plugin_dir_path(__FILE__) . 'includes/class-plugin-starter-activator.php';
+	require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-activator.php';
 	Plugin_Starter_Activator::activate();
 }
 
@@ -55,19 +57,19 @@ function plugin_starter_activate()
  */
 function plugin_starter_deactivate()
 {
-	require_once plugin_dir_path(__FILE__) . 'includes/class-plugin-starter-deactivator.php';
+	require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-deactivator.php';
 	Plugin_Starter_Deactivator::deactivate();
 }
 
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
-// require plugin_dir_path(__FILE__) . '/vendor/autoload.php';
+// require PLUGIN_STARTER_PATH . '/vendor/autoload.php';
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path(__FILE__) . 'includes/class-plugin-starter.php';
+require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
 
 /**
  * Begins execution of the plugin.

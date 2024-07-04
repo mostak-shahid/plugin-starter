@@ -88,8 +88,8 @@ class Plugin_Starter_Admin
 		// toplevel_page_plugin-starter
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
 
-			wp_enqueue_style($this->plugin_name . '-bootstrap.min', PLUGIN_STARTER_PATH . 'assets/css/bootstrap.min.css', array(), $this->version, 'all');
-			wp_enqueue_style($this->plugin_name . '-hint-css', PLUGIN_STARTER_PATH . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
+			wp_enqueue_style($this->plugin_name . '-bootstrap.min', PLUGIN_STARTER_URL . 'assets/css/bootstrap.min.css', array(), $this->version, 'all');
+			wp_enqueue_style($this->plugin_name . '-hint-css', PLUGIN_STARTER_URL . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
 			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');
 		}
 	}
