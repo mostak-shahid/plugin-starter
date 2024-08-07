@@ -1,68 +1,54 @@
-/*import React from 'react';
-// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-
-const Home = () => <div>Its Home</div>;
-const Settings = () => <div>Its Setting</div>;
-const About = () => <div>Its About</div>;
-
-const App = () => (
-  <Router basename='/wp-admin/admin.php'>
-    <LoadSettingsPages />
-    <div>
-      <nav>
-        <ul>
-          <li><Link to="?page=plugin-starter">Home</Link></li>
-          <li><Link to="/settings">Settings</Link></li>
-          <li><Link to="/about">About</Link></li>
-        </ul>
-      </nav>
-      <Routes>
-        <Route path="?page=plugin-starter" element={<Home />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </div>
-  </Router>
-);
-
-export default App;
-*/
 import React from "react";
 import {
-    NavLink,
-    BrowserRouter as Router,
-    useLocation
+  BrowserRouter as Router,
+  useLocation
 } from "react-router-dom";
+import './style.scss';
 
-
+import Footer from './Organisms/Footer';
 import Header from './Organisms/Header';
-import Elements from './Pages/Elements';
 import Home from './Pages/Home';
-import Image from "./Pages/Image";
 import NotFound from "./Pages/NotFound";
 import Settings from "./Pages/Settings";
-// React Router does not have any opinions about
-// how you should parse URL query strings.
-//
-// If you use simple key=value query strings and
-// you do not need to support IE 11, you can use
-// the browser's built-in URLSearchParams API.
-//
-// If your query strings contain array or object
-// syntax, you'll probably need to bring your own
-// query parsing function.
 
-// const Home = () => <div>Its Home</div>;
-// const Settings = () => <div>Its Setting</div>;
-// const About = () => <div>Its About</div>;
+import { useEffect, useState } from '@wordpress/element';
 // const NotFound = () => <div>Its 404</div>;
 
 export default function App() {
+  
+  const [options, setOptions] = useState({});
+  const [loading,setLoading] = useState(true);
+  useEffect(() => {
+    /**
+     * Initialize the options fields with the data received from the REST API
+     * endpoint provided by the plugin.
+     */
+    wp.apiFetch({path: '/plugin_starter/v1/options'}).
+    then(data => {
+            let options = {};
+            //Set the new values of the options in the state
+            // setOption1(data['plugin_option_1'])
+            // setOption2(data['plugin_option_2'])
+            setOptions(data['plugin_starter_options'])
+        },
+      );
+  }, []);
+  useEffect(() => {
+      if (Object.keys(options).length) {
+          setLoading(false);
+      }
+  }, [options]);
+  
   return (
     <Router basename='/wp-admin/admin.php'>
-        <Header />
-        <LoadSettingsPages />
+      
+    {!loading &&
+      <>
+      <Header />
+      <LoadSettingsPages data={options} setData={setOptions}/>
+      <Footer />
+      </>
+    }
     </Router>
   );
 }
@@ -74,69 +60,21 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-function LoadSettingsPages() {
+function LoadSettingsPages({data, setData}) {
   let query = useQuery();
-  
   if (query.get("path")){
-    if(query.get("path") === 'settings') {return <Settings />;} 
-    else if(query.get("path") === 'elements') {return <Elements /> ;}
-    else if(query.get("path") === 'image') {return <Image onSelectImage={(image) => console.log(image)} /> ;}
+    if(
+      query.get("path") === 'settings'
+      || query.get("path") === 'elements'
+      || query.get("path") === 'image'
+      || query.get("path") === 'posts'
+      || query.get("path") === 'draft-posts'
+      || query.get("path") === 'trash-posts'
+      || query.get("path") === 'scheduled-posts'
+    ) {return <Settings data={data} setData={setData} />;} 
+    // else if(query.get("path") === 'elements') {return <Elements /> ;}
+    // else if(query.get("path") === 'image') {return <Image onSelectImage={(image) => console.log(image)} /> ;}
     else {return <NotFound/>;}
   }
   else {return <Home />;} 
-
-  return (
-      <>
-        <ul>
-          <li>
-            <NavLink 
-            to="?page=plugin-starter"
-            className={({ isActive, isPending, isTransitioning }) =>
-              [
-                isPending ? "pending" : "",
-                isActive ? "current" : "",
-                isTransitioning ? "transitioning" : "",
-              ].join(" ")
-            }
-            >Dashboard</NavLink>
-          </li>
-          <li>
-            <NavLink 
-            to="?page=plugin-starter&path=settings"
-            className={({ isActive, isPending, isTransitioning }) =>
-              [
-                isPending ? "pending" : "",
-                isActive ? "current" : "",
-                isTransitioning ? "transitioning" : "",
-              ].join(" ")
-            }
-            >Setting</NavLink>
-          </li>
-          <li>
-            <NavLink 
-            to="?page=plugin-starter&path=elements"
-            className={({ isActive, isPending, isTransitioning }) =>
-              [
-                isPending ? "pending" : "",
-                isActive ? "current" : "",
-                isTransitioning ? "transitioning" : "",
-              ].join(" ")
-            }
-            >Elements</NavLink>
-          </li>
-          <li>
-            <NavLink 
-            to="?page=plugin-starter&path=image"
-            className={({ isActive, isPending, isTransitioning }) =>
-              [
-                isPending ? "pending" : "",
-                isActive ? "current" : "",
-                isTransitioning ? "transitioning" : "",
-              ].join(" ")
-            }
-            >Image</NavLink>
-          </li>
-        </ul>
-      </>
-  );
 }

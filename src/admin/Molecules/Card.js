@@ -1,4 +1,5 @@
 import React from 'react';
+import './Card.scss';
 import Cta from './Cta';
 import ImageBox from './Imgbox';
 export default function Card(props) {

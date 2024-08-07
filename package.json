@@ -1,25 +1,22 @@
 {
   "name": "plugin-starter",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Plugin starter boilerplate for WordPress",
+  "author": "Md. Mostak Shahid",
+  "license": "GPL-2.0-or-later",
+  "keywords": [],
   "scripts": {
-    "build:admin": "wp-scripts build src/admin.js --output-path=build/admin",
-    "build:public": "wp-scripts build src/public.js --output-path=build/public",
-    "build": "npm-run-all build:admin build:public",
-    "start:admin": "wp-scripts start src/admin.js --webpack-src-dir=src/admin --output-path=build/admin",
-    "start:public": "wp-scripts start src/public.js --output-path=build/public",
-    "start": "npm-run-all --parallel start:admin start:public",
     "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "format": "wp-scripts format",
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
     "makejsstring": "node .bin/make-string.js",
     "makepot": "wp i18n make-pot . languages/wp-react-plugin-boilerplate.pot --skip-js --exclude=src,vendor,node_modules --merge=languages/js.pot",
     "copy": "node .bin/copy.js",
     "deploy": "npm-run-all build makepot copy",
     "initial-rename": "node .bin/initial-rename.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@wordpress/scripts": "^26.0.0",
     "@wordpress/babel-plugin-makepot": "^6.1.0",
@@ -35,7 +32,8 @@
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
     "process": "^0.11.10",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "@woocommerce/dependency-extraction-webpack-plugin": "^3.0.1"
   },
   "dependencies": {
     "@wordpress/url": "^4.1.0",

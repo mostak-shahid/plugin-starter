@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://www.programmelab.com/
+ * @link       https://www.mdmostakshahid.com/
  * @since      1.0.0
  *
  * @package    Plugin_Starter
@@ -18,17 +18,9 @@
  *
  * @package    Plugin_Starter
  * @subpackage Plugin_Starter/public
- * @author     Programmelab <rizvi@programmelab.com>
+ * @author     Md. Mostak Shahid <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Public {
-
-	/**
-	 * Store plugin main class to allow public access.
-	 *
-	 * @since    1.0.0
-	 * @var object      The main class.
-	 */
-	public $main;
 
 	/**
 	 * The ID of this plugin.
@@ -55,9 +47,7 @@ class Plugin_Starter_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $plugin_main ) {
-
-    	$this->main = $plugin_main;
+	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
@@ -82,8 +72,9 @@ class Plugin_Starter_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-starter-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style($this->plugin_name , PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
+		// wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-starter-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name . '-public', PLUGIN_STARTER_URL . 'admin/css/public-style.css', array(), $this->version, 'all' );
 
 	}
 
@@ -106,7 +97,19 @@ class Plugin_Starter_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/plugin-starter-public.js', array( 'jquery' ), $this->version, false );
+		// wp_enqueue_script($this->plugin_name, plugin_dir_url(__DIR__) . 'assets/js/script.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
+		wp_enqueue_script( $this->plugin_name . '-public-script', plugin_dir_url( __FILE__ ) . 'js/public-script.js', array( 'jquery' ), $this->version, false );
+		
+
+		$ajax_params = array(
+			'admin_url' => admin_url(),
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
+			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
+		);
+		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 
 	}
 

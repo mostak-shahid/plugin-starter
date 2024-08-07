@@ -8,22 +8,27 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://www.programmelab.com/
+ * @link              https://www.mdmostakshahid.com/
  * @since             1.0.0
  * @package           Plugin_Starter
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Starter
- * Plugin URI:        https://https://www.programmelab.com/plugin-starter/
+ * Plugin URI:        https://https://www.mdmostakshahid.com/plugin-starter/
  * Description:       Plugin starter boilerplate for WordPress
  * Version:           1.0.0
- * Author:            Programmelab
- * Author URI:        https://www.programmelab.com//
+ * Author:            Md. Mostak Shahid
+ * Author URI:        https://www.mdmostakshahid.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       plugin-starter
  * Domain Path:       /languages
  */
+
+
+use Automattic\WooCommerce\Admin\BlockTemplates\BlockTemplateInterface;
+use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\ProductTemplates\ProductFormTemplateInterface;
+use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\BlockRegistry;
 
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
@@ -80,44 +85,112 @@ require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
  *
  * @since    1.0.0
  */
-// function plugin_starter_run()
-// {
+function plugin_starter_run()
+{
 
-// 	$plugin = new Plugin_Starter();
-// 	$plugin->run();
-// }
-// plugin_starter_run();
+	$plugin = new Plugin_Starter();
+	$plugin->run();
+}
+plugin_starter_run();
 
 
-require_once( 'plugin_starter_registry.php' );
-$registry = Plugin_Starter_Registry::get_instance();
-$registry->add( 'plugin_starter', new Plugin_Starter() );
-$registry->get( 'plugin_starter' )->run();
+
 
 
 
 /**
- * Now you can access to your plugin/functions.
- * Example:
+ * Registers the block using the metadata loaded from the `block.json` file.
+ * Behind the scenes, it registers also all assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-////////////////////////////////////////////////
-// ADD TO FILE -> anywhere after "plugins_loaded"
-// @link: http://rachievee.com/the-wordpress-hooks-firing-sequence/
-
-// ...
-
-// ACCESS FROM ADMIN FROM PUBLIC
-function access_test() {
-
-    $registry = Plugin_Starter_Registry::get_instance();
-    $plugin_starter = $registry->get( 'plugin_starter' );
-
-    $test_function_from_main = $plugin_starter->your_function_from_main();
-    // - OR -
-    $test_function_from_main = $registry->get( 'plugin_starter' )->your_function_from_main();
-
-    // - MORE EXAPLES -
-    $test_function_from_admin = $plugin_starter->admin->your_function_from_admin();
-    $test_function_from_public = $plugin_starter->public->your_function_from_public();
-
+function plugin_starter_extension_block_init()
+{
+	if (isset($_GET['page']) && $_GET['page'] === 'wc-admin') {
+		BlockRegistry::get_instance()->register_block_type_from_metadata(__DIR__ . '/build/woocommerce/min-quantity');
+		BlockRegistry::get_instance()->register_block_type_from_metadata(__DIR__ . '/build/woocommerce/max-quantity');
+	}
 }
+add_action('init', 'plugin_starter_extension_block_init');
+
+function plugin_starter_extension_add_block_to_product_editor(BlockTemplateInterface $template)
+{
+	if ($template instanceof ProductFormTemplateInterface && 'simple-product' === $template->get_id()) {
+		$basic_details = $template->get_section_by_id('basic-details');
+
+		if ($basic_details) {
+			$basic_details->add_block(
+				[
+					'id' 	     => 'plugin-starter-min-quantity-block',
+					'order'	     => 40,
+					'blockName'  => 'plugin-starter/min-quantity-block',
+					'attributes' => [
+						'message' => 'Min Max Tutorial',
+					]
+				]
+			);
+			$basic_details->add_block(
+				[
+					'id' 	     => 'plugin-starter-max-quantity-block',
+					'order'	     => 40,
+					'blockName'  => 'plugin-starter/max-quantity-block',
+					'attributes' => [
+						'message' => 'Min Max Tutorial',
+					]
+				]
+			);
+		}
+	}
+}
+add_filter('woocommerce_block_template_register', 'plugin_starter_extension_add_block_to_product_editor', 100);
+
+
+
+
+function plugin_starter_create_block_block_init() {
+	register_block_type( __DIR__ . '/build/blocks/row' );
+	register_block_type( __DIR__ . '/build/blocks/column' );
+	register_block_type( __DIR__ . '/build/blocks/section' );
+	register_block_type( __DIR__ . '/build/blocks/recent-posts', array(
+        'render_callback' => 'plugin_starter_gutenberg_examples_dynamic_render_callback'
+    ) );
+}
+add_action( 'init', 'plugin_starter_create_block_block_init' );
+
+function plugin_starter_gutenberg_examples_dynamic_render_callback( $attr , $content ) {
+	$html = '';
+    $recent_posts = wp_get_recent_posts( array(
+        'numberposts' => (@$attr['numberOfItems'])?$attr['numberOfItems']:3,
+        'post_status' => 'publish',
+    ) );
+    if ( count( $recent_posts ) === 0 ) {
+        return 'No posts';
+    }
+	$html .= '<ul>';
+	foreach($recent_posts as $post){
+		$html .= '<li><a class="wp-block-my-plugin-latest-post" href="'.get_permalink( $post['ID'] ).'">'.get_the_title($post['ID']).'</a></li>';
+	}
+	$html .= '<ul>';
+	return $html;
+}
+function plugin_starter_register_blocks_category( $categories ) {
+	$categories[] = array(
+		'slug'  => 'plugin-starter-blocks', 
+		'title' => 'Starter Blocks',
+		'icon' => NULL,
+	);
+	// var_dump($categories);
+
+	return $categories;
+}
+
+
+if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
+	add_filter( 'block_categories_all', 'plugin_starter_register_blocks_category' );
+} else {
+	add_filter( 'block_categories', 'plugin_starter_register_blocks_category' );
+}
+
+
+

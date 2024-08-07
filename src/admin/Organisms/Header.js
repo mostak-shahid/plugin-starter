@@ -27,18 +27,19 @@ export default function Header() {
             <Container fluid="fluid">
                 <div className="header-part bg-lite-blue">
                     <Row className="align-items-center">
-                        <Col className="col-lg-8 left-header">
+                        <Col className="col-lg-7 col-12 mb-3 mb-lg-0 left-header">
                             <div className="d-flex flex-column flex-lg-row align-items-center">
                                 <Image fluid="fluid" src={Icon} alt={data.name + ' - Logo'} width="59" height="42"/>
                                 <Image fluid="fluid" src={Logo} alt="Programme-lab-Logo" width="176" height="36"/>
                                 <HeaderLeftNav />                                
                             </div>
                         </Col>
-                        <Col className="col-lg-4 right-header text-center text-lg-end">
+                        <Col className="col-lg-5 col-12 right-header text-center text-lg-end">
                             <ul className="list-inline">
-                                <li className="list-inline-item"><a href="https://www.programmelab.com/" className="leanrmore-link" target="_blank">{__('Learn More', 'plugin-starter')}</a></li>
+                                <li className="list-inline-item"><a href="https://www.mdmostakshahid.com/" className="knowledge-base-link" target="_blank" rel="noreferrer">{ __('Knowledge Base','plugin-starter') }</a></li>
+                                <li className="list-inline-item"><a href="https://www.mdmostakshahid.com/" className="leanrmore-link" target="_blank" rel="noreferrer">{__('Learn More', 'plugin-starter')}</a></li>
                                 <li className="list-inline-item">
-                                    <a href="#" className="review-link">
+                                    <a href="#" className="review-link" target="_blank" rel="noreferrer">
 
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clipPath="url(#clip0_3319_11057)">

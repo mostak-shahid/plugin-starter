@@ -16,7 +16,7 @@ export default function Home() {
             <Container fluid="fluid">
                 <div className="content-part">
                     <Row>
-                        <Col className="col-lg-8 left-content">
+                        <Col className="col-lg-8 col-12 left-content mb-4 mb-lg-0">
                             <Card
                             // className="custom-class"      
                             header = {{
@@ -48,7 +48,7 @@ export default function Home() {
                             }}
                             />
                         </Col>
-                        <Col className="col-lg-4 right-content">
+                        <Col className="col-lg-4 col-12 right-content">
                             <Card
                             // className="custom-class"      
                             body = {{

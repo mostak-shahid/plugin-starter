@@ -1,9 +1,11 @@
 <?php
-
+use Automattic\WooCommerce\Admin\BlockTemplates\BlockTemplateInterface;
+use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\ProductTemplates\ProductFormTemplateInterface;
+use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\BlockRegistry;
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://www.programmelab.com/
+ * @link       https://www.mdmostakshahid.com/
  * @since      1.0.0
  *
  * @package    Plugin_Starter
@@ -18,17 +20,10 @@
  *
  * @package    Plugin_Starter
  * @subpackage Plugin_Starter/admin
- * @author     Programmelab <rizvi@programmelab.com>
+ * @author     Md. Mostak Shahid <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Admin
 {
-	/**
-	 * Store plugin main class to allow public access.
-	 *
-	 * @since    1.0.0
-	 * @var object      The main class.
-	 */
-	public $main;
 
 	/**
 	 * The ID of this plugin.
@@ -55,10 +50,8 @@ class Plugin_Starter_Admin
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $plugin_main ) 
+	public function __construct( $plugin_name, $version) 
 	{
-
-		$this->main = $plugin_main;
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
@@ -83,14 +76,16 @@ class Plugin_Starter_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		
+		wp_enqueue_style($this->plugin_name , PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		$current_screen = get_current_screen();
 		// var_dump($current_screen->id);
 		// toplevel_page_plugin-starter
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
-
-			wp_enqueue_style($this->plugin_name . '-bootstrap.min', PLUGIN_STARTER_URL . 'assets/css/bootstrap.min.css', array(), $this->version, 'all');
-			wp_enqueue_style($this->plugin_name . '-hint-css', PLUGIN_STARTER_URL . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
-			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');
+			wp_enqueue_style($this->plugin_name . '-hint', PLUGIN_STARTER_URL . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
+			wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
+			// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');			
+			// wp_enqueue_style( $this->plugin_name, plugin_dir_url(__DIR__) . 'admin/css/plugin-starter-admin.css', array(), $this->version, 'all' );
 		}
 	}
 
@@ -113,6 +108,10 @@ class Plugin_Starter_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		
+		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
+
 		$current_screen = get_current_screen();
 		// var_dump($current_screen->id);
 		// toplevel_page_plugin-starter
@@ -121,19 +120,22 @@ class Plugin_Starter_Admin
 			$plugin_url  = plugin_dir_url(__DIR__);
 			wp_enqueue_script(
 				'react-plugin-starter',
-				$plugin_url . 'build/admin/admin.js',
+				$plugin_url . 'build/admin.js',
 				array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
 				$this->version,
 				true
 			);
+			wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
 		}
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/plugin-starter-admin.js', array('jquery'), $this->version, false);
+		
+
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
+			'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
 		);
-		wp_localize_script($this->plugin_name, 'plugin_starter_ajax_obj', $ajax_params);
+		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 
 	/**
@@ -162,38 +164,6 @@ class Plugin_Starter_Admin
 					</p>
 					<p><a id="plugin_starter_wooinstall" class="install-now button" data-plugin-slug="woocommerce"><?php esc_html_e('Install Now', 'plugin-starter'); ?></a></p>
 				</div>
-
-				<script>
-					jQuery(document).on('click', '#plugin_starter_wooinstall', function(e) {
-						e.preventDefault();
-						var current = jQuery(this);
-						var plugin_slug = current.attr("data-plugin-slug");
-						var ajax_url = '<?php echo esc_url(admin_url('admin-ajax.php')) ?>';
-
-						current.addClass('updating-message').text('Installing...');
-
-						var data = {
-							action: 'plugin_starter_ajax_install_plugin',
-							_ajax_nonce: '<?php echo esc_attr(wp_create_nonce('updates')); ?>',
-							slug: plugin_slug,
-						};
-
-						jQuery.post(ajax_url, data, function(response) {
-								current.removeClass('updating-message');
-								current.addClass('updated-message').text('Installing...');
-								current.attr("href", response.data.activateUrl);
-							})
-							.fail(function() {
-								current.removeClass('updating-message').text('Install Failed');
-							})
-							.always(function() {
-								current.removeClass('install-now updated-message').addClass('activate-now button-primary').text('Activating...');
-								current.unbind(e);
-								current[0].click();
-							});
-					});
-				</script>
-
 			<?php
 			} elseif (!is_plugin_active('woocommerce/woocommerce.php') && file_exists(WP_PLUGIN_DIR . '/woocommerce/woocommerce.php')) {
 			?>
@@ -427,7 +397,7 @@ class Plugin_Starter_Admin
 		//Update the options
 		// update_option('plugin_option_1', $plugin_option_1);
 		// update_option('plugin_option_2', $plugin_option_2);
-		update_option('plugin_starter_options', $plugin_starter_options);
+		$plugin_starter_options && update_option('plugin_starter_options', $plugin_starter_options);
 
 		$response = new WP_REST_Response('Data successfully added.', '200');
 

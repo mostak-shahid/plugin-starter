@@ -31,14 +31,6 @@ class Plugin_Starter
 {
 
 	/**
-	 * Store plugin main class to allow public access.
-	 *
-	 * @since    1.0.0
-	 * @var object      The main class.
-	 */
-	public $main;
-
-	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
@@ -77,8 +69,6 @@ class Plugin_Starter
 	 */
 	public function __construct()
 	{
-		// Save instance for the main class.
-		$this->main = $this;
 
 		if (defined('PLUGIN_STARTER_VERSION')) {
 			$this->version = PLUGIN_STARTER_VERSION;
@@ -125,7 +115,7 @@ class Plugin_Starter
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-i18n.php';
-
+		
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
@@ -136,8 +126,10 @@ class Plugin_Starter
 		 * side of the site.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
-
+		
 		$this->loader = new Plugin_Starter_Loader();
+		
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/extend-woocommerce-template.php';
 	}
 
 	/**
@@ -169,7 +161,7 @@ class Plugin_Starter
 
 		// $plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version(), $this->main );
+		$this->admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		if (is_plugin_active('woocommerce/woocommerce.php')) {
 			$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_styles');
@@ -188,6 +180,7 @@ class Plugin_Starter
 			$this->loader->add_action('current_screen', $this->admin, 'plugin_starter_hide_admin_notices');
 			
 			$this->loader->add_action('rest_api_init', $this->admin, 'plugin_starter_rest_api_register_route');
+			
 		} else {
 			$this->loader->add_action('admin_notices', $this->admin, 'plugin_starter_woo_check');
 			add_action("wp_ajax_plugin_starter_ajax_install_plugin", "wp_ajax_install_plugin");
@@ -206,7 +199,7 @@ class Plugin_Starter
 
 		// $plugin_public = new Plugin_Starter_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->public = new Plugin_Starter_Public( $this->get_plugin_name(), $this->get_version(), $this->main );
+		$this->public = new Plugin_Starter_Public( $this->get_plugin_name(), $this->get_version() );
 		if (is_plugin_active('woocommerce/woocommerce.php')) {
 			$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_styles');
 			$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_scripts');

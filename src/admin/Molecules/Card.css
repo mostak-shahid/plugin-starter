@@ -1,0 +1,19 @@
+.card-box {
+  background-color: #f9fafe;
+  border-radius: 8px;
+  border: 1px solid #e1e4e7;
+  box-shadow: -0.65px 0px 6px 0px rgba(0, 0, 0, 0.0392156863);
+}
+.card-box > * {
+  padding: 30px;
+}
+.card-box > *:not(:last-child) {
+  border-bottom: 1px solid #e1e4e7;
+}
+.card-box .part-content > * {
+  margin: 0;
+  padding: 0;
+}
+.card-box + .card-box {
+  margin-top: 30px;
+}/*# sourceMappingURL=Card.css.map */

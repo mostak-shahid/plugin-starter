@@ -1,0 +1,23 @@
+.card-box {
+  background-color: #f9fafe;
+  border-radius: 8px;
+  border: 1px solid #e1e4e7;
+  box-shadow: -0.65px 0px 6px 0px #0000000a;
+  & > * {
+    padding: 30px;
+    &:not(:last-child) {
+      border-bottom: 1px solid #e1e4e7;
+    }
+  }
+  .part-img {
+  }
+  .part-content {
+    & > * {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  & + .card-box {
+    margin-top: 30px;
+  }
+}

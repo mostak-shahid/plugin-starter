@@ -1,0 +1,13 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-plugin-starter-column {
+	min-height: 40px;
+	border: 1px dashed #ccc;
+	.mos-placeholder-text {
+		color: #212529;
+	}
+}
