@@ -14,8 +14,11 @@
         }
     ],
     "minimum-stability": "stable",
-    "require-dev": {
-        "wp-coding-standards/wpcs": "^3.1"
+    "require-dev": {        
+        "woocommerce/woocommerce-sniffs": "^1.0",
+        "squizlabs/php_codesniffer": "^3.10",
+        "wp-coding-standards/wpcs": "^3.1",
+        "woocommerce/qit-cli": "^0.5.3"
     },
     "config": {
         "allow-plugins": {
