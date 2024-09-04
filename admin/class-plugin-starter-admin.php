@@ -81,7 +81,8 @@ class Plugin_Starter_Admin
 		$current_screen = get_current_screen();
 		// var_dump($current_screen->id);
 		// toplevel_page_plugin-starter
-		if ($current_screen->id == 'toplevel_page_plugin-starter') {
+		if ($current_screen->id == 'toplevel_page_plugin-starter') {			
+			wp_enqueue_style('wp-block-editor', './wp-includes/css/dist/block-editor/style.css', array(), $this->version, 'all');
 			wp_enqueue_style($this->plugin_name . '-hint', PLUGIN_STARTER_URL . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
 			wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
 			// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');			
