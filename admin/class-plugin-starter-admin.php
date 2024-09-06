@@ -1,7 +1,4 @@
 <?php
-use Automattic\WooCommerce\Admin\BlockTemplates\BlockTemplateInterface;
-use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\ProductTemplates\ProductFormTemplateInterface;
-use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\BlockRegistry;
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -117,15 +114,6 @@ class Plugin_Starter_Admin
 		// var_dump($current_screen->id);
 		// toplevel_page_plugin-starter
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
-			wp_enqueue_media();
-			$plugin_url  = plugin_dir_url(__DIR__);
-			wp_enqueue_script(
-				'react-plugin-starter',
-				$plugin_url . 'build/admin.js',
-				array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
-				$this->version,
-				true
-			);
 			wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
 		}
 		
@@ -139,75 +127,7 @@ class Plugin_Starter_Admin
 		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 
-	/**
-	 * Adding Woocommerce dependency to our plugin.
-	 *
-	 * @since    1.0.0
-	 */
-	public function plugin_starter_woo_check()
-	{
-
-		if (current_user_can('activate_plugins')) {
-			if (!is_plugin_active('woocommerce/woocommerce.php') && !file_exists(WP_PLUGIN_DIR . '/woocommerce/woocommerce.php')) {
-?>
-				<div id="message" class="error">
-					<?php /* translators: %1$s: WooCommerce plugin url start, %2$s: WooCommerce plugin url end */ ?>
-					<p>
-						<?php printf(
-							esc_html__(
-								'%1$s requires %2$s WooCommerce %3$s to be activated.',
-								'plugin-starter'
-							),
-							esc_html(PLUGIN_STARTER_NAME),
-							'<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">',
-							'</a></strong>'
-						); ?>
-					</p>
-					<p><a id="plugin_starter_wooinstall" class="install-now button" data-plugin-slug="woocommerce"><?php esc_html_e('Install Now', 'plugin-starter'); ?></a></p>
-				</div>
-			<?php
-			} elseif (!is_plugin_active('woocommerce/woocommerce.php') && file_exists(WP_PLUGIN_DIR . '/woocommerce/woocommerce.php')) {
-			?>
-
-				<div id="message" class="error">
-					<?php /* translators: %1$s: WooCommerce plugin url start, %2$s: WooCommerce plugin url end */ ?>
-					<p>
-						<?php printf(
-							esc_html__(
-								'%1$s requires %2$s WooCommerce %3$s to be activated.',
-								'plugin-starter'
-							),
-							esc_html(PLUGIN_STARTER_NAME),
-							'<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">',
-							'</a></strong>'
-						); ?>
-					</p>
-					<p><a href="<?php echo esc_url(get_admin_url()); ?>plugins.php?_wpnonce=<?php echo esc_attr(wp_create_nonce('activate-plugin_woocommerce/woocommerce.php')); ?>&action=activate&plugin=woocommerce/woocommerce.php" class="button activate-now button-primary"><?php esc_html_e('Activate', 'plugin-starter'); ?></a></p>
-				</div>
-			<?php
-			} elseif (version_compare(get_option('woocommerce_db_version'), '2.5', '<')) {
-			?>
-
-				<div id="message" class="error">
-					<p>
-						<?php printf(
-							esc_html__(
-								'%1$s %2$s is inactive.%3$s This plugin requires WooCommerce 2.5 or newer. Please %4$supdate WooCommerce to version 2.5 or newer%5$s',
-								'plugin-starter'
-							),
-							'<strong>',
-							esc_html(PLUGIN_STARTER_NAME),
-							'</strong>',
-							'<a href="' . esc_url(admin_url('plugins.php')) . '">',
-							'&nbsp;&raquo;</a>'
-						); ?>
-					</p>
-				</div>
-
-<?php
-			}
-		}
-	}
+	
 
 	/**
 	 * Adding menu to admin menu.
@@ -315,93 +235,24 @@ class Plugin_Starter_Admin
 	public function plugin_starter_hide_admin_notices()
 	{
 		$current_screen = get_current_screen();
-		if ($current_screen->base == 'toplevel_page_plugin-starter') {
+		if ($current_screen->id == 'toplevel_page_plugin-starter') {
 			remove_all_actions('user_admin_notices');
 			remove_all_actions('admin_notices');
 		}
 	}
+	function plugin_starter_update_completed( $upgrader_object, $options ) {
 
-	/*
-	* Add custom routes to the Rest API
-	*
-	* @since    1.0.0
-	*/
-	public function plugin_starter_rest_api_register_route()
-	{
-
-		//Add the GET 'plugin_starter/v1/options' endpoint to the Rest API
-		register_rest_route(
-			'plugin_starter/v1',
-			'/options',
-			array(
-				'methods'  => 'GET',
-				'callback' => [$this, 'rest_api_plugin_starter_read_options_callback'],
-				'permission_callback' => '__return_true'
-			)
-		);
-
-		//Add the POST 'plugin_starter/v1/options' endpoint to the Rest API
-		register_rest_route(
-			'plugin_starter/v1',
-			'/options',
-			array(
-				'methods'             => 'POST',
-				'callback'            => [$this, 'rest_api_plugin_starter_update_options_callback'],
-				'permission_callback' => '__return_true'
-			)
-		);
-	}
-	/*
-	* Callback for the GET 'plugin_starter/v1/options' endpoint of the Rest API
-	*/
-	public function rest_api_plugin_starter_read_options_callback($data)
-	{
-
-		//Check the capability
-		if (!current_user_can('manage_options')) {
-			return new WP_Error(
-				'rest_read_error',
-				'Sorry, you are not allowed to view the options.',
-				array('status' => 403)
-			);
+		// If an update has taken place and the updated type is plugins and the plugins element exists
+		if ( $options['action'] == 'update' && $options['type'] == 'plugin' && isset( $options['plugins'] ) ) {
+			foreach( $options['plugins'] as $plugin ) {
+				// Check to ensure it's my plugin
+				if( $plugin == plugin_basename( __FILE__ ) ) {
+					// do stuff here
+					$plugin_starter_options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,get_option('plugin_starter_options', []));
+					update_option('plugin_starter_options', $plugin_starter_options);
+				}
+			}
 		}
-
-		//Generate the response
-		$response = [];
-		// $response['plugin_option_1'] = get_option('plugin_option_1');
-		// $response['plugin_option_2'] = get_option('plugin_option_2');
-		$response['plugin_starter_options'] = get_option('plugin_starter_options', []);
-
-
-		//Prepare the response
-		$response = new WP_REST_Response($response);
-
-		return $response;
 	}
-	public function rest_api_plugin_starter_update_options_callback($request)
-	{
-
-		if (!current_user_can('manage_options')) {
-			return new WP_Error(
-				'rest_update_error',
-				'Sorry, you are not allowed to update the DAEXT UI Test options.',
-				array('status' => 403)
-			);
-		}
-
-		//Get the data and sanitize
-		//Note: In a real-world scenario, the sanitization function should be based on the option type.
-		// $plugin_option_1 = sanitize_text_field($request->get_param('plugin_option_1'));
-		// $plugin_option_2 = sanitize_text_field($request->get_param('plugin_option_2'));
-		$plugin_starter_options = $request->get_param('plugin_starter_options');
-
-		//Update the options
-		// update_option('plugin_option_1', $plugin_option_1);
-		// update_option('plugin_option_2', $plugin_option_2);
-		$plugin_starter_options && update_option('plugin_starter_options', $plugin_starter_options);
-
-		$response = new WP_REST_Response('Data successfully added.', '200');
-
-		return $response;
-	}
+	
 }

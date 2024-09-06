@@ -115,6 +115,13 @@ class Plugin_Starter
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-i18n.php';
+
+		/**
+		 * The class responsible for defining settings functionality
+		 * of the plugin.
+		 */
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-setting-api.php';
 		
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -128,8 +135,6 @@ class Plugin_Starter
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
 		
 		$this->loader = new Plugin_Starter_Loader();
-		
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/extend-woocommerce-template.php';
 	}
 
 	/**
@@ -162,8 +167,6 @@ class Plugin_Starter
 		// $plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
 
 		$this->admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		if (is_plugin_active('woocommerce/woocommerce.php')) {
 			$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_styles');
 			$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_scripts');
 
@@ -178,13 +181,12 @@ class Plugin_Starter
 			$this->loader->add_action('admin_init', $this->admin, 'plugin_starter_do_activation_redirect');
 
 			$this->loader->add_action('current_screen', $this->admin, 'plugin_starter_hide_admin_notices');
-			
-			$this->loader->add_action('rest_api_init', $this->admin, 'plugin_starter_rest_api_register_route');
-			
-		} else {
-			$this->loader->add_action('admin_notices', $this->admin, 'plugin_starter_woo_check');
-			add_action("wp_ajax_plugin_starter_ajax_install_plugin", "wp_ajax_install_plugin");
-		}
+			// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
+			$this->loader->add_action('upgrader_process_complete', $this->admin, 'plugin_starter_update_completed', 10,2);
+
+
+			$plugin_settings = new Plugin_Starter_Setting_API();
+			$this->loader->add_action('admin_init', $plugin_settings, 'plugin_starter_api_settings_init');
 	}
 
 	/**
