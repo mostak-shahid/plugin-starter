@@ -44,10 +44,19 @@ define( 'PLUGIN_STARTER_URL', plugin_dir_url( __FILE__ ) );
 define(
 	'PLUGIN_STARTER_DEFAULT_OPTIONS',
 	[
-		'plugin_starter_option_text' => 'Is it working?',
-		'plugin_starter_option_check' => 1,
-		'plugin_starter_option_radio' => 'ok',
-		'plugin_starter_option_select_multy' => [],
+		'settings_input_text' => 'Is it working?',
+		'settings_input_email' =>  'example@email.com',
+		'settings_input_color' =>   "#eaeaea",
+		'settings_input_date' =>  '2024-09-08',
+		'settings_input_datetime_local' =>   "",
+		'settings_textarea' =>   "ha ha",
+		'settings_editor' =>   "edited",
+		'settings_switch' =>   "1",
+		'settings_checkbox' => ["1", "2"],
+		'settings_datalist' =>   "Option 10",
+		'settings_select' =>   "1",
+		'settings_multi_select' => ["1", "2"],
+		'settings_radio' =>   "4",
 	]
 );
 /**

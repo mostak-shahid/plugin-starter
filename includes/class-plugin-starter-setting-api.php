@@ -118,13 +118,13 @@ class Plugin_Starter_Setting_API
             ]
         );
         add_settings_field(
-            'plugin_starter_settings_enable_product_tab',
+            'plugin_starter_settings_switch',
             esc_html__('Enable Product Tabs', 'plugin-starter'),
             [$this, 'plugin_starter_switch'],
             'plugin_starter_settings',
             'plugin_starter_setting_api_section',
             [
-                'label_for' => 'settings_enable_product_tab', 
+                'label_for' => 'settings_switch', 
                 'class' => 'plugin_starter_row', 
                 'element_class' => 'switcher', 
                 'default' => '1', 
@@ -195,7 +195,7 @@ class Plugin_Starter_Setting_API
         );
         add_settings_field(
             'plugin_starter_settings_multi_select',
-            esc_html__('Select Input', 'plugin-starter'),
+            esc_html__('Multi Select Input', 'plugin-starter'),
             [$this, 'plugin_starter_multi_select'],
             'plugin_starter_settings',
             'plugin_starter_setting_api_section',
@@ -238,7 +238,11 @@ class Plugin_Starter_Setting_API
         
     }
     public function plugin_starter_scetion_start() {
-        echo "Ha ha ha";
+        $options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        echo '<pre>';
+        var_dump($options);
+        echo '</pre>';
+
     }
 
     public function plugin_starter_input($args)
@@ -294,6 +298,7 @@ class Plugin_Starter_Setting_API
                 );
                 wp_editor( $default, $editor_id, $arg ); 
                 ?>
+                
             </label>
         </div>
     <?php
