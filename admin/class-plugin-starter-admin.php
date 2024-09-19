@@ -121,5 +121,19 @@ class Plugin_Starter_Admin
 		}
 		wp_die();
 	}
+	function plugin_starter_update_completed( $upgrader_object, $options ) {
+
+		// If an update has taken place and the updated type is plugins and the plugins element exists
+		if ( $options['action'] == 'update' && $options['type'] == 'plugin' && isset( $options['plugins'] ) ) {
+			foreach( $options['plugins'] as $plugin ) {
+				// Check to ensure it's my plugin
+				if( $plugin == plugin_basename( __FILE__ ) ) {
+					// do stuff here
+					$plugin_starter_options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,get_option('plugin_starter_options', []));
+					update_option('plugin_starter_options', $plugin_starter_options);
+				}
+			}
+		}
+	}
 	
 }
