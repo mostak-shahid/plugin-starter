@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
             if(name) {
                 var dataJSON = {
                     action: 'plugin_starter_reset_settings',
-                    _ajax_nonce: plugin_starter_ajax_obj.install_plugin_wpnonce,
+                    security: plugin_starter_ajax_obj.security,
                     name: name,
                 };
                 $.ajax({
