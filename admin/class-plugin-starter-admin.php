@@ -108,23 +108,15 @@ class Plugin_Starter_Admin
 		 */
 		
 		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
-
-		$current_screen = get_current_screen();
-		// var_dump($current_screen->id);
-		// toplevel_page_plugin-starter
-		if ($current_screen->id == 'toplevel_page_plugin-starter') {
-			wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
-		}
-		
-
+		wp_enqueue_script($this->plugin_name . '-admin-ajax', plugin_dir_url(__FILE__) . 'js/admin-ajax.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
-			'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
+			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
+			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
 		);
-		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
+		wp_localize_script($this->plugin_name . '-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 
 	
@@ -142,7 +134,7 @@ class Plugin_Starter_Admin
 			'manage_options',
 			$this->plugin_name,
 			array($this, 'plugin_starter_dashboard_page_html'),
-			plugin_dir_url(__DIR__) . 'admin/images/menu-icon.svg',
+			plugin_dir_url(__DIR__) . 'admin/images/menu-icon.png',
 			57
 		);
 		// add_submenu_page(
@@ -240,6 +232,22 @@ class Plugin_Starter_Admin
 			remove_all_actions('admin_notices');
 		}
 	}
+	
+	public function plugin_starter_reset_settings (){
+		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
+			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
+			$name = sanitize_text_field(wp_unslash($_POST['name']));
+			if ($name == 'all') {
+				update_option('plugin_starter_options', PLUGIN_STARTER_DEFAULT_OPTIONS);
+			}
+			wp_send_json_success();
+		} else {
+			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
+			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
+		}
+		wp_die();
+	}
+
 	function plugin_starter_update_completed( $upgrader_object, $options ) {
 
 		// If an update has taken place and the updated type is plugins and the plugins element exists

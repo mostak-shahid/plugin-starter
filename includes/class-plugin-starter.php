@@ -164,29 +164,30 @@ class Plugin_Starter
 	private function define_admin_hooks()
 	{
 
-		// $plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
+		$plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
-		$this->admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version() );
-			$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_styles');
-			$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_scripts');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'plugin_starter_admin_menu');
 
-			$this->loader->add_action('admin_menu', $this->admin, 'plugin_starter_admin_menu');
+		// Add Settings link to the plugin
+		$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
+		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'plugin_starter_add_action_links');
 
-			// Add Settings link to the plugin
-			$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
-			$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $this->admin, 'plugin_starter_add_action_links');
+		$this->loader->add_filter('admin_body_class', $plugin_admin, 'plugin_starter_admin_body_class');
 
-			$this->loader->add_filter('admin_body_class', $this->admin, 'plugin_starter_admin_body_class');
+		$this->loader->add_action('admin_init', $plugin_admin, 'plugin_starter_do_activation_redirect');
 
-			$this->loader->add_action('admin_init', $this->admin, 'plugin_starter_do_activation_redirect');
-
-			$this->loader->add_action('current_screen', $this->admin, 'plugin_starter_hide_admin_notices');
-			// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
-			$this->loader->add_action('upgrader_process_complete', $this->admin, 'plugin_starter_update_completed', 10,2);
+		$this->loader->add_action('current_screen', $plugin_admin, 'plugin_starter_hide_admin_notices');
+		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
+		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
 
 
-			$plugin_settings = new Plugin_Starter_Setting_API();
-			$this->loader->add_action('admin_init', $plugin_settings, 'plugin_starter_api_settings_init');
+		$plugin_settings = new Plugin_Starter_Setting_API();
+		$this->loader->add_action('admin_init', $plugin_settings, 'plugin_starter_api_settings_init');
+
+		// Save settings by ajax
+		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
 	}
 
 	/**
@@ -198,14 +199,15 @@ class Plugin_Starter
 	 */
 	private function define_public_hooks()
 	{
+		$plugin_public = new Plugin_Starter_Public($this->get_plugin_name(), $this->get_version());
 
-		// $plugin_public = new Plugin_Starter_Public($this->get_plugin_name(), $this->get_version());
-
-		$this->public = new Plugin_Starter_Public( $this->get_plugin_name(), $this->get_version() );
-		if (is_plugin_active('woocommerce/woocommerce.php')) {
-			$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_styles');
-			$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_scripts');
-		}
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+		
+		// Save settings by ajax
+		$this->loader->add_action('wp_ajax_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
+		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
+		
 	}
 
 	/**

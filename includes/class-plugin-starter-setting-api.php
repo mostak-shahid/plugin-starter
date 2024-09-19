@@ -238,16 +238,18 @@ class Plugin_Starter_Setting_API
         
     }
     public function plugin_starter_scetion_start() {
-        $options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
-        echo '<pre>';
-        var_dump($options);
-        echo '</pre>';
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
+        // echo '<pre>';
+        // var_dump($options);
+        // echo '</pre>';
 
     }
 
     public function plugin_starter_input($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -267,7 +269,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_textarea($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -286,7 +289,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_editor($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -306,7 +310,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_switch($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? 1 : 0) : 0;
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -327,7 +332,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_checkbox($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $adefault = (isset($args['default']) && is_array($args['default']))?$args['default']:[];
 
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : $adefault) : $adefault;
@@ -358,7 +364,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_radio($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -382,7 +389,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_datalist($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -409,7 +417,8 @@ class Plugin_Starter_Setting_API
 
     public function plugin_starter_select($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : @$args['default']) : @$args['default'];
     ?>
         <div class="position-relative <?php echo esc_html(@$args['element_class']); ?>">
@@ -433,7 +442,8 @@ class Plugin_Starter_Setting_API
     }
     public function plugin_starter_multi_select($args)
     {
-        $options = (get_option($args['option_key'])) ? get_option($args['option_key']) : [];
+        $plugin_starter_options = (get_option('plugin_starter_options')) ? get_option('plugin_starter_options') : [];
+        $options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,$plugin_starter_options);
         $adefault = (isset($args['default']) && is_array($args['default']))?$args['default']:[];
 
         $default = ($options) ? (array_key_exists($args['label_for'], $options) ? $options[$args['label_for']] : $adefault) : $adefault;

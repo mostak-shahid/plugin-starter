@@ -98,19 +98,26 @@ class Plugin_Starter_Public {
 		 */
 
 		// wp_enqueue_script($this->plugin_name, plugin_dir_url(__DIR__) . 'assets/js/script.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);		
+		wp_enqueue_script($this->plugin_name . '-public-ajax', plugin_dir_url( __FILE__ ) . 'js/public-ajax.js', array('jquery'), $this->version, false);
 		wp_enqueue_script( $this->plugin_name . '-public-script', plugin_dir_url( __FILE__ ) . 'js/public-script.js', array( 'jquery' ), $this->version, false );
-		
-
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
+			'_wp_nonce' => esc_attr(wp_create_nonce('plugin_starter_wp_nonce')),
 			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
 		);
-		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
-
+		wp_localize_script($this->plugin_name . '-public-ajax', 'plugin_starter_ajax_obj', $ajax_params);
+	}
+	public function plugin_starter_ajax_callback (){
+		if (isset($_POST['_wp_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wp_nonce'])), 'plugin_starter_wp_nonce')) {
+			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
+			wp_send_json_success();
+		} else {
+			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
+			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
+		}
+		wp_die();
 	}
 
 }
