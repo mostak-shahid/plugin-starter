@@ -163,6 +163,9 @@ class Plugin_Starter
 		// Save settings by ajax
 		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
 		
+		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
+		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
+		
 	}
 
 	/**
