@@ -101,18 +101,18 @@ class Plugin_Starter_Admin
 		 */
 		
 		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-admin-ajax', plugin_dir_url(__FILE__) . 'assets/js/admin-ajax.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
+			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
 			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
 		);
-		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
+		wp_localize_script($this->plugin_name . '-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 	public function plugin_starter_reset_settings (){
-		if (isset($_POST['security']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['security'])), 'plugin_starter_security_nonce')) {
+		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
 			wp_send_json_success();
 		} else {
