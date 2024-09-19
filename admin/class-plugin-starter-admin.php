@@ -1,7 +1,4 @@
 <?php
-use Automattic\WooCommerce\Admin\BlockTemplates\BlockTemplateInterface;
-use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\ProductTemplates\ProductFormTemplateInterface;
-use Automattic\WooCommerce\Admin\Features\ProductBlockEditor\BlockRegistry;
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -104,7 +101,15 @@ class Plugin_Starter_Admin
 		 */
 		
 		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-ajax', PLUGIN_STARTER_URL . 'assets/js/ajax.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
+		$ajax_params = array(
+			'admin_url' => admin_url(),
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'security' => esc_attr(wp_create_nonce('plugin_starter_security_nonce')),
+			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
+		);
+		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 
 	
