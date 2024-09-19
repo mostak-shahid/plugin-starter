@@ -112,12 +112,14 @@ class Plugin_Starter_Admin
 		wp_localize_script($this->plugin_name . '-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 	public function plugin_starter_reset_settings (){
-		if(1) {    
-			wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
-        	} else {
-            		wp_send_json_error(array('error_message' => 'Variation not found'));
-        	}
-        	wp_die();
+		if (isset($_POST['security']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['security'])), 'plugin_starter_security_nonce')) {
+			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
+			wp_send_json_success();
+		} else {
+			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
+			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
+		}
+		wp_die();
 	}
 	
 }
