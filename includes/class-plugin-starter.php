@@ -159,10 +159,12 @@ class Plugin_Starter
 
 		// $plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version() );
-		$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_styles');
-		$this->loader->add_action('admin_enqueue_scripts', $this->admin, 'enqueue_scripts');
-			
+		$admin = new Plugin_Starter_Admin( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $admin, 'enqueue_scripts');
+		// Save settings by ajax
+		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
+		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');	
 		
 	}
 
@@ -178,9 +180,9 @@ class Plugin_Starter
 
 		// $plugin_public = new Plugin_Starter_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->public = new Plugin_Starter_Public( $this->get_plugin_name(), $this->get_version() );
-		$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_styles');
-		$this->loader->add_action('wp_enqueue_scripts', $this->public, 'enqueue_scripts');
+		$public = new Plugin_Starter_Public( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->add_action('wp_enqueue_scripts', $public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $public, 'enqueue_scripts');
 		
 	}
 
