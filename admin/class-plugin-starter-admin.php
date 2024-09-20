@@ -236,7 +236,7 @@ class Plugin_Starter_Admin
 	public function plugin_starter_reset_settings (){
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
-			$name = sanitize_text_field(wp_unslash($_POST['name']));
+			$name = isset($_POST['name'])?sanitize_text_field(wp_unslash($_POST['name'])):'';
 			if ($name == 'all') {
 				update_option('plugin_starter_options', PLUGIN_STARTER_DEFAULT_OPTIONS);
 			}
