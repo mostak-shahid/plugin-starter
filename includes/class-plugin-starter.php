@@ -115,13 +115,6 @@ class Plugin_Starter
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-i18n.php';
-
-		/**
-		 * The class responsible for defining settings functionality
-		 * of the plugin.
-		 */
-
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-setting-api.php';
 		
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -182,8 +175,6 @@ class Plugin_Starter
 		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
 		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
 
-
-		$plugin_settings = new Plugin_Starter_Setting_API();
 		$this->loader->add_action('admin_init', $plugin_settings, 'plugin_starter_api_settings_init');
 
 		// Save settings by ajax
