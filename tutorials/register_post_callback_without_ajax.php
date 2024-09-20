@@ -30,7 +30,7 @@ private function define_admin_hooks() {
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) die;
+if ( ! defined( 'ABSPATH' ) ) die;
 
 // Generate a custom nonce value.
 $_nonce = wp_create_nonce( 'my_post_form_nonce' );

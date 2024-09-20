@@ -128,7 +128,7 @@ public function options_update() {
 // ADD TO FILE -> partials/plugin-name-admin-display.php
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) die;
+if ( ! defined( 'ABSPATH' ) ) die;
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
