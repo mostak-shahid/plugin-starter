@@ -172,13 +172,15 @@ class Plugin_Starter
 		$this->loader->add_action('admin_init', $plugin_admin, 'plugin_starter_do_activation_redirect');
 
 		$this->loader->add_action('current_screen', $plugin_admin, 'plugin_starter_hide_admin_notices');
-		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
-		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
 
-		$this->loader->add_action('admin_init', $plugin_settings, 'plugin_starter_api_settings_init');
+		//add_action('admin_head', 'plugin_starter_option_form_submit');
+		$this->loader->add_action('admin_head', $plugin_admin, 'plugin_starter_option_form_submit');
 
 		// Save settings by ajax
 		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
+
+		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
+		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
 	}
 
 	/**
