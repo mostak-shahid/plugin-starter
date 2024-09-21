@@ -240,17 +240,17 @@ class Plugin_Starter_Admin
 			
 			$plugin_starter_options["settings_input_text"] = isset($_POST["plugin_starter_options"]["settings_input_text"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_input_text"])):'';
 
-			$plugin_starter_options["settings_input_email"] = isset($_POST["plugin_starter_options"]["settings_input_email"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_input_email"])):'';
+			$plugin_starter_options["settings_input_email"] = isset($_POST["plugin_starter_options"]["settings_input_email"])?sanitize_email(wp_unslash($_POST["plugin_starter_options"]["settings_input_email"])):'';
 
-			$plugin_starter_options["settings_input_color"] = isset($_POST["plugin_starter_options"]["settings_input_color"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_input_color"])):'';
+			$plugin_starter_options["settings_input_color"] = isset($_POST["plugin_starter_options"]["settings_input_color"])?sanitize_hex_color(wp_unslash($_POST["plugin_starter_options"]["settings_input_color"])):'';
 
 			$plugin_starter_options["settings_input_date"] = isset($_POST["plugin_starter_options"]["settings_input_date"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_input_date"])):'';
 
 			$plugin_starter_options["settings_input_datetime_local"] = isset($_POST["plugin_starter_options"]["settings_input_datetime_local"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_input_datetime_local"])):'';
 
-			$plugin_starter_options["settings_textarea"] = isset($_POST["plugin_starter_options"]["settings_textarea"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_textarea"])):'';
+			$plugin_starter_options["settings_textarea"] = isset($_POST["plugin_starter_options"]["settings_textarea"])?sanitize_textarea_field(wp_unslash($_POST["plugin_starter_options"]["settings_textarea"])):'';
 
-			$plugin_starter_options["settings_editor"] = isset($_POST["plugin_starter_options"]["settings_editor"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_editor"])):'';
+			$plugin_starter_options["settings_editor"] = isset($_POST["plugin_starter_options"]["settings_editor"])?wp_kses_post(wp_unslash($_POST["plugin_starter_options"]["settings_editor"])):'';
 
 			$plugin_starter_options["settings_switch"] = isset($_POST["plugin_starter_options"]["settings_switch"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["settings_switch"])):'';
 
@@ -276,7 +276,8 @@ class Plugin_Starter_Admin
 	
 	public function plugin_starter_reset_settings (){
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
-			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
+			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));			
+			$plugin_starter_options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,get_option('plugin_starter_options', []));
 			$name = isset($_POST['name'])?sanitize_text_field(wp_unslash($_POST['name'])):'';
 			if ($name == 'all') {
 				update_option('plugin_starter_options', PLUGIN_STARTER_DEFAULT_OPTIONS);
