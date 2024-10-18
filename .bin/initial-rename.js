@@ -22,7 +22,9 @@ const options = {
         /PLUGIN STARTER/g,
         /Plugin-Starter/g,
         /Plugin_Starter/g,
+        /Plugin Starter/g,
         /PluginStarter/g,
+        /Plugin starter/g,
         /Md. Mostak Shahid/g,
         /www.mdmostakshahid.com/g,
         /mostak.shahid@gmail.com/g,
@@ -38,6 +40,7 @@ const options = {
         'Your_Renamed_Plugin',
         'Your Renamed Plugin',
         'YourRenamedPlugin',
+        'Your renamed plugin',
         'Your Name',
         'www.siteurl.com',
         'your@email.com'
