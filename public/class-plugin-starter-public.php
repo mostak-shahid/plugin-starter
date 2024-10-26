@@ -74,7 +74,7 @@ class Plugin_Starter_Public {
 		 */
 		wp_enqueue_style($this->plugin_name , PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		// wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-starter-public.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name . '-public', PLUGIN_STARTER_URL . 'admin/css/public-style.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name . '-public', PLUGIN_STARTER_URL . 'public/css/public-style.css', array(), $this->version, 'all' );
 
 	}
 
