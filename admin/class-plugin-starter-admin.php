@@ -243,6 +243,48 @@ class Plugin_Starter_Admin
 			remove_all_actions('admin_notices');
 		}
 	}
+	public function plugin_starter_option_form_submit(){
+		$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(),get_option('plugin_starter_options', []));
+		if (isset( $_POST['options_form_field'] ) && wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['options_form_field'])), 'options_form_action' ) ) {
+
+			$err = 0;
+			
+			$plugin_starter_options["base-input"]["text-input"] = isset($_POST["plugin_starter_options"]["base-input"]["text-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["text-input"])):'';
+
+			$plugin_starter_options["base-input"]["email-input"] = isset($_POST["plugin_starter_options"]["base-input"]["email-input"])?sanitize_email(wp_unslash($_POST["plugin_starter_options"]["base-input"]["email-input"])):'';
+
+			$plugin_starter_options["base-input"]["color-input"] = isset($_POST["plugin_starter_options"]["base-input"]["color-input"])?sanitize_hex_color(wp_unslash($_POST["plugin_starter_options"]["base-input"]["color-input"])):'';
+
+			$plugin_starter_options["base-input"]["date-input"] = isset($_POST["plugin_starter_options"]["base-input"]["date-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["date-input"])):'';
+
+			$plugin_starter_options["base-input"]["datetime-local-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"])):'';
+
+			$plugin_starter_options["base-input"]["textarea-input"] = isset($_POST["plugin_starter_options"]["base-input"]["textarea-input"])?sanitize_textarea_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["textarea-input"])):'';
+			
+			$plugin_starter_options["base-input"]["switch-input"] = isset($_POST["plugin_starter_options"]["base-input"]["switch-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["switch-input"])):'';
+
+			$plugin_starter_options["base-input"]["radio-input"] = isset($_POST["plugin_starter_options"]["base-input"]["radio-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["radio-input"])):'';
+
+			$plugin_starter_options["base-input"]["datalist-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datalist-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datalist-input"])):'';
+
+			$plugin_starter_options["base-input"]["select-input"] = isset($_POST["plugin_starter_options"]["base-input"]["select-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["select-input"])):'';
+
+			$plugin_starter_options["editor-input"] = isset($_POST["plugin_starter_options"]["editor-input"])?wp_kses_post(wp_unslash($_POST["plugin_starter_options"]["editor-input"])):'';
+
+			$plugin_starter_options["array-input"]["checkbox-input"] = isset($_POST["plugin_starter_options"]["array-input"]["checkbox-input"])?array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["checkbox-input"])):[];
+			
+			$plugin_starter_options["array-input"]["multi-select-input"] = isset($_POST["plugin_starter_options"]["array-input"]["multi-select-input"])?array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["multi-select-input"])):[];
+
+			if (!$err) {
+				$_POST['settings-updated'] = true;
+			}
+
+			var_dump($_POST);			
+		}
+		update_option('plugin_starter_options', $plugin_starter_options);
+	}
+	// add_action('admin_head', 'plugin_starter_option_form_submit');
+
 	public function plugin_starter_reset_settings (){
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));

@@ -122,11 +122,18 @@ function plugin_starter_get_tabs()
 function plugin_starter_get_default_options()
 {
 	$plugin_starter_default_options = [
-		'select-input' => [
-			'based-select' => '1',
-			'multi-select' => ['1', '2'],
+		'base-input' => [
+			'text-input' => '',
+			'email-input' => 'email@mail.com',
+			'select-input' => '1',
+			'radio-input' => '1',
 		],
-		'text-input' => '',
+		'array-input' => [
+			'checkbox-input' => ['1', '2'],
+			'multi-select-input' => ['1', '2'],
+		],
+		'editor-input' => '<p>Lorem</p>',
+		
 	];
 	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
 
