@@ -87,3 +87,80 @@ function plugin_starter_run()
 	$plugin->run();
 }
 plugin_starter_run();
+
+function plugin_starter_get_tabs()
+{
+	$plugin_starter_tabs = [];
+	/*$plugin_starter_tabs = [
+		'integration' => [
+			'slug' => 'integration',
+			'name' => esc_html__('Restrictions', 'plugin-starter'),
+			'description' => esc_html__('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'plugin-starter'),
+			'url' => 'plugin-starter',
+			'sub' => [
+				'security-for-woocommerce' => [
+					'slug' => 'security-for-woocommerce',
+					'name' => esc_html__('Settings', 'plugin-starter'),
+					'description' => esc_html__('Below you will find all the settings you need to restrict specific countires and IP addressses that you wish to restrict for your WooCommerce site. The restrictons will be applied to your WooCommerce pages.', 'plugin-starter'),
+					'url' => 'plugin-starter'
+				],
+				'customize' => [
+					'slug' => 'customize',
+					'name' => esc_html__('Customize', 'plugin-starter'),
+					'description' => esc_html__('Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.', 'plugin-starter'),
+					'url' => 'plugin-starter-integration-customize'
+				],
+			],
+		],
+	];*/
+	// Apply filter to allow modification of $variable by other plugins
+	$plugin_starter_tabs = apply_filters('plugin_starter_tabs_modify', $plugin_starter_tabs);
+
+	return $plugin_starter_tabs;
+}
+
+function plugin_starter_get_default_options()
+{
+	$plugin_starter_default_options = [
+		'select-input' => [
+			'based-select' => '1',
+			'multi-select' => ['1', '2'],
+		],
+		'text-input' => '',
+	];
+	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
+
+	return $plugin_starter_default_options;
+}
+function plugin_starter_get_option()
+{
+	$plugin_starter_options_database = get_option('plugin_starter_options', []);
+	$plugin_starter_options = array_replace_recursive(plugin_starter_get_default_options(), $plugin_starter_options_database);
+	return $plugin_starter_options;
+}
+function plugin_starter_is_plugin_page()
+{
+	if (function_exists('get_current_screen')) {
+		$current_screen = get_current_screen();
+		$tabs = plugin_starter_get_tabs();
+		$pages = [];
+		if (isset($tabs) && sizeof($tabs)) {
+			foreach ($tabs as $tab) {
+				$pages[] = 'admin_page_' . $tab['url'];
+				if (isset($tab['sub']) && sizeof($tab['sub'])) {
+					foreach ($tab['sub'] as $subtab) {
+						$pages[] = 'admin_page_' . $subtab['url'];
+					}
+				}
+			}
+		}
+		
+		if (
+			$current_screen->id == 'toplevel_page_plugin-starter'
+			|| in_array($current_screen->id, $pages)
+		) {
+			return true;
+		}
+	}
+	return false;
+}

@@ -32,5 +32,8 @@ class Plugin_Starter_Activator
 	 */
 	public static function activate()
 	{
+		$plugin_starter_options = plugin_starter_get_option();
+		update_option('plugin_starter_options', $plugin_starter_options);
+		//add_option('plugin_starter_do_activation_redirect', true);
 	}
 }

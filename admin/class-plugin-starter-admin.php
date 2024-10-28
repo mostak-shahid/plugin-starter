@@ -111,6 +111,138 @@ class Plugin_Starter_Admin
 		);
 		wp_localize_script($this->plugin_name . '-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
+	
+
+	/**
+	 * Adding menu to admin menu.
+	 *
+	 * @since    1.0.0
+	 */
+	public function plugin_starter_admin_menu()
+	{
+		add_menu_page(
+			esc_html(PLUGIN_STARTER_NAME),
+			esc_html(PLUGIN_STARTER_NAME),
+			'manage_options',
+			$this->plugin_name,
+			array($this, 'plugin_starter_dashboard_page_html'),
+			plugin_dir_url(__DIR__) . 'admin/images/menu-icon.svg',
+			57
+		);
+		/*add_submenu_page(
+			$this->plugin_name,
+			esc_html__('Sub', 'ultimate-security-for-woocommerce'),
+			esc_html__('Sub', 'ultimate-security-for-woocommerce'),
+			'manage_options',
+			$this->plugin_name . '-sub',
+			array($this, 'plugin_starter_dashboard_page_html')
+		);
+		$tabs = plugin_starter_get_tabs();
+		if (sizeof($tabs)) {
+			foreach ($tabs as $key => $tab) {
+				if (isset($tab['sub']) && $tab['sub']) {
+					foreach ($tab['sub'] as $k => $subtab) {
+						add_submenu_page(
+							$this->plugin_name . '-sub',
+							// 'admin.php?page=wc-settings',
+							esc_html($subtab['name']),
+							esc_html($subtab['name']),
+							'manage_options',
+							$subtab['url'],
+							array($this, 'plugin_starter_dashboard_page_html')
+						);
+					}
+				} else {
+					add_submenu_page(
+						$this->plugin_name . '-sub',
+						// 'admin.php?page=wc-settings',
+						esc_html($tab['name']),
+						esc_html($tab['name']),
+						'manage_options',
+						$tab['url'],
+						array($this, 'plugin_starter_dashboard_page_html')
+					);
+				}
+			}
+		}
+		remove_submenu_page($this->plugin_name, $this->plugin_name . '-sub');*/
+	}
+	/**
+	 * Loading plugin Welcome page.
+	 *
+	 * @since    1.0.0
+	 */
+	private function plugin_starter_dashboard_page_html () {
+		if (!current_user_can('manage_options')) {
+			return;
+		}
+		include_once('partials/' . $this->plugin_name . '-admin-display.php');
+	}
+
+	/**
+	 * Add settings action link to the plugins page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function plugin_starter_add_action_links($links)
+	{
+
+		/**
+		 * Documentation : https://codex.wordpress.org/Plugin_API/Filter_Reference/plugin_action_links_(plugin_file_name)
+		 * The "plugins.php" must match with the previously added add_submenu_page first option.
+		 * For custom post type you have to change 'plugins.php?page=' to 'edit.php?post_type=your_custom_post_type&page='
+		 * 
+		 */
+		$settings_link = array(
+			'<a href="' . admin_url('admin.php?page=' . $this->plugin_name) . '">' . esc_html__('Settings', 'plugin-starter') . '</a>',
+			// '<a href="' . admin_url('admin.php?page=' . $this->plugin_name . '-settings') . '">' . esc_html__('Settings', 'plugin-starter') . '</a>'
+		);
+		return array_merge($settings_link, $links);
+	}
+
+	/**
+	 * Add body classes to the settings pages.
+	 *
+	 * @since    1.0.0
+	 */
+	public function plugin_starter_admin_body_class($classes)
+	{
+
+		$current_screen = get_current_screen();
+		// var_dump($current_screen->id);
+		if (plugin_starter_is_plugin_page()) {
+			$classes .= ' ' . $this->plugin_name . '-settings-template ';
+		}
+		return $classes;
+	}
+
+	/**
+	 * Redirect to the welcome pages.
+	 *
+	 * @since    1.0.0
+	 */
+	public function plugin_starter_do_activation_redirect()
+	{
+		if (get_option('plugin_starter_do_activation_redirect')) {
+			delete_option('plugin_starter_do_activation_redirect');
+			wp_safe_redirect(admin_url('admin.php?page=' . $this->plugin_name));
+		}
+	}
+
+	/**
+	 * Removing all notieces from settings page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function plugin_starter_hide_admin_notices()
+	{
+		// $current_screen = get_current_screen();
+		// var_dump($current_screen->id);
+		if (plugin_starter_is_plugin_page()) {
+			remove_all_actions('user_admin_notices');
+			remove_all_actions('admin_notices');
+		}
+	}
 	public function plugin_starter_reset_settings (){
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
@@ -129,7 +261,7 @@ class Plugin_Starter_Admin
 				// Check to ensure it's my plugin
 				if( $plugin == plugin_basename( __FILE__ ) ) {
 					// do stuff here
-					$plugin_starter_options = array_replace_recursive(PLUGIN_STARTER_DEFAULT_OPTIONS,get_option('plugin_starter_options', []));
+					$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(),get_option('plugin_starter_options', []));
 					update_option('plugin_starter_options', $plugin_starter_options);
 				}
 			}
