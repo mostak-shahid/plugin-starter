@@ -115,7 +115,7 @@ class Plugin_Starter
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-i18n.php';
-		
+
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
@@ -126,7 +126,7 @@ class Plugin_Starter
 		 * side of the site.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
-		
+
 		$this->loader = new Plugin_Starter_Loader();
 	}
 
@@ -156,16 +156,30 @@ class Plugin_Starter
 	 */
 	private function define_admin_hooks()
 	{
-
 		$plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+
+		$this->loader->add_action('admin_menu', $plugin_admin, 'plugin_starter_admin_menu');
+
+		// Add Settings link to the plugin
+		$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
+		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'plugin_starter_add_action_links');
+
+		$this->loader->add_filter('admin_body_class', $plugin_admin, 'plugin_starter_admin_body_class');
+
+		$this->loader->add_action('admin_init', $plugin_admin, 'plugin_starter_do_activation_redirect');
+
+		$this->loader->add_action('current_screen', $plugin_admin, 'plugin_starter_hide_admin_notices');
+
+		//add_action('admin_head', 'plugin_starter_option_form_submit');
+		$this->loader->add_action('admin_head', $plugin_admin, 'plugin_starter_option_form_submit');
+
 		// Save settings by ajax
 		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
-		
+
 		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
-		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10,2);
-		
+		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10, 2);
 	}
 
 	/**
@@ -183,8 +197,7 @@ class Plugin_Starter
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		// Save settings by ajax
 		$this->loader->add_action('wp_ajax_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
-		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');	
-		
+		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
 	}
 
 	/**

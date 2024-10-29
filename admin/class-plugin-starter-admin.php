@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -47,7 +48,7 @@ class Plugin_Starter_Admin
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version) 
+	public function __construct($plugin_name, $version)
 	{
 
 		$this->plugin_name = $plugin_name;
@@ -73,8 +74,8 @@ class Plugin_Starter_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		
-		wp_enqueue_style($this->plugin_name , PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');		
+
+		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
 		// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');			
 		// wp_enqueue_style( $this->plugin_name, plugin_dir_url(__DIR__) . 'admin/css/plugin-starter-admin.css', array(), $this->version, 'all' );
@@ -99,7 +100,7 @@ class Plugin_Starter_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		
+
 		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-admin-ajax', plugin_dir_url(__FILE__) . 'js/admin-ajax.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery'), $this->version, false);
@@ -111,7 +112,7 @@ class Plugin_Starter_Admin
 		);
 		wp_localize_script($this->plugin_name . '-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
-	
+
 
 	/**
 	 * Adding menu to admin menu.
@@ -172,7 +173,8 @@ class Plugin_Starter_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	private function plugin_starter_dashboard_page_html () {
+	public function plugin_starter_dashboard_page_html()
+	{
 		if (!current_user_can('manage_options')) {
 			return;
 		}
@@ -243,49 +245,51 @@ class Plugin_Starter_Admin
 			remove_all_actions('admin_notices');
 		}
 	}
-	public function plugin_starter_option_form_submit(){
-		$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(),get_option('plugin_starter_options', []));
-		if (isset( $_POST['options_form_field'] ) && wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['options_form_field'])), 'options_form_action' ) ) {
+	public function plugin_starter_option_form_submit()
+	{
+		$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(), get_option('plugin_starter_options', []));
+		if (isset($_POST['options_form_field']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['options_form_field'])), 'options_form_action')) {
 
 			$err = 0;
-			
-			$plugin_starter_options["base-input"]["text-input"] = isset($_POST["plugin_starter_options"]["base-input"]["text-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["text-input"])):'';
 
-			$plugin_starter_options["base-input"]["email-input"] = isset($_POST["plugin_starter_options"]["base-input"]["email-input"])?sanitize_email(wp_unslash($_POST["plugin_starter_options"]["base-input"]["email-input"])):'';
+			$plugin_starter_options["base-input"]["text-input"] = isset($_POST["plugin_starter_options"]["base-input"]["text-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["text-input"])) : '';
 
-			$plugin_starter_options["base-input"]["color-input"] = isset($_POST["plugin_starter_options"]["base-input"]["color-input"])?sanitize_hex_color(wp_unslash($_POST["plugin_starter_options"]["base-input"]["color-input"])):'';
+			$plugin_starter_options["base-input"]["email-input"] = isset($_POST["plugin_starter_options"]["base-input"]["email-input"]) ? sanitize_email(wp_unslash($_POST["plugin_starter_options"]["base-input"]["email-input"])) : '';
 
-			$plugin_starter_options["base-input"]["date-input"] = isset($_POST["plugin_starter_options"]["base-input"]["date-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["date-input"])):'';
+			$plugin_starter_options["base-input"]["color-input"] = isset($_POST["plugin_starter_options"]["base-input"]["color-input"]) ? sanitize_hex_color(wp_unslash($_POST["plugin_starter_options"]["base-input"]["color-input"])) : '';
 
-			$plugin_starter_options["base-input"]["datetime-local-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"])):'';
+			$plugin_starter_options["base-input"]["date-input"] = isset($_POST["plugin_starter_options"]["base-input"]["date-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["date-input"])) : '';
 
-			$plugin_starter_options["base-input"]["textarea-input"] = isset($_POST["plugin_starter_options"]["base-input"]["textarea-input"])?sanitize_textarea_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["textarea-input"])):'';
-			
-			$plugin_starter_options["base-input"]["switch-input"] = isset($_POST["plugin_starter_options"]["base-input"]["switch-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["switch-input"])):'';
+			$plugin_starter_options["base-input"]["datetime-local-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datetime-local-input"])) : '';
 
-			$plugin_starter_options["base-input"]["radio-input"] = isset($_POST["plugin_starter_options"]["base-input"]["radio-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["radio-input"])):'';
+			$plugin_starter_options["base-input"]["textarea-input"] = isset($_POST["plugin_starter_options"]["base-input"]["textarea-input"]) ? sanitize_textarea_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["textarea-input"])) : '';
 
-			$plugin_starter_options["base-input"]["datalist-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datalist-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datalist-input"])):'';
+			$plugin_starter_options["base-input"]["switch-input"] = isset($_POST["plugin_starter_options"]["base-input"]["switch-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["switch-input"])) : '';
 
-			$plugin_starter_options["base-input"]["select-input"] = isset($_POST["plugin_starter_options"]["base-input"]["select-input"])?sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["select-input"])):'';
+			$plugin_starter_options["base-input"]["radio-input"] = isset($_POST["plugin_starter_options"]["base-input"]["radio-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["radio-input"])) : '';
 
-			$plugin_starter_options["editor-input"] = isset($_POST["plugin_starter_options"]["editor-input"])?wp_kses_post(wp_unslash($_POST["plugin_starter_options"]["editor-input"])):'';
+			$plugin_starter_options["base-input"]["datalist-input"] = isset($_POST["plugin_starter_options"]["base-input"]["datalist-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["datalist-input"])) : '';
 
-			$plugin_starter_options["array-input"]["checkbox-input"] = isset($_POST["plugin_starter_options"]["array-input"]["checkbox-input"])?array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["checkbox-input"])):[];
-			
-			$plugin_starter_options["array-input"]["multi-select-input"] = isset($_POST["plugin_starter_options"]["array-input"]["multi-select-input"])?array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["multi-select-input"])):[];
+			$plugin_starter_options["base-input"]["select-input"] = isset($_POST["plugin_starter_options"]["base-input"]["select-input"]) ? sanitize_text_field(wp_unslash($_POST["plugin_starter_options"]["base-input"]["select-input"])) : '';
+
+			$plugin_starter_options["editor-input"] = isset($_POST["plugin_starter_options"]["editor-input"]) ? wp_kses_post(wp_unslash($_POST["plugin_starter_options"]["editor-input"])) : '';
+
+			$plugin_starter_options["array-input"]["checkbox-input"] = isset($_POST["plugin_starter_options"]["array-input"]["checkbox-input"]) ? array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["checkbox-input"])) : [];
+
+			$plugin_starter_options["array-input"]["multi-select-input"] = isset($_POST["plugin_starter_options"]["array-input"]["multi-select-input"]) ? array_map('sanitize_text_field', wp_unslash($_POST["plugin_starter_options"]["array-input"]["multi-select-input"])) : [];
 
 			if (!$err) {
 				$_POST['settings-updated'] = true;
 			}
 
-			var_dump($_POST);			
+			var_dump($_POST);
 		}
 		update_option('plugin_starter_options', $plugin_starter_options);
 	}
 	// add_action('admin_head', 'plugin_starter_option_form_submit');
 
-	public function plugin_starter_reset_settings (){
+	public function plugin_starter_reset_settings()
+	{
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			// wp_send_json_success(array('variation_id' => $variation_id, 'price' => $price));
 			wp_send_json_success();
@@ -295,19 +299,19 @@ class Plugin_Starter_Admin
 		}
 		wp_die();
 	}
-	function plugin_starter_update_completed( $upgrader_object, $options ) {
+	function plugin_starter_update_completed($upgrader_object, $options)
+	{
 
 		// If an update has taken place and the updated type is plugins and the plugins element exists
-		if ( $options['action'] == 'update' && $options['type'] == 'plugin' && isset( $options['plugins'] ) ) {
-			foreach( $options['plugins'] as $plugin ) {
+		if ($options['action'] == 'update' && $options['type'] == 'plugin' && isset($options['plugins'])) {
+			foreach ($options['plugins'] as $plugin) {
 				// Check to ensure it's my plugin
-				if( $plugin == plugin_basename( __FILE__ ) ) {
+				if ($plugin == plugin_basename(__FILE__)) {
 					// do stuff here
-					$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(),get_option('plugin_starter_options', []));
+					$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(), get_option('plugin_starter_options', []));
 					update_option('plugin_starter_options', $plugin_starter_options);
 				}
 			}
 		}
 	}
-	
 }

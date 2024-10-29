@@ -34,6 +34,6 @@ class Plugin_Starter_Activator
 	{
 		$plugin_starter_options = plugin_starter_get_option();
 		update_option('plugin_starter_options', $plugin_starter_options);
-		//add_option('plugin_starter_do_activation_redirect', true);
+		add_option('plugin_starter_do_activation_redirect', true);
 	}
 }

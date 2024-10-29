@@ -38,8 +38,8 @@ if (!defined('ABSPATH')) {
 define('PLUGIN_STARTER_VERSION', '1.0.0');
 define('PLUGIN_STARTER_NAME', __('Plugin Starter', 'plugin-starter'));
 
-define( 'PLUGIN_STARTER_PATH', plugin_dir_path( __FILE__ ) );
-define( 'PLUGIN_STARTER_URL', plugin_dir_url( __FILE__ ) );
+define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
+define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
 
 /**
  * The code that runs during plugin activation.
@@ -124,16 +124,22 @@ function plugin_starter_get_default_options()
 	$plugin_starter_default_options = [
 		'base-input' => [
 			'text-input' => '',
-			'email-input' => 'email@mail.com',
-			'select-input' => '1',
-			'radio-input' => '1',
+			'email-input' => '',
+			'color-input' => '',
+			'date-input' => '',
+			'datetime-local-input' => '',
+			'textarea-input' => '',
+			'switch-input' => '1',
+			'radio-input' => '',
+			'datalist-input' => '',
+			'select-input' => '',
 		],
 		'array-input' => [
-			'checkbox-input' => ['1', '2'],
-			'multi-select-input' => ['1', '2'],
+			'checkbox-input' => [],
+			'multi-select-input' => [],
 		],
 		'editor-input' => '<p>Lorem</p>',
-		
+
 	];
 	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
 
@@ -161,7 +167,7 @@ function plugin_starter_is_plugin_page()
 				}
 			}
 		}
-		
+
 		if (
 			$current_screen->id == 'toplevel_page_plugin-starter'
 			|| in_array($current_screen->id, $pages)
