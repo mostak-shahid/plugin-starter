@@ -1,0 +1,25 @@
+.plugin-starter-settings-template {
+  #wpcontent {
+    padding-left: 0;
+    #wpbody {
+      #wpbody-content {
+        .plugin-starter-settings-wrapper {
+          padding: 30px;
+          .plugin-starter-settings-container {
+            .plugin-starter-settings {
+              h1 {
+                margin: 0;
+              }
+              .notice,
+              div.error,
+              div.updated {
+                margin: 0;
+                margin-top: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,1 +1,15 @@
-/*# sourceMappingURL=admin-style.css.map */
+.plugin-starter-settings-template #wpcontent {
+  padding-left: 0;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper {
+  padding: 30px;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings h1 {
+  margin: 0;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .notice,
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings div.error,
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings div.updated {
+  margin: 0;
+  margin-top: 20px;
+}/*# sourceMappingURL=admin-style.css.map */

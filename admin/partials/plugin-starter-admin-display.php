@@ -25,9 +25,9 @@ $dataOptions = [
                     <?php
                     if (isset($_POST['options_form_field']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['options_form_field'])), 'options_form_action')) {
                         if (isset($_POST['settings-updated'])) {
-                            add_settings_error('wporg_messages', 'wporg_message', esc_html__('All changes have been applied correctly, ensuring your preferences are now in effect.', 'plugin-starter'), 'updated');
+                            add_settings_error('plugin-starter-messages', 'plugin-starter-message', esc_html__('All changes have been applied correctly, ensuring your preferences are now in effect.', 'plugin-starter'), 'updated');
                         }
-                        settings_errors('wporg_messages');
+                        settings_errors('plugin-starter-messages');
                     }
                     ?>
                     <table class="form-table" role="presentation">
@@ -95,7 +95,7 @@ $dataOptions = [
                             <tr class="plugin_starter_row">
                                 <th scope="row"><label for="switch-input"><?php echo esc_html__('Enable Product Tabs', 'plugin-starter') ?></label></th>
                                 <td>
-                                    <div class="position-relative switcher">
+                                    <div class="position-relative plugin-starter-switcher">
                                         <label for="plugin_starter_options_switch-input">
                                             <input type="checkbox" name="plugin_starter_options[base-input][switch-input]" id="plugin_starter_options_switch-input" value="1" <?php checked(@$plugin_starter_options['base-input']['switch-input'], 1, 1) ?>>
                                             <em data-on="on" data-off="off"></em>
@@ -220,7 +220,7 @@ $dataOptions = [
         ?>
         <p class="submit">
             <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_html__('Save Changes', 'plugin-starter') ?>">
-            <button class="button button-reset button-secondary" data-name="all" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
+            <button class="button plugin-starter-button-reset button-secondary" data-name="all" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
         </p>
     </form>
 </div>

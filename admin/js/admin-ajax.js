@@ -1,10 +1,11 @@
 jQuery(document).ready(function($) {   
-    $('body').on('click', '.button-reset', function(reset){
+    $('body').on('click', '.plugin-starter-button-reset', function(reset){
         // console.log('clicked');
         reset.preventDefault();
         let text = "Are You Sure?\nAre you sure you want to proceed with the changes.";
         if (confirm(text) == true) {
             let name= $(this).data('name');
+            let url= $(this).data('url');
             if(name) {
                 var dataJSON = {
                     action: 'plugin_starter_reset_settings',
@@ -21,7 +22,14 @@ jQuery(document).ready(function($) {
                     // },
                     success: function(response) {
                         console.log(response);
-                        if (response.success) {}
+                        if (response.success) {
+                            
+                            // Simulate a mouse click:
+                            // window.location.href = url;
+
+                            // Simulate an HTTP redirect:
+                            window.location.replace(url);
+                        }
                         // on success
                         // code...
                     },
