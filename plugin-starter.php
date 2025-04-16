@@ -41,6 +41,24 @@ define('PLUGIN_STARTER_NAME', __('Plugin Starter', 'plugin-starter'));
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
 
+require PLUGIN_STARTER_PATH . 'vendor/yahnis-elsts//plugin-update-checker/plugin-update-checker.php';
+
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-starter.json',
+	__FILE__, //Full path to the main plugin file or functions.php.
+	'plugin-starter'
+);
+
+// $myUpdateChecker = PucFactory::buildUpdateChecker(
+// 	'https://github.com/mostak-shahid/plugin-starter/',
+// 	__FILE__,
+// 	'plugin-starter'
+// );
+// // Set the branch that contains the stable release.
+// $myUpdateChecker->setBranch('main');
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-plugin-starter-activator.php
@@ -64,7 +82,9 @@ function plugin_starter_deactivate()
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
-// require PLUGIN_STARTER_PATH . '/vendor/autoload.php';
+if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
+	require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
+}
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
