@@ -7,6 +7,11 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ImportExport from "./pages/ImportExport";
 import More from "./pages/More";
+import ComponentsBasic from "./pages/ComponentsBasic";
+import ComponentsAdvanced from "./pages/ComponentsAdvanced";
+import BaseInput from "./pages/BaseInput";
+import ArrayInput from "./pages/ArrayInput";
+import Page from "./pages/Page";
 import Feedback from "./pages/Feedback";
 import Footer from "./layouts/Footer/Footer";
 const NotFound = () => (
