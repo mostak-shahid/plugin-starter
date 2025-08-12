@@ -1,5 +1,27 @@
 {
-    "require": {
-        "yahnis-elsts/plugin-update-checker": "^5.5"
+  "name": "mos/plugin-starter",
+  "description": "Plugin starter boilerplate for WordPress",
+  "type": "wordpress-plugin",
+  "license": "GPLv2",
+  "autoload": {
+    "psr-4": {
+      "Mos\\PluginStarter\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Md. Mostak Shahid",
+      "email": "mostak.shahid@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "require": {}
 }

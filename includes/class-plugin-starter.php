@@ -6,7 +6,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://www.programmelab.com/
+ * @link       http://wp-test.test/
  * @since      1.0.0
  *
  * @package    Plugin_Starter
@@ -25,7 +25,7 @@
  * @since      1.0.0
  * @package    Plugin_Starter
  * @subpackage Plugin_Starter/includes
- * @author     Programmelab <rizvi@programmelab.com>
+ * @author     Programmelab <mostak.shahid@gmail.com>
  */
 class Plugin_Starter
 {
@@ -126,6 +126,8 @@ class Plugin_Starter
 		 * side of the site.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-import-export.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-more.php';
 
 		$this->loader = new Plugin_Starter_Loader();
 	}
@@ -175,11 +177,22 @@ class Plugin_Starter
 		//add_action('admin_head', 'plugin_starter_option_form_submit');
 		$this->loader->add_action('admin_head', $plugin_admin, 'plugin_starter_option_form_submit');
 
-		// Save settings by ajax
+		// Reset settings by ajax
 		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
+		$this->loader->add_action('wp_ajax_plugin_starter_reset_all_settings', $plugin_admin, 'plugin_starter_reset_all_settings');
+
+
+
+		$this->loader->add_action('wp_ajax_plugin_starter_ajax_install_plugins', $plugin_admin, 'plugin_starter_ajax_install_plugins');
+		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_install_plugins', $plugin_admin, 'plugin_starter_ajax_install_plugins');
+
+		$this->loader->add_action('wp_ajax_plugin_starter_ajax_plugins_status', $plugin_admin, 'plugin_starter_ajax_plugins_status');
+		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_plugins_status', $plugin_admin, 'plugin_starter_ajax_plugins_status');
 
 		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
 		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10, 2);
+
+		$this->loader->add_action('rest_api_init', $plugin_admin, 'plugin_starter_rest_api_init');
 	}
 
 	/**

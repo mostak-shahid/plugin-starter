@@ -1,114 +1,92 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://www.programmelab.com//
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+=== Plugin Starter ===
+Contributors: Md. Mostak Shahid
+Tags: frequently asked questions, FAQ, FAQs, easy FAQ, knowledge base, simple FAQ, FAQ categories, knowledgebase, answer, answers, faq page, FAQ Plugin, help, help desk, helpdesk, questions, wordpress faq, FAQ list, FAQ accordion, custom post type with accordion, faq list, faq with accordion, jquery ui accordion, jquery-ui, shortcodes, wordpress, WordPress Plugin, Categories, widget, widgets, statistics, AJAX, responsive FAQ, responsive FAQs, responsive frequently asked questions
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Requires at least: 4.0
+Tested up to: 4.9.8
+Requires PHP: 5.6
+Stable tag: 2.0.0
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+Plugin Starter plugin that lets you easily create, order and publicize FAQs using shortcodes.
 
 == Description ==
+Plugin starter boilerplate for WordPress You can display your every FAQ section in 3 different ways accordion, collapsible, and block view. Includes shortcode options for different display configurations.
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+= FAQ KEY FEATURES =
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+* Plugin Starter, with unlimited tag and category support
+* Create FAQ categories and tags
+* Create FAQ posts and assign categories and tags to them
+* Easy design layout to style your FAQ posts
+* Responsive FAQ design that looks great on all screen sizes
+* For advanced user additional CSS and JS input panel for adding custom scripts
+* And the most important thing it will not add any additional time on your page load time
 
-A few notes about the sections above:
+[mos_faq]
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+Simply insert the above shortcode into any page to display your FAQs.
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+Plugin Starter can do more than just FAQs. If you have a help desk or knowledge base and need to pass on information to your visitors and/or users, the question/answer formatting is perfect. With the various options related to toggling, as well as the custom fields functionality, you can easily create an in-depth knowledge base and help desk.
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+Plugin Starter has a responsive design that makes your FAQs look good on all screen sizes and all devices. No more worrying about what your mobile FAQs might look like. All options and styling will be applied accross all devices, so you can focus on your content.
+
+A few extra seconds could have a huge impact on your ability to engage visitors and make sales. This means that having a fast site is essential — not just for ranking well with Google, but for keeping your bottom-line profits high. So losing page speed for a plugin is a very pain full experience, by default Plugin Starter plugin fully optimized and it will not add any additonal load into your website.
+
+= SHORTCODE =
+
+This shortcode accepts a lot attributes, the attributes controls what to display and how to display your FAQs. Discription of attributes in short is given below
+
+* limit: (int) - number of post to show. Use 'limit'=>-1 to show all FAQs (the 'offset' parameter is ignored with a -1 value).
+* offset: (int) - number of post to displace or pass over. The 'offset' parameter is ignored when 'limit'=>-1 (show all FAQs) is used.
+* category (string) - category ids seperate by `,`
+* tag (string) - tag ids seperate by `,`
+* order (string) - Designates the ascending or descending order of the 'orderby' parameter. Defaults to 'DESC'. An array can be used for multiple order/orderby sets.
+	1. 'ASC' - ascending order from lowest to highest values (1, 2, 3; a, b, c).
+	2. 'DESC' - descending order from highest to lowest values (3, 2, 1; c, b, a).
+* orderby (string) - Sort retrieved posts by parameter. Defaults to 'date (post_date)'. One of ID, author, title, name, type, date, modified, parent, rand, comment_count these options can be passed.
+* author (int | string) - use author id or comma-separated list of IDs.
+* container (string) - Whether to wrap the FAQs section, and what to wrap it with. Default 'div'.
+* container_class (string) - Class that is applied to the container.
+* class (string) - CSS class to use for the container of FAQs.
+* view (string) - One of accordion, collapsible, and block these options can be passed.
+* grid (int) - One of 1, 2, 3, 4, and 5 these options can be passed.
+* pagination (int) - If necessary then use `1` if not then leave this attribute or use `0`.
+* singular (int) - If necessary then use `1` if not then leave this attribute or use `0`.
+
 
 == Installation ==
-
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `plugin-starter.zip` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. Upload "mos-faq" folder to the "/wp-content/plugins/" directory.
+1. Activate the plugin through the "Plugins" menu in WordPress.
+1. That's it.
 
 == Frequently Asked Questions ==
+= What does this do? =
+It uses the custom post type feature to create a dedicated FAQ section in your WordPress site, including categories and tags exclusive to them.
 
-= A question that someone might have =
+= How Do I Use It? =
+Try adding the shortcode [mos_faq] to whatever page you’d like to display the FAQ on.
 
-An answer to that question.
+= What are the current FAQ shortcodes? =
+Currently only one shortcode [mos_faq].
 
-= What about foo bar? =
+= How do I limit the number of posts generated by a shortcode? =
+You can use the limit attribute to limit the number of posts shown. For example:
+[mos_faq limit=10]
 
-Answer to foo bar dilemma.
+= How do I customize my FAQs, for example, to change the font? =
+Yes you can, there is a setting section under FAQs tab from there you can almost customize every pixel of you FAQs if it is not enough for you, there is a section called ** Advanced CSS, JS ** from there you can put custom css and js.
 
 == Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. The screenshot description corresponds to screenshot-1.(png|jpg|jpeg|gif).
+2. The screenshot description corresponds to screenshot-2.(png|jpg|jpeg|gif).
+3. The screenshot description corresponds to screenshot-3.(png|jpg|jpeg|gif).
 
 == Changelog ==
+= 0.2 =
+* Visual Interface of admin panel has been updated.
+* Update CSS & JS panel
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 0.1 =
+* Basic version

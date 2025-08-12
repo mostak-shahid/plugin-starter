@@ -11,19 +11,18 @@
     "format": "wp-scripts format",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
-    "plugin-zip": "wp-scripts plugin-zip"
+    "plugin-zip": "wp-scripts plugin-zip",
+    "plugin-build": "zip -r dist.zip . -x '*.git*' 'node_modules/*' '*.DS_Store*' 'package*.json' 'webpack.config.js' 'src/*'",
+    "postinstall": "composer install"
   },
   "dependencies": {
-    "@yaireo/tagify": "^4.33.2",
-    "axios": "^1.7.9",
-    "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-data-table-component": "^7.7.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^18.2.0",
-    "react-modal": "^3.16.3",
-    "react-router-dom": "^7.1.5"
+    "@coreui/icons": "^1.0.0",
+    "ace-builds": "^1.43.2",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.5",
+    "react-ace": "^14.0.1",
+    "react-bootstrap": "^2.10.9",
+    "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.10.0",
@@ -31,7 +30,6 @@
     "file-loader": "^6.2.0",
     "sass": "^1.84.0",
     "sass-loader": "^16.0.4",
-    "style-loader": "^4.0.0",
-    "@woocommerce/dependency-extraction-webpack-plugin": "^3.0.1"
+    "style-loader": "^4.0.0"
   }
 }

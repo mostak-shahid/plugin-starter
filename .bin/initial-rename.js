@@ -25,9 +25,9 @@ const options = {
         /Plugin Starter/g,
         /PluginStarter/g,
         /Plugin starter/g,
-        /Md. Mostak Shahid/g,
-        /www.mdmostakshahid.com/g,
-        /mostak.shahid@gmail.com/g,
+        /ProgrammeLab/g,
+        /https://programmelab.com/g,
+        /rizvi@programmelab.com/g,
     ],
     to: [
         'your-renamed-plugin',

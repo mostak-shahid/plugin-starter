@@ -1,0 +1,25 @@
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li {
+  padding-left: 20px;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li a {
+  display: block;
+  padding: 5px 0;
+  color: #000000;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li:hover > a, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li.menu-open > a, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li.active > a {
+  color: var(--plugin-starter-color);
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group li.menu-open > ul {
+  display: block;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .top-level-list-group ul {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}/*# sourceMappingURL=MultiLevelListGroup.css.map */

@@ -3,7 +3,7 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       https://www.programmelab.com/
+ * @link       https://mostak-shahid.github.io/
  * @since      1.0.0
  *
  * @package    Plugin_Starter
@@ -18,7 +18,7 @@
  * @since      1.0.0
  * @package    Plugin_Starter
  * @subpackage Plugin_Starter/includes
- * @author     Programmelab <rizvi@programmelab.com>
+ * @author     Programmelab <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Deactivator {
 

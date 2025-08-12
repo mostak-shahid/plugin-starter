@@ -3,7 +3,7 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 module.exports = {
     ...defaultConfig,
     entry: {
-        index: './src/index.js'
+        index: './src/index.jsx'
     },
   
   output: {
@@ -32,6 +32,11 @@ module.exports = {
       },
       {
         test: /\.svg$/,
+        use: ["file-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset/resource',
         use: ["file-loader"],
       },
     ]
