@@ -34,13 +34,13 @@ const ComponentsAdvanced = ({handleChange}) => {
                                 handleChange={handleChange}
                                 options = {{
                                     frame:{
-                                        title: __("Select or Upload Image", "ultimate-security-for-woocommerce"),
+                                        title: __("Select or Upload Image", "plugin-starter"),
                                     },
                                     library: {type: 'image'},
                                     buttons: {
-                                        upload: __("Upload Image", "ultimate-security-for-woocommerce"),
-                                        remove: __("Remove", "ultimate-security-for-woocommerce"),
-                                        select: __("Use this image", "ultimate-security-for-woocommerce")                                            
+                                        upload: __("Upload Image", "plugin-starter"),
+                                        remove: __("Remove", "plugin-starter"),
+                                        select: __("Use this image", "plugin-starter")                                            
                                     }
                                 }}
                             />                           
@@ -71,13 +71,13 @@ const ComponentsAdvanced = ({handleChange}) => {
                                 handleChange={handleChange}
                                 options = {{
                                     frame:{
-                                        title: __("Select or Upload Image", "ultimate-security-for-woocommerce"),
+                                        title: __("Select or Upload Image", "plugin-starter"),
                                     },
                                     library: {type: 'image'},
                                     buttons: {
-                                        upload: __("Upload Image", "ultimate-security-for-woocommerce"),
-                                        remove: __("Remove", "ultimate-security-for-woocommerce"),
-                                        select: __("Use this image", "ultimate-security-for-woocommerce")                                            
+                                        upload: __("Upload Image", "plugin-starter"),
+                                        remove: __("Remove", "plugin-starter"),
+                                        select: __("Use this image", "plugin-starter")                                            
                                     }
                                 }}
                             />                           

@@ -1,6 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import React from 'react';
 import Checkbox from '../components/Checkbox/Checkbox';
+import Background from '../components/Background/Background';
 import MultiSelect from '../components/MultiSelect/MultiSelect';
 import NativeMultiSelect from '../components/NativeMultiSelect/NativeMultiSelect';
 import { useMain } from '../contexts/MainContext';
@@ -12,6 +13,46 @@ const ArrayInput = ({handleChange}) => {
     } = useMain();
     return (
         <>
+            <div className="setting-unit border-bottom py-4">
+                <div className="row justify-content-between">
+                    <div className="col-lg-7">
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
+                            : <h4>{__("Background", "plugin-starter")}</h4>
+                        }
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
+                            : <p>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</p>
+                        }
+                    </div>    
+                    {
+                        !settingLoading &&                               
+                        <div className="col-lg-5">
+                            <Background 
+                                options={[
+                                    'image',
+                                    'color',
+                                    // 'position',
+                                    'size',
+                                    'repeat',
+                                    // 'origin',
+                                    // 'clip',
+                                    // 'attachment',
+                                ]}
+                                defaultValues={[
+                                    {'color': "#000000"},
+                                    {'position': "center center"},
+                                ]}
+                                name="array_input.checkbox_input"
+                                handleChange= {handleChange}
+                                type="block"
+                            />                           
+                        </div>
+                    }
+                </div>
+            </div>
             <div className="setting-unit border-bottom py-4">
                 <div className="row justify-content-between">
                     <div className="col-lg-7">
