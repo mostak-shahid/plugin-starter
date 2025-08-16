@@ -30,16 +30,17 @@ const ArrayInput = ({handleChange}) => {
                     {
                         !settingLoading &&                               
                         <div className="col-lg-5">
+                            
                             <Background 
                                 options={[
                                     'image',
                                     'color',
-                                    // 'position',
+                                    'position',
                                     'size',
                                     'repeat',
-                                    // 'origin',
-                                    // 'clip',
-                                    // 'attachment',
+                                    'origin',
+                                    'clip',
+                                    'attachment',
                                 ]}
                                 defaultValues={[
                                     {'color': "#000000"},

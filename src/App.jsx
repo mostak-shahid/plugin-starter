@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import "./App.css";
+import "./App.scss";
 import Header from "./layouts/Header/Header";
 // import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";

@@ -26,7 +26,6 @@ export default function Header() {
                     <Navbar.Brand href="#/" className="p-0">
                         <div className="d-flex align-items-center gap-2">
                             <img src={logo} alt="" />
-                            <span>{Details?.name}</span>
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -10,6 +10,7 @@ const Background = ({defaultValues, options = [], name = "checkbox-group", type 
     return (
         <>
             <div className="background-wrapper">
+                {console.log(options)}
                 {
                     options.map((option, index) => (
                         option == 'color' ? 
@@ -41,7 +42,7 @@ const Background = ({defaultValues, options = [], name = "checkbox-group", type 
                             </div>
                         : option == 'size' ? 
                         <div className="unit size-unit">
-                                <label class="form-label">{__("Background size", "plugin-starter")}</label>
+                                <label class="form-label">{__("Backgroundx size", "plugin-starter")}</label>
                                 <select 
                                     className="form-select"
                                     // value={settingData?.elements?.basic?.select_field} 
@@ -120,25 +121,26 @@ const Background = ({defaultValues, options = [], name = "checkbox-group", type 
                                     <option value="inherit">inherit</option>
                                 </select> 
                             </div>
+                        : option == 'image' ? 
+                            <MediaUploader 
+                                // data={settingData?.components?.advanced?.media_uploader} 
+                                // name='components.advanced.media_uploader' 
+                                handleChange={handleChange}
+                                options = {{
+                                    frame:{
+                                        title: __("Select or Upload Image", "plugin-starter"),
+                                    },
+                                    library: {type: 'image'},
+                                    buttons: {
+                                        upload: __("Upload Image", "plugin-starter"),
+                                        remove: __("Remove", "plugin-starter"),
+                                        select: __("Use this image", "plugin-starter")                                            
+                                    }
+                                }}
+                            />
                         :''
                     ))
-                }
-                <MediaUploader 
-                                                // data={settingData?.components?.advanced?.media_uploader} 
-                                                // name='components.advanced.media_uploader' 
-                    handleChange={handleChange}
-                    options = {{
-                        frame:{
-                            title: __("Select or Upload Image", "plugin-starter"),
-                        },
-                        library: {type: 'image'},
-                        buttons: {
-                            upload: __("Upload Image", "plugin-starter"),
-                            remove: __("Remove", "plugin-starter"),
-                            select: __("Use this image", "plugin-starter")                                            
-                        }
-                    }}
-                />  
+                }  
             </div>
         </>
     );    

@@ -9,6 +9,9 @@ import { useMain } from "../contexts/MainContext";
 import { formDataPost, setNestedValue, urlToArr } from "../lib/Helpers"; // Import utility function
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+
+import logo from '../assets/images/logo.svg';
+import Details from '../data/details.json';
 const withForm = (OriginalComponent) => {     
     function NewComponent() {
         const {
@@ -156,7 +159,12 @@ const withForm = (OriginalComponent) => {
                     <div className="container">
                         <div className="row g-0">
                             <div className="col-lg-3 d-none d-lg-block">
-                                <div className="plugin-starter-sidebar card mt-0 py-3 rounded-0" style={{marginRight:'-1px', height: "100%"}}>                            
+                                <div className="plugin-starter-sidebar card mt-0 py-3 rounded-0" style={{marginRight:'-1px', height: "100%"}}> 
+                                    <div className="plugin-info d-flex flex-column align-items-center gap-2 p-3 border-bottom">
+                                        <img className="img-fluid" src={logo} alt="" width="100" />
+                                        <span className="fw-bold">{Details?.name}</span>
+                                        <span>{Details?.version}</span>
+                                    </div>                           
                                     <MultiLevelListGroup  data={settingsMenu}/>
                                 </div>
                             </div>

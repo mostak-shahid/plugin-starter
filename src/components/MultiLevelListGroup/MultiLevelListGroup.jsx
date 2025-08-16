@@ -48,7 +48,7 @@ const MultiLevelListGroup = ({ data, level = 0 }) => {
         const hasSub = !!item.sub;
         const isOpen = openKeys[key];
         
-        // const isChildActive = currentPath.startsWith(item.url);
+        const isChildActive = currentPath.startsWith(item.url);
         return (
           <li 
             key={key}
@@ -56,7 +56,7 @@ const MultiLevelListGroup = ({ data, level = 0 }) => {
               `list-group-item`,
               `menu-item-${slugify(item.title)}`,
               hasSub ? 'has-submenu' : '',
-              // isChildActive || (hasSub && isOpen) ? 'menu-open' : '',
+              isChildActive ? 'active' : '',
               isOpen ? 'menu-open' : '',
               currentPath === item.url ? 'active' : '',
             ].filter(Boolean).join(' ')}
