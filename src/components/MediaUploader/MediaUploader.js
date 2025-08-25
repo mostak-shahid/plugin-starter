@@ -58,14 +58,15 @@ export default function MediaUploader({ data, name, handleChange, options={} }) 
     }
     return (
         <>
+            {console.log(data)}
             <div className="plugin-starter-media-uploader-unit">
-                <div className="media-uploader">
+                <div className="media-uploader d-flex align-items-center gap-3">
                     { media?.url && media?.id ?                     
-                        <div className="file-name mb-medium background-primary with-close-button">
+                        <div className="file-name background-primary with-close-button">
                             <img className="uploaded-image" src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} />
                             <img className="plugin-starter-remove-image" onClick={removeImage} src={removeMedia} alt="" />
                         </div> : 
-                        <div className="file-name mb-medium background-primary d-flex align-items-center justify-content-center" onClick={runUploader}>
+                        <div className="file-name background-primary d-flex align-items-center justify-content-center" onClick={runUploader}>
                             <div className="no-media-wrap">
                                 <div className="img-wrap">
                                     <img className="uploaded-image" src={uploadMedia} />
@@ -79,7 +80,7 @@ export default function MediaUploader({ data, name, handleChange, options={} }) 
                         </div>
                     }
                     <div className="file-detail">
-                        <div className="button-wrapper">
+                        <div className="button-wrapper d-flex gap-2 mb-3">
                             <button type="button" className="button button-primary" onClick={runUploader}>
                                 {options?.buttons?.upload || __("Upload Image", "plugin-starter")}
                             </button>                        

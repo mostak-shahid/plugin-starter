@@ -1,10 +1,7 @@
 .plugin-starter-media-uploader-unit {
-  margin-left: 25px;
   .media-uploader {
     .file-name {
       position: relative;
-      width: 100%;
-      max-width: 222px;
       margin-top: 12px;
       border: 1px dashed #dcdcde;
       border-radius: 4px;
@@ -63,13 +60,6 @@
       }
     }
     .file-detail {
-      .upload-help-text {
-      }
-      .button-wrapper {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 16px;
-      }
       .file-link {
         width: 100%;
         max-width: 375px;

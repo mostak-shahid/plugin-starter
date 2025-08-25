@@ -30,26 +30,26 @@ const ArrayInput = ({handleChange}) => {
                     {
                         !settingLoading &&                               
                         <div className="col-lg-5">
-                            
-                            <Background 
+                            <Background
                                 options={[
-                                    'image',
-                                    'color',
-                                    'position',
-                                    'size',
-                                    'repeat',
-                                    'origin',
-                                    'clip',
-                                    'attachment',
+                                    "image",
+                                    "color",
+                                    "position",
+                                    "size",
+                                    "repeat",
+                                    "origin",
+                                    "clip",
+                                    "attachment",
                                 ]}
-                                defaultValues={[
-                                    {'color': "#000000"},
-                                    {'position': "center center"},
-                                ]}
-                                name="array_input.checkbox_input"
-                                handleChange= {handleChange}
-                                type="block"
-                            />                           
+                                // defaultValues={{
+                                //     color: "#ff00ff",
+                                //     size: "cover",
+                                //     repeat: "no-repeat",
+                                // }}
+                                defaultValues={settingData?.array_input?.background}
+                                name="array_input.background"
+                                handleChange={handleChange}
+                            />                          
                         </div>
                     }
                 </div>

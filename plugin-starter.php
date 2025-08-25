@@ -141,6 +141,19 @@ function plugin_starter_get_default_options()
 		'array_input' => [
 			'checkbox_input' => [],
 			'multi_select_input' => [],
+			'background' => [
+				'image' => [
+					'url' => '',
+					'id' => 0
+				],
+				'color' => '#ff00ff',
+				'position' => 'center',
+				'size' => 'cover',
+				'repeat' => 'repeat',
+				'origin' => 'padding-box',
+				'clip' => 'border-box',
+				'attachment' => 'scroll'
+			],
 		],		
 		'components' => [
 			'basic' => [
