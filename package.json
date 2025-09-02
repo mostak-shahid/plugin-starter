@@ -18,14 +18,18 @@
   "dependencies": {
     "@coreui/icons": "^1.0.0",
     "ace-builds": "^1.43.2",
-    "axios": "^1.9.0",
-    "bootstrap": "^5.3.5",
+    "axios": "^1.11.0",
+    "bootstrap": "^5.3.8",
+    "datatables.net": "^2.3.3",
+    "datatables.net-bs5": "^2.3.3",
+    "datatables.net-dt": "^2.3.3",
+    "datatables.net-react": "^1.0.1",
     "react-ace": "^14.0.1",
     "react-bootstrap": "^2.10.9",
     "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^30.10.0",
+    "@wordpress/scripts": "^30.22.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
     "sass": "^1.84.0",

@@ -14,6 +14,7 @@ import ArrayInput from "./pages/ArrayInput";
 import Page from "./pages/Page";
 import Feedback from "./pages/Feedback";
 import Footer from "./layouts/Footer/Footer";
+import Datatable from "./components/Datatable/Datatable"
 const NotFound = () => (
   <div>
     <h2>{__("404 - Page Not Found", "plugin-starter")}</h2>
@@ -41,6 +42,7 @@ function App() {
         <Route path="/settings/feedback" element={<Feedback />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Datatable />
       <Footer/>
     </div>
   );
