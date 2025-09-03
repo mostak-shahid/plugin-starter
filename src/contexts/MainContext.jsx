@@ -15,6 +15,20 @@ const settingsMenu = {
         "description": __( "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam quisquam non velit recusandae maxime, soluta labore id dignissimos tenetur, vitae nesciunt? Aspernatur nemo velit veniam adipisci obcaecati impedit alias, officiis hic ratione perspiciatis, quo molestiae expedita? Aliquam, quam dolorem? Similique enim minus error tempore necessitatibus dolorum quidem modi maiores suscipit.", "plugin-starter" ), 
         "url":"/settings/array_input",
     },
+    "datatable": { 
+        "title": __( "Datatable", "plugin-starter" ), 
+        "url":"/settings/datatable",      
+        "sub": {
+            "basic_table" : {
+                "title": __( "Basic Table", "plugin-starter" ),                
+                "url":"/settings/datatable/basic_table",
+            },
+            "ajax_table" : {
+                "title": __( "Ajax table", "plugin-starter" ),
+                "url":"/settings/datatable/ajax_table",
+            }
+        }
+    },
     "components": { 
         "title": __( "Components", "plugin-starter" ), 
         "url":"/settings/components",      

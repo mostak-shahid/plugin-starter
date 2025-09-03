@@ -36,6 +36,8 @@ function App() {
         <Route path="/settings/components/advanced" element={<ComponentsAdvanced />} />
         <Route path="/settings/base_input" element={<BaseInput />} />
         <Route path="/settings/array_input" element={<ArrayInput />} />
+        <Route path="/settings/datatable/basic_table" element={<ArrayInput />} />
+        <Route path="/settings/datatable/ajax_table" element={<ArrayInput />} />
         <Route path="/page" element={<Page />} />
         <Route path="/settings/import_export" element={<ImportExport />} />
         <Route path="/settings/more" element={<More />} />
