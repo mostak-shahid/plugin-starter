@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import React from 'react';
 import { useMain } from '../contexts/MainContext';
-import withForm from '../pages/withForm';
+import withForm from './withForm';
 const Page = ({handleChange}) => {
     const {
         settingData,

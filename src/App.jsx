@@ -11,10 +11,11 @@ import ComponentsBasic from "./pages/ComponentsBasic";
 import ComponentsAdvanced from "./pages/ComponentsAdvanced";
 import BaseInput from "./pages/BaseInput";
 import ArrayInput from "./pages/ArrayInput";
+import BasicTable from "./pages/BasicTable";
+import AjaxTable from "./pages/AjaxTable";
 import Page from "./pages/Page";
 import Feedback from "./pages/Feedback";
 import Footer from "./layouts/Footer/Footer";
-import Datatable from "./components/Datatable/Datatable"
 const NotFound = () => (
   <div>
     <h2>{__("404 - Page Not Found", "plugin-starter")}</h2>
@@ -36,15 +37,14 @@ function App() {
         <Route path="/settings/components/advanced" element={<ComponentsAdvanced />} />
         <Route path="/settings/base_input" element={<BaseInput />} />
         <Route path="/settings/array_input" element={<ArrayInput />} />
-        <Route path="/settings/datatable/basic_table" element={<ArrayInput />} />
-        <Route path="/settings/datatable/ajax_table" element={<ArrayInput />} />
+        <Route path="/settings/datatable/basic_table" element={<BasicTable />} />
+        <Route path="/settings/datatable/ajax_table" element={<AjaxTable />} />
         <Route path="/page" element={<Page />} />
         <Route path="/settings/import_export" element={<ImportExport />} />
         <Route path="/settings/more" element={<More />} />
         <Route path="/settings/feedback" element={<Feedback />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Datatable />
       <Footer/>
     </div>
   );
