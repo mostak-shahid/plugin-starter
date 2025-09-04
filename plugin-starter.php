@@ -74,6 +74,7 @@ if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
  * admin-specific hooks, and public-facing site hooks.
  */
 require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
+require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
 
 /**
  * Begins execution of the plugin.
