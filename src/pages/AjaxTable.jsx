@@ -63,14 +63,14 @@ const AjaxTable = () => {
     // ✅ Columns
     const columns = [
         {
-        data: null,
-        title: `<input type="checkbox" id="select-all" />`,
-        orderable: false,
-        className: "all",
-        render: (data, type, row) =>
-            `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${
-            selectedPosts.includes(row.id) ? "checked" : ""
-            } />`,
+            data: null,
+            title: `<input type="checkbox" id="select-all" />`,
+            orderable: false,
+            className: "all",
+            render: (data, type, row) =>
+                `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${
+                selectedPosts.includes(row.id) ? "checked" : ""
+                } />`,
         },
         { data: "id", title: "ID", className: "all" },
         {

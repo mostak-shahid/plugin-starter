@@ -1,119 +1,224 @@
 import { __ } from "@wordpress/i18n";
 import Tagify from "@yaireo/tagify";
 import "@yaireo/tagify/dist/tagify.css";
-import React, { useEffect, useRef, useState } from "react";
+import * as ipaddr from "ipaddr.js";
+import React, {
+	useRef,
+	useEffect,
+	useState,
+	forwardRef,
+	useImperativeHandle,
+} from "react";
 import "./TagInput.scss";
 
-const TagInput = ({ type = 'tag', initialTags, whitelist=[], name, handleChange }) => {
-    const tagifyInputRef = useRef(null);
-    const tagifyInstanceRef = useRef(null);
-    
-    
-    // Whitelist with objects
-    // const whitelist = type === "country" ? countries : type === "type" ? rolesArray : [];
+// Validation functions
+function isValidIpOrCidr(value) {
+	try {
+		if (value.includes("/")) {
+			// CIDR path
+			const [addr, prefix] = ipaddr.parseCIDR(value); // throws if invalid
+			const max = addr.kind() === "ipv4" ? 32 : 128;
+			return Number.isInteger(prefix) && prefix >= 0 && prefix <= max;
+		}
+		// Single IP path
+		ipaddr.parse(value); // throws if invalid
+		return true;
+	} catch {
+		return false;
+	}
+}
 
-    // Regex for validating IPv4 address and Email
-    const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+function isValidEmail(value) {
+	const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	return emailRegex.test(value);
+}
 
-    // Ensure initialTags is always an array
-    const formattedInitialTags = Array.isArray(initialTags) ? initialTags.map(item => (item.value && item.code ? { value: item.value, code: item.code }: item)) : [];
-    
+function isValidUrl(value) {
+	try {
+		// Try to create a URL object - this will throw for invalid URLs
+		new URL(value.startsWith('http') ? value : `https://${value}`);
+		return true;
+	} catch {
+		return false;
+	}
+}
 
-    const [currentTags, setCurrentTags] = useState(formattedInitialTags);
+const TagInput = forwardRef(
+	(
+		{ type = "tag", initialTags, whitelist = [], name, handleChange },
+		ref,
+	) => {
+		const tagifyInputRef = useRef(null);
+		const tagifyInstanceRef = useRef(null);
+		const isInternalChangeRef = useRef(false);
+		const lastInitialTagsRef = useRef(null);
+		const isInitializedRef = useRef(false);
+		const skipNextSyncRef = useRef(false);
 
-    useEffect(() => {
-        // Initialize Tagify
-        tagifyInstanceRef.current = new Tagify(tagifyInputRef.current, {
-            whitelist: whitelist.map(item => (item.value && item.code ? { value: item.value, code: item.code }: item)), // Convert whitelist for Tagify
-            dropdown: {
-                maxItems: whitelist.length,
-                enabled: 0,
-            },
-        });
+		const formattedInitialTags = Array.isArray(initialTags)
+			? initialTags.map((item) =>
+					item.value && item.code
+						? { value: item.value, code: item.code }
+						: item,
+			  )
+			: [];
 
-        // Set initial tags properly
-        tagifyInstanceRef.current.addTags(formattedInitialTags);
+		const [currentTags, setCurrentTags] = useState(formattedInitialTags);
 
-        // Listen for tag changes
-        tagifyInstanceRef.current.on("change", (e) => {
-            // console.log("Name:", name, ", Value:", e.detail.value);
+		useEffect(() => {
+			if (isInitializedRef.current || !tagifyInputRef.current) return;
 
-            let parsedTags;
-            try {
-                parsedTags = JSON.parse(e.detail.value); // Convert JSON string to array
-            } catch (error) {
-                parsedTags = [];
-            }
+			const baseOptions = {
+				whitelist: whitelist.map(item =>
+					item.value && item.code ? { value: item.value, code: item.code } : item
+				),
+				dropdown: { maxItems: whitelist.length, enabled: 0 },
+				originalInputValueFormat: (valuesArr) => JSON.stringify(valuesArr),
+				pasteAsTags: true,
+				duplicates: false,
 
-            setCurrentTags(parsedTags);
-            handleChange(name, parsedTags); // Pass updated tags to parent
-        });
+				// Central validation based on type
+				validate: (tagData) => {
+					const value = tagData.value;
+					
+					switch (type) {
+						case "ip":
+							return isValidIpOrCidr(value) || "Invalid IP or CIDR";
+						case "email":
+							return isValidEmail(value) || "Invalid email address";
+						case "url":
+							return isValidUrl(value) || "Invalid URL";
+						case "role":
+						case "page":
+						case "category":
+						case "method":
+						case "username":
+						case "tag":
+							// For types with whitelist, validate against whitelist
+							if (whitelist.length > 0) {
+								const isValid = whitelist.some(item => 
+									(typeof item === 'object' ? item.value === value : item === value)
+								);
+								return isValid || "Invalid selection";
+							}
+							return true; // No validation if no whitelist
+						default:
+							return true; // No validation for unknown types
+					}
+				},
+			};
 
-        
+			tagifyInstanceRef.current = new Tagify(tagifyInputRef.current, baseOptions);
+			const instance = tagifyInstanceRef.current;
 
-        if (type == "ip") {
-            tagifyInstanceRef.current.on('add', (e) => {
-                const addedTag = e.detail.data;
-                // Validate the IP address
-                if (!ipRegex.test(addedTag.value)) {
-                    tagifyInstanceRef.current.removeTag(addedTag.value); 
-                }
-            });
-        } else if(type == "email"){
-            tagifyInstanceRef.current.on('add', (e) => {
-                const addedTag = e.detail.data;
-                // Validate the email address
-                if (!emailRegex.test(addedTag.value)) {
-                    tagifyInstanceRef.current.removeTag(addedTag.value); 
-                }
-            });
-        }
+			const handleTagChange = (e) => {
+				let parsed;
+				try { parsed = JSON.parse(e.detail.value); } catch { parsed = []; }
+				setCurrentTags(parsed);
+				handleChange(name, parsed);
+				isInternalChangeRef.current = false;
+			};
+			instance.on("change", handleTagChange);
 
-        return () => {
-            tagifyInstanceRef.current.destroy(); // Cleanup on unmount
-        };
-    }, [initialTags]);
+			if (formattedInitialTags.length > 0) {
+				isInternalChangeRef.current = true;
+				instance.addTags(formattedInitialTags);
+			}
+			lastInitialTagsRef.current = JSON.stringify(formattedInitialTags);
+			isInitializedRef.current = true;
 
-    useEffect(() => {
-        if (tagifyInstanceRef.current) {
-            tagifyInstanceRef.current.removeAllTags();
-            tagifyInstanceRef.current.addTags(formattedInitialTags);
-        }
-    }, [initialTags]);
+			return () => {
+				try { tagifyInstanceRef.current?.destroy?.(); } catch {}
+				tagifyInstanceRef.current = null;
+				isInitializedRef.current = false;
+			};
+		}, []);
 
-    // Handle Select All
-    const handleSelectAll = () => {
-        tagifyInstanceRef.current.removeAllTags(); // Remove all tags
-        tagifyInstanceRef.current.addTags(whitelist.map(item => item.value)); // Add all whitelist items
-    };
+		useEffect(() => {
+			if (!tagifyInstanceRef.current || !isInitializedRef.current) {
+				return;
+			}
 
-    // Handle Remove All
-    const handleRemoveAll = () => {
-        tagifyInstanceRef.current.removeAllTags(); // Remove all tags
-        setCurrentTags([]);
-    };
+			const newInitialTagsJSON = JSON.stringify(formattedInitialTags);
 
-    return (
-        <div className="tagify-wrapper">
-            <input 
-                type="text" 
-                ref={tagifyInputRef} 
-                placeholder={`Add ${type}...`}
-            />
-            {
-                whitelist.length ?
-                <div className="tagify-button-group mt-2">
-                    <button className="tagify-button select-all-buton pl-heading-1 fw-600 text-purple-40" onClick={handleSelectAll}>
-                        {__("Select All", "plugin-starter")}
-                    </button>
-                    <button className="tagify-button remove-all-button pl-heading-1 fw-600 text-extra" onClick={handleRemoveAll}>
-                        {__("Remove All", "plugin-starter")}
-                    </button>
-                </div> : null
-            }
-        </div>
-    );
-};
+			if (skipNextSyncRef.current) {
+				skipNextSyncRef.current = false;
+				lastInitialTagsRef.current = newInitialTagsJSON;
+				return;
+			}
+
+			if (isInternalChangeRef.current) {
+				return;
+			}
+
+			const currentValues = tagifyInstanceRef.current.value || [];
+			const currentJSON = JSON.stringify(currentValues);
+
+			isInternalChangeRef.current = true;
+
+			setTimeout(() => {
+				if (tagifyInstanceRef.current && isInitializedRef.current) {
+					tagifyInstanceRef.current.removeAllTags();
+					if (formattedInitialTags.length > 0) {
+						tagifyInstanceRef.current.addTags(formattedInitialTags);
+					}
+					setTimeout(() => {
+						isInternalChangeRef.current = false;
+					}, 100);
+				}
+			}, 0);
+
+			lastInitialTagsRef.current = newInitialTagsJSON;
+		}, [initialTags]);
+
+		const handleSelectAll = () => {
+			tagifyInstanceRef.current.removeAllTags();
+			const allTags = whitelist.map((item) =>
+				typeof item === "object" && item.value ? item : { value: item },
+			);
+			tagifyInstanceRef.current.addTags(allTags);
+		};
+
+		const handleRemoveAll = () => {
+			tagifyInstanceRef.current.removeAllTags();
+		};
+
+		useImperativeHandle(ref, () => ({
+			addTag: (tag) => {
+				if (tagifyInstanceRef.current) {
+					tagifyInstanceRef.current.addTags([tag]);
+				}
+			},
+		}));
+
+		return (
+			<div className="tagify-wrapper">
+				<input
+					type="text"
+					ref={tagifyInputRef}
+					placeholder={`Add ${type}...`}
+				/>
+				{whitelist.length > 0 && (
+					<div className="tagify-button-group mt-2">
+						<button
+							type="button"
+							className="tagify-button select-all-buton pl-heading-1 fw-600 text-purple-40"
+							onClick={handleSelectAll}
+						>
+							{__("Select All", "plugin-starter")}
+						</button>
+						<button
+							type="button"
+							className="tagify-button remove-all-button pl-heading-1 fw-600 text-extra"
+							onClick={handleRemoveAll}
+						>
+							{__("Remove All", "plugin-starter")}
+						</button>
+					</div>
+				)}
+			</div>
+		);
+	},
+);
 
 export default TagInput;

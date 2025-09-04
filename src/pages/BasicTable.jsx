@@ -35,6 +35,8 @@ const BasicTable = ({handleChange}) => {
     const [selectedPosts, setSelectedPosts] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
 
+    const filters = ["publish", "draft", "trash", "pending"];
+
     useEffect(() => {
         fetchPosts(statusFilter);
     }, [statusFilter]);
@@ -84,61 +86,62 @@ const BasicTable = ({handleChange}) => {
     };
 
     const columns = [
-        {
-            data: null,
-            title: `<input type="checkbox" id="select-all" />`, // must be HTML string
-            orderable: false,
-            className: "all", // always visible
-            render: (data, type, row) =>
-                `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${
-                selectedPosts.includes(row.id) ? "checked" : ""
-                } />`
-            },
-        { 
-            data: "id", 
-            title: "ID",
-            className: "min-tablet", // visible on tablet/desktop, hidden on phone 
-        },
-        {
-            data: "author",
-            title: "Author",
-            className: "min-desktop", // only show on desktop
-            render: (data, type, row) => {
-                const author = row._embedded?.author?.[0];
-                return author
-                ? `<img src="${author.avatar_urls[24]}" class="rounded-circle me-2" width="24" height="24"/> ${author.name}`
-                : "—";
-            }
-        },
-        { 
-            data: "title.rendered", 
-            title: "Title",
-            className: "min-desktop", // only show on desktop 
-        },
-        {
-            data: "categories",
-            title: "Category",
-            render: (data, type, row) =>
-                row._embedded?.["wp:term"]?.[0]?.map((c) => c.name).join(", ") || "—"
-            },
-        {
-            data: "tags",
-            title: "Tags",
-            render: (data, type, row) =>
-                row._embedded?.["wp:term"]?.[1]?.map((t) => t.name).join(", ") || "—"
-            },
-        {   data: "date", title: "Date" },
-        {
-            data: null,
-            title: "Action",
-            className: "all",
-            render: (data, type, row) => `
-                <button class="btn btn-sm btn-success me-1" onclick="window.changeStatus(${row.id}, 'publish')">Publish</button>
-                <button class="btn btn-sm btn-warning me-1" onclick="window.changeStatus(${row.id}, 'draft')">Draft</button>
-                <button class="btn btn-sm btn-danger" onclick="window.changeStatus(${row.id}, 'trash')">Trash</button>
-            `
-        }
+    {
+        className: "control",  // 👈 required
+        orderable: false,
+        data: null,
+        defaultContent: "",
+    },
+    {
+        data: null,
+        title: `<input type="checkbox" id="select-all" />`,
+        orderable: false,
+        className: "all",
+        render: (data, type, row) =>
+            `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${
+            selectedPosts.includes(row.id) ? "checked" : ""
+            } />`,
+    },
+    {
+        data: "id",
+        title: "ID",
+        className: "all"
+    },
+    {
+        data: "author",
+        title: "Author",
+        className: "min-tablet",
+        render: (d, t, row) =>
+        row.author
+            ? `<img src="${row.author.avatar}" class="rounded-circle me-2" width="24" height="24"/> ${row.author.name}`
+            : "—",
+    },
+    { data: "title", title: "Title", className: "all" },
+    {
+        data: "categories",
+        title: "Category",
+        className: "min-desktop",
+        render: (d, t, row) => row.categories?.join(", ") || "—",
+    },
+    {
+        data: "tags",
+        title: "Tags",
+        className: "min-desktop",
+        render: (d, t, row) => row.tags?.join(", ") || "—",
+    },
+    { data: "date", title: "Date", className: "all" },
+    {
+        data: null,
+        title: "Action",
+        className: "all",
+        render: (d, t, row) => `
+        <button class="btn btn-sm btn-success me-1" onclick="window.changeStatus(${row.id}, 'publish')">Publish</button>
+        <button class="btn btn-sm btn-warning me-1" onclick="window.changeStatus(${row.id}, 'draft')">Draft</button>
+        <button class="btn btn-sm btn-danger" onclick="window.changeStatus(${row.id}, 'trash')">Trash</button>
+        `,
+    },
     ];
+
 
     // Hook checkboxes inside the table
     useEffect(() => {
@@ -194,8 +197,8 @@ const BasicTable = ({handleChange}) => {
         <>
             <div className="setting-unit py-4">
                 <div className="mb-3">
-                    {["publish", "draft", "trash"].map((status) => (
-                    <a
+                    {filters.map((status) => (
+                    <span
                         key={status}
                         href="#"
                         onClick={(e) => {
@@ -203,21 +206,27 @@ const BasicTable = ({handleChange}) => {
                         setStatusFilter(status);
                         }}
                         className={`me-3 ${statusFilter === status ? "fw-bold text-primary" : ""}`}
+                        style={{ cursor: "pointer" }}
                     >
                         {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </a>
+                    </span>
                     ))}
                 </div>
 
                 <div className="mb-3 d-flex">
                     <select
-                    className="form-select w-auto me-2"
-                    onChange={(e) => setBulkAction(e.target.value)}
+                        className="form-select w-auto me-2"
+                        onChange={(e) => setBulkAction(e.target.value)}
                     >
-                    <option value="">Bulk Actions</option>
-                    <option value="publish">Publish</option>
-                    <option value="draft">Move to Draft</option>
-                    <option value="trash">Move to Trash</option>
+                        <option value="">Bulk Actions</option>
+                        {filters.map((s) => (
+                            <option
+                                key={s}
+                                value={s}
+                            >
+                                {s.charAt(0).toUpperCase() + s.slice(1)}
+                            </option>
+                        ))}
                     </select>
                     <button className="btn btn-primary" onClick={handleBulkAction}>
                     Apply
@@ -231,11 +240,19 @@ const BasicTable = ({handleChange}) => {
                     options={{
                         searching: true,
                         order: [[2, "asc"]],
+                        responsive: {
+                            details: {
+                                type: "column",   // 👈 show arrow in "control" column
+                                target: 0         // 👈 column index (0 = our dedicated first col)
+                            }
+                        },
                         columnDefs: [
-                            { targets: [2, 3, 5], orderable: true },
+                            { className: "control", orderable: false, targets: 0 },
+                            { targets: [3, 6], orderable: true },
                             { targets: "_all", orderable: false }
                         ],
-                        responsive: true,   // 👈 enable responsive plugin
+                        // responsive: true,   // 👈 enable responsive plugin
+                        // dom: "Bfrtip", // ✅ place buttons on top
                     }}
                     className="table table-striped table-bordered"
                 />
