@@ -14,16 +14,16 @@ export default function Dashboard() {
     const [error, setError] = useState(null);
     useEffect(() => {
         const fetchPlugins = async () => {
-        try {
-            // const response = await axios.get('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-details.json');
-            const response = await axios.get('https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[author]=mostakshahid&request[per_page]=24');
-            // 
-            setPlugins(response.data.plugins);
-        } catch (error) {
-            setError('Error fetching plugin data:', error);
-        } finally {
-            setPluginsLoading(false);
-        }
+            try {
+                // const response = await axios.get('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-details.json');
+                const response = await axios.get(`/wp-json/plugin-starter/v1/plugins`);
+                // 
+                setPlugins(response.data.plugins);
+            } catch (error) {
+                setError('Error fetching plugin data:', error);
+            } finally {
+                setPluginsLoading(false);
+            }
         };
         fetchPlugins();
     }, []);
@@ -110,7 +110,7 @@ export default function Dashboard() {
                                                     intro={plugin.short_description} 
                                                     plugin_source='internal'
                                                     plugin_slug={plugin.slug} 
-                                                    plugin_file={`${plugin.file}/${plugin.slug}`} 
+                                                    plugin_file={`${plugin.slug}/${plugin.slug}.php`} 
                                                     download_url={plugin.download_link}
                                                 /> 
                                             </div> 

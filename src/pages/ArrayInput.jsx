@@ -1,6 +1,8 @@
 import { __ } from "@wordpress/i18n";
 import React from 'react';
 import Checkbox from '../components/Checkbox/Checkbox';
+import Font from '../components/Font/Font';
+import Border from '../components/Border/Border';
 import Background from '../components/Background/Background';
 import MultiSelect from '../components/MultiSelect/MultiSelect';
 import NativeMultiSelect from '../components/NativeMultiSelect/NativeMultiSelect';
@@ -13,6 +15,79 @@ const ArrayInput = ({handleChange}) => {
     } = useMain();
     return (
         <>
+            <div className="setting-unit border-bottom py-4">
+                <div className="row justify-content-between">
+                    <div className="col-lg-7">
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
+                            : <h4>{__("Border", "plugin-starter")}</h4>
+                        }
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
+                            : <p>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</p>
+                        }
+                    </div>    
+                    {
+                        !settingLoading &&                               
+                        <div className="col-lg-5">
+                            <Border
+                                options={[
+                                    "color",
+                                    "width",
+                                    "style",
+                                    "radius",
+                                ]}
+                                defaultValues={settingData?.array_input?.border}
+                                name="array_input.border"
+                                handleChange={handleChange}
+                            />                          
+                        </div>
+                    }
+                </div>
+            </div>
+            <div className="setting-unit border-bottom py-4">
+                <div className="row justify-content-between">
+                    <div className="col-lg-7">
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
+                            : <h4>{__("Font", "plugin-starter")}</h4>
+                        }
+                        {
+                            settingLoading 
+                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
+                            : <p>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</p>
+                        }
+                    </div>    
+                    {
+                        !settingLoading &&                               
+                        <div className="col-lg-5">
+                            <Font
+                                options={[
+                                    "color",
+                                    "font-family",
+                                    "font-size",
+                                    "font-weight",
+                                    "font-style",
+                                    "font-variant",
+                                    "line-height",
+                                    "font-stretch",
+                                    "letter-spacing",
+                                    "word-spacing",
+                                    "text-align",
+                                    "text-decoration",
+                                    "text-transform",
+                                ]}
+                                defaultValues={settingData?.array_input?.font}
+                                name="array_input.font"
+                                handleChange={handleChange}
+                            />                          
+                        </div>
+                    }
+                </div>
+            </div>
             <div className="setting-unit border-bottom py-4">
                 <div className="row justify-content-between">
                     <div className="col-lg-7">

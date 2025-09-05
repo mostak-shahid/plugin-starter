@@ -111,10 +111,6 @@
 .plugin-starter-settings-template .plugin-starter-settings-wrapper textarea.form-control {
   border: 1px solid #dee2e6;
 }
-.plugin-starter-settings-template .plugin-starter-settings-wrapper input[type=color].form-control {
-  padding: 2px;
-  width: 27px;
-}
 .plugin-starter-settings-template .plugin-starter-settings-wrapper .button-link {
   background-color: transparent !important;
 }

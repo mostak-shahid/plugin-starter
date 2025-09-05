@@ -7,14 +7,14 @@ export default function Footer() {
             <div className="plugin-starter-footer pb-3">
                 <div className="container">
                     <div className="row align-items-center justify-content-between">
-                        <div className="col-lg-6 mb-3 mb-lg-0 product-by">
-                            <div className="d-flex align-items-center gap-2">
+                        <div className="col-lg-6 text-center text-lg-start product-by">
+                            <div className="d-flex align-items-center gap-2 justify-content-center justify-content-lg-start">
                                 <img src={logo} alt="" width="30" height="30" />
                                 <span>{Details?.name}</span>
                             </div>
                         </div>
-                        <div className="col-lg-6 text-end product-version">
-                            {Details?.version} {__( 'Core', "plugin-starter" )}
+                        <div className="col-lg-6 mt-3 mt-lg-0 text-center text-lg-end product-version">
+                            {Details?.version} {__( 'Core', "mos-faqs" )}
                         </div>
                     </div>                       
                 </div>
