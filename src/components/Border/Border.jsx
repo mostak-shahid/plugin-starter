@@ -32,9 +32,10 @@ const Border = ({options, defaultValues = {}, name, handleChange}) => {
                                 <div class="input-group">
                                     <span className="input-group-text"><span className="dashicons dashicons-move"></span></span>
                                     <input 
-                                        type="text" 
+                                        type="number" 
                                         className="form-control"
                                         value={values[option] || ""}
+                                        min="0"
                                         onChange={(e) => updateValue(option, e.target.value)}
                                     />
                                     <span className="input-group-text">px</span>
