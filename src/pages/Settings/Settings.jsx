@@ -1,7 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import React from 'react';
 import MultiLevelListGroup from '../../components/MultiLevelListGroup/MultiLevelListGroup';
-import Switch from '../../components/Switch/Switch';
 import { useMain } from "../../contexts/MainContext";
 export default function Settings() {
     const {
@@ -10,7 +9,7 @@ export default function Settings() {
         settingsMenu,
     } = useMain();
     return (
-        <div className="plugin-starter-settings">
+        <div className="plugin-startersettings">
             <div className="container">
                 <div className="row g-0">
                     <div className="col-lg-3 d-none d-lg-block">
@@ -45,9 +44,9 @@ export default function Settings() {
                                 </div>
                             </div>
                             <div className="card-footer d-flex gap-2">
-                                <button type="button" class="btn btn-primary btn-sm">Save</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">Reset</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">Reset All</button>
+                                <button type="button" className="btn btn-primary btn-sm">Save</button>
+                                <button type="button" className="btn btn-outline-primary btn-sm">Reset</button>
+                                <button type="button" className="btn btn-outline-primary btn-sm">Reset All</button>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,9 @@
-.plugin-starter-notice {
+.plugin-starternotice {
   display: flex;
   align-items: stretch;
   background-color: #414141;
 }
-.plugin-starter-notice .notice-tick {
+.plugin-starternotice .notice-tick {
   background-color: #4AB866;
   display: flex;
   align-items: center;
@@ -11,11 +11,11 @@
   flex: 0 0 48px;
   width: 48px;
 }
-.plugin-starter-notice .notice-tick img {
+.plugin-starternotice .notice-tick img {
   display: inline-block;
   vertical-align: top;
 }
-.plugin-starter-notice .notice-content {
+.plugin-starternotice .notice-content {
   flex: 1;
   color: #FFFFFF;
   font-weight: 400;
@@ -24,14 +24,14 @@
   letter-spacing: 0%;
   padding: 16px;
 }
-.plugin-starter-notice .notice-close {
+.plugin-starternotice .notice-close {
   flex: 0 0 40px;
   width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.plugin-starter-notice .notice-close img {
+.plugin-starternotice .notice-close img {
   display: inline-block;
   vertical-align: top;
   cursor: pointer;

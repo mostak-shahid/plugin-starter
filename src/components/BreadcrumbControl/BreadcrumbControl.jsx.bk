@@ -1,0 +1,140 @@
+import React, { useMemo, useEffect } from 'react';
+import { useMain } from "../../contexts/MainContext";
+const BreadcrumbControl = () => {
+    const {
+        settingsMenu,
+    } = useMain();
+    // Get current path from window.location.hash
+    const getCurrentPath = () => {
+        const hash = window.location.hash;
+        return hash.replace(/^#?\/?/, '');
+    };
+
+    const [currentPath, setCurrentPath] = React.useState(getCurrentPath());
+
+    // Listen to hash changes
+    useEffect(() => {
+        const handleHashChange = () => {
+        setCurrentPath(getCurrentPath());
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    const breadcrumbItems = useMemo(() => {
+        const path = currentPath;
+        const segments = path.split('/').filter(Boolean);
+
+        if (segments.length === 0) {
+        return [{ text: 'Home', href: '#/' }];
+        }
+
+        const items = [{ text: 'Home', href: '#/' }];
+        let buildPath = '';
+        let currentMenu = settingsMenu;
+
+        for (let i = 0; i < segments.length; i++) {
+        buildPath += `/${segments[i]}`;
+        
+        // Find matching item in current menu level
+        const menuItem = currentMenu?.find(item => {
+            const itemPath = item.url.replace(/^#?\/?/, '');
+            return itemPath === buildPath.replace(/^\//, '') || 
+                itemPath.endsWith(segments[i]);
+        });
+
+        if (menuItem) {
+            items.push({
+            text: menuItem.text,
+            href: `#${menuItem.url}`,
+            icon: menuItem.icon
+            });
+
+            // Update current menu to nested items if they exist
+            currentMenu = menuItem.items;
+        } else {
+            // If no menu item found, use segment as fallback
+            items.push({
+            text: segments[i].split(/[-_]/).map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' '),
+            href: `#${buildPath}`
+            });
+        }
+        }
+
+        return items;
+    }, [currentPath, settingsMenu]);
+
+    const handleClick = (item, e) => {
+        e.preventDefault();
+        if (item.href && item.href !== '#/') {
+            window.location.hash = item.href.replace(/^#/, '');
+        } else {
+            window.location.hash = '/';
+        }
+    };
+
+    return (
+        <nav aria-label="Breadcrumb" style={{ marginBottom: '20px' }}>
+            <ol style={{
+                display: 'flex',
+                alignItems: 'center',
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                flexWrap: 'wrap',
+                gap: '8px'
+            }}>
+                {breadcrumbItems.map((item, index) => {
+                const isLast = index === breadcrumbItems.length - 1;
+                
+                return (
+                    <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {index > 0 && (
+                        <span style={{ color: '#ccc', userSelect: 'none' }}>/</span>
+                    )}
+                    {isLast ? (
+                        <span style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        color: '#333',
+                        fontSize: '14px',
+                        fontWeight: '500'
+                        }}>
+                        {/* {item.icon && <span style={{ fontSize: '16px' }}>{item.icon}</span>} */}
+                        {item.text}
+                        </span>
+                    ) : (
+                        <a
+                        href={item.href}
+                        onClick={(e) => handleClick(item, e)}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            color: '#1890ff',
+                            textDecoration: 'none',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                            transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#40a9ff'}
+                        onMouseLeave={(e) => e.target.style.color = '#1890ff'}
+                        >
+                        {/* {item.icon && <span style={{ fontSize: '16px' }}>{item.icon}</span>} */}
+                        {item.text}
+                        </a>
+                    )}
+                    </li>
+                );
+                })}
+            </ol>
+        </nav>
+    );
+};
+
+
+export default BreadcrumbControl;

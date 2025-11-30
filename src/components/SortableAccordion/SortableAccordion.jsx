@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import accordionArrow from "../../assets/images/accordion-arrow.svg";
@@ -11,29 +11,29 @@ const ITEM_TYPE = "ACCORDION_ITEM";
 const SortableAccordion = ({ name, options, fields, savedData = [], handleChange }) => {
   const sectionsFirstRender = useRef(true);
 
-  const [sections, setSections] = useState(
-    savedData.length > 0
-      ? savedData.map((data, index) => ({ id: index + 1, values: data }))
-      : [{ id: 1, values: initializeFields(fields) }]
-  );
-  
-
-  function initializeFields(fields) {
-    return fields.reduce((acc, field) => {
+  const initializeFields = useCallback(() => (
+    fields.reduce((acc, field) => {
       acc[field.name] = field.type === "checkbox" ? false : "";
       return acc;
-    }, {});
-  }
+    }, {})
+  ), [fields]);
 
-  const moveSection = (dragIndex, hoverIndex) => {
-    const updatedSections = [...sections];
-    const [movedItem] = updatedSections.splice(dragIndex, 1);
-    updatedSections.splice(hoverIndex, 0, movedItem);
-    setSections(updatedSections);
-  };
+  const [sections, setSections] = useState(() => (
+    savedData.length > 0
+      ? savedData.map((data, index) => ({ id: index + 1, values: data }))
+      : [{ id: 1, values: initializeFields() }]
+  ));
 
-  const updateField = (sectionId, fieldName, value) => {
-    console.log(sectionId, fieldName, value)
+  const moveSection = useCallback((dragIndex, hoverIndex) => {
+    setSections((prevSections) => {
+      const updatedSections = [...prevSections];
+      const [movedItem] = updatedSections.splice(dragIndex, 1);
+      updatedSections.splice(hoverIndex, 0, movedItem);
+      return updatedSections;
+    });
+  }, []);
+
+  const updateField = useCallback((sectionId, fieldName, value) => {
     setSections((prevSections) =>
       prevSections.map((section) =>
         section.id === sectionId
@@ -41,15 +41,18 @@ const SortableAccordion = ({ name, options, fields, savedData = [], handleChange
           : section
       )
     );
-  };
+  }, []);
 
-  const addSection = () => {
-    setSections([...sections, { id: Date.now(), values: initializeFields(fields) }]);
-  };
+  const addSection = useCallback(() => {
+    setSections((prevSections) => [
+      ...prevSections,
+      { id: Date.now(), values: initializeFields() }
+    ]);
+  }, [initializeFields]);
 
-  const removeSection = (id) => {
-    setSections(sections.filter((section) => section.id !== id));
-  };
+  const removeSection = useCallback((id) => {
+    setSections((prevSections) => prevSections.filter((section) => section.id !== id));
+  }, []);
 
   useEffect(() => {
     if (sectionsFirstRender.current) {
@@ -62,7 +65,7 @@ const SortableAccordion = ({ name, options, fields, savedData = [], handleChange
     // console.log('sections', sections)
     // console.log('valuesArray', valuesArray)
     handleChange(name, valuesArray)
-  }, [sections])
+  }, [handleChange, name, sections])
   
   return (
     <DndProvider backend={HTML5Backend}>

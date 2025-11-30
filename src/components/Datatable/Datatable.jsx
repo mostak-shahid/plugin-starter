@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import apiFetch from "@wordpress/api-fetch";
 // import DataTable from "datatables.net-react";
 // import DT from "datatables.net-dt";
 
@@ -11,9 +11,6 @@ DataTable.use(DT);
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
-
-DataTable.use(DT);
-
 const PostTable = () => {
   const [posts, setPosts] = useState([]);
   const [statusFilter, setStatusFilter] = useState("publish");
@@ -21,24 +18,26 @@ const PostTable = () => {
   const [selectedPosts, setSelectedPosts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  useEffect(() => {
-    fetchPosts(statusFilter);
-  }, [statusFilter]);
-
-  const fetchPosts = async (status) => {
-    const res = await axios.get(`/wp-json/wp/v2/posts?per_page=100&status=${status}&_embed`);
-    setPosts(res.data);
+  const fetchPosts = useCallback(async (status) => {
+    const data = await apiFetch({
+      path: `/wp/v2/posts?per_page=100&status=${status}&_embed`
+    });
+    setPosts(data);
     setSelectedPosts([]); // reset selection when filter changes
     setSelectAll(false);
-  };
+  }, []);
 
-  const toggleSelectPost = (id) => {
+  useEffect(() => {
+    fetchPosts(statusFilter);
+  }, [fetchPosts, statusFilter]);
+
+  const toggleSelectPost = useCallback((id) => {
     setSelectedPosts((prev) =>
       prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
     );
-  };
+  }, []);
 
-  const toggleSelectAll = () => {
+  const toggleSelectAll = useCallback(() => {
     if (selectAll) {
       setSelectedPosts([]);
       setSelectAll(false);
@@ -46,28 +45,31 @@ const PostTable = () => {
       setSelectedPosts(posts.map((p) => p.id));
       setSelectAll(true);
     }
-  };
+  }, [posts, selectAll]);
 
-  const changeStatus = async (postId, newStatus) => {
-    await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: newStatus });
+  const changeStatus = useCallback(async (postId, newStatus) => {
+    await apiFetch({
+      path: `/wp/v2/posts/${postId}`,
+      method: "POST",
+      data: { status: newStatus }
+    });
     fetchPosts(statusFilter);
-  };
+  }, [fetchPosts, statusFilter]);
 
-  const handleBulkAction = async () => {
-    console.log('bulkAction', bulkAction, 'selectedPosts', selectedPosts);
+  const handleBulkAction = useCallback(async () => {
     if (!bulkAction || selectedPosts.length === 0) {
       alert("Please select posts and choose an action.");
       return;
     }
 
     // for (let postId of selectedPosts) {
-    //   await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: bulkAction });
+    //   await apiFetch({ path: `/wp/v2/posts/${postId}`, method: "POST", data: { status: bulkAction } });
     // }
 
     // setSelectedPosts([]);
     // setSelectAll(false);
     // fetchPosts(statusFilter);
-  };
+  }, [bulkAction, selectedPosts]);
 
   const columns = [
     {
@@ -129,7 +131,7 @@ const PostTable = () => {
 
     table.addEventListener("change", handler);
     return () => table.removeEventListener("change", handler);
-  }, [posts]);
+  }, [posts, toggleSelectPost]);
 
   useEffect(() => {
   const table = document.querySelector("#react-posts-table");
@@ -161,10 +163,17 @@ const PostTable = () => {
     table.removeEventListener("change", rowHandler);
     table.removeEventListener("change", allHandler);
   };
-}, [posts, selectAll]);
+}, [posts, selectAll, toggleSelectAll, toggleSelectPost]);
 
 
-  window.changeStatus = changeStatus;
+  useEffect(() => {
+    window.changeStatus = changeStatus;
+    return () => {
+      if (window.changeStatus === changeStatus) {
+        delete window.changeStatus;
+      }
+    };
+  }, [changeStatus]);
 
   return (
     <div>

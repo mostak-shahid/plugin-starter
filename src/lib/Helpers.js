@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // Helper function to set nested values dynamically
@@ -50,14 +50,18 @@ export const formDataPost = async (action, data = {})=> {
             formData.append(key, value);
         });
         // Make the POST request
-        const response = await axios.post(
-            plugin_starter_ajax_obj.ajax_url,
-            formData
-        );
-        if (response.data.success) {
-            return response.data; 
+        const response = await apiFetch({
+            url: plugin_starter_ajax_obj.ajax_url,
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
+            }
+        });
+        if (response.success) {
+            return response; 
         } else {
-            throw new Error(response.data.data.error_message || 'Reset failed');
+            throw new Error(response.data?.error_message || 'Reset failed');
         }
     } catch (error) {
         console.error('API Service Error:', error);
@@ -94,3 +98,28 @@ export const urlToArr = () => {
     }, [location]);
     return activePathArr;
 }
+export const settingsBodyHeight = (() => {
+    const [height, setHeight] = useState();
+    useEffect(() => {
+        function updateVH() {
+            const plugin_starter_height = document.body.scrollHeight
+            ? document.body.scrollHeight
+            : window.innerHeight; // fallback
+            // const appliedHeight = vh - 69;
+            setHeight(plugin_starter_height - 130);
+            // console.log("document.body.scrollHeight:", document.body.scrollHeight);
+        }
+
+        updateVH();
+
+        // Listen to resize & viewport changes
+        window.visualViewport?.addEventListener("resize", updateVH);
+        window.visualViewport?.addEventListener("scroll", updateVH);
+
+        return () => {
+            window.visualViewport?.removeEventListener("resize", updateVH);
+            window.visualViewport?.removeEventListener("scroll", updateVH);
+        };
+    }, []);
+    return height;
+});

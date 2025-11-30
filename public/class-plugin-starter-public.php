@@ -6,8 +6,8 @@
  * @link       https://www.mdmostakshahid.com/
  * @since      1.0.0
  *
- * @package    Plugin_Starter
- * @subpackage Plugin_Starter/public
+ * @package    Authpress
+ * @subpackage Authpress/public
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Plugin_Starter
- * @subpackage Plugin_Starter/public
+ * @package    Authpress
+ * @subpackage Authpress/public
  * @author     Md. Mostak Shahid <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Public
@@ -75,7 +75,7 @@ class Plugin_Starter_Public
 		 * class.
 		 */
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
-		// wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-starter-public.css', array(), $this->version, 'all' );
+		// wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-starterpublic.css', array(), $this->version, 'all' );
 		wp_enqueue_style($this->plugin_name . '-public', PLUGIN_STARTER_URL . 'public/css/public-style.css', array(), $this->version, 'all');
 	}
 

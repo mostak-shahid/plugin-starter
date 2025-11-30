@@ -3,7 +3,7 @@ import { useMain } from '../contexts/MainContext';
 import withForm from './withForm';
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 // import DataTable from "datatables.net-react";
 // import DT from "datatables.net-dt";
 
@@ -17,9 +17,9 @@ import DataTable from "datatables.net-react";
 import DT from "datatables.net-bs5";
 import Responsive from "datatables.net-responsive-bs5";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
-import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+// import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 
 DataTable.use(DT);
 DataTable.use(Responsive);
@@ -42,8 +42,10 @@ const BasicTable = ({handleChange}) => {
     }, [statusFilter]);
 
     const fetchPosts = async (status) => {
-        const res = await axios.get(`/wp-json/wp/v2/posts?per_page=100&status=${status}&_embed`);
-        setPosts(res.data);
+        const data = await apiFetch({
+            path: `/wp/v2/posts?per_page=100&status=${status}&_embed`
+        });
+        setPosts(data);
         setSelectedPosts([]); // reset selection when filter changes
         setSelectAll(false);
     };
@@ -65,7 +67,11 @@ const BasicTable = ({handleChange}) => {
     };
 
     const changeStatus = async (postId, newStatus) => {
-        await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: newStatus });
+        await apiFetch({
+            path: `/wp/v2/posts/${postId}`,
+            method: "POST",
+            data: { status: newStatus }
+        });
         fetchPosts(statusFilter);
     };
 
@@ -77,7 +83,7 @@ const BasicTable = ({handleChange}) => {
         }
 
         // for (let postId of selectedPosts) {
-        //   await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: bulkAction });
+        //   await apiFetch({ path: `/wp/v2/posts/${postId}`, method: "POST", data: { status: bulkAction } });
         // }
 
         // setSelectedPosts([]);
@@ -98,7 +104,7 @@ const BasicTable = ({handleChange}) => {
         orderable: false,
         className: "all",
         render: (data, type, row) =>
-            `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${
+            `<input type="checkbox" className="row-checkbox" data-id="${row.id}" ${
             selectedPosts.includes(row.id) ? "checked" : ""
             } />`,
     },
@@ -113,7 +119,7 @@ const BasicTable = ({handleChange}) => {
         className: "min-tablet",
         render: (d, t, row) =>
         row.author
-            ? `<img src="${row.author.avatar}" class="rounded-circle me-2" width="24" height="24"/> ${row.author.name}`
+            ? `<img src="${row.author.avatar}" className="rounded-circle me-2" width="24" height="24"/> ${row.author.name}`
             : "—",
     },
     { data: "title", title: "Title", className: "all" },
@@ -135,9 +141,9 @@ const BasicTable = ({handleChange}) => {
         title: "Action",
         className: "all",
         render: (d, t, row) => `
-        <button class="btn btn-sm btn-success me-1" onclick="window.changeStatus(${row.id}, 'publish')">Publish</button>
-        <button class="btn btn-sm btn-warning me-1" onclick="window.changeStatus(${row.id}, 'draft')">Draft</button>
-        <button class="btn btn-sm btn-danger" onclick="window.changeStatus(${row.id}, 'trash')">Trash</button>
+        <button className="btn btn-sm btn-success me-1" onclick="window.changeStatus(${row.id}, 'publish')">Publish</button>
+        <button className="btn btn-sm btn-warning me-1" onclick="window.changeStatus(${row.id}, 'draft')">Draft</button>
+        <button className="btn btn-sm btn-danger" onclick="window.changeStatus(${row.id}, 'trash')">Trash</button>
         `,
     },
     ];

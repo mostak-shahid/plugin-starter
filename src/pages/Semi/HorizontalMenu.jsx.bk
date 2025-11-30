@@ -1,0 +1,240 @@
+import  { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+    Nav, 
+    Avatar, 
+    Dropdown,
+    SideSheet, 
+    Button, 
+} from '@douyinfe/semi-ui';
+import {
+    IconStar,
+    IconUser,
+    IconUserGroup,
+    IconSetting,
+    IconEdit,
+    IconMenu,
+} from '@douyinfe/semi-icons';
+
+const items = [
+    { itemKey: 'user', text: 'User Management', icon: <IconUser />, url: '/semi/user' },
+    { itemKey: 'union', text: 'Union Center', icon: <IconStar />, url: '/semi/union' },
+    {
+        itemKey: 'union-management',
+        text: 'Union Management',
+        icon: <IconUserGroup />,
+        url: '/semi/union-management',
+        items: [
+            { itemKey: 'announcement-settings', text: 'Announcement Settings', url: '/semi/union-management/announcement-settings' },
+            { itemKey: 'union-query', text: 'Union Query', url: '/semi/union-management/union-query' },
+            { itemKey: 'entry-information', text: 'Entry Information', url: '/semi/union-management/entry-information' },
+        ],
+    },
+    {
+        itemKey: 'approve-management',
+        text: 'Approval Management',
+        icon: <IconEdit />,
+        url: '/semi/approve-management',
+        items: [
+            { itemKey: 'check-in-review', text: 'Check-in Review', url: '/semi/approve-management/check-in-review' },
+            {
+                itemKey: 'operation-management',
+                text: 'Operations Management',
+                url: '/semi/approve-management/operation-management',
+                items: [
+                    { itemKey: 'personnel-management', text: 'Personnel Management', url: '/semi/approve-management/operation-management/personnel-management' },
+                    { itemKey: 'personnel-change', text: 'Personnel Change', url: '/semi/approve-management/operation-management/personnel-change' },
+                ],
+            },
+        ],
+    },
+    {
+        text: 'Task Platform',
+        icon: <IconSetting />,
+        itemKey: 'job',
+        url: '/semi/job',
+        items: [
+            { itemKey: 'task-management', text: 'Task Management', url: '/semi/job/task-management' },
+            { itemKey: 'user-task-query', text: 'User Task Query', url: '/semi/job/user-task-query' },
+        ],
+    },
+];
+export default function HorizontalMenu() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const BREAKPOINT = 960;
+    const [isCollapse, setIsCollapse] = useState(window.innerWidth <= BREAKPOINT);
+    const [menuVisible, setMenuVisible] = useState(false);
+    
+    const [openKeys, setOpenKeys] = useState([]);
+    const [selectedKeys, setSelectedKeys] = useState([]);
+
+    // Handle responsive
+    useEffect(() => {
+        const handleResize = () => {
+            setIsCollapse(window.innerWidth <= BREAKPOINT);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const headerContent = {
+        logo: (
+            <img
+                src="https://sf6-cdn-tos.douyinstatic.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/webcast_logo.svg"
+                alt="logo"
+            />
+        ),
+        text: 'Live Platform',
+    };
+    const footerContent = (
+        <Dropdown
+            position="bottomRight"
+            render={
+                <Dropdown.Menu>
+                    <Dropdown.Item>Detail</Dropdown.Item>
+                    <Dropdown.Item>Quit</Dropdown.Item>
+                </Dropdown.Menu>
+            }
+        >
+            <Avatar size="small" color="light-blue" style={{ margin: 4 }}>
+                BD
+            </Avatar>
+            <span>Bytedancer</span>
+        </Dropdown>
+    );    
+    
+    // Find active keys based on route
+    useEffect(() => {
+        const path = location.pathname;
+        const active = findActiveKeys(items, path);
+        setSelectedKeys([active.selected]);
+        setOpenKeys(active.openKeys);
+    }, [location.pathname]);
+
+    // Find active keys recursively
+    const findActiveKeys = (menuItems, path, parents = []) => {
+        for (const item of menuItems) {
+            if (item.url === path) {
+                return { selected: item.itemKey, openKeys: parents };
+            }
+            if (item.items) {
+                const result = findActiveKeys(item.items, path, [...parents, item.itemKey]);
+                if (result.selected) return result;
+            }
+        }
+        return { selected: '', openKeys: [] };
+    };
+
+    // Find item by key
+    const findItemByKey = (menuItems, key) => {
+        for (const item of menuItems) {
+            if (item.itemKey === key) return item;
+            if (item.items) {
+                const result = findItemByKey(item.items, key);
+                if (result) return result;
+            }
+        }
+        return null;
+    };
+
+    // Handle open/close (submenu toggle)
+    const handleOpenChange = (data) => {
+        // Ensure we always work with an array
+        const keys = Array.isArray(data) ? data : (data?.openKeys || []);
+        setOpenKeys(keys);
+    };
+
+    // Handle click/select
+    const handleSelect = (data) => {
+        const itemKey = data?.itemKey;
+        if (!itemKey) return;
+
+        const found = findItemByKey(items, itemKey);
+        
+        if (found?.items && found.items.length > 0) {
+            // It's a parent with submenu: toggle open state
+            setOpenKeys((prev) => {
+                // Ensure prev is always an array
+                const prevKeys = Array.isArray(prev) ? prev : [];
+                return prevKeys.includes(itemKey)
+                    ? prevKeys.filter((k) => k !== itemKey)
+                    : [...prevKeys, itemKey];
+            });
+        } else if (found?.url) {
+            // It's a leaf: navigate
+            navigate(found.url);
+        }
+        setSelectedKeys([itemKey]);
+        setMenuVisible(false);
+    };
+    return ( 
+        <>
+                    
+            {!isCollapse ? (
+                // Desktop view
+                <Nav
+                    mode="horizontal"
+                    items={items}     
+                    selectedKeys={Array.isArray(openKeys) ? openKeys : []}               
+                    onSelect={handleSelect}                    
+                    header={headerContent}
+                    footer={footerContent}
+                />
+            ) : (
+                // Mobile view
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '8px 16px',
+                        backgroundColor: 'var(--semi-color-bg-1)',
+                        borderBottom: '1px solid var(--semi-color-border)',
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {headerContent.logo}
+                        <span style={{ marginLeft: 8, fontWeight: 600 }}>
+                            {headerContent.text}
+                        </span>
+                    </div>
+
+                    {/* Hamburger button */}
+                    <Button
+                        icon={<IconMenu />}
+                        type="tertiary"
+                        onClick={() => setMenuVisible(true)}
+                    />
+                </div>
+            )}
+            
+            {/* SideSheet (mobile menu) */}
+            <SideSheet
+                placement="right"
+                visible={menuVisible}
+                onCancel={() => setMenuVisible(false)}
+                // width={240}
+                title="Menu"
+                closeOnEsc={true}
+            >
+                <Nav
+                    mode="vertical"
+                    items={items}
+                    // onSelect={(key) => {
+                    //     console.log('Selected:', key);
+                    //     setMenuVisible(false); // auto close after select
+                    // }}
+                    selectedKeys={selectedKeys}
+                    openKeys={Array.isArray(openKeys) ? openKeys : []}
+                    onOpenChange={handleOpenChange}
+                    onSelect={handleSelect}
+                    onCollapseChange={(collapsed) => setIsCollapse(collapsed)}
+                    footer={{ collapseButton: false }}
+                    style={{width: '100%', height: '100%', borderRight: 'none'}}
+                />
+            </SideSheet>
+        </>       
+    )
+}

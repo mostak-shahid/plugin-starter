@@ -1,8 +1,11 @@
 import { __ } from "@wordpress/i18n";
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { formDataPost } from "../../lib/Helpers"; // Import utility function
 import './PluginCard.scss';
+import { Space, Button, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
 export default function PluginCard({image, name, intro, plugin_source='internal', plugin_slug='', plugin_file='', download_url=''}) {
+    
+    const { Text, Paragraph, Title } = Typography;
     /*
     data-sub_action="install_activate" 
     data-plugin_source="external" 
@@ -15,14 +18,10 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
     data-plugin_slug="mos-product-specifications-tab"
     */
     const [pluginStatus, setPluginStatus] = useState("checking");
-    const [pluginFile, setPluginFile] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
     // Check plugin status on component mount
-    useEffect(() => {
-        checkPluginStatus();
-    }, [plugin_slug]);
-    const checkPluginStatus = async () => {
+    const checkPluginStatus = useCallback(async () => {
         setPluginStatus("checking");
         setErrorMessage("");
         try {
@@ -36,7 +35,11 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
         } finally {
             // setPluginStatusLoading(false);
         }
-    };
+    }, [plugin_file]);
+
+    useEffect(() => {
+        checkPluginStatus();
+    }, [checkPluginStatus, plugin_slug]);
 
     const handlePlugin = async () => {              
         // setProcessing(true);     
@@ -103,14 +106,13 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
         setPluginStatus("installing");
         setErrorMessage("");
         try {
-            const result = await formDataPost('plugin_starter_ajax_install_plugins', {
+            await formDataPost('plugin_starter_ajax_install_plugins', {
                 sub_action:'install',
                 download_url:download_url,                
                 plugin_slug:plugin_slug,
                 plugin_file:plugin_file,
                 plugin_source:plugin_source,
             }); 
-            console.log("Result:", result); // check structure here
         } catch (error) {
             setErrorMessage(error.message);
         } finally {
@@ -122,14 +124,13 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
         setPluginStatus("activating");
         setErrorMessage("");        
         try {
-            const result = await formDataPost('plugin_starter_ajax_install_plugins', {
+            await formDataPost('plugin_starter_ajax_install_plugins', {
                 sub_action:'activate',
                 download_url:download_url,                
                 plugin_slug:plugin_slug,
                 plugin_file:plugin_file,
                 plugin_source:plugin_source,
             }); 
-            console.log("Result:", result); // check structure here
         } catch (error) {
             setErrorMessage(error.message);
         } finally {
@@ -140,25 +141,19 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
 		pluginStatus,
 	);
     return (
-        <div className="row g-2 safq-plugin-card align-items-center"> 
-            <div className="col-auto">
-                <div style={{width:'60px', height:'60px'}}>
-                    <img className="img-fluid" src={image} alt="" />
-                </div>
-            </div>
-            <div className="col">
-                <h4 className="title m-0" dangerouslySetInnerHTML={{ __html: name }}/>
-                {/* <p className="intro m-0" dangerouslySetInnerHTML={{ __html: intro }}/> */}
-                <div className="action">
-                    <button 
-                        onClick={handleButtonClick}
-                        className={`link install-button ${pluginStatus}`}
-                        disabled={isButtonDisabled}
-                    >                            
-                        {getButtonLabel()}
-                    </button>
-                </div>
-            </div>
-        </div>
+        <Space align='center'>
+            <Avatar
+                alt={name}
+                src={image}
+                size="large"
+                shape="square"
+                style={{flex: '0 0 72px'}}
+            />
+            <Space vertical align='start'>
+                <Title heading={6}>{name}</Title>
+                {/* <Paragraph>{intro}</Paragraph> */}
+                <Tag color='green' size='large'> tag </Tag>
+            </Space>
+        </Space>
     )
 }

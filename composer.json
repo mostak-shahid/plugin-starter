@@ -1,11 +1,11 @@
 {
   "name": "mos/plugin-starter",
-  "description": "Plugin starter boilerplate for WordPress",
+  "description": "Authpress boilerplate for WordPress",
   "type": "wordpress-plugin",
   "license": "GPLv2",
   "autoload": {
     "psr-4": {
-      "Mos\\PluginStarter\\": "src/"
+      "Mos\\Authpress\\": "src/"
     }
   },
   "authors": [

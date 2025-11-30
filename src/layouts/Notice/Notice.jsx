@@ -34,7 +34,7 @@ export default function Notice() {
         <>
             {
                 show && 
-                    <div ref={noticeRef} className={`plugin-starter-notice ${additionalClass}`}>
+                    <div ref={noticeRef} className={`plugin-starternotice ${additionalClass}`}>
                         <div className="notice-tick" >
                             <img src={noticeTick} alt="" />
                         </div>

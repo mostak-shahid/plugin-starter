@@ -9,8 +9,8 @@
  * @link       http://wp-test.test/
  * @since      1.0.0
  *
- * @package    Plugin_Starter
- * @subpackage Plugin_Starter/includes
+ * @package    Authpress
+ * @subpackage Authpress/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Plugin_Starter
- * @subpackage Plugin_Starter/includes
+ * @package    Authpress
+ * @subpackage Authpress/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Plugin_Starter
+class Authpress
 {
 
 	/**
@@ -118,6 +118,7 @@ class Plugin_Starter
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
+		require_once plugin_dir_path(dirname(__FILE__)) . 'API/Ajax_API.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-import-export.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-more.php';
@@ -135,8 +136,8 @@ class Plugin_Starter
 	private function define_admin_hooks()
 	{
 		$plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 9999);
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 9999);
 
 		$this->loader->add_action('admin_menu', $plugin_admin, 'plugin_starter_admin_menu');
 
@@ -154,17 +155,7 @@ class Plugin_Starter
 		$this->loader->add_action('admin_head', $plugin_admin, 'plugin_starter_option_form_submit');
 
 		// Reset settings by ajax
-		$this->loader->add_action('wp_ajax_plugin_starter_reset_settings', $plugin_admin, 'plugin_starter_reset_settings');
-		$this->loader->add_action('wp_ajax_plugin_starter_reset_all_settings', $plugin_admin, 'plugin_starter_reset_all_settings');
-
-
-
-		$this->loader->add_action('wp_ajax_plugin_starter_ajax_install_plugins', $plugin_admin, 'plugin_starter_ajax_install_plugins');
-		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_install_plugins', $plugin_admin, 'plugin_starter_ajax_install_plugins');
-
-		$this->loader->add_action('wp_ajax_plugin_starter_ajax_plugins_status', $plugin_admin, 'plugin_starter_ajax_plugins_status');
-		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_plugins_status', $plugin_admin, 'plugin_starter_ajax_plugins_status');
-
+		
 		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
 		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10, 2);
 

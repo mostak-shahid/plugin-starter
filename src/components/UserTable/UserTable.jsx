@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 export default function UserTable() {
@@ -30,9 +30,9 @@ export default function UserTable() {
             sortable: true,
         },
         { 
-            id: 'plugin-starter-2fa-provider',
+            id: 'plugin-starter2fa-provider',
             name: '2FA Type',
-            selector: row => row.data.user_meta['plugin-starter-2fa-provider']?row.data.user_meta['plugin-starter-2fa-provider']:'N/A',
+            selector: row => row.data.user_meta['plugin-starter2fa-provider']?row.data.user_meta['plugin-starter2fa-provider']:'N/A',
             sortable: true,
         },
         { 
@@ -62,13 +62,15 @@ export default function UserTable() {
     ]
 
     useEffect(() => {
-        const baseURL = '/wp-json/plugin-starter/v1';        
+        const basePath = '/plugin-starter/v1';        
         const getRoleData = async () => {
             try {
-                const response = await axios.get(`${baseURL}/get-roles`);
+                const response = await apiFetch({
+                    path: `${basePath}/get-roles`
+                });
                 // setSettingData(response.data);
                 // Convert the object into an array of objects
-                const rolesArray = Object.entries(response.data).map(([key, value]) => ({
+                const rolesArray = Object.entries(response).map(([key, value]) => ({
                     role: key,
                     ...value
                 }));
@@ -109,12 +111,14 @@ export default function UserTable() {
     },[])
     */
     useEffect(() => {
-        const baseURL = '/wp-json/plugin-starter/v1';        
+        const basePath = '/plugin-starter/v1';        
         const getUserData = async () => {
             try {
-                const response = await axios.get(`${baseURL}/get-users`);
-                setUserList(response.data)
-                setRecords(response.data)                
+                const response = await apiFetch({
+                    path: `${basePath}/get-users`
+                });
+                setUserList(response)
+                setRecords(response)                
             } catch (error) {
                 console.log(error);
             }
@@ -151,7 +155,7 @@ export default function UserTable() {
         // console.log("Reset 2fa for: ", user_id)
         const confirmed = window.confirm(__('Are you sure you want to proceed?', 'plugin-starter'));
         if (confirmed) {
-            apiService.formDataPost('plugin-starter_user_2fa_reset',{"user_id": user_id})
+            apiService.formDataPost('plugin_starter_user_2fa_reset',{"user_id": user_id})
             .then(data=> {
                 // setForceLogoutLoading(false)            
                 if(data.success){
@@ -186,7 +190,7 @@ export default function UserTable() {
     const handleClick2faResetAll = () => {
         const confirmed = window.confirm(__('Are you sure you want to proceed?', 'plugin-starter'));
         if (confirmed) {
-            apiService.formDataPost('plugin-starter_user_2fa_reset_all', {})
+            apiService.formDataPost('plugin_starter_user_2fa_reset_all', {})
             .then(data=> {
                 console.log(data)
                 // setForceLogoutLoading(false)            
@@ -233,7 +237,7 @@ export default function UserTable() {
 
             if (bulkAction === "reset") {
                 // console.log("Reset these ids", ids)
-                apiService.formDataPost('plugin-starter_user_2fa_reset_users',{"user_ids": ids})
+                apiService.formDataPost('plugin_starter_user_2fa_reset_users',{"user_ids": ids})
                 .then(data=> {
                     console.log(data)
                     // setForceLogoutLoading(false)            
@@ -266,7 +270,7 @@ export default function UserTable() {
 
             } else if (bulkAction === "delete") {
                 // console.log("Delete these ids", ids)
-                // apiService.formDataPost('plugin-starter_send_password_reset_emails',{"user_ids": ids})
+                // apiService.formDataPost('plugin_starter_send_password_reset_emails',{"user_ids": ids})
                 // .then(data=> {
                 //     // setForceLogoutLoading(false)            
                 //     if(data.success){

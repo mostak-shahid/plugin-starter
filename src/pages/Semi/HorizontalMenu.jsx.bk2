@@ -1,0 +1,244 @@
+import { __ } from "@wordpress/i18n";
+import  { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+    Nav, 
+    Space,
+    SideSheet, 
+    Button, 
+} from '@douyinfe/semi-ui';
+import {
+    IconStar,
+    IconSetting,
+    IconMenu,
+    IconHome,
+    IconMember,
+    IconBookStroked,
+    IconHelpCircleStroked,
+} from '@douyinfe/semi-icons';
+import {Logo, MegaphoneStroked} from '../../lib/Illustrations';
+
+const items = [
+    { itemKey: 'welcome', text: 'Welcome', icon: <IconHome />, url: '/semi/welcome' },
+    { itemKey: 'settings', text: 'Settings', icon: <IconSetting />, url: '/semi/settings' },
+    { itemKey: 'feedback', text: 'Feedback', icon: <IconStar />, url: '/semi/feedback' },
+    { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
+    {
+        itemKey: 'union-management',
+        text: 'Union Management',
+        icon: <IconUserGroup />,
+        url: '/semi/union-management',
+        items: [
+            { itemKey: 'announcement-settings', text: 'Announcement Settings', url: '/semi/union-management/announcement-settings' },
+            { itemKey: 'union-query', text: 'Union Query', url: '/semi/union-management/union-query' },
+            { itemKey: 'entry-information', text: 'Entry Information', url: '/semi/union-management/entry-information' },
+        ],
+    },
+    {
+        itemKey: 'approve-management',
+        text: 'Approval Management',
+        icon: <IconEdit />,
+        url: '/semi/approve-management',
+        items: [
+            { itemKey: 'check-in-review', text: 'Check-in Review', url: '/semi/approve-management/check-in-review' },
+            {
+                itemKey: 'operation-management',
+                text: 'Operations Management',
+                url: '/semi/approve-management/operation-management',
+                items: [
+                    { itemKey: 'personnel-management', text: 'Personnel Management', url: '/semi/approve-management/operation-management/personnel-management' },
+                    { itemKey: 'personnel-change', text: 'Personnel Change', url: '/semi/approve-management/operation-management/personnel-change' },
+                ],
+            },
+        ],
+    },
+    {
+        text: 'Task Platform',
+        icon: <IconSetting />,
+        itemKey: 'job',
+        url: '/semi/job',
+        items: [
+            { itemKey: 'task-management', text: 'Task Management', url: '/semi/job/task-management' },
+            { itemKey: 'user-task-query', text: 'User Task Query', url: '/semi/job/user-task-query' },
+        ],
+    },
+];
+
+export default function HorizontalMenu() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const BREAKPOINT = 960;
+    const [isCollapse, setIsCollapse] = useState(window.innerWidth <= BREAKPOINT);
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [newsVisible, setNewsVisible] = useState(false);
+    
+    const [openKeys, setOpenKeys] = useState([]);
+    const [selectedKeys, setSelectedKeys] = useState([]);
+
+    // Handle responsive
+    useEffect(() => {
+        const handleResize = () => {
+            setIsCollapse(window.innerWidth <= BREAKPOINT);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const headerContent = {
+        logo: (
+            <Logo
+                width={36}
+                height={36}
+            />
+        ),
+        text: 'AuthPress',
+    };
+    const footerContent = (
+        <Space align='center'>
+            <Button theme='outline' icon={<IconBookStroked />} aria-label="Screenshot" />
+            <Button theme='outline' icon={<IconHelpCircleStroked />} aria-label="Screenshot" />
+            <Button theme='outline' icon={<MegaphoneStroked width={16} height={16}/>}  onClick={() => setNewsVisible(true)} aria-label="Screenshot" />
+        </Space>
+    );    
+    
+    // Find active keys based on route
+    useEffect(() => {
+        const path = location.pathname;
+        const active = findActiveKeys(items, path);
+        setSelectedKeys([active.selected]);
+        setOpenKeys(active.openKeys);
+    }, [location.pathname]);
+
+    // Find active keys recursively
+    const findActiveKeys = (menuItems, path, parents = []) => {
+        for (const item of menuItems) {
+            if (item.url === path) {
+                return { selected: item.itemKey, openKeys: parents };
+            }
+            if (item.items) {
+                const result = findActiveKeys(item.items, path, [...parents, item.itemKey]);
+                if (result.selected) return result;
+            }
+        }
+        return { selected: '', openKeys: [] };
+    };
+
+    // Find item by key
+    const findItemByKey = (menuItems, key) => {
+        for (const item of menuItems) {
+            if (item.itemKey === key) return item;
+            if (item.items) {
+                const result = findItemByKey(item.items, key);
+                if (result) return result;
+            }
+        }
+        return null;
+    };
+
+    // Handle open/close (submenu toggle)
+    const handleOpenChange = (data) => {
+        // Ensure we always work with an array
+        const keys = Array.isArray(data) ? data : (data?.openKeys || []);
+        setOpenKeys(keys);
+    };
+
+    // Handle click/select
+    const handleSelect = (data) => {
+        const itemKey = data?.itemKey;
+        if (!itemKey) return;
+
+        const found = findItemByKey(items, itemKey);
+        
+        if (found?.items && found.items.length > 0) {
+            // It's a parent with submenu: toggle open state
+            setOpenKeys((prev) => {
+                // Ensure prev is always an array
+                const prevKeys = Array.isArray(prev) ? prev : [];
+                return prevKeys.includes(itemKey)
+                    ? prevKeys.filter((k) => k !== itemKey)
+                    : [...prevKeys, itemKey];
+            });
+        } else if (found?.url) {
+            // It's a leaf: navigate
+            navigate(found.url);
+        }
+        setSelectedKeys([itemKey]);
+        setMenuVisible(false);
+    };
+    
+    return ( 
+        <>
+            {!isCollapse ? (
+                // Desktop view
+                <Nav
+                    mode="horizontal"
+                    items={items}     
+                    selectedKeys={selectedKeys}  // FIXED: Changed from openKeys to selectedKeys
+                    openKeys={openKeys}          // ADDED: Also pass openKeys for proper submenu state
+                    onOpenChange={handleOpenChange} // ADDED: Handle submenu toggling
+                    onSelect={handleSelect}                    
+                    header={headerContent}
+                    footer={footerContent}
+                />
+            ) : (
+                // Mobile view
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '8px 16px',
+                        backgroundColor: 'var(--semi-color-bg-1)',
+                        borderBottom: '1px solid var(--semi-color-border)',
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {headerContent.logo}
+                        <span style={{ marginLeft: 8, fontWeight: 600 }}>
+                            {headerContent.text}
+                        </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {footerContent}
+                        <Button
+                            icon={<IconMenu />}
+                            type="tertiary"
+                            onClick={() => setMenuVisible(true)}
+                        />
+                    </div>
+                </div>
+            )}
+            
+            {/* SideSheet (mobile menu) */}
+            <SideSheet
+                placement="right"
+                visible={menuVisible}
+                onCancel={() => setMenuVisible(false)}
+                title={__("Menu", "plugin-starter")}
+                closeOnEsc={true}
+            >
+                <Nav
+                    mode="vertical"
+                    items={items}
+                    selectedKeys={selectedKeys}
+                    openKeys={Array.isArray(openKeys) ? openKeys : []}
+                    onOpenChange={handleOpenChange}
+                    onSelect={handleSelect}
+                    onCollapseChange={(collapsed) => setIsCollapse(collapsed)}
+                    footer={{ collapseButton: false }}
+                    style={{width: '100%', height: '100%', borderRight: 'none'}}
+                />
+            </SideSheet>
+            <SideSheet
+                placement="right"
+                visible={newsVisible}
+                onCancel={() => setNewsVisible(false)}
+                title={__("What's New?", "plugin-starter")}
+                closeOnEsc={true}
+            >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti perferendis nostrum quae sint aliquam quasi iure nulla assumenda tempore provident! Rem eos atque velit sunt numquam tempora deserunt, quis ipsum, optio fugiat quasi at natus. Asperiores distinctio, nam iste reiciendis eveniet molestias placeat, labore voluptates optio eos accusamus, dicta sapiente aperiam nobis. Odit ab ut, vero impedit aliquam dolorem dolor eaque. Quam deleniti assumenda dicta neque? Quaerat, atque consequuntur quibusdam sint officia quas quod ut unde dignissimos aut, adipisci minus pariatur assumenda magnam. Labore voluptas natus optio itaque reprehenderit? At molestias eos impedit ratione? Deserunt sed provident cumque corporis quasi nam aspernatur, aliquam, explicabo voluptate reprehenderit dolor itaque illum harum ex earum eos quas quisquam expedita. Doloremque provident architecto assumenda illo amet iste tempora hic accusantium adipisci officiis dolorem tempore distinctio, labore repellat, aliquid similique rem molestias cum? A ut debitis deserunt rem beatae quia iure ipsa eum libero praesentium?
+            </SideSheet>
+        </>       
+    )
+}

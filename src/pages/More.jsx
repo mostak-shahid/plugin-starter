@@ -1,9 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import { useState } from "react";
-import Switch from '../components/Switch/Switch';
 import { useMain } from '../contexts/MainContext';
 import withForm from '../pages/withForm';
-
+import { Row, Col, Typography, Skeleton, Switch, } from '@douyinfe/semi-ui';
+import { SkeletonPlaceholder } from '../components';
 
 import AceEditor from "react-ace";
 // Load modes and theme
@@ -16,55 +15,39 @@ const More = ({handleChange}) => {
         settingData,
         settingLoading,
     } = useMain();
-    const [cssCode, setCssCode] = useState("/* CSS Code Here */");
-    const [jsCode, setJsCode] = useState("// JavaScript Code Here");
-    const [htmlCode1, setHtmlCode1] = useState("<!-- HTML Code 1 -->");
-    const [htmlCode2, setHtmlCode2] = useState("<!-- HTML Code 2 -->");
+    const { Title, Text, Paragraph } = Typography;
     return (
         <>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("Enable Scripts", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("Enable Scripts", "plugin-starter")}</Title>
+                            <Paragraph>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-auto">
+                        <Col xs={24} lg={12} xl={10}>
                             <Switch 
-                                name="more.enable_scripts"
-                                checked={settingData?.more.enable_scripts} // Pass "1"/"0" from API 
-                                onChange={handleChange} 
-                            />
-                        </div>
+                                onChange={(value, element) => handleChange('more.enable_scripts', value)}
+                                checked={ Boolean(settingData?.more.enable_scripts) }
+                            />   
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("CSS Editor", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("Add any custom CSS code if necessary", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("CSS Editor", "plugin-starter")}</Title>
+                            <Paragraph>{__("Add any custom CSS code if necessary", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-lg-12 mt-2">
+                        <Col xs={24}>
                             <AceEditor
                                 mode="css"
                                 theme="monokai"
@@ -75,27 +58,21 @@ const More = ({handleChange}) => {
                                 height="200px"
                                 editorProps={{ $blockScrolling: true }}
                             />
-                        </div>
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("JavaScript Editor", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("Add any custom JS code if necessary", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("JavaScript Editor", "plugin-starter")}</Title>
+                            <Paragraph>{__("Add any custom JS code if necessary", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-lg-12 mt-2">
+                        <Col xs={24}>
                             <AceEditor
                                 mode="javascript"
                                 theme="monokai"
@@ -106,27 +83,21 @@ const More = ({handleChange}) => {
                                 height="200px"
                                 editorProps={{ $blockScrolling: true }}
                             />
-                        </div>
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("Header Code", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("This code will be placed inside <head> tag", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("Header Code", "plugin-starter")}</Title>
+                            <Paragraph>{__("This code will be placed inside <head> tag", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-lg-12 mt-2">
+                        <Col xs={24}>
                             <AceEditor
                                 mode="html"
                                 theme="monokai"
@@ -137,27 +108,21 @@ const More = ({handleChange}) => {
                                 height="200px"
                                 editorProps={{ $blockScrolling: true }}
                             />
-                        </div>
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("Footer Code", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("This code will be placed inside <body> tag", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit pt-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("Footer Code", "plugin-starter")}</Title>
+                            <Paragraph>{__("This code will be placed inside <body> tag", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-lg-12 mt-2">
+                        <Col xs={24}>
                             <AceEditor
                                 mode="html"
                                 theme="monokai"
@@ -168,11 +133,11 @@ const More = ({handleChange}) => {
                                 height="200px"
                                 editorProps={{ $blockScrolling: true }}
                             />
-                        </div>
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
         </>
     )
 }
-export default withForm(More);
+export default withForm(More, 'more');

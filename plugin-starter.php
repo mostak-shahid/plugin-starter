@@ -10,12 +10,12 @@
  *
  * @link              https://www.mdmostakshahid.com/
  * @since             1.0.0
- * @package           Plugin_Starter
+ * @package           Authpress
  *
  * @wordpress-plugin
- * Plugin Name:       Plugin Starter
+ * Plugin Name:       AuthPress
  * Plugin URI:        https://www.mdmostakshahid.com/plugin-starter/
- * Description:       Plugin starter boilerplate for WordPress
+ * Description:       Authpress boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Md. Mostak Shahid
  * Author URI:        https://www.mdmostakshahid.com/
@@ -36,7 +36,7 @@ if (!defined('ABSPATH')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
-define('PLUGIN_STARTER_NAME', 'Plugin Starter');
+define('PLUGIN_STARTER_NAME', 'AuthPress');
 
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
@@ -73,7 +73,7 @@ if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
+require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-.php';
 require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
 
 /**
@@ -88,7 +88,7 @@ require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
 function plugin_starter_run()
 {
 
-	$plugin = new Plugin_Starter();
+	$plugin = new Authpress();
 	$plugin->run();
 }
 plugin_starter_run();
@@ -113,7 +113,7 @@ function plugin_starter_get_tabs()
 					'slug' => 'customize',
 					'name' => 'Customize',
 					'description' => 'Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.',
-					'url' => 'plugin-starter-integration-customize'
+					'url' => 'plugin-starterintegration-customize'
 				],
 			],
 		],
@@ -127,89 +127,284 @@ function plugin_starter_get_tabs()
 function plugin_starter_get_default_options()
 {
 	$plugin_starter_default_options = [
-		'base_input' => [
-			'text_input' => '',
-			'email_input' => '',
-			'color_input' => '',
-			'date_input' => '',
-			'datetime_local_input' => '',
-			'textarea_input' => '',
-			'switch_input' => '1',
-			'radio_input' => 'radio-2',
-			'datalist_input' => '',
-			'select_input' => '',
+		'customizer' => [
+			'redesign' => [
+				'templates' => 'default-login',
+				'background'=> [
+					'type' => 'image', // gradient, image, video
+					'background' => [
+						"image" => [],
+						"color" => "#f0f0f1",
+						"position" => "center",
+						"size" => "auto",
+						"repeat" => "repeat",
+						"origin" => "padding-box",
+						"clip" => "border-box",
+						"attachment" => "scroll",
+					],
+					'video' => '',
+					'overlay' => '#ffffff00',
+				],
+				'logo' => [
+					'disabled' => false,
+					'image' => [],
+					'width' => '64px',
+					'height' => '64px',
+					'space' => '24px',
+					'url' => 'https://wordpress.org/'
+				],
+				'form' => [
+					'wrapper' => [
+						'width' => '320px',
+						'height' => '',
+						'margin' => [],
+						'padding' => [
+							'top' => '5%',
+							'right' => '0px',
+							'bottom' => '0px',
+							'left' => '0px',
+						],
+						'position' => 'center',
+						'background' => [
+							"image" => [
+								'id' => '',
+								'url' => '',
+							],
+							"color" => "",
+							"position" => "center",
+							"size" => "auto",
+							"repeat" => "repeat",
+							"attachment" => "scroll",
+						],
+						'border' => [],
+						'border_radius' => '0px',
+						//box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+						"glass_effect" => false,
+					],
+					'unit' => [
+						'margin' => [
+							'top' => '24px',
+							'right' => '0px',
+							'bottom' => '24px',
+							'left' => '0px',
+						],
+						'padding' => [
+							'top' => '26px',
+							'right' => '24px',
+							'bottom' => '26px',
+							'left' => '24px',
+						],
+						'background' => [
+							"image" => "",
+							"color" => "#fff",
+							"position" => "center",
+							"size" => "auto",
+							"repeat" => "repeat",
+							"attachment" => "scroll",
+						],
+						'border' => [],
+						'border_radius' => '0px',
+						//box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+						"glass_effect" => false,
+
+					],
+				],
+				'fields' => [
+					'width' => '100%',
+					'height' => '40px',
+					'font' => [						
+						"enabled" => false,
+						"color" => '#2c3338',
+						"font-size" => '14px', 
+						"font-weight" => '400', 
+						"font-style" => '', 
+						"font-variant" => '', 
+						"font-stretch" => '', 
+						"text-align" => '', 
+						"text-decoration" => '', 
+						"text-transform" => '', 
+					],
+					'border' => ['color'=> '#8c8f94','style'=> 'solid','width'=> '0.0625rem'],
+					'border_radius' => '4px',
+					'boxshadow' => [],
+					'padding' => [
+						'top' => '0.1875rem',
+						'right' => '0.3125rem',
+						'bottom' => '0.1875rem',
+						'left' => '0.3125rem',
+					],
+					'margin' => [
+						'top' => '0px',
+						'right' => '6px',
+						'bottom' => '16px',
+						'left' => '0px',
+					],
+					'background_color' => '#ffffff',
+					'label_font' => [							
+						"enabled" => false,
+						"color" => '#3c434a',
+						"font-size" => '14px', 
+						"font-weight" => '400', 
+						"font-style" => '', 
+						"font-variant" => '', 
+						"font-stretch" => '', 
+						"text-align" => '', 
+						"text-decoration" => '', 
+						"text-transform" => '', 
+					],
+				],
+				'button' => [
+					'font' => [
+						"enabled" => false,
+						"color" => '#ffffff',
+						"font-size" => '13px', 
+						"font-weight" => '', 
+						"font-style" => '', 
+						"font-variant" => '', 
+						"font-stretch" => '', 
+						"text-align" => '', 
+						"text-decoration" => '', 
+						"text-transform" => '', 
+					],
+					'background' => [
+						'normal' => '#2271b1', 
+						'hover' => '#135e96', 
+						'active' => '#135e96',
+					],
+					'color' => [
+						'normal' => '#ffffff', 
+						'hover' => '#ffffff', 
+						'active' => '#ffffff',
+					],
+					'padding' => [
+						'top' => '0px',
+						'right' => '12px',
+						'bottom' => '0px',
+						'left' => '12px',
+					],
+					'margin' => [],
+					'border' => [
+						'color'=> '#2271b1',
+						'style'=> 'solid',
+						'width'=> '1px'
+					],
+					'border_radius' => '3px',
+					'boxshadow' => [],
+					'textshadow' => [],
+					'size' => 'auto',
+
+
+				],
+				'other' => [
+					'disable_remember_me' => false,
+					'disable_register_link' => false,
+					'disable_lost_password' => false,
+					'disable_privacy_policy' => false,
+					'disable_back_to_website' => false,
+					'login_by' => 'both', //username, email, both
+					'registered_with_password' => false, //true, false
+				],
+			],
+		],	
+		'hide_login' => [
+			'login_url' => '',
 		],
-		'array_input' => [
-			'checkbox_input' => [],
-			'multi_select_input' => [],
-			'background' => [
-				'image' => [
-					'url' => '',
-					'id' => 0
-				],
-				'color' => '#ff00ff',
-				'position' => 'center',
-				'size' => 'cover',
-				'repeat' => 'repeat',
-				'origin' => 'padding-box',
-				'clip' => 'border-box',
-				'attachment' => 'scroll'
+		'two_fa_authentication' => [
+			'email' => [
+				'enabled' => true,
 			],
-		],		
-		'components' => [
-			'basic' => [
-				'ip' => '',
-				'text_field' => 'this is a text field',
-				'textarea_field' => 'this is a textarea field',
-				'select_field' => 'select-1',
-				'radio_field' => 'radio-1',
-				'radio_field_2' => 'radio-2',
-				'checkbox_field' => ['checkbox-1', 'checkbox-3'],
-				'checkbox_field_2' => ['checkbox-2', 'checkbox-3'],
-				'checkbox_field_3' => ['checkbox-1', 'checkbox-3'],
-				'multiselect_field' => ['select-2', 'select-3'],
-				'multiselect_field_2' => ['select-3', 'select-4'],
-				'switch' => 0,
+			'settings' => [
+				'enabled' => true,
 			],
-			'advanced' => [
-				'media_uploader' => [
-					'url' => '',
-					'id' => 0
-				],
-				'countries_list' => [
-					['value' => "Albania", 'code' => "AL"],
-					['value' => "Algeria", 'code' => "DZ"],
-				],
-				'ips' => ["111.111.111.111", "222.222.222.222"],
-				'emails' => ["asd@asd.asd", "abc@abc.abc"],
-				'repeatablesorter_group' => [
-					[
-						"enabler" => true,
-						"title" => "123 Main St",
-						"note" => "Leave at door",
-						"enable" => true,
-						"gender" => "male",
-						"country" => "us",
-						"languages" => ["en", "fr"],
-						"hobbies" => ["reading", "sports"],
-					]
-				],
-				'repeatablesorter' => [
-					'https://www.facebook.com/',
-					'https://web.whatsapp.com/',
-					'https://www.youtube.com/',
-					'https://web.skype.com/'
-				]
+		],
+		'captcha' => [
+			'settings' => [
+				'enabled' => true,
+			],
+		],
+		'auto_login' => [
+			'settings' => [
+				'enabled' => true,
+			],
+			'link_login' => [
+				'enabled' => true,
+			],
+			'social_login' => [
+				'enabled' => true,
+			],
+			'barcode_login' => [
+				'enabled' => true,
+			],
+			'google_login' => [
+				'enabled' => true,
 			]
 		],
+		// 'components' => [
+		// 	'basic' => [
+		// 		'ip' => '',
+		// 		'text_field' => 'this is a text field',
+		// 		'textarea_field' => 'this is a textarea field',
+		// 		'select_field' => 'select-1',
+		// 		'radio_field' => 'radio-1',
+		// 		'radio_field_2' => 'radio-2',
+		// 		'checkbox_field' => ['checkbox-1', 'checkbox-3'],
+		// 		'checkbox_field_2' => ['checkbox-2', 'checkbox-3'],
+		// 		'checkbox_field_3' => ['checkbox-1', 'checkbox-3'],
+		// 		'multiselect_field' => ['select-2', 'select-3'],
+		// 		'multiselect_field_2' => ['select-3', 'select-4'],
+		// 		'switch' => 0,				
+		// 		'media_uploader' => [
+		// 			'url' => '',
+		// 			'id' => 0
+		// 		],
+		// 		'countries_list' => [
+		// 			['value' => "Albania", 'code' => "AL"],
+		// 			['value' => "Algeria", 'code' => "DZ"],
+		// 		],
+		// 		'ips' => ["111.111.111.111", "222.222.222.222"],
+		// 		'emails' => ["asd@asd.asd", "abc@abc.abc"],
+		// 		'repeatablesorter_group' => [
+		// 			[
+		// 				"enabler" => true,
+		// 				"title" => "123 Main St",
+		// 				"note" => "Leave at door",
+		// 				"enable" => true,
+		// 				"gender" => "male",
+		// 				"country" => "us",
+		// 				"languages" => ["en", "fr"],
+		// 				"hobbies" => ["reading", "sports"],
+		// 			]
+		// 		],
+		// 		'repeatablesorter' => [
+		// 			'https://www.facebook.com/',
+		// 			'https://web.whatsapp.com/',
+		// 			'https://www.youtube.com/',
+		// 			'https://web.skype.com/'
+		// 		]
+		// 	],
+		// 	'advanced' => [
+		// 		'wordpress' => [
+
+		// 		],
+		// 		'custom' => [
+		// 			'color_picker' => '#ff00ff',
+		// 			'gradient_picker' => 'linear-gradient(135deg,#f00,#ff0)',
+		// 			'color_gradient_picker' => '',
+		// 		],
+		// 	]
+		// ],
 		// 'editor-input' => '<p>Lorem</p>',
 
 		'more' => [
-			'enable_scripts' => 0,
+			'enable_scripts' => false,
 			'css' => '/* CSS Code Here */',
 			'js' => '// JavaScript Code Here',
 			'header_content' => '<!-- Content inside HEAD tag -->',
 			'footer_content' => '<!-- Content inside BODY tag -->',
+			
+		],
+		'tools' => [
+			'delete_data_on' => 'none', // delete, unstall, none
 		],
 
 	];
@@ -245,7 +440,7 @@ function plugin_starter_is_plugin_page()
 
 		if (
 			$current_screen->id == 'toplevel_page_plugin-starter'
-			|| $current_screen->id == 'plugin-starter_page_plugin-starter-react'
+			|| $current_screen->id == 'plugin_starter_page_plugin-starterreact'
 			|| in_array($current_screen->id, $pages)
 		) {
 			return true;
@@ -253,11 +448,76 @@ function plugin_starter_is_plugin_page()
 	}
 	return false;
 }
-add_action( 'before_woocommerce_init', function() {
-    if (
-        class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class )
-    ) {
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
-    }
-} );
+
+// <iframe width="560" height="315" src="https://www.youtube.com/embed/fjCrLPL1YJk?si=Auv0jR210UGihyRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+/**
+ * Step 1: Register Rewrite Rules
+ */
+
+// Register custom login/register/lost password slugs
+// add_action('init', function () {
+//     add_rewrite_rule('^my-login/?$', 'index.php?custom_auth_page=login', 'top');
+//     add_rewrite_rule('^my-register/?$', 'index.php?custom_auth_page=register', 'top');
+//     add_rewrite_rule('^my-lost-password/?$', 'index.php?custom_auth_page=lostpassword', 'top');
+// });
+
+// // Register custom query var
+// add_filter('query_vars', function ($vars) {
+//     $vars[] = 'custom_auth_page';
+//     return $vars;
+// });
+
+/**
+ * Step 2: Catch and Render the Page
+ */
+
+// Now intercept when someone visits /my-login/, /my-register/, or /my-lost-password/:
+// add_action('template_redirect', function () {
+//     $auth_page = get_query_var('custom_auth_page');
+
+//     if ($auth_page) {
+//         status_header(200);
+//         nocache_headers();
+
+//         get_header();
+
+//         echo '<div class="custom-auth-page">';
+//         if ($auth_page === 'login') {
+//             wp_login_form(); // native login form
+//         } elseif ($auth_page === 'register') {
+//             // basic WP register form
+//             echo '<h2>Register</h2>';
+//             wp_register('', '');
+//         } elseif ($auth_page === 'lostpassword') {
+//             echo '<h2>Lost Password</h2>';
+//             echo '<p><a href="' . esc_url(wp_lostpassword_url()) . '">Click here to reset your password</a></p>';
+//         }
+//         echo '</div>';
+
+//         get_footer();
+//         exit;
+//     }
+// });
+
+/**
+ * Step 3: Override Default WordPress URLs
+ */
+
+// So functions like wp_login_url(), wp_registration_url(), and wp_lostpassword_url() return your custom slugs:
+// add_filter('login_url', function ($url, $redirect, $force_reauth) {
+//     return home_url('/' . get_option('myplugin_login_slug', 'my-login') . '/');
+// }, 10, 3);
+
+// add_filter('register_url', function ($url) {
+//     return home_url('/' . get_option('myplugin_register_slug', 'my-register') . '/');
+// });
+
+// add_filter('lostpassword_url', function ($url, $redirect) {
+//     return home_url('/' . get_option('myplugin_lost_slug', 'my-lost-password') . '/');
+// }, 10, 2);
+
+
+
+
+

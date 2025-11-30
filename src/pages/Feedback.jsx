@@ -1,34 +1,51 @@
 import { __ } from "@wordpress/i18n";
-import Switch from '../components/Switch/Switch';
-import { useMain } from '../contexts/MainContext';
 import withForm from '../pages/withForm';
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 import { useEffect, useState } from 'react';
+import {OnlineSurvey} from '../lib/Illustrations';
+import { Button, Col, Row, Input, TextArea, Typography, Toast } from '@douyinfe/semi-ui';
+
+import { IconSend } from '@douyinfe/semi-icons';
 const Feedback = () => {
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
-    const [processing, setProcessing] = useState(false)
+    const [processing, setProcessing] = useState(false); // normal, processing, done
     const handleForm = async () => {
         if (subject && message) {
             setProcessing(true);
             try {
-                const result = await axios.post(
-                    "/wp-json/plugin-starter/v1/feedback",
-                    {
-                        subject: subject,
-                        message: message
+                const result = await apiFetch({
+                    path: "/plugin-starter/v1/feedback",
+                    method: "POST",
+                    data: {
+                        subject,
+                        message
                     },
-                    {
-                        headers: {
-                            'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce,
-                            'Content-Type': 'application/json'
-                        }
+                    headers: {
+                        'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
                     }
-                );
+                });
                 // You might want to handle success here
-                // console.log("Mail sent successfully:", result.data);
+                console.log(result);
+                if (result.success) {
+                    setSubject('');
+                    setMessage('');
+                    Toast.success({
+						content: __("Feedback send successfully!", "plugin-starter"),
+						duration: 3,
+                        theme: 'light',
+                        left,
+					});
+                }
+
             } catch (error) {
                 console.error("Mail Sending Error:", error);
+                Toast.error({
+                    content: __("Please try again!", "plugin-starter"),
+                    duration: 3,
+                    theme: 'light',
+                    left,
+                });
             } finally {
                 setProcessing(false);
             }
@@ -36,47 +53,47 @@ const Feedback = () => {
             alert('Subject or Message can\'t be Empty')
         }
     };
+    
+    const { Title } = Typography; 
     return (
         <>
-            <div className="setting-unit">
-                <div className="row align-items-center">
-                    <div className="col-lg-6">
-                        <img className="img-fluid" src={`${plugin_starter_ajax_obj.image_url}feedback.jpg`} alt="" />
-                    </div> 
-                    <div className="col-lg-6">
-                        <div class="mb-3">
-                            <label htmlFor="subject" class="form-label">{__("Subject", "plugin-starter")}</label>
-                            <input 
-                                id="subject"
-                                className="form-control"
-                                type="text"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                            /> 
+            <div className="setting-unit mx-[3%]">
+                <Row type="flex" gutter={[24,24]} align="middle">
+                    <Col sx={24} lg={12}>
+                        <OnlineSurvey/>
+                    </Col> 
+                    <Col sx={24} lg={12}>
+                        <div className="mb-3">
+                            <Title heading={6}>{__("Subject", "plugin-starter")}</Title>
+                            <Input                                
+                                value={ subject }
+                                onChange={ ( value ) => setSubject( value ) }
+                                className="mt-2"
+                            />
                         </div>
-                        <div class="mb-3">
-                            <label htmlFor="message" class="form-label">{__("Message", "plugin-starter")}</label>
-                            <textarea 
-                                id="message"
-                                className="form-control"
-                                type="text"
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                            /> 
+                        <div className="mb-3">
+                            <Title heading={6}>{__("Message", "plugin-starter")}</Title>
+                            <TextArea
+                                value={ message }
+                                onChange={ ( value ) => setMessage( value ) }
+                                className="mt-2"
+                            />
                         </div>
-                        <button 
-                            type="button" 
-                            className="button button-primary" 
-                            onClick={handleForm}
-                            disabled={processing}
-                        >
+                        <Button 
+                            theme="solid"
+                            type="primary"
+                            icon={<IconSend />}
+                            loading={processing} 
+                            onClick={handleForm} 
+                            style={{ marginRight: 14 }}
+                        >                                
                             {
                                 processing ? __( "Sending...", "plugin-starter" ) : __( "Send", "plugin-starter" )
                             }
-                        </button>
+                        </Button>
                         
-                    </div>  
-                </div>
+                    </Col>  
+                </Row>
             </div>
         </>
     )

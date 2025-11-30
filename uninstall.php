@@ -22,7 +22,7 @@
  * @link       https://mostak-shahid.github.io/
  * @since      1.0.0
  *
- * @package    Plugin_Starter
+ * @package    Authpress
  */
 
 // If uninstall not called from WordPress, then exit.

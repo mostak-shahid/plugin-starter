@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiFetch from "@wordpress/api-fetch";
 // import DataTable from "datatables.net-react";
 // import DT from "datatables.net-dt";
 
@@ -39,14 +39,20 @@ const PostTable = () => {
   }, [statusFilter]);
 
   const fetchPosts = async (status) => {
-    const res = await axios.get(`/wp-json/wp/v2/posts?per_page=100&status=${status}&_embed`);
-    setPosts(res.data);
+    const data = await apiFetch({
+      path: `/wp/v2/posts?per_page=100&status=${status}&_embed`
+    });
+    setPosts(data);
   };
 
 
 
   const changeStatus = async (postId, newStatus) => {
-    await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: newStatus });
+    await apiFetch({
+      path: `/wp/v2/posts/${postId}`,
+      method: "POST",
+      data: { status: newStatus }
+    });
     fetchPosts(statusFilter);
   };
 
@@ -128,7 +134,7 @@ const handleBulkAction = async () => {
   }
 
   // for (let postId of selectedPosts) {
-  //   await axios.post(`/wp-json/wp/v2/posts/${postId}`, { status: bulkAction });
+  //   await apiFetch({ path: `/wp/v2/posts/${postId}`, method: "POST", data: { status: bulkAction } });
   // }
 
   // setSelectedPosts([]);

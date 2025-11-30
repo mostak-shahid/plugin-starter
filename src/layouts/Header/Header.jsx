@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import { useState } from 'react';
 import { Button, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { Link, NavLink } from "react-router-dom";
-import logo from '../../assets/images/logo.svg';
 import Details from '../../data/details.json';
 export default function Header() {
     const [show, setShow] = useState(false);
@@ -25,7 +24,7 @@ export default function Header() {
                 <div className="container-fluid">
                     <Navbar.Brand href="#/" className="p-0">
                         <div className="d-flex align-items-center gap-2">
-                            <img src={logo} alt="" />
+                            <img src={`${plugin_starter_ajax_obj.image_url}logo.svg`} alt="" width="40" height="40" />
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -84,13 +83,13 @@ export default function Header() {
                                 <a className="nav-link disabled" aria-disabled="true">{Details?.version} {__( 'Core', "plugin-starter" )}</a>
                             </li>
                             <li className="nav-item">
-                                <a href="https://wordpress.org/support/plugin/plugin-starter/" target="_blank" className="nav-link" title={__( 'Documentation', "plugin-starter" )}><span class="dashicons dashicons-editor-help d-none d-lg-inline"></span><span className="d-lg-none">{__( 'Documentation', "plugin-starter" )}</span></a>
+                                <a href="https://wordpress.org/support/plugin/plugin-starter/" target="_blank" className="nav-link" title={__( 'Documentation', "plugin-starter" )}><span className="dashicons dashicons-editor-help d-none d-lg-inline"></span><span className="d-lg-none">{__( 'Documentation', "plugin-starter" )}</span></a>
                             </li>
                             <li className="nav-item">
-                                <a href="https://wordpress.org/support/plugin/plugin-starter/reviews/#new-post"  target="_blank" className="nav-link" title={__( 'Knowledge Base', "plugin-starter" )}><span class="dashicons dashicons-book d-none d-lg-inline"></span><span className="d-lg-none">{__( 'Knowledge Base', "plugin-starter" )}</span></a>
+                                <a href="https://wordpress.org/support/plugin/plugin-starter/reviews/#new-post"  target="_blank" className="nav-link" title={__( 'Knowledge Base', "plugin-starter" )}><span className="dashicons dashicons-book d-none d-lg-inline"></span><span className="d-lg-none">{__( 'Knowledge Base', "plugin-starter" )}</span></a>
                             </li>
                             <li className="nav-item" onClick={handleShow}>
-                                <a className="nav-link" title={__( 'What\'s New', "plugin-starter" )}><span class="dashicons dashicons-megaphone d-none d-lg-inline"></span><span className="d-lg-none">{__( 'What\'s New', "plugin-starter" )}</span></a>
+                                <a className="nav-link" title={__( 'What\'s New', "plugin-starter" )}><span className="dashicons dashicons-megaphone d-none d-lg-inline"></span><span className="d-lg-none">{__( 'What\'s New', "plugin-starter" )}</span></a>
                             </li>
                             {/* <NavDropdown 
                                 title={
