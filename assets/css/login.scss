@@ -1,4 +1,4 @@
-.plugin-starterlogin-page {
+.plugin-starter-login-page {
     .forgetmenot,
     .submit {
         float: none;
@@ -18,7 +18,7 @@
         display: flex;
         justify-content: space-between;
     }
-    .plugin-starterseprator {
+    .plugin-starter-seprator {
         display: none;
     }
     #backtoblog {
@@ -30,7 +30,7 @@
         float: right;
         width: auto;
     }
-    .plugin-starter2fa-wrapper {
+    .plugin-starter-2fa-wrapper {
         button.button { 
             display: block; 
             margin-bottom: 10px; 
@@ -38,7 +38,7 @@
             clear: both; 
             width: 100%;
         }        
-        .plugin-starter2fa-secondary { margin-top:12px; }
-        .plugin-starter2fa-help { font-size:13px; color:#50575e; margin-top:18px; }
+        .plugin-starter-2fa-secondary { margin-top:12px; }
+        .plugin-starter-2fa-help { font-size:13px; color:#50575e; margin-top:18px; }
     }
 }

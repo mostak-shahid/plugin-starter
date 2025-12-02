@@ -175,7 +175,7 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
             ) : (
                 // --- Desktop (Horizontal) ---
                 <Nav
-                    className="plugin-starterdesktop-horizontal-menu"
+                    className="plugin-starter-desktop-horizontal-menu"
                     mode="horizontal"
                     items={items}
                     selectedKeys={selectedKeys}
@@ -194,10 +194,10 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
                     onCancel={() => setMenuVisible(false)}
                     title={__("Menu", "plugin-starter")}
                     closeOnEsc={true}
-                    className="plugin-starterphone-horizontal-sidesheet"
+                    className="plugin-starter-phone-horizontal-sidesheet"
                 >
                     <Nav
-                        className="plugin-starterphone-horizontal-menu"
+                        className="plugin-starter-phone-horizontal-menu"
                         mode="vertical"
                         items={items}
                         selectedKeys={selectedKeys}

@@ -1,4 +1,4 @@
-
+import { __ } from "@wordpress/i18n";
 import { IllustrationIdle, Illustration404, Logo } from '../lib/Illustrations';
 import PluginCard from './PluginCard/PluginCard';
 import BackgroundControl from './BackgroundControl/BackgroundControl';

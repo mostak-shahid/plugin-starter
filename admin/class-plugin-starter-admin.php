@@ -6,8 +6,8 @@
  * @link       https://www.mdmostakshahid.com/
  * @since      1.0.0
  *
- * @package    Authpress
- * @subpackage Authpress/admin
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/admin
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Authpress
- * @subpackage Authpress/admin
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/admin
  * @author     Md. Mostak Shahid <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Admin
@@ -83,8 +83,8 @@ class Plugin_Starter_Admin
 		wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
-		// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starteradmin.css', array(), $this->version, 'all');			
-		// wp_enqueue_style( $this->plugin_name, plugin_dir_url(__DIR__) . 'admin/css/plugin-starteradmin.css', array(), $this->version, 'all' );
+		// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');			
+		// wp_enqueue_style( $this->plugin_name, plugin_dir_url(__DIR__) . 'admin/css/plugin-starter-admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-components' );
 
 

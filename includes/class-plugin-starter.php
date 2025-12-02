@@ -9,8 +9,8 @@
  * @link       http://wp-test.test/
  * @since      1.0.0
  *
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Authpress
+class Plugin_Starter
 {
 
 	/**

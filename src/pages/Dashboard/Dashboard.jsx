@@ -36,7 +36,7 @@ export default function Dashboard() {
     }, []);
     
     return (
-        <div className="plugin-startersettings container mx-auto p-6">
+        <div className="plugin-starter-settings container mx-auto p-6">
             <Card
                 className="mb-6"
             >
@@ -45,7 +45,7 @@ export default function Dashboard() {
                     {__("Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste mollitia voluptates molestiae nihil! Atque repellendus, nulla, aut magni in, sunt optio labore commodi at ipsa voluptatibus provident eveniet perferendis consequuntur.", "plugin-starter")}
                 </Paragraph>
                 <Paragraph>
-                    {__("AuthPress is an all-in-one toolkit to enhance your WooCommerce store. This is a highly effective plugin developed for assisting online businesses in improving sales and profits.", "plugin-starter")}
+                    {__("Plugin Starter is an all-in-one toolkit to enhance your WooCommerce store. This is a highly effective plugin developed for assisting online businesses in improving sales and profits.", "plugin-starter")}
                 </Paragraph>
             </Card>
             <Row type="flex" gutter={[24,24]}>

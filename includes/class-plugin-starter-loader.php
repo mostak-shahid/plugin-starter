@@ -6,8 +6,8 @@
  * @link       https://mostak-shahid.github.io/
  * @since      1.0.0
  *
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  */
 
 /**
@@ -17,8 +17,8 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Loader

@@ -13,19 +13,19 @@ $dataOptions = [
 ]
 
 ?>
-<div class="plugin-startersettings-wrapper">
+<div class="plugin-starter-settings-wrapper">
     <?php
     $active_tab_input = 0;
     if (isset($_POST['plugin_starter_options_form_field']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['plugin_starter_options_form_field'])), 'plugin_starter_options_form_action')) {
-        $active_tab_input = isset($_POST['active_tab_input']) ? sanitize_text_field(wp_unslash(_POST['active_tab_input'])) : 0;
+        $active_tab_input = isset($_POST['active_tab_input']) ? sanitize_text_field(wp_unslash($_POST['active_tab_input'])) : 0;
         if (isset($_POST['settings-updated'])) {
-            add_settings_error('plugin-startermessages', 'plugin-startermessage', esc_html__('All changes have been applied correctly, ensuring your preferences are now in effect.', 'plugin-starter'), 'updated');
+            add_settings_error('plugin-starter-messages', 'plugin-starter-message', esc_html__('All changes have been applied correctly, ensuring your preferences are now in effect.', 'plugin-starter'), 'updated');
         }
-        settings_errors('plugin-startermessages');
+        settings_errors('plugin-starter-messages');
     }
     ?>
     <input type="hidden" class="active_tab_input" id="active_tab_input" value="<?php echo esc_html($active_tab_input); ?>" />
-    <div id="plugin-startersettings-tabs">
+    <div id="plugin-starter-settings-tabs">
         <ul>
             <li><a href="#base-input"><?php echo esc_html('Base Input', 'plugin-starter'); ?></a></li>
             <li><a href="#array-input"><?php echo esc_html('Array Input', 'plugin-starter'); ?></a></li>
@@ -33,8 +33,8 @@ $dataOptions = [
         <div id="base-input">
             <form method='post'>
                 <?php wp_nonce_field('plugin_starter_options_form_action', 'plugin_starter_options_form_field'); ?>
-                <div class="plugin-startersettings-container">
-                    <div class="plugin-startersettings">
+                <div class="plugin-starter-settings-container">
+                    <div class="plugin-starter-settings">
                         <div class="part-title">
                             <h2><?php echo esc_html('Base Input', 'plugin-starter'); ?></h2>
                         </div>
@@ -104,7 +104,7 @@ $dataOptions = [
                                     <tr class="plugin_starter_row">
                                         <th scope="row"><label for="switch_input"><?php echo esc_html__('Enable Product Tabs', 'plugin-starter') ?></label></th>
                                         <td>
-                                            <div class="position-relative plugin-starterswitcher">
+                                            <div class="position-relative plugin-starter-switcher">
                                                 <label for="plugin_starter_options_switch_input">
                                                     <input type="checkbox" name="plugin_starter_options[base_input][switch_input]" id="plugin_starter_options_switch_input" value="1" <?php checked($plugin_starter_options['base_input']['switch_input'] ?? null, 1); ?>>
                                                     <em data-on="on" data-off="off"></em>
@@ -173,7 +173,7 @@ $dataOptions = [
                 </div>
                 <p class="submit">
                     <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_html__('Save Changes', 'plugin-starter') ?>">
-                    <button class="button plugin-starterbutton-reset button-secondary" data-name="base_input" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
+                    <button class="button plugin-starter-button-reset button-secondary" data-name="base_input" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
                     <input type="hidden" class="active_tab_input" name="active_tab_input" value="<?php echo esc_html($active_tab_input); ?>" />
                     <input type="hidden" name="plugin_starter_options[base_input][submit]" value="1">
                 </p>
@@ -182,8 +182,8 @@ $dataOptions = [
         <div id="array-input">
             <form method='post'>
                 <?php wp_nonce_field('plugin_starter_options_form_action', 'plugin_starter_options_form_field'); ?>
-                <div class="plugin-startersettings-container">
-                    <div class="plugin-startersettings">
+                <div class="plugin-starter-settings-container">
+                    <div class="plugin-starter-settings">
                         <div class="part-title">
                             <h2><?php echo esc_html('Array Input', 'plugin-starter'); ?></h2>
                         </div>
@@ -233,7 +233,7 @@ $dataOptions = [
                 </div>
                 <p class="submit">
                     <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_html__('Save Changes', 'plugin-starter') ?>">
-                    <button class="button plugin-starterbutton-reset button-secondary" data-name="array_input" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
+                    <button class="button plugin-starter-button-reset button-secondary" data-name="array_input" data-url="<?php echo esc_url($actual_link) ?>"><?php echo esc_html__('Reset', 'plugin-starter') ?></button>
                     <input type="hidden" class="active_tab_input" name="active_tab_input" value="<?php echo esc_html($active_tab_input); ?>" />
                     <input type="hidden" name="plugin_starter_options[array_input][submit]" value="1">
                 </p>

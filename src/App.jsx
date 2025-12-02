@@ -2,37 +2,12 @@ import { __ } from "@wordpress/i18n";
 
 import "./App.scss";
 import "./tailwind.css"
-// import Header from "./layouts/Header/Header";
-// import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-// import "bootstrap/dist/css/bootstrap.min.css";
 import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
 import {  Navigate, Route, Routes } from "react-router-dom";
 //Route Pages
-// import Dashboard from "./pages/Dashboard/Dashboard";
-// import ImportExport from "./pages/ImportExport";
-// import More from "./pages/More";
-// import ComponentsBasic from "./pages/ComponentsBasic";
-import {Dashboard, CustomizerRedesignTemplate, CustomizerRedesignBackground, CustomizerRedesignLogo, ImportExport, More, Tools, Feedback} from "./pages";
+import {Dashboard, Page, ImportExport, More, Tools, Feedback} from "./pages";
 import {NotFound} from "./components";
-// import CustomizerRedesignLogo from "./pages/CustomizerRedesignLogo";
-// import CustomizerRedesignForm from "./pages/CustomizerRedesignForm";
-// import ComponentsAdvanced from "./pages/ComponentsAdvanced";
-// import BasicTable from "./pages/BasicTable";
-// import AjaxTable from "./pages/AjaxTable";
-// import Page from "./pages/Page";
-// import Feedback from "./pages/Feedback";
-// import Footer from "./layouts/Footer/Footer";
-// import CustomizerRedesignFields from "./pages/CustomizerRedesignFields";
-// import CustomizerRedesignButton from "./pages/CustomizerRedesignButton";
-// import CustomizerRedesignOther from "./pages/CustomizerRedesignOther";
-// import Tools from "./pages/Tools";
-// import HideLogin from "./pages/HideLogin";
-// import Two_FA_Email from "./pages/Two_FA_Email";
-// import Two_FA from "./pages/Two_FA";
-// import Captcha from "./pages/Captcha";
-// import AutoLogin from "./pages/AutoLogin";
-// import AutoLoginLink from "./pages/AutoLoginLink";
 
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import local from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -98,7 +73,7 @@ function App() {
     };
     return (
         <LocaleProvider locale={local}>
-            <div className="plugin-startersettings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
+            <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
                 <Banner 
                     // className="semi-always-light"
                     fullMode={false}
@@ -141,17 +116,15 @@ function App() {
                         />
                     </Header>
                     <div 
-                        className="plugin-startersettings"
+                        className="plugin-starter-settings"
                         style={{minHeight:settingsBodyHeight, }}
                     >
                         <Routes>
                             {/* <Route path="/" element={<RestrictionsSettings handleChange={handleChange} />} /> */}
                             {/* <Route path="/"  element={<Navigate to="/restrictions/settings" />} /> */}
                             <Route path="/" element={<Dashboard />} />
-                            <Route path="/settings" element={<Navigate to="/settings/customizer/redesign/templates" />} />
-                            <Route path="/settings/customizer/redesign/templates" element={<CustomizerRedesignTemplate />} />
-                            <Route path="/settings/customizer/redesign/background" element={<CustomizerRedesignBackground />} />
-                            <Route path="/settings/customizer/redesign/logo" element={<CustomizerRedesignLogo />} />
+                            <Route path="/settings" element={<Navigate to="/settings/page" />} />
+                            <Route path="/settings/page" element={<Page />} />
                             
 
                             <Route path="/settings/import_export" element={<ImportExport />} />

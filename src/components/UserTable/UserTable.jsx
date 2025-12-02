@@ -30,9 +30,9 @@ export default function UserTable() {
             sortable: true,
         },
         { 
-            id: 'plugin-starter2fa-provider',
+            id: 'plugin-starter-2fa-provider',
             name: '2FA Type',
-            selector: row => row.data.user_meta['plugin-starter2fa-provider']?row.data.user_meta['plugin-starter2fa-provider']:'N/A',
+            selector: row => row.data.user_meta['plugin-starter-2fa-provider']?row.data.user_meta['plugin-starter-2fa-provider']:'N/A',
             sortable: true,
         },
         { 

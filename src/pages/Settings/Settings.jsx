@@ -9,7 +9,7 @@ export default function Settings() {
         settingsMenu,
     } = useMain();
     return (
-        <div className="plugin-startersettings">
+        <div className="plugin-starter-settings">
             <div className="container">
                 <div className="row g-0">
                     <div className="col-lg-3 d-none d-lg-block">

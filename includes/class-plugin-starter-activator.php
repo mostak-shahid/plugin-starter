@@ -6,8 +6,8 @@
  * @link       https://mostak-shahid.github.io/
  * @since      1.0.0
  *
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  */
 
 /**
@@ -16,8 +16,8 @@
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Authpress
- * @subpackage Authpress/includes
+ * @package    Plugin_Starter
+ * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
 class Plugin_Starter_Activator

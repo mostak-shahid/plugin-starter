@@ -1,7 +1,7 @@
-.plugin-startersettings-template .color-picker-popover .components-tab-panel__tab-content > * {
+.plugin-starter-settings-template .color-picker-popover .components-tab-panel__tab-content > * {
   padding: 0 16px;
 }
-.plugin-startersettings-template .color-picker-popover .components-tab-panel__tab-content .components-circular-option-picker::before {
+.plugin-starter-settings-template .color-picker-popover .components-tab-panel__tab-content .components-circular-option-picker::before {
   content: "Themes";
   display: block;
   font-size: 11px;

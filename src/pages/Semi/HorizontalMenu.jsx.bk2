@@ -92,7 +92,7 @@ export default function HorizontalMenu() {
                 height={36}
             />
         ),
-        text: 'AuthPress',
+        text: 'Plugin Starter',
     };
     const footerContent = (
         <Space align='center'>

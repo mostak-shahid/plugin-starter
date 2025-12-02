@@ -349,7 +349,7 @@ class RestApi
             'Content-Type: text/html; charset=UTF-8'
         );
 
-        wp_mail($email, 'Feedback from AuthPress', $output, $headers);
+        wp_mail($email, 'Feedback from Plugin Starter', $output, $headers);
         $response = [
             'success' => true,
             'msg' => esc_html__('Email Send successfully.', 'plugin-starter'),

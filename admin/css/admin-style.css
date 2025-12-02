@@ -1,10 +1,10 @@
 :root {
-  --plugin-startercolor: #720eec;
-  --plugin-startercolor-light: #00a0d2;
-  --plugin-startercolor-dark: #005177;
-  --plugin-startercolor-accent: #f7f7f7;
-  --plugin-startercolor-text: #333;
-  --plugin-startercolor-text-light: #fff;
+  --plugin-starter-color: #720eec;
+  --plugin-starter-color-light: #00a0d2;
+  --plugin-starter-color-dark: #005177;
+  --plugin-starter-color-accent: #f7f7f7;
+  --plugin-starter-color-text: #333;
+  --plugin-starter-color-text-light: #fff;
   --semi-color-bg-0: rgba(255, 255, 255, 1);
   --semi-color-bg-1: rgba(255, 255, 255, 1);
   --semi-color-bg-2: rgba(255, 255, 255, 1);
@@ -20,16 +20,16 @@ body[theme-mode=dark], body .semi-always-dark, :host([theme-mode=dark]), :host .
   --semi-color-bg-4: rgba(79, 81, 89, 1);
 }
 
-.plugin-startersettings-template {
+.plugin-starter-settings-template {
   position: relative;
 }
-.plugin-startersettings-template #wpcontent {
+.plugin-starter-settings-template #wpcontent {
   padding-left: 0;
 }
-.plugin-startersettings-template #wpcontent #wpbody #wpbody-content {
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content {
   padding-bottom: 0;
 }
-.plugin-startersettings-template #wpfooter {
+.plugin-starter-settings-template #wpfooter {
   display: none;
 }
 

@@ -52,9 +52,9 @@ const MultiSelectControl = ({
     }, [selected, normalizedOptions]);
 
     return (
-        <div className={`plugin-startermultiselect-wrapper ${className}`}>
+        <div className={`plugin-starter-multiselect-wrapper ${className}`}>
             <Dropdown
-                className="plugin-startermultiselect"
+                className="plugin-starter-multiselect"
                 position="bottom left"
                 renderToggle={({ onToggle }) => (
                     <Button onClick={onToggle} variant="secondary">

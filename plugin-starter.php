@@ -10,12 +10,12 @@
  *
  * @link              https://www.mdmostakshahid.com/
  * @since             1.0.0
- * @package           Authpress
+ * @package           PluginStarter
  *
  * @wordpress-plugin
- * Plugin Name:       AuthPress
+ * Plugin Name:       Plugin Starter
  * Plugin URI:        https://www.mdmostakshahid.com/plugin-starter/
- * Description:       Authpress boilerplate for WordPress
+ * Description:       Plugin starter boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Md. Mostak Shahid
  * Author URI:        https://www.mdmostakshahid.com/
@@ -36,7 +36,7 @@ if (!defined('ABSPATH')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
-define('PLUGIN_STARTER_NAME', 'AuthPress');
+define('PLUGIN_STARTER_NAME', 'Plugin Starter');
 
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
@@ -73,7 +73,7 @@ if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-.php';
+require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
 require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
 
 /**
@@ -88,7 +88,7 @@ require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
 function plugin_starter_run()
 {
 
-	$plugin = new Authpress();
+	$plugin = new Plugin_Starter();
 	$plugin->run();
 }
 plugin_starter_run();
@@ -113,7 +113,7 @@ function plugin_starter_get_tabs()
 					'slug' => 'customize',
 					'name' => 'Customize',
 					'description' => 'Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.',
-					'url' => 'plugin-starterintegration-customize'
+					'url' => 'plugin-starter-integration-customize'
 				],
 			],
 		],
@@ -425,6 +425,7 @@ function plugin_starter_is_plugin_page()
 {
 	if (function_exists('get_current_screen')) {
 		$current_screen = get_current_screen();
+		// var_dump($current_screen->id);
 		$tabs = plugin_starter_get_tabs();
 		$pages = [];
 		if (isset($tabs) && sizeof($tabs)) {
@@ -440,7 +441,6 @@ function plugin_starter_is_plugin_page()
 
 		if (
 			$current_screen->id == 'toplevel_page_plugin-starter'
-			|| $current_screen->id == 'plugin_starter_page_plugin-starterreact'
 			|| in_array($current_screen->id, $pages)
 		) {
 			return true;
@@ -448,74 +448,6 @@ function plugin_starter_is_plugin_page()
 	}
 	return false;
 }
-
-// <iframe width="560" height="315" src="https://www.youtube.com/embed/fjCrLPL1YJk?si=Auv0jR210UGihyRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-/**
- * Step 1: Register Rewrite Rules
- */
-
-// Register custom login/register/lost password slugs
-// add_action('init', function () {
-//     add_rewrite_rule('^my-login/?$', 'index.php?custom_auth_page=login', 'top');
-//     add_rewrite_rule('^my-register/?$', 'index.php?custom_auth_page=register', 'top');
-//     add_rewrite_rule('^my-lost-password/?$', 'index.php?custom_auth_page=lostpassword', 'top');
-// });
-
-// // Register custom query var
-// add_filter('query_vars', function ($vars) {
-//     $vars[] = 'custom_auth_page';
-//     return $vars;
-// });
-
-/**
- * Step 2: Catch and Render the Page
- */
-
-// Now intercept when someone visits /my-login/, /my-register/, or /my-lost-password/:
-// add_action('template_redirect', function () {
-//     $auth_page = get_query_var('custom_auth_page');
-
-//     if ($auth_page) {
-//         status_header(200);
-//         nocache_headers();
-
-//         get_header();
-
-//         echo '<div class="custom-auth-page">';
-//         if ($auth_page === 'login') {
-//             wp_login_form(); // native login form
-//         } elseif ($auth_page === 'register') {
-//             // basic WP register form
-//             echo '<h2>Register</h2>';
-//             wp_register('', '');
-//         } elseif ($auth_page === 'lostpassword') {
-//             echo '<h2>Lost Password</h2>';
-//             echo '<p><a href="' . esc_url(wp_lostpassword_url()) . '">Click here to reset your password</a></p>';
-//         }
-//         echo '</div>';
-
-//         get_footer();
-//         exit;
-//     }
-// });
-
-/**
- * Step 3: Override Default WordPress URLs
- */
-
-// So functions like wp_login_url(), wp_registration_url(), and wp_lostpassword_url() return your custom slugs:
-// add_filter('login_url', function ($url, $redirect, $force_reauth) {
-//     return home_url('/' . get_option('myplugin_login_slug', 'my-login') . '/');
-// }, 10, 3);
-
-// add_filter('register_url', function ($url) {
-//     return home_url('/' . get_option('myplugin_register_slug', 'my-register') . '/');
-// });
-
-// add_filter('lostpassword_url', function ($url, $redirect) {
-//     return home_url('/' . get_option('myplugin_lost_slug', 'my-lost-password') . '/');
-// }, 10, 2);
 
 
 

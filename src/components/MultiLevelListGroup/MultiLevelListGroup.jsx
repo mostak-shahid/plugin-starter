@@ -46,7 +46,7 @@ const MultiLevelMenu = ({ data, level = 0 }) => {
 
 	return (
 		<MenuGroup
-			className={level > 0 ? 'plugin-starterchild-menu-group' : 'plugin-startertop-menu-group'}
+			className={level > 0 ? 'plugin-starter-child-menu-group' : 'plugin-starter-top-menu-group'}
 			label={level === 0 ? undefined : null}
 		>
 			{Object.entries(data).map(([key, item]) => {

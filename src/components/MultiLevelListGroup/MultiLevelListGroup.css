@@ -1,25 +1,25 @@
-.plugin-startertop-menu-group {
+.plugin-starter-top-menu-group {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.plugin-startertop-menu-group .menu-item-wrapper {
+.plugin-starter-top-menu-group .menu-item-wrapper {
   margin-left: 10px;
   margin-right: 10px;
 }
-.plugin-startertop-menu-group .menu-item-wrapper .menu-item.components-button:focus:not(:disabled) {
+.plugin-starter-top-menu-group .menu-item-wrapper .menu-item.components-button:focus:not(:disabled) {
   box-shadow: none;
 }
-.plugin-startertop-menu-group .menu-item-wrapper .menu-item.components-button .components-menu-item__item {
+.plugin-starter-top-menu-group .menu-item-wrapper .menu-item.components-button .components-menu-item__item {
   width: 100%;
   justify-content: space-between;
 }
-.plugin-startertop-menu-group .menu-item-wrapper .submenu {
+.plugin-starter-top-menu-group .menu-item-wrapper .submenu {
   padding-top: 5px;
 }
-.plugin-startertop-menu-group .menu-item-wrapper .menu-item-wrapper {
+.plugin-starter-top-menu-group .menu-item-wrapper .menu-item-wrapper {
   margin-right: 0;
 }
-.plugin-startertop-menu-group .menu-item-wrapper.active > .menu-item.components-button {
+.plugin-starter-top-menu-group .menu-item-wrapper.active > .menu-item.components-button {
   background-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
   color: var(--wp-components-color-accent-inverted, #fff);
 }/*# sourceMappingURL=MultiLevelListGroup.css.map */

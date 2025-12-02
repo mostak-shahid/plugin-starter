@@ -58,8 +58,6 @@ export default function ColorPickerControl({ defaultValue, handleChange, mode = 
             <Button
                 block
                 type="secondary"
-                // className="color-picker-button border-plugin-starter"
-                // aria-label="Select Color or Gradient"
                 onClick={ () => setIsOpen(!isOpen) }
                 // style={ { border: '1px solid #ccc', color: '#ccc', gap: '10px', boxShadow: 'none', width: '100%' } }
             >                                   

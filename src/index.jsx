@@ -22,7 +22,7 @@ if (typeof window.wpApiSettings !== 'undefined') {
   apiFetch.use(apiFetch.createNonceMiddleware(window.wpApiSettings.nonce));
 }
 // Get the container element
-const rootElement = document.getElementById('plugin-startersettings-react-app');
+const rootElement = document.getElementById('plugin-starter-settings-react-app');
 
 // Check if the root element exists before rendering
 if (rootElement) {
@@ -35,5 +35,5 @@ if (rootElement) {
     </HashRouter>
   ); // Render the App component
 } else {
-  console.error("Target container '#plugin-startersettings-react-app' not found in the DOM.");
+  console.error("Target container '#plugin-starter-settings-react-app' not found in the DOM.");
 }

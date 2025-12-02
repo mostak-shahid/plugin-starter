@@ -154,7 +154,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
         };
         return (
             <>
-                <div className="plugin-startersettings container mx-auto px-4">
+                <div className="plugin-starter-settings container mx-auto px-4">
                     <Layout>
                         <Sider>
                             <VerticalMenuControl 

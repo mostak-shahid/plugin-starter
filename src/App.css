@@ -1,67 +1,67 @@
-.plugin-startersettings-template input[type=text],
-.plugin-startersettings-template input[type=password],
-.plugin-startersettings-template input[type=color],
-.plugin-startersettings-template input[type=date],
-.plugin-startersettings-template input[type=datetime],
-.plugin-startersettings-template input[type=datetime-local],
-.plugin-startersettings-template input[type=email],
-.plugin-startersettings-template input[type=month],
-.plugin-startersettings-template input[type=number],
-.plugin-startersettings-template input[type=search],
-.plugin-startersettings-template input[type=tel],
-.plugin-startersettings-template input[type=time],
-.plugin-startersettings-template input[type=url],
-.plugin-startersettings-template input[type=week],
-.plugin-startersettings-template select,
-.plugin-startersettings-template textarea {
+.plugin-starter-settings-template input[type=text],
+.plugin-starter-settings-template input[type=password],
+.plugin-starter-settings-template input[type=color],
+.plugin-starter-settings-template input[type=date],
+.plugin-starter-settings-template input[type=datetime],
+.plugin-starter-settings-template input[type=datetime-local],
+.plugin-starter-settings-template input[type=email],
+.plugin-starter-settings-template input[type=month],
+.plugin-starter-settings-template input[type=number],
+.plugin-starter-settings-template input[type=search],
+.plugin-starter-settings-template input[type=tel],
+.plugin-starter-settings-template input[type=time],
+.plugin-starter-settings-template input[type=url],
+.plugin-starter-settings-template input[type=week],
+.plugin-starter-settings-template select,
+.plugin-starter-settings-template textarea {
   background-color: transparent;
   border-color: transparent;
 }
-.plugin-startersettings-template .semi-typography {
+.plugin-starter-settings-template .semi-typography {
   color: var(--semi-color-text-0);
 }
-.plugin-startersettings-template h1.semi-typography,
-.plugin-startersettings-template .semi-typography-h1.semi-typography,
-.plugin-startersettings-template h2.semi-typography,
-.plugin-startersettings-template .semi-typography-h2.semi-typography,
-.plugin-startersettings-template h3.semi-typography,
-.plugin-startersettings-template .semi-typography-h3.semi-typography,
-.plugin-startersettings-template h4.semi-typography,
-.plugin-startersettings-template .semi-typography-h4.semi-typography,
-.plugin-startersettings-template h5.semi-typography,
-.plugin-startersettings-template .semi-typography-h5.semi-typography,
-.plugin-startersettings-template h6.semi-typography,
-.plugin-startersettings-template .semi-typography-h6.semi-typography,
-.plugin-startersettings-template p, .plugin-startersettings-template .wp-die-message {
+.plugin-starter-settings-template h1.semi-typography,
+.plugin-starter-settings-template .semi-typography-h1.semi-typography,
+.plugin-starter-settings-template h2.semi-typography,
+.plugin-starter-settings-template .semi-typography-h2.semi-typography,
+.plugin-starter-settings-template h3.semi-typography,
+.plugin-starter-settings-template .semi-typography-h3.semi-typography,
+.plugin-starter-settings-template h4.semi-typography,
+.plugin-starter-settings-template .semi-typography-h4.semi-typography,
+.plugin-starter-settings-template h5.semi-typography,
+.plugin-starter-settings-template .semi-typography-h5.semi-typography,
+.plugin-starter-settings-template h6.semi-typography,
+.plugin-starter-settings-template .semi-typography-h6.semi-typography,
+.plugin-starter-settings-template p, .plugin-starter-settings-template .wp-die-message {
   margin: 0;
 }
-.plugin-startersettings-template h1.semi-typography,
-.plugin-startersettings-template .semi-typography-h1.semi-typography {
+.plugin-starter-settings-template h1.semi-typography,
+.plugin-starter-settings-template .semi-typography-h1.semi-typography {
   font-size: 32px;
   line-height: 44px;
 }
-.plugin-startersettings-template h2.semi-typography,
-.plugin-startersettings-template .semi-typography-h2.semi-typography {
+.plugin-starter-settings-template h2.semi-typography,
+.plugin-starter-settings-template .semi-typography-h2.semi-typography {
   font-size: 28px;
   line-height: 40px;
 }
-.plugin-startersettings-template h3.semi-typography,
-.plugin-startersettings-template .semi-typography-h3.semi-typography {
+.plugin-starter-settings-template h3.semi-typography,
+.plugin-starter-settings-template .semi-typography-h3.semi-typography {
   font-size: 24px;
   line-height: 32px;
 }
-.plugin-startersettings-template h4.semi-typography,
-.plugin-startersettings-template .semi-typography-h4.semi-typography {
+.plugin-starter-settings-template h4.semi-typography,
+.plugin-starter-settings-template .semi-typography-h4.semi-typography {
   font-size: 20px;
   line-height: 28px;
 }
-.plugin-startersettings-template h5.semi-typography,
-.plugin-startersettings-template .semi-typography-h5.semi-typography {
+.plugin-starter-settings-template h5.semi-typography,
+.plugin-starter-settings-template .semi-typography-h5.semi-typography {
   font-size: 18px;
   line-height: 24px;
 }
-.plugin-startersettings-template h6.semi-typography,
-.plugin-startersettings-template .semi-typography-h6.semi-typography {
+.plugin-starter-settings-template h6.semi-typography,
+.plugin-starter-settings-template .semi-typography-h6.semi-typography {
   font-size: 16px;
   line-height: 22px;
 }/*# sourceMappingURL=App.css.map */

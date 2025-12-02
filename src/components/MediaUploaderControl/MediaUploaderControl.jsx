@@ -60,13 +60,13 @@ export default function MediaUploaderControl({ data={}, name, handleChange, opti
     return (
         <>
             {/* {console.log(data)} */}
-            <div className={`plugin-startermedia-uploader-unit ${className}`}>
+            <div className={`plugin-starter-media-uploader-unit ${className}`}>
                 <Row type="flex" gutter={[16, 16]} align='middle' className="media-uploader">
                     <Col xs={12}>
                         { media?.url && media?.id ?                     
                             <div className="file-name background-primary with-close-button">
                                 <img className="uploaded-image" src={media?.thumbnail} onClick={runUploader} />                                
-                                <Dashicon className="plugin-starterremove-image text-danger" onClick={removeImage} icon="remove" />
+                                <Dashicon className="plugin-starter-remove-image text-danger" onClick={removeImage} icon="remove" />
                             </div> : 
                             <div className="file-name background-primary d-flex align-items-center justify-content-center" onClick={runUploader}>
                                 <div className="no-media-wrap">
