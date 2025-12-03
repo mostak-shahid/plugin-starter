@@ -98,28 +98,43 @@ export const urlToArr = () => {
     }, [location]);
     return activePathArr;
 }
-export const settingsBodyHeight = (() => {
-    const [height, setHeight] = useState();
+export function useSettingsBodyHeight() {
+    const [height, setHeight] = useState(0);
+
     useEffect(() => {
-        function updateVH() {
-            const plugin_starter_height = document.body.scrollHeight
-            ? document.body.scrollHeight
-            : window.innerHeight; // fallback
-            // const appliedHeight = vh - 69;
-            setHeight(plugin_starter_height - 130);
-            // console.log("document.body.scrollHeight:", document.body.scrollHeight);
+        function calculateHeight() {
+            // Base height (document or viewport fallback)
+            const baseHeight = document.body.scrollHeight || window.innerHeight;
+
+            // Helper to get element height safely
+            const getHeight = (selector) => {
+                const el = document.querySelector(selector);
+                return el ? el.offsetHeight : 0;
+            };
+
+            // Heights of optional elements
+            const bannerHeight = getHeight('.plugin-starter-promote-banner');
+            const headerHeight = getHeight('.plugin-starter-header');
+            const footerHeight = getHeight('.plugin-starter-footer');
+
+            // Subtract them from total height
+            const finalHeight = baseHeight - (bannerHeight + headerHeight + footerHeight);
+
+            setHeight(finalHeight);
         }
 
-        updateVH();
+        // Initial calculation
+        calculateHeight();
 
-        // Listen to resize & viewport changes
-        window.visualViewport?.addEventListener("resize", updateVH);
-        window.visualViewport?.addEventListener("scroll", updateVH);
+        // Listeners
+        window.visualViewport?.addEventListener("resize", calculateHeight);
+        window.visualViewport?.addEventListener("scroll", calculateHeight);
 
         return () => {
-            window.visualViewport?.removeEventListener("resize", updateVH);
-            window.visualViewport?.removeEventListener("scroll", updateVH);
+            window.visualViewport?.removeEventListener("resize", calculateHeight);
+            window.visualViewport?.removeEventListener("scroll", calculateHeight);
         };
     }, []);
+
     return height;
-});
+}

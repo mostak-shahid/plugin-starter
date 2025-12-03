@@ -1,11 +1,11 @@
 {
-  "name": "mos/plugin-starter",
+  "name": "mospress/plugin-starter",
   "description": "Plugin starter boilerplate for WordPress",
   "type": "wordpress-plugin",
   "license": "GPLv2",
   "autoload": {
     "psr-4": {
-      "Mos\\PluginStarter\\": "php/"
+      "MosPress\\PluginStarter\\": "php/"
     }
   },
   "authors": [
@@ -15,6 +15,14 @@
     }
   ],
   "minimum-stability": "stable",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
 
   "require": {}
 }

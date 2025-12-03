@@ -1,11 +1,16 @@
 <?php
+namespace MosPress\PluginStarter\API;
 if ( ! defined( 'ABSPATH' ) ) exit;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_Query;
 /**
  * Rest API Router
  *
  * Registers all REST API endpoints and routes them to appropriate controllers
  */
-class RestApi
+class Rest_API
 {
     
     private const NAMESPACE = 'plugin-starter/v1';
@@ -23,7 +28,7 @@ class RestApi
     }
     public function rest_api_init()
     {        
-        register_rest_route('plugin-starter/v1', '/plugins', [
+        register_rest_route(self::NAMESPACE, '/plugins', [
             'methods' => 'GET',
             'callback' => function () {
                 $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[author]=mostakshahid&request[per_page]=24');
@@ -36,7 +41,7 @@ class RestApi
         
         // ✅ Get posts (with embed info)
         // GET /wp-json/plugin-starter/v1/posts?page=1&per_page=10&status=publish&search=hello
-        register_rest_route( 'plugin-starter/v1', '/posts', [
+        register_rest_route( self::NAMESPACE, '/posts', [
             'methods'  => 'GET',
             'callback' => [$this, 'plugin_starter_get_posts'],
             // 'permission_callback' => function () {
@@ -55,7 +60,7 @@ class RestApi
         // ✅ Change status of a single post
         // POST /wp-json/plugin-starter/v1/post/123/status
         // { "status": "draft" }
-        register_rest_route( 'plugin-starter/v1', '/post/(?P<id>\d+)/status', [
+        register_rest_route( self::NAMESPACE, '/post/(?P<id>\d+)/status', [
             'methods'  => 'POST',
             'callback' => [$this, 'plugin_starter_change_post_status'],
             'permission_callback' => function () {
@@ -74,7 +79,7 @@ class RestApi
         // POST /wp-json/plugin-starter/v1/posts/status
         // { "ids": [1,2,3], "status": "trash" }
 
-        register_rest_route( 'plugin-starter/v1', '/posts/status', [
+        register_rest_route( self::NAMESPACE, '/posts/status', [
             'methods'  => 'POST',
             'callback' => [$this, 'plugin_starter_bulk_change_status'],
             'permission_callback' => function () {
@@ -96,7 +101,7 @@ class RestApi
 
         
 		register_rest_route(
-			'plugin-starter/v1',
+			self::NAMESPACE,
 			'/options',
 			array(
 				'methods'  => 'GET',
@@ -110,7 +115,7 @@ class RestApi
 
 		//Add the POST 'plugin-starter/v1/options' endpoint to the Rest API
 		register_rest_route(
-			'plugin-starter/v1',
+			self::NAMESPACE,
 			'/options',
 			array(
 				'methods'             => 'POST',
@@ -123,7 +128,7 @@ class RestApi
 		);
 
 		register_rest_route(
-            'plugin-starter/v1',
+            self::NAMESPACE,
             '/feedback',
             array(
                 'methods' => 'POST',
@@ -136,7 +141,7 @@ class RestApi
         );
 
 		register_rest_route(
-			'plugin-starter/v1',
+			self::NAMESPACE,
 			'/set-settings-theme',
 			array(
 				'methods'  => 'GET',
@@ -160,7 +165,7 @@ class RestApi
 			)
 		);
         register_rest_route(
-			'plugin-starter/v1',
+			self::NAMESPACE,
 			'/get-settings-theme',
 			array(
 				'methods'  => 'GET',
@@ -382,4 +387,4 @@ class RestApi
     }
 
 }
-new RestApi();
+// new Rest_Api();

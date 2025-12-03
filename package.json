@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@coreui/icons": "^1.0.0",
-    "@douyinfe/semi-ui": "^2.87.1",
+    "@douyinfe/semi-icons": "^2.88.3",
+    "@douyinfe/semi-ui": "^2.88.3",
     "@wordpress/api-fetch": "^7.35.0",
     "@wordpress/components": "^28.9.0",
     "react-ace": "^14.0.1",

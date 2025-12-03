@@ -1,6 +1,19 @@
 <?php
+namespace MosPress\PluginStarter\API;
+if ( ! defined( 'ABSPATH' ) ) exit;
+use Plugin_Upgrader;
+use WP_Ajax_Upgrader_Skin;
+
 class Ajax_API
 {
+    private static $instance = null;
+    public static function get_instance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
     public function __construct()
 	{
         add_action('wp_ajax_plugin_starter_reset_settings', [$this, 'plugin_starter_reset_settings']);		
@@ -319,4 +332,4 @@ class Ajax_API
 	}	
 }
 
-new Ajax_API();
+// new Ajax_API();

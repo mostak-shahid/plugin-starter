@@ -12,7 +12,7 @@ import {NotFound} from "./components";
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import local from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 import { Logo } from './lib/Illustrations';
-import {settingsBodyHeight} from './lib/Helpers';
+import {useSettingsBodyHeight} from './lib/Helpers';
 import Details from './data/details.json';
 
 
@@ -27,6 +27,7 @@ function App() {
     const { Text } = Typography;
     const [newsVisible, setNewsVisible] = useState(false);
     const [darkmode, setDarkmode] = useState(false);
+    const settingsBodyHeight = useSettingsBodyHeight();
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -75,7 +76,7 @@ function App() {
         <LocaleProvider locale={local}>
             <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
                 <Banner 
-                    // className="semi-always-light"
+                    className="plugin-starter-promote-banner"
                     fullMode={false}
                     type="info"
                     description={
@@ -89,6 +90,7 @@ function App() {
                 <Layout className="components-layout-demo">
                     <Header
                         style={{backgroundColor:'var(--semi-color-bg-3)'}}
+                        className="plugin-starter-header"
                     >                    
                         <HorizontalMenuControl
                             items = {[
@@ -117,7 +119,7 @@ function App() {
                     </Header>
                     <div 
                         className="plugin-starter-settings"
-                        style={{minHeight:settingsBodyHeight, }}
+                        style={{minHeight:settingsBodyHeight, color: 'red'}}
                     >
                         <Routes>
                             {/* <Route path="/" element={<RestrictionsSettings handleChange={handleChange} />} /> */}
@@ -173,7 +175,7 @@ function App() {
                         </Routes>
                     </div>
                     <Footer
-                        className="p-[15px] w-full" 
+                        className="p-[15px] w-full plugin-starter-footer" 
                         style={{borderTop: '1px solid var(--semi-color-border)', backgroundColor:'var(--semi-color-bg-2)'}}
                     >
                         <Row type="flex" gutter={24} align="middle" justify="space-between">

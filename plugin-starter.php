@@ -66,15 +66,18 @@ function plugin_starter_deactivate()
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
-if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
-	require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
-}
+require_once __DIR__ . '/vendor/autoload.php';
+
+use MosPress\PluginStarter\API\Ajax_API;
+use MosPress\PluginStarter\API\Rest_API;
+
+Ajax_API::get_instance();
+Rest_API::get_instance();
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
-require PLUGIN_STARTER_PATH . 'API/Rest_API.php';
+require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
 
 /**
  * Begins execution of the plugin.

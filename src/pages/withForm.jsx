@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageInfo from "../components/PageInfo/PageInfo";
 import { useMain } from "../contexts/MainContext";
-import { formDataPost, setNestedValue, urlToArr,  } from "../lib/Helpers"; // Import utility function
+import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from "../lib/Helpers"; // Import utility function
+
 import Details from '../data/details.json';
 
 import { Layout, Typography,  Toast, Card, Button, Space,} from '@douyinfe/semi-ui';
@@ -36,6 +37,8 @@ const withForm = (OriginalComponent, sectionPath = null) => {
         const [ resetting, setResetting ] = useState(false);
 
         const urlArr = urlToArr();
+        
+        const settingsBodyHeight = useSettingsBodyHeight();
 
         const location = useLocation();
         
@@ -125,28 +128,6 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                 }
             }
         };
-        const [settingsBodyHeight, setHeight] = useState();
-        useEffect(() => {
-            function updateVH() {
-                const plugin_starter_height = document.body.scrollHeight
-                ? document.body.scrollHeight
-                : window.innerHeight; // fallback
-                // const appliedHeight = vh - 69;
-                setHeight(plugin_starter_height - 130);
-                // console.log("document.body.scrollHeight:", document.body.scrollHeight);
-            }
-
-            updateVH();
-
-            // Listen to resize & viewport changes
-            window.visualViewport?.addEventListener("resize", updateVH);
-            window.visualViewport?.addEventListener("scroll", updateVH);
-
-            return () => {
-                window.visualViewport?.removeEventListener("resize", updateVH);
-                window.visualViewport?.removeEventListener("scroll", updateVH);
-            };
-        }, []);
         
         const headerContent = {
                 logo: <Logo width={36} height={36} />,
