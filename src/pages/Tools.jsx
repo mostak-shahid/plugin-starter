@@ -4,12 +4,6 @@ import { useMain } from '../contexts/MainContext';
 import withForm from '../pages/withForm';
 import apiFetch from "@wordpress/api-fetch";
 import { formDataPost, setNestedValue, urlToArr } from "../lib/Helpers"; // Import utility function
-import { 
-    SelectControl,
-    // Button,
-    Tooltip
-} from '@wordpress/components';
-import { backup, rotateRight, check } from '@wordpress/icons'; // Example icon
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import { IconRefresh } from '@douyinfe/semi-icons';
 import { SkeletonPlaceholder } from '../components';
@@ -38,29 +32,9 @@ const Tools = ({handleChange}) => {
             }
         }
     };
-
-    
-    // const handleResetAll = async () => {
-    //     const confirmation = window.confirm(__( "Are you sure you want to proceed?", "plugin-starter" ));
-    //     let result;
-    //     if (confirmation) {       
-    //         setResetting(true);     
-    //         setResetLoading(true);
-    //         setResetError(null);            
-    //         try {
-    //             result = await formDataPost('plugin_starter_reset_all_settings', {}); 
-    //             setSettingReload(Math.random);
-    //         } catch (error) {
-    //             setResetError(error.message);
-    //         } finally {
-    //             setResetLoading(false);
-    //             setResetting(false);
-    //         }
-    //     }
-    // };
     return (
         <>
-            <div className="setting-unit border-bottom py-4">
+            <div className="setting-unit py-4">
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>
                         <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>

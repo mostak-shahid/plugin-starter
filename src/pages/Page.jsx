@@ -1,42 +1,47 @@
 import { __ } from "@wordpress/i18n";
+
+import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import React from 'react';
 import { useMain } from '../contexts/MainContext';
 import withForm from './withForm';
+import { SkeletonPlaceholder } from '../components';
 const Page = ({handleChange}) => {
     const {
         settingData,
         settingLoading
     } = useMain();
+    const { Title, Text, Paragraph } = Typography;
     return (
         <>
-            <div className="setting-unit border-bottom py-4">
-                <div className="row justify-content-between">
-                    <div className="col-lg-7">
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton h4" style={{width: '60%'}}></div>
-                            : <h4>{__("Text Input", "plugin-starter")}</h4>
-                        }
-                        {
-                            settingLoading 
-                            ? <div className="loading-skeleton p" style={{width: '70%'}}></div>
-                            : <p>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</p>
-                        }
-                    </div>    
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("Delete all the plugin data upon", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
                     {
                         !settingLoading &&                               
-                        <div className="col-lg-5">
-                            <input 
-                                className="form-control"
-                                type="text"
-                                value={settingData?.base_input?.text_input}
-                                onChange={(e) => handleChange('base_input.text_input', e.target.value)}
-                            />                          
-                        </div>
+                        <Col xs={24} lg={12} xl={10}>
+                            <Select 
+                                className="w-full"
+                                placeholder={__("Action type", "plugin-starter")} 
+                                value={ settingData?.tools.delete_data_on }
+                                //delete, unstall, none
+                                optionList={ [
+                                    { label: 'None', value: 'none' },
+                                    { label: 'Delete', value: 'delete' },
+                                    { label: 'Unstall', value: 'unstall' },
+                                ] }
+                                onChange={ ( changedValue ) => handleChange('tools.delete_data_on', changedValue ) }
+                            />
+                        </Col>
                     }
-                </div>
+                </Row>
             </div>
         </>
     )
 }
-export default withForm(Page);
+export default withForm(Page, 'tools'); 
+// export default withForm(Tools, 'tools.something');

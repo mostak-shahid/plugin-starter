@@ -24,10 +24,7 @@ class Ajax_API
 		add_action('wp_ajax_plugin_starter_send_email_login_url', [$this, 'plugin_starter_send_email_login_url']);
 		add_action('init', [$this, 'plugin_starter_maybe_flush_rules'], 99);
 		
-    }
-	
-
-    
+    }    
 	public function plugin_starter_ajax_plugins_status()
 	{
 
@@ -57,7 +54,6 @@ class Ajax_API
 		}
 		wp_die();
 	}
-
 	public function plugin_starter_set_login_url()
 	{
 		// wp_send_json_success($_POST['_admin_nonce']);

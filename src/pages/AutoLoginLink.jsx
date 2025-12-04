@@ -12,7 +12,7 @@ const AutoLoginLink = ({handleChange}) => {
     } = useMain();
     return (
         <>
-            <div className="setting-unit border-bottom py-4">
+            <div className="setting-unit py-4">
                 <div className="row justify-content-between">
                     <div className="col-lg-7">
                         {

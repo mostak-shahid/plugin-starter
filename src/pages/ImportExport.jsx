@@ -96,7 +96,7 @@ const ImportExport = ({handleChange}) => {
     };
     return (
         <>
-            <div className="setting-unit border-bottom py-4">
+            <div className="setting-unit py-4">
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>
                         <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
