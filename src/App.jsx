@@ -35,9 +35,11 @@ export default function App() {
     return (
         <MenuProvider baseMenu={baseMenu} proItems={proItems} remoteItems={remoteItems}>
             <YourMenuRenderer />
-            <Suspense fallback={<div>{__("Loading remote component...", "plugin-starter")}</div>}>
-                <RemoteLoginForm />
-            </Suspense>
+            {plugin_starter_ajax_obj?.isPro &&
+                <Suspense fallback={<div>{__("Loading remote component...", "plugin-starter")}</div>}>
+                    <RemoteLoginForm />
+                </Suspense>
+            }
         </MenuProvider>
     );
 }
