@@ -130,7 +130,6 @@ function plugin_starter_get_tabs()
 function plugin_starter_get_default_options()
 {
 	$plugin_starter_default_options = [
-
 		'more' => [
 			'enable_scripts' => false,
 			'css' => '/* CSS Code Here */',

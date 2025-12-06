@@ -1,11 +1,6 @@
-import { __ } from '@wordpress/i18n';
-// import apiFetch from "@wordpress/api-fetch";
-import { createContext, useContext, useState } from "react";
-
+import { __ } from "@wordpress/i18n";
 import {IconSetting,IconLikeThumb,IconCloud,IconPlusCircle,IconUser,} from '@douyinfe/semi-icons';
-
-const MainContext = createContext();
-const settingsMenu = [
+export const baseMenu = [
     {
         itemKey: "page",
         text: __("Page", "plugin-starter"),
@@ -63,28 +58,3 @@ const settingsMenu = [
         icon: <IconLikeThumb />,
     },
 ];
-
-
-export const MainProvider = ({ children }) => {
-    const [settingData, setSettingData] = useState({});
-    const [settingLoading, setSettingLoading] = useState(true);
-    const [settingReload, setSettingReload] = useState(true);
-    return (
-        <MainContext.Provider
-            value={{
-                settingData, 
-                setSettingData,
-                settingLoading,
-                setSettingLoading,
-                settingsMenu,
-                settingReload, 
-                setSettingReload
-            }}
-        >
-            {children}
-            {/* {console.log('settingData from contex API', settingData)} */}
-        </MainContext.Provider>
-    );
-};
-
-export const useMain = () => useContext(MainContext);

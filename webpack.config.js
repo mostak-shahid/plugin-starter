@@ -1,7 +1,7 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const SemiPlugin = require("@douyinfe/semi-webpack-plugin").default;
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const { ModuleFederationPlugin } = require("webpack").container;
 module.exports = {
     ...defaultConfig,
 
@@ -75,6 +75,16 @@ module.exports = {
         }),
         new SemiPlugin({
             cssLayer: true
+        }),
+        new ModuleFederationPlugin({
+            name: "pluginstarter",
+            remotes: {
+                pluginstarterpro: `pluginstarterpro@../../wp-content/plugins/plugin-starter-pro/build/pluginstarterprocomponents.js"}`
+            },
+            shared: {
+                react: { singleton: true, requiredVersion: false },
+                "react-dom": { singleton: true, requiredVersion: false },
+            }
         })
     ]
 };

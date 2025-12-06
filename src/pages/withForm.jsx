@@ -9,8 +9,15 @@ import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from ".
 
 import Details from '../data/details.json';
 
-import { Layout, Typography,  Toast, Card, Button, Space,} from '@douyinfe/semi-ui';
-import { IconSave, IconRefresh } from '@douyinfe/semi-icons';
+import { Layout, Typography,  Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';
+import { IconSave, IconRefresh,
+    IconHelpCircle,
+    IconLikeHeart,
+    IconUserAdd,
+    IconSend,
+    IconCreditCard,
+    IconHistogram,
+} from '@douyinfe/semi-icons';
 
 
 import VerticalMenuControl from "../components/VerticalMenuControl/VerticalMenuControl";
@@ -44,12 +51,11 @@ const withForm = (OriginalComponent, sectionPath = null) => {
         
         const OPTIONS_API_URL = "/plugin-starter/v1/options";
 
-        useEffect(() => {
-            const basePath = '/plugin-starter/v1';        
+        useEffect(() => {      
             const fetchSettingData = async () => {
                 try {
                     const response = await apiFetch({
-                        path: `${basePath}/options`,
+                        path: OPTIONS_API_URL,
                         headers: { 'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce }
                     });
                     setSettingData(response);
@@ -130,9 +136,100 @@ const withForm = (OriginalComponent, sectionPath = null) => {
         };
         
         const headerContent = {
-                logo: <Logo width={36} height={36} />,
-                text: Details?.name,
+            logo: <Logo width={36} height={36} />,
+            text: Details?.name,
         };
+        const footerContent = (
+            <>
+                {/* Your bottom menu */}
+                <Nav 
+                    items= {[
+                        {
+                            itemKey: "vip",
+                            text: __("VIP Priority Support", "plugin-starter"),
+                            url: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
+                            target: "_blank",
+                            icon: <IconSend />
+                        },
+                        {
+                            itemKey: "help",
+                            text: __("Help Center", "plugin-starter"),
+                            url: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
+                            target: "_blank",
+                            icon: <IconHelpCircle />
+                        },
+                        {
+                            itemKey: "community",
+                            text: __("Join the Community", "plugin-starter"),
+                            url: "https://www.facebook.com/groups/wpastra",
+                            icon: <IconUserAdd />
+                        },
+                        {
+                            itemKey: "rate",
+                            text: __("Rate Us", "plugin-starter"),
+                            url: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
+                            target: "_blank",
+                            icon: <IconLikeHeart />
+                        },
+                    ]}
+                    onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
+                    style={{ padding: 0, marginBottom: 0, border: 'none' }}
+                />
+
+                {/* Collapse Button */}
+                {/* <Nav.Footer collapseButton={true} /> */}
+            </>
+        );
+        const footerContentHandleSelect = (item) => {
+            console.log(item)
+            if (!item || !item.url) {
+                return;
+            }
+
+            // Open in new tab if target is "_blank"
+            if (item.target === '_blank') {
+                window.open(item.url, '_blank');
+            } else {
+                // Default: same tab navigation
+                window.location.href = item.url;
+            }
+        };
+        
+
+        // 1. Add a sub-item programmatically
+        settingsMenu.find(item => item.itemKey === "page")?.items.push({
+            itemKey: "page-3",
+            text: __("Page 3", "plugin-starter"),
+            description: __("Page 3", "plugin-starter"),
+            url: "/settings/page/page-3",
+        });
+        // 2. Add a new top-level item (anywhere you want)
+        // Add at the end:
+        settingsMenu.push({
+            itemKey: "support",
+            text: __("Support", "plugin-starter"),
+            description: __("Documentation & help resources", "plugin-starter"),
+            url: "/settings/support",
+            icon: <IconHelpCircle />,
+        });
+        // Add at a specific index:
+        settingsMenu.splice(3, 0, {
+            itemKey: "pricing",
+            text: __("Pricing", "plugin-starter"),
+            description: __("View pricing and upgrade options", "plugin-starter"),
+            url: "/settings/pricing",
+            icon: <IconCreditCard />,
+        });
+        if (window.plugin_starter_ajax_obj?.isPro) {
+            settingsMenu.push({
+                itemKey: "analytics",
+                text: __("Analytics", "plugin-starter"),
+                description: __("Advanced insights", "plugin-starter"),
+                url: "/settings/analytics",
+                icon: <IconHistogram />,
+            });
+        }
+
         return (
             <>
                 <div className="plugin-starter-settings container mx-auto px-4">
@@ -142,6 +239,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                                 items={settingsMenu}
                                 breakpoint={960}
                                 headerContent={headerContent}
+                                footerContent={footerContent}
                             />
                         </Sider>
                         <Content style={{ padding: 24, minHeight: settingsBodyHeight, backgroundColor: 'var(--semi-color-bg-4)'}}>    

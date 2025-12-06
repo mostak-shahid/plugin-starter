@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Nav } from '@douyinfe/semi-ui';
+import { Nav, Divider, Dropdown, Avatar } from '@douyinfe/semi-ui';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { IllustrationIdle, Illustration404, Logo } from '../../lib/Illustrations';
 
 import Details from '../../data/details.json';
-export default function VerticalMenuControl({items=[], breakpoint, headerContent}) {
+export default function VerticalMenuControl({items=[], breakpoint, headerContent={}, footerContent={}}) {
     const navigate = useNavigate();
     const location = useLocation();
     
@@ -121,9 +121,13 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
             onOpenChange={handleOpenChange}
             onSelect={handleSelect}
             onCollapseChange={setIsCollapse}
-            header = {headerContent}
-            footer={{ collapseButton: breakpoint?true:false }}
+            header={headerContent}
             style={{height: '100%'}}
-        />
+        >
+            <Nav.Footer style={{padding: 0, marginTop: 'auto'}}>
+                {footerContent}
+            </Nav.Footer>
+            {breakpoint && <Nav.Footer collapseButton={true} />}
+        </Nav>
     );
 }

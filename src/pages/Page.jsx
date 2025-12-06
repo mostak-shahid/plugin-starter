@@ -1,10 +1,11 @@
 import { __ } from "@wordpress/i18n";
 
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
-import React from 'react';
+import React, {Suspense} from 'react';
 import { useMain } from '../contexts/MainContext';
 import withForm from './withForm';
 import { SkeletonPlaceholder } from '../components';
+const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
 const Page = ({handleChange}) => {
     const {
         settingData,
@@ -13,6 +14,7 @@ const Page = ({handleChange}) => {
     const { Title, Text, Paragraph } = Typography;
     return (
         <>
+            {console.log('settingData in tools page', settingData)}
             <div className="setting-unit py-4">
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>
@@ -40,6 +42,26 @@ const Page = ({handleChange}) => {
                     }
                 </Row>
             </div>
+            {plugin_starter_ajax_obj.isPro &&            
+                <div className="setting-unit py-4">
+                    <Row type="flex" gutter={[24, 24]}>
+                        <Col xs={24} lg={12} xl={14}>
+                            <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                                <Title heading={4}>{__("This is from pro", "plugin-starter")}</Title>
+                                <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                            </Skeleton>
+                        </Col>    
+                        {
+                            !settingLoading &&                               
+                            <Col xs={24} lg={12} xl={10}>
+                                <Suspense fallback={<div>{__("Loading remote component...", "plugin-starter")}</div>}>
+                                    <RemoteLoginForm settingData={settingData} />
+                                </Suspense>
+                            </Col>
+                        }
+                    </Row>
+                </div>                            
+            }
         </>
     )
 }
