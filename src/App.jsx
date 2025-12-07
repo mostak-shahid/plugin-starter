@@ -6,7 +6,7 @@ import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, 
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
 import {  Navigate, Route, Routes } from "react-router-dom";
 //Route Pages
-import {Dashboard, Page, ImportExport, More, Tools, Feedback} from "./pages";
+import {Dashboard, Page, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
 import {NotFound} from "./components";
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -22,10 +22,6 @@ import apiFetch from "@wordpress/api-fetch";
 
 import { MenuProvider } from "./contexts/MenuContext";
 import { baseMenu } from "./data/baseMenu";
-import YourMenuRenderer from "./YourMenuRenderer";
-
-const ProMenuComponent = React.lazy(() => import("pluginstarterpro/MenuItems"));
-const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
 
 export default function App() {
     const { Header, Footer } = Layout;
@@ -102,40 +98,50 @@ export default function App() {
         }
     }, []);
 
+    const HorizontalMenuItems = [
+        { itemKey: 'welcome', text: 'Welcome', icon: <IconHome />, url: '/' },
+        { itemKey: 'settings', text: 'Settings', icon: <IconSetting />, url: '/settings' },
+        { itemKey: 'feedback', text: 'Feedback', icon: <IconStar />, url: '/feedback' },
+
+        ...(!plugin_starter_ajax_obj?.isPro
+            ? [
+                {
+                    itemKey: 'free-vs-pro',
+                    text: 'Free vs Pro',
+                    icon: <IconMember />,
+                    url: '/free-vs-pro'
+                }
+            ]
+            : []
+        ),
+        // { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
+    ];
+
     return (
         <LocaleProvider locale={en_US}>
             <MenuProvider baseMenu={baseMenu} proItems={proItems} remoteItems={remoteItems}>
-                <YourMenuRenderer />
-                {plugin_starter_ajax_obj?.isPro &&
-                    <Suspense fallback={<div>{__("Loading remote component...", "plugin-starter")}</div>}>
-                        <RemoteLoginForm />
-                    </Suspense>
-                }
                 <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
-                    <Banner 
-                        className="plugin-starter-promote-banner"
-                        fullMode={false}
-                        type="info"
-                        description={
-                            <>
-                                <Text>{__('You\'re currently using the Free plan. ', 'plugin-starter')}</Text>
-                                <Text>{__('Some settings and features are only available in ', 'plugin-starter')}</Text>
-                                <b><Text link={{ href: 'https://semi.design', target: '_blank' }}>{__('Pro version.', 'plugin-starter')}</Text></b>
-                            </>
-                        }
-                    />
+                    {!plugin_starter_ajax_obj?.isPro &&
+                        <Banner 
+                            className="plugin-starter-promote-banner"
+                            fullMode={false}
+                            type="info"
+                            description={
+                                <>
+                                    <Text>{__('You\'re currently using the Free plan. ', 'plugin-starter')}</Text>
+                                    <Text>{__('Some settings and features are only available in ', 'plugin-starter')}</Text>
+                                    <b><Text link={{ href: 'https://semi.design', target: '_blank' }}>{__('Pro version.', 'plugin-starter')}</Text></b>
+                                </>
+                            }
+                        />
+                    }
                     <Layout className="components-layout-demo">
                         <Header
                             style={{backgroundColor:'var(--semi-color-bg-3)'}}
                             className="plugin-starter-header"
                         >                    
                             <HorizontalMenuControl
-                                items = {[
-                                    { itemKey: 'welcome', text: 'Welcome', icon: <IconHome />, url: '/' },
-                                    { itemKey: 'settings', text: 'Settings', icon: <IconSetting />, url: '/settings' },
-                                    { itemKey: 'feedback', text: 'Feedback', icon: <IconStar />, url: '/feedback' },
-                                    { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
-                                ]}
+                                items = {HorizontalMenuItems}
                                 breakpoint = "960"
                                 headerContent = {{
                                     logo: <Logo width={36} height={36} />,
@@ -156,7 +162,7 @@ export default function App() {
                         </Header>
                         <div 
                             className="plugin-starter-settings"
-                            style={{minHeight:settingsBodyHeight, color: 'red'}}
+                            style={{minHeight:settingsBodyHeight,}}
                         >   
                             <Routes>
                                 {/* <Route path="/" element={<RestrictionsSettings handleChange={handleChange} />} /> */}
@@ -170,6 +176,7 @@ export default function App() {
                                 <Route path="/settings/more" element={<More />} />
                                 <Route path="/settings/tools" element={<Tools />} />
                                 <Route path="/feedback" element={<Feedback />} />
+                                <Route path="/free-vs-pro" element={<FreeVsPro />} />
                                 <Route path="/semi" element={<Semi />} />
     
                                 <Route path="/semi" element={<Semi />}>
@@ -194,8 +201,8 @@ export default function App() {
                                 </Col>
                                 <Col xs={24} lg={12} className="text-center lg:text-right">
                                     <Space align='center' spacing='medium'>
-                                        <Text>{Details?.version}</Text> 
-                                        <Badge count={__( 'Free', "plugin-starter" )} theme='light' />
+                                        <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
+                                        <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
                                     </Space>
                                 </Col>
                             </Row>

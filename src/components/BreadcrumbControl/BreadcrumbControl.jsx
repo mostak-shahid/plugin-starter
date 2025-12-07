@@ -1,9 +1,10 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Breadcrumb } from '@douyinfe/semi-ui';
 import { useMain } from "../../contexts/MainContext";
+import { useMenu } from "../../contexts/MenuContext";
 
 const BreadcrumbControl = () => {
-    const { settingsMenu } = useMain();
+    const { settingsMenu } = useMenu();
     
     // Get current path from window.location.hash
     const getCurrentPath = () => {

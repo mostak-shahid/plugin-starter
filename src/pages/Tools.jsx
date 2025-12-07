@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { __ } from "@wordpress/i18n";
-import { useMain } from '../contexts/MainContext';
+import { useMenu } from '../contexts/MenuContext';
 import withForm from '../pages/withForm';
 import apiFetch from "@wordpress/api-fetch";
 import { formDataPost, setNestedValue, urlToArr } from "../lib/Helpers"; // Import utility function
@@ -12,7 +12,7 @@ const Tools = ({handleChange}) => {
         settingData,
         settingLoading,
         setSettingReload,
-    } = useMain();
+    } = useMenu();
     const { Title, Text, Paragraph } = Typography;
     const [processing, setProcessing] = useState(false); // normal, processing, done
     const handleClick = async () => {

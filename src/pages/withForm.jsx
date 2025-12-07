@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageInfo from "../components/PageInfo/PageInfo";
 import { useMain } from "../contexts/MainContext";
+import { useMenu } from "../contexts/MenuContext";
 import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from "../lib/Helpers"; // Import utility function
 
 import Details from '../data/details.json';
@@ -39,7 +40,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
             settingsMenu,
             settingReload,
             setSettingReload
-        } = useMain();
+        } = useMenu();
         const [ saving, setSaving ] = useState(false);
         const [ resetting, setResetting ] = useState(false);
 
@@ -161,7 +162,8 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                         {
                             itemKey: "community",
                             text: __("Join the Community", "plugin-starter"),
-                            url: "https://www.facebook.com/groups/wpastra",
+                            url: "https://www.facebook.com/mospressbd",
+                            target: "_blank",
                             icon: <IconUserAdd />
                         },
                         {
@@ -181,7 +183,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
             </>
         );
         const footerContentHandleSelect = (item) => {
-            console.log(item)
+            // console.log(item)
             if (!item || !item.url) {
                 return;
             }
@@ -194,41 +196,6 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                 window.location.href = item.url;
             }
         };
-        
-
-        // 1. Add a sub-item programmatically
-        settingsMenu.find(item => item.itemKey === "page")?.items.push({
-            itemKey: "page-3",
-            text: __("Page 3", "plugin-starter"),
-            description: __("Page 3", "plugin-starter"),
-            url: "/settings/page/page-3",
-        });
-        // 2. Add a new top-level item (anywhere you want)
-        // Add at the end:
-        settingsMenu.push({
-            itemKey: "support",
-            text: __("Support", "plugin-starter"),
-            description: __("Documentation & help resources", "plugin-starter"),
-            url: "/settings/support",
-            icon: <IconHelpCircle />,
-        });
-        // Add at a specific index:
-        settingsMenu.splice(3, 0, {
-            itemKey: "pricing",
-            text: __("Pricing", "plugin-starter"),
-            description: __("View pricing and upgrade options", "plugin-starter"),
-            url: "/settings/pricing",
-            icon: <IconCreditCard />,
-        });
-        if (window.plugin_starter_ajax_obj?.isPro) {
-            settingsMenu.push({
-                itemKey: "analytics",
-                text: __("Analytics", "plugin-starter"),
-                description: __("Advanced insights", "plugin-starter"),
-                url: "/settings/analytics",
-                icon: <IconHistogram />,
-            });
-        }
 
         return (
             <>

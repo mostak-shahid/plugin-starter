@@ -3,6 +3,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from 'react';
 import {PluginCard} from "../../components";
 import { useMain } from '../../contexts/MainContext';
+import { useMenu } from "../../contexts/MenuContext";
 import Details from '../../data/details.json';
 import './Dashboard.scss';
 // import {
@@ -14,7 +15,7 @@ import { Typography, Card, Col, Row  } from '@douyinfe/semi-ui';
 export default function Dashboard() {
     const {
         settingsMenu,
-    } = useMain();
+    } = useMenu();
     const { Text, Paragraph, Title } = Typography;
     const [plugins, setPlugins] = useState([]);
     const [pluginsLoading, setPluginsLoading] = useState(true);

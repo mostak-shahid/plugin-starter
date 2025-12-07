@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { useMain } from '../contexts/MainContext';
+import { useMenu } from '../contexts/MenuContext';
 import withForm from '../pages/withForm';
 import { Row, Col, Typography, Skeleton, Switch, } from '@douyinfe/semi-ui';
 import { SkeletonPlaceholder } from '../components';
@@ -14,7 +14,7 @@ const More = ({handleChange}) => {
     const {
         settingData,
         settingLoading,
-    } = useMain();
+    } = useMenu();
     const { Title, Text, Paragraph } = Typography;
     return (
         <>

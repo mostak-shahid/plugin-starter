@@ -101,7 +101,7 @@ export function MenuProvider({ baseMenu, proItems = [], remoteItems = [], childr
     return (
         <MenuContext.Provider 
             value={{ 
-                menu: mergedMenu,
+                settingsMenu: mergedMenu,
                 settingData, 
                 setSettingData,
                 settingLoading,

@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import React, {Suspense} from 'react';
 import { useMain } from '../contexts/MainContext';
+import { useMenu } from '../contexts/MenuContext';
 import withForm from './withForm';
 import { SkeletonPlaceholder } from '../components';
 const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
@@ -10,11 +11,11 @@ const Page = ({handleChange}) => {
     const {
         settingData,
         settingLoading
-    } = useMain();
+    } = useMenu();
     const { Title, Text, Paragraph } = Typography;
     return (
         <>
-            {console.log('settingData in tools page', settingData)}
+            {/* {console.log('settingData in tools page', settingData)} */}
             <div className="setting-unit py-4">
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>

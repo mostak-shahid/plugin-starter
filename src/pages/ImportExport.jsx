@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useState } from 'react';
-import { useMain } from '../contexts/MainContext';
+import { useMenu } from '../contexts/MenuContext';
 import withForm from '../pages/withForm';
 import { Row, Col, Typography, Skeleton, Button, Upload, Space, Toast, } from '@douyinfe/semi-ui';
 import { IconDownload, IconUpload, IconTickCircle } from '@douyinfe/semi-icons';
@@ -11,7 +11,7 @@ const ImportExport = ({handleChange}) => {
         settingData,
         settingLoading,
         setSettingReload
-    } = useMain();
+    } = useMenu();
     const { Title, Text, Paragraph } = Typography;
     const [importData, setImportData] = useState('');
     const [processingImport, setProcessingImport] = useState(false);

@@ -1,4 +1,5 @@
 import { useMain } from '../../contexts/MainContext';
+import { useMenu } from '../../contexts/MenuContext';
 import { useLocation } from 'react-router-dom';
 import { Typography } from '@douyinfe/semi-ui';
 
@@ -32,7 +33,7 @@ const findPageInfo = (menuArray, path) => {
  * Page Info Component
  */
 const PageInfo = ({ url }) => {
-    const { settingsMenu } = useMain();    // ⚡ now reading array, not object
+    const { settingsMenu } = useMenu();    // ⚡ now reading array, not object
     const location = useLocation();
     
     // Prefer explicit URL, fallback to router's actual path

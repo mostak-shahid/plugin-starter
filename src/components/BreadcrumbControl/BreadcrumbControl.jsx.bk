@@ -1,9 +1,10 @@
 import React, { useMemo, useEffect } from 'react';
 import { useMain } from "../../contexts/MainContext";
+import { useMenu } from "../../contexts/MenuContext";
 const BreadcrumbControl = () => {
     const {
         settingsMenu,
-    } = useMain();
+    } = useMenu();
     // Get current path from window.location.hash
     const getCurrentPath = () => {
         const hash = window.location.hash;

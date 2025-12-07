@@ -4,7 +4,6 @@ import {
     HashRouter
 } from 'react-router-dom';
 import App from './App';
-import { MainProvider } from "./contexts/MainContext";
 import apiFetch from '@wordpress/api-fetch';
 // Configure apiFetch with REST API settings
 // WordPress automatically uses window.wpApiSettings if available
@@ -29,11 +28,9 @@ if (rootElement) {
     const root = ReactDOM.createRoot(rootElement); // Create a root
     root.render(
         <HashRouter>
-            <MainProvider>
-                <App />
-            </MainProvider>
+            <App />
         </HashRouter>
     ); // Render the App component
 } else {
-  console.error("Target container '#plugin-starter-settings-react-app' not found in the DOM.");
+    console.error("Target container '#plugin-starter-settings-react-app' not found in the DOM.");
 }
