@@ -56,7 +56,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                 try {
                     const response = await apiFetch({
                         path: OPTIONS_API_URL,
-                        headers: { 'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce }
+                        // headers: { 'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce }
                     });
                     setSettingData(response);
                     setSettingLoading(false)

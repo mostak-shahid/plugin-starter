@@ -20,7 +20,7 @@
 //         </MenuContext.Provider>
 //     );
 // };
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 
 const MenuContext = createContext();
 
@@ -74,6 +74,9 @@ function cleanItem(item) {
 
 
 export function MenuProvider({ baseMenu, proItems = [], remoteItems = [], children }) {
+    const [settingData, setSettingData] = useState({});
+    const [settingLoading, setSettingLoading] = useState(true);
+    const [settingReload, setSettingReload] = useState(true);
     
     const mergedMenu = useMemo(() => {
         let menu = [...baseMenu];
@@ -96,7 +99,17 @@ export function MenuProvider({ baseMenu, proItems = [], remoteItems = [], childr
     }, [baseMenu, proItems, remoteItems]);
 
     return (
-        <MenuContext.Provider value={{ menu: mergedMenu }}>
+        <MenuContext.Provider 
+            value={{ 
+                menu: mergedMenu,
+                settingData, 
+                setSettingData,
+                settingLoading,
+                setSettingLoading,
+                settingReload, 
+                setSettingReload
+            }}
+        >
             {children}
         </MenuContext.Provider>
     );
