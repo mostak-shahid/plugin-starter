@@ -2,11 +2,25 @@ const fs = require('fs-extra');
 const { replaceInFile } = require('replace-in-file');
 
 const pluginFiles = [
-    'assets/**/*',
-    'php/**/*',
-    'templates/**/*',
-    'src/**/*',
-    'ultimate-security.php',
+    // 'assets/**/*',
+    // 'php/**/*',
+    // 'templates/**/*',
+    // 'src/**/*',
+    // 'plugin-starter.php',
+    // 'uninstall.php',
+    'admin/',
+    'assets/',
+    'build/',
+    'includes/',
+    'languages/',
+    'php/',
+    'public/',
+    // 'templates/',
+    'vendor/',
+    'index.php',
+    'README.txt',
+    'composer.json',
+    'plugin-starter.php',
     'uninstall.php',
 ];
 const { version } = JSON.parse(fs.readFileSync('package.json'));

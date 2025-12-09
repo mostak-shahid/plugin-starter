@@ -3,15 +3,19 @@ const { exec } = require('child_process');
 const chalk = require('chalk');
 
 const pluginFiles = [
+    'admin/',
     'assets/',
     'build/',
+    'includes/',
     'languages/',
     'php/',
-    'templates/',
+    'public/',
+    // 'templates/',
     'vendor/',
-    'readme.txt',
+    'index.php',
+    'README.txt',
     'composer.json',
-    'ultimate-security.php',
+    'plugin-starter.php',
     'uninstall.php',
 ];
 
@@ -33,7 +37,7 @@ exec(
             fs.mkdirp('release');
         }
 
-        const dest = 'release/ultimate-security'; // Temporary folder name after copying all the files here.
+        const dest = 'release/plugin-starter'; // Temporary folder name after copying all the files here.
         fs.mkdirp(dest);
 
         console.log(`🗜 Started making the zip ...`);
@@ -76,13 +80,13 @@ exec(
                 fs.removeSync(`${dest}/composer.lock`);
 
                 // Output zip file name.
-                const zipFile = `ultimate-security-v${version}.zip`;
+                const zipFile = `plugin-starter-v${version}.zip`;
 
                 console.log(`📦 Making the zip file ${zipFile} ...`);
 
                 // Making the zip file here.
                 exec(
-                    `zip ${zipFile} ultimate-security -rq`,
+                    `zip ${zipFile} plugin-starter -rq`,
                     {
                         cwd: 'release',
                     },

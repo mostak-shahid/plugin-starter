@@ -17,7 +17,7 @@ const targetFiles = [
 
 console.log(
     chalk.bgYellowBright.black(
-        '🧹Removing files that are unnecessery for production build in ultimate-security.'
+        '🧹Removing files that are unnecessery for production build in plugin-starter.'
     )
 );
 

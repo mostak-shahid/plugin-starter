@@ -373,7 +373,7 @@ class Rest_API
                 
         $response = [
             'success' => true,
-            'msg' => esc_html__('Theme set successfully.' . $user_id . $settings_theme, 'ultimate-security'),
+            'msg' => esc_html__('Theme set successfully.' . $user_id . $settings_theme, 'plugin-starter'),
         ];
 
         return new WP_REST_Response($response, 200);
