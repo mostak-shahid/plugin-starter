@@ -56,7 +56,7 @@ class Action_Hook
 			'manage_options',
 			$this->plugin_name,
 			array($this, 'plugin_starter_dashboard_react_page_html'),
-			plugin_dir_url(__DIR__) . 'admin/images/menu-icon.svg',
+			PLUGIN_STARTER_URL . 'admin/images/menu-icon.svg',
 			57
 		);
 	}
@@ -70,14 +70,14 @@ class Action_Hook
 		if (!current_user_can('manage_options')) {
 			return;
 		}
-		include_once(PLUGIN_STARTER_PATH . 'partials/' . $this->plugin_name . '-admin-display.php');
+		include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display.php');
 	}
 	public function plugin_starter_dashboard_react_page_html()
 	{
 		if (!current_user_can('manage_options')) {
 			return;
 		}
-		include_once(PLUGIN_STARTER_PATH . 'partials/' . $this->plugin_name . '-admin-display-react.php');
+		include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display-react.php');
 	}
 
 	/**

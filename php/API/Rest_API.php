@@ -37,6 +37,9 @@ class Rest_API
                 }
                 return json_decode(wp_remote_retrieve_body($response), true);
             },
+			'permission_callback' => function () {
+				return current_user_can('manage_options');
+			},
         ]);
         
         // ✅ Get posts (with embed info)
@@ -44,9 +47,9 @@ class Rest_API
         register_rest_route( self::NAMESPACE, '/posts', [
             'methods'  => 'GET',
             'callback' => [$this, 'plugin_starter_get_posts'],
-            // 'permission_callback' => function () {
-            //     return current_user_can( 'edit_posts' );
-            // },
+            'permission_callback' => function () {
+                return current_user_can( 'edit_posts' );
+            },
             'args' => [
                 'page'     => ['type' => 'integer'],
                 'per_page' => ['type' => 'integer'],

@@ -11,14 +11,7 @@ import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from ".
 import Details from '../data/details.json';
 
 import { Layout, Typography,  Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';
-import { IconSave, IconRefresh,
-    IconHelpCircle,
-    IconLikeHeart,
-    IconUserAdd,
-    IconSend,
-    IconCreditCard,
-    IconHistogram,
-} from '@douyinfe/semi-icons';
+import { IconSave, IconRefresh, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 
 
 import VerticalMenuControl from "../components/VerticalMenuControl/VerticalMenuControl";
@@ -30,7 +23,6 @@ import BreadcrumbControl from "../components/BreadcrumbControl/BreadcrumbControl
 const withForm = (OriginalComponent, sectionPath = null) => {   
     const { Header, Footer, Sider, Content } = Layout;
     const { Title, Text, Paragraph } = Typography;  
-
     function NewComponent() {
         const {
             settingData, 
@@ -209,7 +201,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                                 footerContent={footerContent}
                             />
                         </Sider>
-                        <Content style={{ padding: 24, minHeight: settingsBodyHeight, backgroundColor: 'var(--semi-color-bg-4)'}}>    
+                        <Content style={{ padding: 24, minHeight: settingsBodyHeight}}>    
                             <BreadcrumbControl />
                             <Card 
                                 title={
@@ -256,8 +248,6 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                             </Card>
                         </Content>
                     </Layout>
-                
-                    
                 </div>
             </>
         )

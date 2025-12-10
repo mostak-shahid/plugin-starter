@@ -40,6 +40,8 @@ define('PLUGIN_STARTER_NAME', 'Plugin Starter');
 
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
+define('PLUGIN_STARTER_MAIN_FILE', __FILE__);
+// define('PLUGIN_STARTER_BASENAME', plugin_basename(plugin_dir_path(__DIR__) . 'plugin-starter.php'));
 
 
 
@@ -70,9 +72,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;
+use MosPress\PluginStarter\HOOK\Action_Hook;
+use MosPress\PluginStarter\HOOK\Filter_Hook;
 
 Ajax_API::get_instance();
 Rest_API::get_instance();
+Action_Hook::get_instance();
+Filter_Hook::get_instance();
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
