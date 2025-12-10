@@ -137,28 +137,6 @@ class Plugin_Starter
 		$plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 9999);
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 9999);
-
-		$this->loader->add_action('admin_menu', $plugin_admin, 'plugin_starter_admin_menu');
-
-		// Add Settings link to the plugin
-		$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
-		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'plugin_starter_add_action_links');
-
-		$this->loader->add_filter('admin_body_class', $plugin_admin, 'plugin_starter_admin_body_class');
-
-		$this->loader->add_action('admin_init', $plugin_admin, 'plugin_starter_do_activation_redirect');
-
-		$this->loader->add_action('current_screen', $plugin_admin, 'plugin_starter_hide_admin_notices');
-
-		//add_action('admin_head', 'plugin_starter_option_form_submit');
-		$this->loader->add_action('admin_head', $plugin_admin, 'plugin_starter_option_form_submit');
-
-		// Reset settings by ajax
-		
-		// add_action( 'upgrader_process_complete', 'plugin_starter_update_completed', 10, 2 );
-		$this->loader->add_action('upgrader_process_complete', $plugin_admin, 'plugin_starter_update_completed', 10, 2);
-
-		$this->loader->add_action('rest_api_init', $plugin_admin, 'plugin_starter_rest_api_init');
 	}
 
 	/**
