@@ -201,7 +201,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
             <>
                 <div className="plugin-starter-settings container mx-auto px-4">
                     <Layout>
-                        <Sider>
+                        <Sider style={{ borderLeft: '1px solid var(--semi-color-border)' }}>
                             <VerticalMenuControl 
                                 items={settingsMenu}
                                 breakpoint={960}

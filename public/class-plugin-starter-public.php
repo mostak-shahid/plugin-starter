@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://www.mdmostakshahid.com/
+ * @link       https://mostak-shahid.github.io/
  * @since      1.0.0
  *
  * @package    Plugin_Starter

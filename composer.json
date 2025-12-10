@@ -1,6 +1,6 @@
 {
   "name": "mospress/plugin-starter",
-  "description": "Plugin starter boilerplate for WordPress",
+  "description": "Plugin boilerplate for WordPress",
   "type": "wordpress-plugin",
   "license": "GPLv2",
   "autoload": {

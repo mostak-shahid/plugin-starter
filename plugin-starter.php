@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://www.mdmostakshahid.com/
+ * @link              https://mostak-shahid.github.io/
  * @since             1.0.0
  * @package           PluginStarter
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Starter
- * Plugin URI:        https://www.mdmostakshahid.com/plugin-starter/
- * Description:       Plugin starter boilerplate for WordPress
+ * Plugin URI:        https://mostak-shahid.github.io/plugin-starter/
+ * Description:       Plugin boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Md. Mostak Shahid
- * Author URI:        https://www.mdmostakshahid.com/
+ * Author URI:        https://mostak-shahid.github.io/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       plugin-starter

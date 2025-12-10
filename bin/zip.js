@@ -1,112 +1,76 @@
 const fs = require('fs-extra');
-const { exec } = require('child_process');
-const chalk = require('chalk');
+const path = require('path');
+const archiver = require('archiver');
 
-const pluginFiles = [
-    'admin/',
-    'assets/',
-    'build/',
-    'includes/',
-    'languages/',
-    'php/',
-    'public/',
-    // 'templates/',
-    'vendor/',
-    'index.php',
-    'README.txt',
-    'composer.json',
-    'plugin-starter.php',
-    'uninstall.php',
-];
-
-
-const { version } = JSON.parse(fs.readFileSync('package.json'));
-
-exec(
-    'rm -rf *',
-    {
-        cwd: 'release',
-    },
-    (error) => {
-        if (error) {
-            console.log(
-                chalk.yellow(`⚠️ Could not find the release directory.`)
-            );
-            console.log(chalk.green(`🗂 Creating the release directory ...`));
-            // Making release folder.
-            fs.mkdirp('release');
-        }
-
-        const dest = 'release/plugin-starter'; // Temporary folder name after copying all the files here.
-        fs.mkdirp(dest);
-
-        console.log(`🗜 Started making the zip ...`);
-        try {
-            console.log(`⚙️ Copying plugin files ...`);
-
-            // Copying all the files into release folder.
-            pluginFiles.forEach((file) => {
-                fs.copySync(file, `${dest}/${file}`);
-            });
-            console.log(`📂 Finished copying files.`);
-        } catch (err) {
-            console.error(chalk.red('❌ Could not copy plugin files.'), err);
-            return;
-        }
-
-        exec(
-            'composer install --no-dev && composer du -o',
-            {
-                cwd: dest,
-            },
-            (error) => {
-                if (error) {
-                    console.log(
-                        chalk.red(
-                            `❌ Could not install composer in ${dest} directory.`
-                        )
-                    );
-                    console.log(chalk.bgRed.black(error));
-
-                    return;
-                }
-
-                console.log(
-                    `⚡️ Installed composer packages in ${dest} directory.`
-                );
-
-                console.log(`🧹 Removing composer files from the release ...`);
-                fs.removeSync(`${dest}/composer.json`);
-                fs.removeSync(`${dest}/composer.lock`);
-
-                // Output zip file name.
-                const zipFile = `plugin-starter-v${version}.zip`;
-
-                console.log(`📦 Making the zip file ${zipFile} ...`);
-
-                // Making the zip file here.
-                exec(
-                    `zip ${zipFile} plugin-starter -rq`,
-                    {
-                        cwd: 'release',
-                    },
-                    (error) => {
-                        if (error) {
-                            console.log(
-                                chalk.red(`❌ Could not make ${zipFile}.`)
-                            );
-                            console.log(chalk.bgRed.black(error));
-
-                            return;
-                        }
-
-                        fs.removeSync(dest);
-                        console.log(
-                            chalk.green(`✅  ${zipFile} is ready. 🎉`)
-                        );
-                    }
-                );
-            }
-        );
+async function createZip() {
+  try {
+    // Read package.json for plugin name and version
+    const packageJson = await fs.readJson(path.join(__dirname, '../package.json'));
+    const pluginName = packageJson.name;
+    const version = packageJson.version;
+    
+    const distPath = path.join(__dirname, '../dist');
+    const releasePath = path.join(__dirname, '../release');
+    
+    // Ensure release directory exists
+    await fs.ensureDir(releasePath);
+    
+    // Create zip filename
+    const zipFileName = `${pluginName}-v${version}.zip`;
+    const zipFilePath = path.join(releasePath, zipFileName);
+    
+    // Remove old zip if exists
+    if (await fs.pathExists(zipFilePath)) {
+      await fs.remove(zipFilePath);
+      console.log(`Removed old zip: ${zipFileName}`);
     }
-);
+    
+    console.log(`📦 Creating zip file: ${zipFileName}`);
+    
+    // Create write stream
+    const output = fs.createWriteStream(zipFilePath);
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Maximum compression
+    });
+    
+    // Listen for archive events
+    output.on('close', () => {
+      const sizeInMB = (archive.pointer() / 1024 / 1024).toFixed(2);
+      console.log(`✅ Zip created successfully!`);
+      console.log(`   File: ${zipFileName}`);
+      console.log(`   Size: ${sizeInMB} MB`);
+      console.log(`   Location: ${releasePath}`);
+    });
+    
+    archive.on('error', (err) => {
+      throw err;
+    });
+    
+    archive.on('warning', (err) => {
+      if (err.code === 'ENOENT') {
+        console.warn('⚠ Warning:', err.message);
+      } else {
+        throw err;
+      }
+    });
+    
+    // Pipe archive data to the file
+    archive.pipe(output);
+    
+    // Add dist folder contents to zip
+    // This will add all files from dist/ directly to the root of the zip
+    archive.directory(distPath, false);
+    
+    // Alternatively, to include the plugin folder name in the zip:
+    // archive.directory(distPath, pluginName);
+    
+    // Finalize the archive
+    await archive.finalize();
+    
+  } catch (error) {
+    console.error('❌ Error creating zip:', error.message);
+    process.exit(1);
+  }
+}
+
+createZip();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense, } from 'react';
 import { __ } from "@wordpress/i18n";
+import "./tailwind.css";
 import "./App.scss";
-import "./tailwind.css"
 import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
 import {  Navigate, Route, Routes } from "react-router-dom";
