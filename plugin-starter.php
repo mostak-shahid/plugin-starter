@@ -96,55 +96,10 @@ function plugin_starter_run()
 }
 plugin_starter_run();
 
-function plugin_starter_get_tabs()
-{
-	$plugin_starter_tabs = [];
-	/*$plugin_starter_tabs = [
-		'integration' => [
-			'slug' => 'integration',
-			'name' => 'Restrictions',
-			'description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-			'url' => 'plugin-starter',
-			'sub' => [
-				'security-for-woocommerce' => [
-					'slug' => 'security-for-woocommerce',
-					'name' => 'Settings',
-					'description' => 'Below you will find all the settings you need to restrict specific countires and IP addressses that you wish to restrict for your WooCommerce site. The restrictons will be applied to your WooCommerce pages.',
-					'url' => 'plugin-starter'
-				],
-				'customize' => [
-					'slug' => 'customize',
-					'name' => 'Customize',
-					'description' => 'Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.',
-					'url' => 'plugin-starter-integration-customize'
-				],
-			],
-		],
-	];*/
-	// Apply filter to allow modification of $variable by other plugins
-	$plugin_starter_tabs = apply_filters('plugin_starter_tabs_modify', $plugin_starter_tabs);
-
-	return $plugin_starter_tabs;
-}
-
 function plugin_starter_get_default_options()
 {
-	$plugin_starter_default_options = [
-		'more' => [
-			'enable_scripts' => false,
-			'css' => '/* CSS Code Here */',
-			'js' => '// JavaScript Code Here',
-			'header_content' => '<!-- Content inside HEAD tag -->',
-			'footer_content' => '<!-- Content inside BODY tag -->',
-			
-		],
-		'tools' => [
-			'delete_data_on' => 'none', // delete, unstall, none
-		],
-
-	];
+	$plugin_starter_default_options = [];
 	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
-
 	return $plugin_starter_default_options;
 }
 
@@ -161,19 +116,7 @@ function plugin_starter_is_plugin_page()
 	if (function_exists('get_current_screen')) {
 		$current_screen = get_current_screen();
 		// var_dump($current_screen->id);
-		$tabs = plugin_starter_get_tabs();
 		$pages = [];
-		if (isset($tabs) && sizeof($tabs)) {
-			foreach ($tabs as $tab) {
-				$pages[] = 'admin_page_' . $tab['url'];
-				if (isset($tab['sub']) && sizeof($tab['sub'])) {
-					foreach ($tab['sub'] as $subtab) {
-						$pages[] = 'admin_page_' . $subtab['url'];
-					}
-				}
-			}
-		}
-
 		if (
 			$current_screen->id == 'toplevel_page_plugin-starter'
 			|| in_array($current_screen->id, $pages)
