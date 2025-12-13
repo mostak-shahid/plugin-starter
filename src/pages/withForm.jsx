@@ -7,7 +7,7 @@ import PageInfo from "../components/PageInfo/PageInfo";
 import { useMain } from "../contexts/MainContext";
 import { useMenu } from "../contexts/MenuContext";
 import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from "../lib/Helpers"; // Import utility function
-
+import {BoxedLayout} from "../layouts/BoxedLayout";
 import Details from '../data/details.json';
 
 import { Layout, Typography,  Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';

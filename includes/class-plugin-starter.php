@@ -1,5 +1,10 @@
 <?php
 
+
+use MosPress\PluginStarter\API\Ajax_API;
+use MosPress\PluginStarter\API\Rest_API;
+use MosPress\PluginStarter\HOOK\Action_Hook;
+use MosPress\PluginStarter\HOOK\Filter_Hook;
 /**
  * The file that defines the core plugin class
  *
@@ -80,6 +85,11 @@ class Plugin_Starter
 		$this->load_dependencies();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+
+		Ajax_API::get_instance();
+		Rest_API::get_instance();
+		Action_Hook::get_instance();
+		Filter_Hook::get_instance();
 	}
 
 	/**

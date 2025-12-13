@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import {IconSetting,IconLikeThumb,IconCloud,IconPlusCircle,IconUser,} from '@douyinfe/semi-icons';
+import {IconSetting,IconLikeThumb,IconCloud,IconPlusCircle,IconUser,IconTemplate} from '@douyinfe/semi-icons';
 export const baseMenu = [
     {
         itemKey: "page",
@@ -19,6 +19,67 @@ export const baseMenu = [
                 text: __("Page 2", "plugin-starter"),
                 description: __("Page 2", "plugin-starter"),
                 url: "/settings/page/page-2",
+            },
+        ],
+    },
+    {
+        itemKey: "layouts",
+        text: __("Layouts", "plugin-starter"),
+        description: __("Layouts", "plugin-starter"),
+        url: "/settings/layouts",
+        icon: <IconTemplate />,
+        items: [
+            {
+                itemKey: "layouts-boxed",
+                text: __("Boxed", "plugin-starter"),
+                description: __("Boxed", "plugin-starter"),
+                url: "/settings/layouts/boxed",
+                items: [
+                    {
+                        itemKey: "layouts-boxed-nosidebar",
+                        text: __("No Sidebar", "plugin-starter"),
+                        description: __("No Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/boxed/nosidebar",
+                    },
+                    {
+                        itemKey: "layouts-boxed-leftsidebar",
+                        text: __("Left Sidebar", "plugin-starter"),
+                        description: __("Left Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/boxed/leftsidebar",
+                    },
+                    {
+                        itemKey: "layouts-boxed-rightsidebar",
+                        text: __("Right Sidebar", "plugin-starter"),
+                        description: __("Right Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/boxed/rightsidebar",
+                    },
+                ],
+            },
+            {
+                itemKey: "layouts-fullwidth",
+                text: __("Full Width", "plugin-starter"),
+                description: __("Full Width", "plugin-starter"),
+                url: "/settings/layouts/fullwidth",
+                items: [
+                    {
+                        itemKey: "layouts-fullwidth-nosidebar",
+                        text: __("No Sidebar", "plugin-starter"),
+                        description: __("No Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/fullwidth/nosidebar",
+                    },
+                    {
+                        itemKey: "layouts-fullwidth-leftsidebar",
+                        text: __("Left Sidebar", "plugin-starter"),
+                        description: __("Left Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/fullwidth/leftsidebar",
+                    },
+                    {
+                        itemKey: "layouts-fullwidth-rightsidebar",
+                        text: __("Right Sidebar", "plugin-starter"),
+                        description: __("Right Sidebar", "plugin-starter"),
+                        url: "/settings/layouts/fullwidth/rightsidebar",
+                    },
+                ],
             },
         ],
     },

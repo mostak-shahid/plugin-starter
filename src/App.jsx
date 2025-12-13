@@ -6,7 +6,7 @@ import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, 
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
 import {  Navigate, Route, Routes } from "react-router-dom";
 //Route Pages
-import {Dashboard, Page, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
+import {Dashboard, Page, BoxedNoSidebar, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
 import {NotFound} from "./components";
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -170,6 +170,10 @@ export default function App() {
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/settings" element={<Navigate to="/settings/page" />} />
                                 <Route path="/settings/page" element={<Page />} />
+
+                                <Route path="/settings/layouts" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
+                                <Route path="/settings/layouts/boxed" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
+                                <Route path="/settings/layouts/boxed/nosidebar" element={<BoxedNoSidebar />} />
                                 
     
                                 <Route path="/settings/import_export" element={<ImportExport />} />

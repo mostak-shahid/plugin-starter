@@ -37,14 +37,9 @@ if (!defined('ABSPATH')) {
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
 define('PLUGIN_STARTER_NAME', 'Plugin Starter');
-
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
 define('PLUGIN_STARTER_MAIN_FILE', __FILE__);
-// define('PLUGIN_STARTER_BASENAME', plugin_basename(plugin_dir_path(__DIR__) . 'plugin-starter.php'));
-
-
-
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-plugin-starter-activator.php
@@ -68,22 +63,13 @@ function plugin_starter_deactivate()
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-use MosPress\PluginStarter\API\Ajax_API;
-use MosPress\PluginStarter\API\Rest_API;
-use MosPress\PluginStarter\HOOK\Action_Hook;
-use MosPress\PluginStarter\HOOK\Filter_Hook;
-
-Ajax_API::get_instance();
-Rest_API::get_instance();
-Action_Hook::get_instance();
-Filter_Hook::get_instance();
+require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
+require_once PLUGIN_STARTER_PATH . 'plugin-starter-functions.php';
 
 /**
  * Begins execution of the plugin.
@@ -96,44 +82,7 @@ require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
  */
 function plugin_starter_run()
 {
-
 	$plugin = new Plugin_Starter();
 	$plugin->run();
 }
 plugin_starter_run();
-
-function plugin_starter_get_default_options()
-{
-	$plugin_starter_default_options = [];
-	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
-	return $plugin_starter_default_options;
-}
-
-// update_option('plugin_starter_options', plugin_starter_get_default_options());
-
-function plugin_starter_get_option()
-{
-	$plugin_starter_options_database = get_option('plugin_starter_options', []);
-	$plugin_starter_options = array_replace_recursive(plugin_starter_get_default_options(), $plugin_starter_options_database);
-	return $plugin_starter_options;
-}
-function plugin_starter_is_plugin_page()
-{
-	if (function_exists('get_current_screen')) {
-		$current_screen = get_current_screen();
-		// var_dump($current_screen->id);
-		$pages = [];
-		if (
-			$current_screen->id == 'toplevel_page_plugin-starter'
-			|| in_array($current_screen->id, $pages)
-		) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-
-
-

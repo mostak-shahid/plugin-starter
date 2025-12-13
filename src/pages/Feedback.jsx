@@ -61,11 +61,11 @@ const Feedback = () => {
             <div className="setting-unit mx-[3%]">
                 <Row type="flex" gutter={[24,24]} align="middle">
                     <Col sx={24} lg={12}>
-                        {/* <OnlineSurvey/> */}
-                        <IllustrationControl
+                        <OnlineSurvey/>
+                        {/* <IllustrationControl
                             image={<OnlineSurvey style={{ width: 530, height: 530 }} />}
                             darkModeImage={<OnlineSurveyDark style={{ width: 530, height: 530 }} />}
-                        />
+                        /> */}
                     </Col> 
                     <Col sx={24} lg={12}>
                         <div className="mb-3">
