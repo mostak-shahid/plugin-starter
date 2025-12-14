@@ -2,10 +2,11 @@ import { __ } from "@wordpress/i18n";
 import { IllustrationIdle, Illustration404, Logo } from '../lib/Illustrations';
 import BackgroundControl from './BackgroundControl/BackgroundControl';
 import BoxShadowControl from './BoxShadowControl/BoxShadowControl';
+import FontControl from './FontControl/FontControl';
+import UnitControl from './UnitControl/UnitControl';
 import PluginCard from './PluginCard/PluginCard';
 import ColorPickerControl from './ColorPickerControl/ColorPickerControl';
 import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
-import UnitControl from './UnitControl/UnitControl';
 import { Skeleton, } from '@douyinfe/semi-ui';
 const NotFound = () => (
     <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -23,6 +24,7 @@ const SkeletonPlaceholder = () => (
 export {
     BackgroundControl,
     BoxShadowControl,
+    FontControl,
     SkeletonPlaceholder,
     NotFound,
     PluginCard,

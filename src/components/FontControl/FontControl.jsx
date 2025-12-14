@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useCallback, useEffect, useState } from 'react';
-import ColorPickerControl from '../ColorPickerControl/ColorPickerControl';
+import {ColorPickerControl, UnitControl} from '../../components';
+import { Switch, Space, Typography } from '@douyinfe/semi-ui';
 import { 
     SelectControl,
     FontSizePicker,
@@ -41,13 +42,10 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
         <>
             <div className={`font-wrapper ${className}`}>
                 <div className="d-flex justify-content-end mb-2">
-                    <ToggleControl
-                        label="Enable Font Options"
-                        checked={ enableFont }
-                        onChange={ (newValue) => {
-                            updateValue('enabled', newValue);
-                        } }
-                        className="mb-0"
+                    <Switch 
+                        aria-label={__('Enable Font Options', 'plugin-starter')}
+                        checked={enableFont}
+                        onChange={(enabled) => update('enabled', enabled)}
                     />
                 </div>  
                 {
