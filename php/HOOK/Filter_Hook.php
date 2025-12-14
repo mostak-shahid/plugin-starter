@@ -87,6 +87,11 @@ class Filter_Hook {
                     'enabled' => false,
                     'inset' => false,
                 ],
+                'color' => '#ffffff',
+                'gradient' => '#ffffff',
+                'font' => [
+                    'enabled' => false,
+                ],
             ],
             'more' => [
                 'enable_scripts' => false,

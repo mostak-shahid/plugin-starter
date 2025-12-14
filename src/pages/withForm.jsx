@@ -4,20 +4,15 @@ import apiFetch from "@wordpress/api-fetch";
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageInfo from "../components/PageInfo/PageInfo";
-import { useMain } from "../contexts/MainContext";
 import { useMenu } from "../contexts/MenuContext";
 import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from "../lib/Helpers"; // Import utility function
-import {BoxedLayout} from "../layouts/BoxedLayout";
 import Details from '../data/details.json';
 
 import { Layout, Typography,  Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';
 import { IconSave, IconRefresh, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 
-
-import VerticalMenuControl from "../components/VerticalMenuControl/VerticalMenuControl";
-
 import { Logo } from '../lib/Illustrations';
-import BreadcrumbControl from "../components/BreadcrumbControl/BreadcrumbControl";
+import {BreadcrumbControl, VerticalMenuControl} from "../components";
 
 
 const withForm = (OriginalComponent, sectionPath = null) => {   

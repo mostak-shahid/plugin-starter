@@ -24,84 +24,61 @@ const BoxShadowControl = ({ value = {}, onChange, className='' }) => {
                 <Space align='center'>
                     <Switch 
                         aria-label={__('Enable Box Shadow', 'plugin-starter')}
-                        checked={shadow.enabled}
+                        checked={!!shadow.enabled}
                         onChange={(enabled) => update('enabled', enabled)}
                     />
                     <Typography.Title heading={6} style={{ margin: 8 }}>
-                        {shadow.enabled ? 'Enasbled' : 'Disabled'}
+                        {shadow.enabled ? __('Enabled', 'plugin-starter') : __('Disabled', 'plugin-starter')}
                     </Typography.Title>
                 </Space>
-        
-                {/* <ToggleControl
-                    label={__('Enable Box Shadow', 'plugin-starter')}
-                    checked={!!shadow.enabled}
-                    onChange={(enabled) => update('enabled', enabled)}
-                /> */}
             </div> 
             {shadow.enabled && (
                 <>
-                    <div className="row">
-                        <div className="col-6">
-                            {/* <UnitControl 
-                                label={__('Width', 'authpress')}
-                                onChange={(value) => handleChange('customizer.redesign.logo.width', value)}
-                                value={settingData?.customizer?.redesign?.logo?.width}
-                                units={units}
-                            /> */}
-                            <UnitControl
-                                label={__('Horizontal Offset (px)', 'plugin-starter')}
-                                onChange={(x) => update('x', x)}
-                                value={shadow.x}
-                                units={units}
-                            />
-                        </div>
-                        <div className="col-6">
-                            <UnitControl
-                                label={__('Vertical Offset (px)', 'plugin-starter')}
-                                onChange={(y) => update('y', y)}
-                                value={shadow.y}
-                                units={units}
-                            />
-                        </div>
-                        <div className="col-6">
-                            <UnitControl
-                                label={__('Blur (px)', 'plugin-starter')}
-                                onChange={(blur) => update('blur', blur)}
-                                value={shadow.blur}
-                                units={units}
-                            />
-                        </div>
-                        <div className="col-6">
-                            <UnitControl
-                                label={__('Spread (px)', 'plugin-starter')}
-                                onChange={(spread) => update('spread', spread)}
-                                value={shadow.spread}
-                                units={units}
-                            />
-                        </div>
-                    </div>
-                    <div className='row align-items-end'>
-                        <div className="col-6">
-                            <ColorPickerControl
-                                defaultValue={shadow.color || "#000000"}
-                                handleChange={(color) => update('color', color)}
-                                mode='color'
-                                label={__('Shadow Color', 'plugin-starter')}
-                            /> 
-                        </div>
-                        <div className="col-6">
+                    <Space vertical align='start' className='w-full'>
+                        <UnitControl
+                            label={__('Horizontal Offset (px)', 'plugin-starter')}
+                            onChange={(x) => update('x', x)}
+                            value={shadow.x}
+                            units={units}
+                            className="w-full"
+                        />
+                        <UnitControl
+                            label={__('Vertical Offset (px)', 'plugin-starter')}
+                            onChange={(y) => update('y', y)}
+                            value={shadow.y}
+                            units={units}
+                            className="w-full"
+                        />
+                        <UnitControl
+                            label={__('Blur (px)', 'plugin-starter')}
+                            onChange={(blur) => update('blur', blur)}
+                            value={shadow.blur}
+                            units={units}
+                            className="w-full"
+                        />
+                        <UnitControl
+                            label={__('Spread (px)', 'plugin-starter')}
+                            onChange={(spread) => update('spread', spread)}
+                            value={shadow.spread}
+                            units={units}
+                            className="w-full"
+                        />
+                        <ColorPickerControl
+                            defaultValue={shadow.color || "#000000"}
+                            handleChange={(color) => update('color', color)}
+                            mode='color'
+                            label={__('Shadow Color', 'plugin-starter')}
+                            className="w-full"
+                        /> 
+                        <div>
+                            <label className='font-semibold block'><Typography.Text>{__('Inset', 'plugin-starter')}</Typography.Text></label>
                             <Switch 
                                 aria-label={__('Inset', 'plugin-starter')}
-                                checked={shadow.inset}
+                                checked={!!shadow.inset}
                                 onChange={(enabled) => update('inset', enabled)}
                             />
-                            {/* <ToggleControl
-                                label={__('Inset', 'plugin-starter')}
-                                checked={!!shadow.inset}
-                                onChange={(inset) => update('inset', inset)}                            
-                            /> */}
                         </div>
-                    </div>
+                    </Space>
                 </>
             )}
         </div>

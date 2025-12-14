@@ -138,3 +138,17 @@ export function useSettingsBodyHeight() {
 
     return height;
 }
+
+export function capitalizeWords(string) {
+    // Split the string into an array of words
+    const words = string.split(' ');
+
+    // Capitalize the first letter of each word
+    const capitalizedWords = words.map(word => {
+        if (!word) return "";
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+
+    // Join the words back into a single string with spaces
+    return capitalizedWords.join(' ');
+}

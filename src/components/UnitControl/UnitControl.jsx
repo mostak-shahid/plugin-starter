@@ -6,6 +6,7 @@ export default function UnitControl({
     value,
     onChange,
     units = [],
+    className='',
 }) {
 
     // Extract number + unit from the string (e.g., "20px")
@@ -34,7 +35,7 @@ export default function UnitControl({
     };
 
     return (
-        <div className="unit-control" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className={`unit-control ${className}`} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {label && <label className='font-semibold block'><Typography.Text>{label}</Typography.Text></label>}
 
             <InputGroup style={{ width: '100%' }}>

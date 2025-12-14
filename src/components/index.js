@@ -2,10 +2,12 @@ import { __ } from "@wordpress/i18n";
 import { IllustrationIdle, Illustration404, Logo } from '../lib/Illustrations';
 import BackgroundControl from './BackgroundControl/BackgroundControl';
 import BoxShadowControl from './BoxShadowControl/BoxShadowControl';
+import BreadcrumbControl from './BreadcrumbControl/BreadcrumbControl';
+import ColorPickerControl from './ColorPickerControl/ColorPickerControl';
 import FontControl from './FontControl/FontControl';
 import UnitControl from './UnitControl/UnitControl';
+import VerticalMenuControl from './VerticalMenuControl/VerticalMenuControl';
 import PluginCard from './PluginCard/PluginCard';
-import ColorPickerControl from './ColorPickerControl/ColorPickerControl';
 import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
 import { Skeleton, } from '@douyinfe/semi-ui';
 const NotFound = () => (
@@ -24,11 +26,13 @@ const SkeletonPlaceholder = () => (
 export {
     BackgroundControl,
     BoxShadowControl,
+    BreadcrumbControl,
+    ColorPickerControl,
     FontControl,
     SkeletonPlaceholder,
     NotFound,
     PluginCard,
-    ColorPickerControl,
     MediaUploaderControl,
     UnitControl,
+    VerticalMenuControl,
 };

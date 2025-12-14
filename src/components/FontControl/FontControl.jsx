@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useCallback, useEffect, useState } from 'react';
 import {ColorPickerControl, UnitControl} from '../../components';
-import { Switch, Space, Typography } from '@douyinfe/semi-ui';
+import { Switch, Select, Typography } from '@douyinfe/semi-ui';
+import {capitalizeWords} from '../../lib/Helpers';
 import { 
     SelectControl,
     FontSizePicker,
@@ -45,7 +46,7 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
                     <Switch 
                         aria-label={__('Enable Font Options', 'plugin-starter')}
                         checked={enableFont}
-                        onChange={(enabled) => update('enabled', enabled)}
+                        onChange={(enabled) => updateValue('enabled', enabled)}
                     />
                 </div>  
                 {
@@ -87,20 +88,24 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
                                             option === "font-stretch" 
                                         ) ?
                                         (
-                                            <SelectControl
-                                                label={ option.replace('-', ' ') }
-                                                value={ values[option] || "" }
-                                                options={ SELECT_OPTIONS[option].map(val => {
-                                                    const valStr = String(val);
-                                                    return {
-                                                        label: __(valStr.charAt(0).toUpperCase() + valStr.slice(1), 'plugin-starter'),
-                                                        value: valStr,
-                                                    };
-                                                })}
-                                                onChange={ newValue => updateValue(option, newValue) }
-                                                __next40pxDefaultSize
-                                                __nextHasNoMarginBottom
-                                            />
+                                            <>
+                                                <label className='font-semibold block'><Typography.Text>{capitalizeWords(option.replace('-', ' '))}</Typography.Text></label>
+                                                <Select
+                                                    placeholder={option.replace('-', ' ')}
+                                                    // label={option}
+                                                    value={ values[option] || "" }
+                                                    // optionList={ SELECT_OPTIONS[option].map(val => {
+                                                    //     const valStr = String(val);
+                                                    //     return {
+                                                    //         label: __(valStr.charAt(0).toUpperCase() + valStr.slice(1), 'plugin-starter'),
+                                                    //         value: valStr,
+                                                    //     };
+                                                    // })}
+                                                    optionList={SELECT_OPTIONS[option]?.map((val) => ({ label: val, value: val })) || []}
+                                                    onChange={(value) => updateValue(option, value)}
+                                                    style={{width: '100%'}}
+                                                /> 
+                                            </>
                                         ) : (option === "line-height") ? 
                                         (
                                             <RangeControl

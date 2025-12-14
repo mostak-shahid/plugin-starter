@@ -28,13 +28,7 @@ if (rootElement) {
     const root = ReactDOM.createRoot(rootElement); // Create a root
     root.render(
         <HashRouter>
-<<<<<<< Updated upstream
             <App />
-=======
-            <MainProvider>
-                <App />
-            </MainProvider>
->>>>>>> Stashed changes
         </HashRouter>
     ); // Render the App component
 } else {
