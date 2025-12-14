@@ -2,10 +2,9 @@ import { __ } from "@wordpress/i18n";
 
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import React, {Suspense} from 'react';
-import { useMain } from '../contexts/MainContext';
 import { useMenu } from '../contexts/MenuContext';
 import withForm from './withForm';
-import { SkeletonPlaceholder } from '../components';
+import { BackgroundControl, BoxShadowControl, SkeletonPlaceholder } from '../components';
 const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
 const Page = ({handleChange}) => {
     const {
@@ -43,6 +42,56 @@ const Page = ({handleChange}) => {
                     }
                 </Row>
             </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("BackgroundControl", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <BackgroundControl
+                                options={[
+                                    "image",
+                                    "color",
+                                    "position",
+                                    "size",
+                                    "repeat",
+                                    "origin",
+                                    "clip",
+                                    "attachment",
+                                ]}
+                                defaultValues={settingData?.page?.background}
+                                name="page.background"
+                                handleChange={handleChange}
+                            />  
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("BoxShadowControl", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <BoxShadowControl
+                                value={settingData?.page?.boxshadow}
+                                onChange={(value) => handleChange('page.boxshadow', value)}
+                                // className="border-start border-end border-bottom"
+                            />  
+                        </Col>
+                    }
+                </Row>
+            </div>
             {plugin_starter_ajax_obj.isPro &&            
                 <div className="setting-unit py-4">
                     <Row type="flex" gutter={[24, 24]}>
@@ -66,5 +115,4 @@ const Page = ({handleChange}) => {
         </>
     )
 }
-export default withForm(Page, 'tools'); 
-// export default withForm(Tools, 'tools.something');
+export default withForm(Page, 'page'); 

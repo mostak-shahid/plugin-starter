@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from 'react';
 import {PluginCard} from "../../components";
-import { useMain } from '../../contexts/MainContext';
 import { useMenu } from "../../contexts/MenuContext";
 import Details from '../../data/details.json';
 import './Dashboard.scss';
@@ -102,7 +101,7 @@ export default function Dashboard() {
                                 } */}
                                 {plugins.map((plugin, index) => ( 
                                     <Col lg={12} key={index}>
-                                        {/* {console.log(plugin.icons['1x'])} */}
+                                        {console.log(plugin)}
                                         <PluginCard 
                                             key={plugin.slug} 
                                             image={plugin.icons['1x']} 
@@ -112,6 +111,7 @@ export default function Dashboard() {
                                             plugin_slug={plugin.slug} 
                                             plugin_file={`${plugin.file}/${plugin.slug}`} 
                                             download_url={plugin.download_link}
+                                            version={plugin.version}
                                         /> 
                                     </Col> 
                                     ))
@@ -130,6 +130,16 @@ export default function Dashboard() {
                             {__("Faster and exclusive support service designed for VIP assistance and benefits.", "plugin-starter")}                                    
                         </Paragraph>
                         <Text link={{ href: 'https://semi.design/', target:"_blank" }}>{__("Support", "plugin-starter")}</Text>
+                    </Card>
+
+                    <Card 
+                        className="mb-6"
+                        title={__("Help Center", "plugin-starter")}
+                    >
+                        <Paragraph>
+                            {__("Faster and exclusive support service designed for VIP assistance and benefits.", "plugin-starter")}                                    
+                        </Paragraph>
+                        <Text link={{ href: 'https://semi.design/', target:"_blank" }}>{__("Help", "plugin-starter")}</Text>
                     </Card>
                     
                     <Card 

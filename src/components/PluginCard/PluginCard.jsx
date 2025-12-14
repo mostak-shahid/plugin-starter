@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { formDataPost } from "../../lib/Helpers"; // Import utility function
 import './PluginCard.scss';
 import { Space, Button, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
-export default function PluginCard({image, name, intro, plugin_source='internal', plugin_slug='', plugin_file='', download_url=''}) {
-    
+export default function PluginCard(plugin) {
+    const {image, name, intro, plugin_source='internal', plugin_slug='', plugin_file='', download_url='', version='1.0.0'} = plugin;
     const { Text, Paragraph, Title } = Typography;
     /*
     data-sub_action="install_activate" 
@@ -142,17 +142,16 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
 	);
     return (
         <Space align='center'>
-            <Avatar
+            {console.log()}
+            <img
                 alt={name}
                 src={image}
-                size="large"
-                shape="square"
-                style={{flex: '0 0 72px'}}
+                style={{flex: '0 0 90px'}} 
             />
             <Space vertical align='start'>
                 <Title heading={6}>{name}</Title>
-                {/* <Paragraph>{intro}</Paragraph> */}
-                <Tag color='green' size='large'> tag </Tag>
+                <Paragraph ellipsis={{ showTooltip: true }} style={{ maxWidth: 250 }}>{intro}</Paragraph>
+                <Tag color='green' size='large'>{version}</Tag>
             </Space>
         </Space>
     )

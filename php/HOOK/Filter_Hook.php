@@ -81,6 +81,13 @@ class Filter_Hook {
     public function modify_plugin_starter_default_options( $opts ) {
 
         $defaults = [
+            'page' => [
+                'background' => [],
+                'boxshadow' => [
+                    'enabled' => false,
+                    'inset' => false,
+                ],
+            ],
             'more' => [
                 'enable_scripts' => false,
                 'css' => '/* CSS Code Here */',

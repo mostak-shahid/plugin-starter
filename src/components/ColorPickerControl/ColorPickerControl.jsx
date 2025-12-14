@@ -9,7 +9,8 @@ import {
 } from '@wordpress/components';
 import { 
     Button, 
-    // Popover 
+    // Popover
+    Typography, 
 } from '@douyinfe/semi-ui';
 import './ColorPickerControl.scss';
 
@@ -24,7 +25,6 @@ export default function ColorPickerControl({ defaultValue, handleChange, mode = 
     if (mode === 'gradient' || mode === 'both') {
         availableTabs.push({ name: 'gradient', title: 'Gradient', className: 'tab-gradient' });
     }
-
     const PopoverContent = (
         <TabPanel
             className="color-gradient-tabs p-2"
@@ -55,6 +55,7 @@ export default function ColorPickerControl({ defaultValue, handleChange, mode = 
     );
     return (
         <div className={`color-picker-control ${className}`}>
+            {label && <label className='font-semibold block'><Typography.Text>{label}</Typography.Text></label>}
             <Button
                 block
                 type="secondary"
@@ -62,9 +63,7 @@ export default function ColorPickerControl({ defaultValue, handleChange, mode = 
                 // style={ { border: '1px solid #ccc', color: '#ccc', gap: '10px', boxShadow: 'none', width: '100%' } }
             >                                   
                 <ColorIndicator colorValue={ defaultValue } /> 
-                <span className="color-picker-label ml-2 font-bold">
-                    { label? label : mode === 'color' ? 'Select Color' : mode === 'gradient' ? 'Select Gradient' : 'Select Color or Gradient' }
-                </span>
+                {label && <span className="color-picker-label ml-2 font-bold">{ label }</span>}
             </Button>   
             {/* <Popover visible={isOpen} content={PopoverContent} trigger="custom"/> */}
 

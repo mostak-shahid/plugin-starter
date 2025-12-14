@@ -1,11 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import {
-    ToggleControl,
-    __experimentalUnitControl as UnitControl, 
-} from '@wordpress/components';
 import {useState} from 'react';
-import ColorPickerControl from '../ColorPickerControl/ColorPickerControl';
-import { Switch } from '@douyinfe/semi-ui';
+import {ColorPickerControl, UnitControl} from '../../components';
+import { Switch, Space, Typography } from '@douyinfe/semi-ui';
 const units = [
     { value: 'px', label: 'px' },
     // { value: '%', label: '%' },
@@ -25,73 +21,67 @@ const BoxShadowControl = ({ value = {}, onChange, className='' }) => {
     return (
         <div className={`box-shadow-wrapper ${className}`}>
             <div className="d-flex justify-content-end mb-2">
-                <Switch 
-                    aria-label={__('Enable Box Shadow', 'plugin-starter')}
-                    checked={!!shadow.enabled}
-                    onChange={(enabled) => update('enabled', enabled)}
-                />
+                <Space align='center'>
+                    <Switch 
+                        aria-label={__('Enable Box Shadow', 'plugin-starter')}
+                        checked={shadow.enabled}
+                        onChange={(enabled) => update('enabled', enabled)}
+                    />
+                    <Typography.Title heading={6} style={{ margin: 8 }}>
+                        {shadow.enabled ? 'Enasbled' : 'Disabled'}
+                    </Typography.Title>
+                </Space>
         
-                <ToggleControl
+                {/* <ToggleControl
                     label={__('Enable Box Shadow', 'plugin-starter')}
                     checked={!!shadow.enabled}
                     onChange={(enabled) => update('enabled', enabled)}
-                />
+                /> */}
             </div> 
             {shadow.enabled && (
                 <>
                     <div className="row">
                         <div className="col-6">
+                            {/* <UnitControl 
+                                label={__('Width', 'authpress')}
+                                onChange={(value) => handleChange('customizer.redesign.logo.width', value)}
+                                value={settingData?.customizer?.redesign?.logo?.width}
+                                units={units}
+                            /> */}
                             <UnitControl
-                                __next40pxDefaultSize 
                                 label={__('Horizontal Offset (px)', 'plugin-starter')}
-                                value={shadow.x}
                                 onChange={(x) => update('x', x)}
-                                min={-50}
-                                max={50}
+                                value={shadow.x}
                                 units={units}
-                                className='mb-2'
                             />
                         </div>
                         <div className="col-6">
                             <UnitControl
-                                __next40pxDefaultSize 
                                 label={__('Vertical Offset (px)', 'plugin-starter')}
-                                value={shadow.y}
                                 onChange={(y) => update('y', y)}
-                                min={-50}
-                                max={50}
+                                value={shadow.y}
                                 units={units}
-                                className='mb-2'
                             />
                         </div>
                         <div className="col-6">
                             <UnitControl
-                                __next40pxDefaultSize 
                                 label={__('Blur (px)', 'plugin-starter')}
-                                value={shadow.blur}
                                 onChange={(blur) => update('blur', blur)}
-                                min={0}
-                                max={100}
+                                value={shadow.blur}
                                 units={units}
-                                className='mb-2'
                             />
                         </div>
                         <div className="col-6">
                             <UnitControl
-                                __next40pxDefaultSize 
                                 label={__('Spread (px)', 'plugin-starter')}
-                                value={shadow.spread}
                                 onChange={(spread) => update('spread', spread)}
-                                min={-50}
-                                max={50}
+                                value={shadow.spread}
                                 units={units}
-                                className='mb-2'
                             />
                         </div>
                     </div>
                     <div className='row align-items-end'>
                         <div className="col-6">
-                            <label className="form-label">{__('color', 'plugin-starter')}</label>
                             <ColorPickerControl
                                 defaultValue={shadow.color || "#000000"}
                                 handleChange={(color) => update('color', color)}
@@ -102,14 +92,14 @@ const BoxShadowControl = ({ value = {}, onChange, className='' }) => {
                         <div className="col-6">
                             <Switch 
                                 aria-label={__('Inset', 'plugin-starter')}
-                                checked={!!shadow.inset}
+                                checked={shadow.inset}
                                 onChange={(enabled) => update('inset', enabled)}
                             />
-                            <ToggleControl
+                            {/* <ToggleControl
                                 label={__('Inset', 'plugin-starter')}
                                 checked={!!shadow.inset}
                                 onChange={(inset) => update('inset', inset)}                            
-                            />
+                            /> */}
                         </div>
                     </div>
                 </>

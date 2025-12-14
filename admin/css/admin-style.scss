@@ -21,6 +21,9 @@ body[theme-mode=dark], body .semi-always-dark, :host([theme-mode=dark]), :host .
 }
 .plugin-starter-settings-template {
   position: relative;
+  #wpadminbar, #adminmenuwrap {
+    z-index: 999;
+  }
   #wpcontent {
     padding-left: 0;
     #wpbody {
