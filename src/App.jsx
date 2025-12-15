@@ -7,7 +7,7 @@ import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpC
 import {  Navigate, Route, Routes } from "react-router-dom";
 //Route Pages
 import {Dashboard, Page, BoxedNoSidebar, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
-import {NotFound} from "./components";
+import {NotFound, HorizontalMenuControl} from "./components";
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 import { Logo } from './lib/Illustrations';
@@ -16,7 +16,6 @@ import Details from './data/details.json';
 
 
 import Semi from "./pages/Semi/Semi";
-import HorizontalMenuControl from "./components/HorizontalMenuControl/HorizontalMenuControl";
 import apiFetch from "@wordpress/api-fetch";
 
 

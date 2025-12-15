@@ -6,7 +6,7 @@ import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { Button, Col, Row, Input, TextArea, Typography, Toast } from '@douyinfe/semi-ui';
 import { IllustrationSuccess, IllustrationSuccessDark } from '@douyinfe/semi-illustrations';
 import { IconSend } from '@douyinfe/semi-icons';
-import IllustrationControl from "../components/IllustrationControl/IllustrationControl";
+import {IllustrationControl} from "../components";
 const Feedback = () => {
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')

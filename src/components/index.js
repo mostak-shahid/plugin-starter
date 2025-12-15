@@ -5,6 +5,8 @@ import BoxShadowControl from './BoxShadowControl/BoxShadowControl';
 import BreadcrumbControl from './BreadcrumbControl/BreadcrumbControl';
 import ColorPickerControl from './ColorPickerControl/ColorPickerControl';
 import FontControl from './FontControl/FontControl';
+import HorizontalMenuControl from './HorizontalMenuControl/HorizontalMenuControl';
+import IllustrationControl from './IllustrationControl/IllustrationControl';
 import UnitControl from './UnitControl/UnitControl';
 import VerticalMenuControl from './VerticalMenuControl/VerticalMenuControl';
 import PluginCard from './PluginCard/PluginCard';
@@ -29,6 +31,8 @@ export {
     BreadcrumbControl,
     ColorPickerControl,
     FontControl,
+    HorizontalMenuControl,
+    IllustrationControl,
     SkeletonPlaceholder,
     NotFound,
     PluginCard,
