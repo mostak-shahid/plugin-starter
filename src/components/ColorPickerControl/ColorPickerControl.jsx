@@ -7,7 +7,7 @@ import {
     Popover,
     TabPanel,
 } from '@wordpress/components';
-import { Button, Typography } from '@douyinfe/semi-ui';
+import { Button, Typography, Space } from '@douyinfe/semi-ui';
 import './ColorPickerControl.scss';
 
 const DEFAULT_COLOR = '#ffffff';
@@ -71,14 +71,15 @@ export default function ColorPickerControl({
                 </label>
             )}
 
-            <Button block type="secondary" onClick={() => setIsOpen(!isOpen)}>
-                <ColorIndicator colorValue={value} />
-                {label && (
+            <Space className='semi-button-secondary semi-button-light h-[32px] px-[12px]'>
+                <ColorIndicator colorValue={value}  onClick={() => setIsOpen(!isOpen)}/>
+                <Typography.Text copyable>{value}</Typography.Text>
+                {/* {label && (
                     <span className="color-picker-label ml-2 font-bold">
                         {label}
                     </span>
-                )}
-            </Button>
+                )} */}
+            </Space>
 
             {isOpen && (
                 <Popover
