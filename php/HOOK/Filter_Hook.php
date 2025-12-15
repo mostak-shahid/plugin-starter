@@ -87,8 +87,10 @@ class Filter_Hook {
                     'enabled' => false,
                     'inset' => false,
                 ],
-                'color' => '#ffffff',
-                'gradient' => '#ffffff',
+                // 'color' => '#ffffff',
+                'color' => '',
+                // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
+                'gradient' => '',
                 'font' => [
                     'enabled' => false,
                 ],
