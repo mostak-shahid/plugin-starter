@@ -39,21 +39,21 @@ const TextShadowControl = ({ value = {}, onChange, className='' }) => {
                         onChange={(x) => update('x', x)}
                         value={shadow.x}
                         units={units}
-                        className='mb-2'
+                        className='w-full'
                     />
                     <UnitControl
                         label={__('Vertical Offset (px)', 'plugin-starter')}
                         onChange={(y) => update('y', y)}
                         value={shadow.y}
                         units={units}
-                        className='mb-2'
+                        className='w-full'
                     />
                     <UnitControl
                         label={__('Blur (px)', 'plugin-starter')}
                         onChange={(blur) => update('blur', blur)}
                         value={shadow.blur}
                         units={units}
-                        className='mb-2'
+                        className='w-full'
                     />
                     <ColorPickerControl
                         defaultValue={shadow.color || "#000000"}

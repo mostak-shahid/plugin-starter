@@ -11,6 +11,7 @@ import UnitControl from './UnitControl/UnitControl';
 import VerticalMenuControl from './VerticalMenuControl/VerticalMenuControl';
 import PluginCard from './PluginCard/PluginCard';
 import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
+import TextShadowControl from './TextShadowControl/TextShadowControl';
 import { Skeleton, } from '@douyinfe/semi-ui';
 const NotFound = () => (
     <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -39,4 +40,5 @@ export {
     MediaUploaderControl,
     UnitControl,
     VerticalMenuControl,
+    TextShadowControl,
 };

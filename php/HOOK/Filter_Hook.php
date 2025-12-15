@@ -94,6 +94,9 @@ class Filter_Hook {
                 'font' => [
                     'enabled' => false,
                 ],
+                'textshadow' => [
+                    'enabled' => false,
+                ],
             ],
             'more' => [
                 'enable_scripts' => false,
