@@ -1,14 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { useCallback, useEffect, useState } from 'react';
-import {ColorPickerControl, UnitControl} from '../../components';
-import { Switch, Select, Typography } from '@douyinfe/semi-ui';
+import { Switch, Select, Input, Typography, Space, Popover} from '@douyinfe/semi-ui';
 import {capitalizeWords} from '../../lib/Helpers';
-import { 
-    SelectControl,
-    FontSizePicker,
-    ToggleControl,
-    RangeControl
-} from '@wordpress/components';
+// import { ColorIndicator, ColorPalette, GradientPicker, Popover, TabPanel, } from '@wordpress/components';
+import {ColorPickerControl, UnitControl} from '../../components';
 import { FONT_SIZES } from '../../lib/Constants';
 const sanitizeDefaults = (value) => (
     value && typeof value === 'object' ? value : {}
@@ -22,7 +17,16 @@ const SELECT_OPTIONS = {
     "text-decoration": ["none", "underline", "overline", "line-through"],
     "text-transform": ["none", "uppercase", "lowercase", "capitalize"],
 };
-const FontControl = ({options, defaultValues = {}, name, handleChange, className=''}) => {
+const units = [
+    { value: '', label: __('None', 'plugin-starter') },
+    { value: 'px', label: 'px' },
+    { value: '%', label: '%' },
+    { value: 'em', label: 'em' },
+    { value: 'rem', label: 'rem' },
+    { value: 'vw', label: 'vw' },
+];
+const FontControl = ({defaultValues = {}, name, handleChange, className=''}) => {
+    const [isOpen, setIsOpen] = useState(false);
     const [values, setValues] = useState(() => ({ ...sanitizeDefaults(defaultValues) }));
 
     useEffect(() => {
@@ -38,20 +42,24 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
     }, [handleChange, name]);
 
     const enableFont = Boolean(values.enabled);
+    const options = ["font-family", "color", "font-size", "font-weight", "font-style", "font-variant", "font-stretch", "text-align", "text-decoration", "text-transform", "line-height", "letter-spacing", "word-spacing", ];
 
     return (
         <>
             <div className={`font-wrapper ${className}`}>
-                <div className="d-flex justify-content-end mb-2">
+                <Space align='center'>
                     <Switch 
                         aria-label={__('Enable Font Options', 'plugin-starter')}
                         checked={enableFont}
                         onChange={(enabled) => updateValue('enabled', enabled)}
                     />
-                </div>  
+                    <Typography.Title heading={6} style={{ margin: 8 }}>
+                        {enableFont ? __('Enabled', 'plugin-starter') : __('Disabled', 'plugin-starter')}
+                    </Typography.Title>
+                </Space>  
                 {
                     enableFont && 
-                        <div className="row">
+                        <>
                             {options.map((option) => (
                                 <div key={option} className={`mb-2 from-group from-group-${option} col-${(option === 'color' || option === 'font-size') ? '12' : '6'}`}>
                                     
@@ -59,7 +67,6 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
                                     {
                                         option === "color" ? (
                                             <div className='mb-2'>
-                                                <label className="form-label">{__('color', 'plugin-starter')}</label>
                                                 <ColorPickerControl
                                                     defaultValue={values[option] || "#000000"}
                                                     label={__('Font Color', 'plugin-starter')}
@@ -69,15 +76,15 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
                                             </div>
                                         ) : option === "font-size" ? 
                                         (
-                                            <FontSizePicker
-                                                __next40pxDefaultSize
-                                                fontSizes={ FONT_SIZES }
-                                                value={ values[option] }
-                                                fallbackFontSize={ 16 }
-                                                onChange={ ( value ) => {
-                                                    updateValue(option, value);
-                                                } }
-                                            /> 
+                                            <UnitControl
+                                                label={__('Size', 'plugin-starter')}
+                                                onChange={(value) => updateValue(option, value)}
+                                                value={values[option]}
+                                                units={units}
+                                                min={1}
+                                                step={1}
+                                                className="w-full"
+                                            />
                                         ) : (
                                             option === "font-weight" || 
                                             option === "font-style" || 
@@ -108,27 +115,31 @@ const FontControl = ({options, defaultValues = {}, name, handleChange, className
                                             </>
                                         ) : (option === "line-height") ? 
                                         (
-                                            <RangeControl
+                                            <UnitControl
                                                 label={__('Line Height', 'plugin-starter')}
-                                                value={values[option] || ""}
                                                 onChange={(value) => updateValue(option, value)}
+                                                value={values[option]}
+                                                units={units}
                                                 min={0.8}
                                                 max={3}
                                                 step={0.1}
+                                                className="w-full"
                                             />
                                         ) : 
                                         (
-                                            <input
-                                                type="text"
-                                                value={values[option] || ""}
-                                                onChange={(e) => updateValue(option, e.target.value)}
-                                                className="form-control"
-                                            />
+                                            <>                                            
+                                                <label className='font-semibold block'><Typography.Text>{capitalizeWords(option.replace('-', ' '))}</Typography.Text></label>                                                
+                                                <Input
+                                                    value={values[option] || ""}
+                                                    onChange={(e) => updateValue(option, e.target.value)}
+                                                    className="form-control"
+                                                />
+                                            </>
                                         )
                                     }
                                 </div>
                             ))}                    
-                        </div>
+                        </>
                 }        
             </div>
         </>

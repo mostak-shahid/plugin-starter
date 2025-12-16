@@ -1,9 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Breadcrumb } from '@douyinfe/semi-ui';
-import { useMenu } from "../../contexts/MenuContext";
 
-const BreadcrumbControl = ({className=''}) => {
-    const { settingsMenu } = useMenu();
+const BreadcrumbControl = ({menu=[], className=''}) => {
     
     // Get current path from window.location.hash
     const getCurrentPath = () => {
@@ -46,7 +44,7 @@ const BreadcrumbControl = ({className=''}) => {
         ];
         
         let buildPath = '';
-        let currentMenu = settingsMenu;
+        let currentMenu = menu;
 
         for (let i = 0; i < segments.length; i++) {
             buildPath += `/${segments[i]}`;
@@ -81,7 +79,7 @@ const BreadcrumbControl = ({className=''}) => {
         }
 
         return items;
-    }, [currentPath, settingsMenu]);
+    }, [currentPath, menu]);
 
     const handleClick = (item, e) => {
         e.preventDefault();

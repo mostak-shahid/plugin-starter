@@ -33,7 +33,10 @@ class Filter_Hook {
         );
 
         add_filter('admin_body_class', [ $this, 'plugin_starter_admin_body_class' ]);
+
         add_filter('plugin_starter_default_options_modify', [ $this, 'modify_plugin_starter_default_options' ]);
+        add_filter('plugin_starter_default_colors_modify', [ $this, 'modify_plugin_starter_default_colors' ]);
+        add_filter('plugin_starter_default_gradients_modify', [ $this, 'modify_plugin_starter_default_gradients' ]);
 
         /**
          * Allow PRO add-ons or Module Federation remotes to inject links dynamically
@@ -49,6 +52,12 @@ class Filter_Hook {
         $default_links = [
             '<a href="' . admin_url("admin.php?page={$this->plugin_slug}") . '">' .
                 esc_html__('Settings', 'plugin-starter') .
+            '</a>',
+            '<a href="https://mostak-shahid.github.io/plugin/plugin-starter/docs/" target="_blank">' .
+                esc_html__('Docs', 'plugin-starter') .
+            '</a>',
+            '<a href="https://www.facebook.com/mospressbd" target="_blank">' .
+                esc_html__('Community', 'plugin-starter') .
             '</a>',
         ];
 
@@ -79,7 +88,6 @@ class Filter_Hook {
      * Default options filter (still dynamic)
      */
     public function modify_plugin_starter_default_options( $opts ) {
-
         $defaults = [
             'page' => [
                 'background' => [],
@@ -94,9 +102,16 @@ class Filter_Hook {
                 'font' => [
                     'enabled' => false,
                 ],
+                'media_uploader' => [],
+                'multicolor' => [],
+                'repeatable_field' => [
+                    ['address' => '123 Main St, Cityville, Country' ],
+                    ['address' => '456 Side St, Townsville, Country' ],
+                ],
                 'textshadow' => [
                     'enabled' => false,
                 ],
+                'unitcontrol' => '',
             ],
             'more' => [
                 'enable_scripts' => false,
@@ -109,7 +124,50 @@ class Filter_Hook {
                 'delete_data_on' => 'none', // delete, uninstall, none
             ]
         ];
+        return wp_parse_args( $opts, $defaults );
+    }
 
+    /**
+     * Default options filter (still dynamic)
+     */
+    public function modify_plugin_starter_default_colors( $opts ) {
+        $defaults = [
+            ['name' => esc_html__('Black', 'plugin-starter'), 'color' => '#000000'],
+            ['name' => esc_html__('Blue', 'plugin-starter'), 'color' => '#0073AA'],
+            ['name' => esc_html__('Cyan', 'plugin-starter'), 'color' => '#00A0D2'],
+            ['name' => esc_html__('Deep Blue', 'plugin-starter'), 'color' => '#005075'],
+            ['name' => esc_html__('Deep Purple', 'plugin-starter'), 'color' => '#23036A'],
+            ['name' => esc_html__('Gold', 'plugin-starter'), 'color' => '#FFB900'],
+            ['name' => esc_html__('Gray', 'plugin-starter'), 'color' => '#888888'],
+            ['name' => esc_html__('Green', 'plugin-starter'), 'color' => '#008000'],
+            ['name' => esc_html__('Light Gray', 'plugin-starter'), 'color' => '#E6E6E6'],
+            ['name' => esc_html__('Lime Green', 'plugin-starter'), 'color' => '#82C91E'],
+            ['name' => esc_html__('Navy Blue', 'plugin-starter'), 'color' => '#001F3F'],
+            ['name' => esc_html__('Orange', 'plugin-starter'), 'color' => '#FF6600'],
+            ['name' => esc_html__('Pink', 'plugin-starter'), 'color' => '#FF4081'],
+            ['name' => esc_html__('Purple', 'plugin-starter'), 'color' => '#800080'],
+            ['name' => esc_html__('Red', 'plugin-starter'), 'color' => '#FF0000'],
+            ['name' => esc_html__('Silver', 'plugin-starter'), 'color' => '#C0C0C0'],
+            ['name' => esc_html__('White', 'plugin-starter'), 'color' => '#FFFFFF'],
+            ['name' => esc_html__('Yellow', 'plugin-starter'), 'color' => '#FFFF00'],
+        ];
+        return wp_parse_args( $opts, $defaults );
+    }
+
+    /**
+     * Default options filter (still dynamic)
+     */
+    public function modify_plugin_starter_default_gradients( $opts ) {
+        $defaults = [
+            ['name' => esc_html__('Blue to Purple', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #0064fa 0%, #800080 100%)'],
+            ['name' => esc_html__('Pink to Orange', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #ff4081 0%, #ff6600 100%)'],
+            ['name' => esc_html__('Cyan to Blue', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #00a0d2 0%, #0073aa 100%)'],
+            ['name' => esc_html__('Lime Green to Green', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #82c91e 0%, #008000 100%)'],
+            ['name' => esc_html__('Gold to Orange', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #ffb900 0%, #ff6600 100%)'],
+            ['name' => esc_html__('Red to Deep Purple', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #ff0000 0%, #23036a 100%)'],
+            ['name' => esc_html__('Yellow to Lime Green', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #ffff00 0%, #82c91e 100%)'],
+            ['name' => esc_html__('Silver to Gray', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #c0c0c0 0%, #888888 100%)'],
+	    ];
         return wp_parse_args( $opts, $defaults );
     }
 }

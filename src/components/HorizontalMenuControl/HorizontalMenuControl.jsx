@@ -1,14 +1,8 @@
 import { __ } from "@wordpress/i18n";
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-    Nav,
-    SideSheet,
-    Button,
-} from '@douyinfe/semi-ui';
-import {
-    IconMenu,
-} from '@douyinfe/semi-icons';
+import { Nav, SideSheet, Button, } from '@douyinfe/semi-ui';
+import { IconMenu, } from '@douyinfe/semi-icons';
 import './HorizontalMenuControl.scss';
 
 export default function HorizontalMenuControl({items, breakpoint, headerContent={}, footerContent={}}) {
@@ -35,20 +29,6 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
         setSelectedKeys([active.selected]);
         setOpenKeys(active.openKeys);
     }, [location.pathname]);
-
-    // const findActiveKeys = (menuItems, path, parents = []) => {
-    //     // console.log(menuItems, path, parents);
-    //     for (const item of menuItems) {
-    //         if (item.url === path) {
-    //             return { selected: item.itemKey, openKeys: parents };
-    //         }
-    //         if (item.items) {
-    //             const result = findActiveKeys(item.items, path, [...parents, item.itemKey]);
-    //             if (result.selected) return result;
-    //         }
-    //     }
-    //     return { selected: '', openKeys: [] };
-    // };
 
     const findActiveKeys = (menuItems, path, parents = []) => {
         for (const item of menuItems) {

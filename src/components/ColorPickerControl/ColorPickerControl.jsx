@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
 import { GRADIENTS, COLORS } from '../../lib/Constants';
-import {
-    ColorIndicator,
-    ColorPalette,
-    GradientPicker,
-    Popover,
-    TabPanel,
-} from '@wordpress/components';
-import { Button, Typography, Space } from '@douyinfe/semi-ui';
+import { ColorIndicator, ColorPalette, GradientPicker, Popover, TabPanel, } from '@wordpress/components';
+import { Typography, Space } from '@douyinfe/semi-ui';
+import { IconCopy, IconTickCircle, } from '@douyinfe/semi-icons';
 import './ColorPickerControl.scss';
 
 const DEFAULT_COLOR = '#ffffff';
@@ -66,14 +61,26 @@ export default function ColorPickerControl({
     return (
         <div className={`color-picker-control ${className}`}>
             {label && (
-                <label className="font-semibold block">
+                <label className="font-semibold block mb-1">
                     <Typography.Text>{label}</Typography.Text>
                 </label>
             )}
 
             <Space className='semi-button-secondary semi-button-light h-[32px] px-[12px]'>
-                <ColorIndicator colorValue={value}  onClick={() => setIsOpen(!isOpen)}/>
-                <Typography.Text copyable>{value}</Typography.Text>
+                <ColorIndicator className='cursor-pointer' colorValue={value}  onClick={() => setIsOpen(!isOpen)}/>
+                <Typography.Text
+                    // copyable
+                    copyable = {{
+                        content: value,
+                        render: (copied, doCopy, config) => {
+                            return (
+                                <span onClick={doCopy} className='inline-block ml-1 cursor-pointer'>{copied ? <IconTickCircle /> : <IconCopy />}</span>
+                            );
+                        }
+                    }}
+                >
+                    {value}
+                </Typography.Text>
                 {/* {label && (
                     <span className="color-picker-label ml-2 font-bold">
                         {label}

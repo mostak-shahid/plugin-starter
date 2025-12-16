@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Nav, Divider, Dropdown, Avatar } from '@douyinfe/semi-ui';
+import { Nav, } from '@douyinfe/semi-ui';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-import { IllustrationIdle, Illustration404, Logo } from '../../lib/Illustrations';
-
-import Details from '../../data/details.json';
 export default function VerticalMenuControl({items=[], breakpoint, headerContent={}, footerContent={}}) {
     const navigate = useNavigate();
     const location = useLocation();

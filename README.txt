@@ -1,5 +1,5 @@
 === Plugin Starter ===
-Contributors: (this should be a list of wordpress.org userid's)
+Contributors: mostakshahid
 Donate link: https://example.com/
 Tags: comments, spam
 Requires at least: 4.5

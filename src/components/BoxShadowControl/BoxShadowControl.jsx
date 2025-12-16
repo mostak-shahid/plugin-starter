@@ -68,7 +68,7 @@ const BoxShadowControl = ({ value = {}, onChange, className='' }) => {
                         className="w-full"
                     /> 
                     <div>
-                        <label className='font-semibold block'><Typography.Text>{__('Inset', 'plugin-starter')}</Typography.Text></label>
+                        <label className='font-semibold block mb-1'><Typography.Text>{__('Inset', 'plugin-starter')}</Typography.Text></label>
                         <Switch 
                             aria-label={__('Inset', 'plugin-starter')}
                             checked={!!shadow.inset}

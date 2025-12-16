@@ -7,10 +7,12 @@ import ColorPickerControl from './ColorPickerControl/ColorPickerControl';
 import FontControl from './FontControl/FontControl';
 import HorizontalMenuControl from './HorizontalMenuControl/HorizontalMenuControl';
 import IllustrationControl from './IllustrationControl/IllustrationControl';
+import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
+import MultiColorControl from './MultiColorControl/MultiColorControl';
+
+import PluginCard from './PluginCard/PluginCard';
 import UnitControl from './UnitControl/UnitControl';
 import VerticalMenuControl from './VerticalMenuControl/VerticalMenuControl';
-import PluginCard from './PluginCard/PluginCard';
-import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
 import TextShadowControl from './TextShadowControl/TextShadowControl';
 import { Skeleton, } from '@douyinfe/semi-ui';
 const NotFound = () => (
@@ -34,11 +36,12 @@ export {
     FontControl,
     HorizontalMenuControl,
     IllustrationControl,
-    SkeletonPlaceholder,
+    MediaUploaderControl,
+    MultiColorControl,
     NotFound,
     PluginCard,
-    MediaUploaderControl,
+    SkeletonPlaceholder,
+    TextShadowControl,
     UnitControl,
     VerticalMenuControl,
-    TextShadowControl,
 };

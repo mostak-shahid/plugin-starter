@@ -4,10 +4,14 @@ import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '
 import React, {Suspense} from 'react';
 import { useMenu } from '../contexts/MenuContext';
 import withForm from './withForm';
-import { BackgroundControl, BoxShadowControl, ColorPickerControl, FontControl, SkeletonPlaceholder, TextShadowControl } from '../components';
-import {
-    GradientPicker,
-} from '@wordpress/components';
+import { BackgroundControl, BoxShadowControl, ColorPickerControl, FontControl, MediaUploaderControl, MultiColorControl, SkeletonPlaceholder, TextShadowControl, UnitControl } from '../components';
+const units = [
+    { value: 'px', label: 'px' },
+    // { value: '%', label: '%' },
+    // { value: 'em', label: 'em' },
+    // { value: 'rem', label: 'rem' },
+    // { value: 'vw', label: 'vw' },
+];
 const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
 const Page = ({handleChange}) => {
     const {
@@ -163,7 +167,6 @@ const Page = ({handleChange}) => {
                                 defaultValues={settingData?.page?.font}
                                 name='page.font' 
                                 handleChange={handleChange}
-                                options = {["font-size", "font-weight", "font-style", "font-variant", "font-stretch", "text-align", "text-decoration", "text-transform" ]}
                             />  
                         </Col>
                     }
@@ -183,6 +186,79 @@ const Page = ({handleChange}) => {
                             <TextShadowControl 
                                 value={settingData?.page?.textshadow}
                                 onChange={(value) => handleChange('page.textshadow', value)}/>  
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("MultiColorControl", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <MultiColorControl 
+                                options={['primary', 'secondary', 'tertiary']}
+                                defaultValues={settingData?.page?.multicolor}
+                                name='page.multicolor'
+                                handleChange={handleChange}/>  
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("MediaUploaderControl", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <MediaUploaderControl 
+                                    data={settingData?.page?.media_uploader} 
+                                    name={'page.media_uploader'}
+                                    handleChange={handleChange}
+                                    options = {{
+                                        frame:{
+                                            title: __("Select or Upload Image", "plugin-starter"),
+                                        },
+                                        library: {type: 'image'},
+                                        buttons: {
+                                            upload: __("Upload Image", "plugin-starter"),
+                                            remove: __("Remove", "plugin-starter"),
+                                            select: __("Use this image", "plugin-starter")                                            
+                                        }
+                                    }}
+                                /> 
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingLoading} active>
+                            <Title heading={4}>{__("UnitControl", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>                            
+                            <UnitControl
+                                label={__('UnitControl', 'plugin-starter')}
+                                onChange={(value) => handleChange('page.unitcontrol', value)}
+                                value={settingData?.page?.unitcontrol}
+                                units={units}
+                                className="w-full"
+                            />
                         </Col>
                     }
                 </Row>

@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useCallback, useEffect, useState } from 'react';
 import {ColorPickerControl, MediaUploaderControl} from '../../components';
-import { Select, Typography, Space, } from '@douyinfe/semi-ui';
+import { Select, Typography, Space, Row, Col, Button} from '@douyinfe/semi-ui';
 import {capitalizeWords} from '../../lib/Helpers';
 const SELECT_OPTIONS = {
     position: ["left top", "left center", "left bottom", "center top", "center", "center bottom", "right top", "right center", "right bottom"],
@@ -13,7 +13,7 @@ const SELECT_OPTIONS = {
 };
 
 const BackgroundControl = ({defaultValues = {}, name, handleChange, className=''}) => {
-
+    const [isOpen, setIsOpen] = useState(false);
     const [values, setValues] = useState(() => (
         defaultValues && typeof defaultValues === 'object' ? { ...defaultValues } : {}
     ));
@@ -43,62 +43,72 @@ const BackgroundControl = ({defaultValues = {}, name, handleChange, className=''
         : { id: 0, url: '', thumbnail: '' };
     const options = Array.isArray(defaultValues?.options) && defaultValues.options.length > 0
         ? defaultValues.options
-        : ["image", "color", "position", "size", "repeat", "origin", "clip", "attachment"];
+        : ["color", "image", "position", "size", "repeat", "origin", "clip", "attachment"];
     return (
         <>
             <div className={`background-wrapper ${className}`}>
-                <Space vertical align='start' className='w-full'>
+                <Row type="flex" gutter={[16, 16]}>
                     {options.map((option) => (
-                        <div key={option} className='w-full'>
+                        <Col xs={24} lg={option === "color" || option === "image" ? 24 : 12} key={option}>
                             {/* color → color picker */}
                             {option === "color" && (
-                                <>
-                                    {/* <label className="form-label">{option}</label> */}
+                                <Space className='justify-between' style={{width: '100%'}} align='center'>
                                     <ColorPickerControl
                                         defaultValue={values[option]}
                                         handleChange={(value) => updateValue(option, value)}
-                                        mode='color'
+                                        mode='both'
                                         label={__("Background Color", "plugin-starter")}
                                     />
+                                    <Button
+                                        theme='outline'
+                                        type='primary'
+                                        onClick={() => setIsOpen(!isOpen)}
+                                    >
+                                        {__("More +", "plugin-starter")}
+                                    </Button>
+                                </Space>
+
+                            )}
+                            {isOpen && (
+                                <>
+                                    {/* image → external component */}
+                                    {option === "image" &&  (
+                                        <MediaUploaderControl 
+                                            data={imageData} 
+                                            name={`${name}.image`}
+                                            handleChange={handleImageChange}
+                                            options = {{
+                                                frame:{
+                                                    title: __("Select or Upload Image", "plugin-starter"),
+                                                },
+                                                library: {type: 'image'},
+                                                buttons: {
+                                                    upload: __("Upload Image", "plugin-starter"),
+                                                    remove: __("Remove", "plugin-starter"),
+                                                    select: __("Use this image", "plugin-starter")                                            
+                                                }
+                                            }}
+                                        />
+                                    )}
+                                    {/* rest → select dropdown */}
+                                    {option !== "color" && option !== "image" && (  
+                                        <>                            
+                                            <label className='font-semibold block mb-1'><Typography.Text>{capitalizeWords(option)}</Typography.Text></label>
+                                            <Select
+                                                placeholder={option.toUpperCase()}
+                                                // label={option}
+                                                value={ values[option] || "" }
+                                                optionList={SELECT_OPTIONS[option]?.map((val) => ({ label: val, value: val })) || []}
+                                                onChange={(value) => updateValue(option, value)}
+                                                style={{width: '100%'}}
+                                            />  
+                                        </>                               
+                                    )} 
                                 </>
                             )}
-
-                            {/* image → external component */}
-                            {option === "image" &&  (
-                                <MediaUploaderControl 
-                                    data={imageData} 
-                                    name={`${name}.image`}
-                                    handleChange={handleImageChange}
-                                    options = {{
-                                        frame:{
-                                            title: __("Select or Upload Image", "plugin-starter"),
-                                        },
-                                        library: {type: 'image'},
-                                        buttons: {
-                                            upload: __("Upload Image", "plugin-starter"),
-                                            remove: __("Remove", "plugin-starter"),
-                                            select: __("Use this image", "plugin-starter")                                            
-                                        }
-                                    }}
-                                />
-                            )}
-                                {/* rest → select dropdown */}
-                                {option !== "color" && option !== "image" && (  
-                                    <>                            
-                                        <label className='font-semibold block'><Typography.Text>{capitalizeWords(option)}</Typography.Text></label>
-                                        <Select
-                                            placeholder={option.toUpperCase()}
-                                            // label={option}
-                                            value={ values[option] || "" }
-                                            optionList={SELECT_OPTIONS[option]?.map((val) => ({ label: val, value: val })) || []}
-                                            onChange={(value) => updateValue(option, value)}
-                                            style={{width: '100%'}}
-                                        />  
-                                    </>                               
-                                )} 
-                        </div>
+                        </Col>
                     ))}                    
-                </Space>
+                </Row>
             </div>
         </>
     );    

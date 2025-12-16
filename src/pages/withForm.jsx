@@ -8,7 +8,7 @@ import { useMenu } from "../contexts/MenuContext";
 import { formDataPost, setNestedValue, urlToArr, useSettingsBodyHeight } from "../lib/Helpers"; // Import utility function
 import Details from '../data/details.json';
 
-import { Layout, Typography,  Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';
+import { Layout, Toast, Card, Button, Space, Nav} from '@douyinfe/semi-ui';
 import { IconSave, IconRefresh, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 
 import { Logo } from '../lib/Illustrations';
@@ -16,8 +16,7 @@ import {BreadcrumbControl, VerticalMenuControl} from "../components";
 
 
 const withForm = (OriginalComponent, sectionPath = null) => {   
-    const { Header, Footer, Sider, Content } = Layout;
-    const { Title, Text, Paragraph } = Typography;  
+    const { Sider, Content } = Layout;
     function NewComponent() {
         const {
             settingData, 
@@ -197,7 +196,7 @@ const withForm = (OriginalComponent, sectionPath = null) => {
                             />
                         </Sider>
                         <Content style={{ padding: 24, minHeight: settingsBodyHeight}}>    
-                            <BreadcrumbControl />
+                            <BreadcrumbControl menu={settingsMenu} />
                             <Card 
                                 title={
                                     <PageInfo url={location.pathname} />

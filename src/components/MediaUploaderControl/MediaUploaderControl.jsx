@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import './MediaUploaderControl.scss';
 import { Dashicon } from '@wordpress/components';
 
-import { Row, Col, Typography, Select, Input, InputGroup, Skeleton, Avatar, Button } from '@douyinfe/semi-ui';
+import { Row, Col, Input, InputGroup, Skeleton, Button } from '@douyinfe/semi-ui';
 export default function MediaUploaderControl({ data={}, name, handleChange, options={}, className='' }) {    
     const [media, setMedia] = useState({});
 

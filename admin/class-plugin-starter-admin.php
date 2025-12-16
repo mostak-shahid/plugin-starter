@@ -147,6 +147,8 @@ class Plugin_Starter_Admin
 			'get_current_user_id' => get_current_user_id(),
 			'root'  => esc_url_raw( rest_url() ),
     		'nonce' => wp_create_nonce('wp_rest'),
+			'default_colors' => plugin_starter_get_default_colors(),
+			'default_gradients' => plugin_starter_get_default_gradients(),
 			'isPro' => is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' ) ? true : false,
 			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
 		);
