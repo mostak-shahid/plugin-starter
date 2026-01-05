@@ -62,7 +62,6 @@ class Plugin_Starter_Admin
 	 */
 	public function enqueue_styles()
 	{
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -76,18 +75,12 @@ class Plugin_Starter_Admin
 		 */
 		$current_screen = get_current_screen();
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
-			wp_enqueue_style($this->plugin_name . '-google-font', 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap', array(), $this->version, 'all');
 			wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
 		}
 		wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
-		// wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-starter-admin.css', array(), $this->version, 'all');			
-		// wp_enqueue_style( $this->plugin_name, plugin_dir_url(__DIR__) . 'admin/css/plugin-starter-admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-components' );
-
-
-
 	}
 
 	/**
