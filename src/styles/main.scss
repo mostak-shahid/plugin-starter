@@ -1,0 +1,143 @@
+// Main styles for Plugin Starter
+
+.plugin-starter-settings-template {
+    margin: 20px 0;
+    
+    .components-card {
+        margin-bottom: 20px;
+    }
+
+    .settings-loading,
+    .dashboard-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        
+        .components-spinner {
+            margin-bottom: 15px;
+        }
+        
+        p {
+            color: #757575;
+            font-size: 14px;
+        }
+    }
+
+    .settings-fields {
+        margin: 20px 0;
+        
+        > * {
+            margin-bottom: 20px;
+        }
+
+        .color-field {
+            margin-bottom: 20px;
+            
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                font-size: 13px;
+                line-height: 1.4;
+                color: #1e1e1e;
+            }
+            
+            input[type="color"] {
+                width: 100px;
+                height: 40px;
+                border: 1px solid #8c8f94;
+                border-radius: 4px;
+                cursor: pointer;
+                
+                &:hover {
+                    border-color: #2271b1;
+                }
+            }
+        }
+    }
+
+    .settings-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #dcdcde;
+    }
+
+    .components-notice {
+        margin: 0 0 20px 0;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    h3 {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .description {
+        color: #646970;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+}
+
+// Repeater fields styles
+.repeater-section {
+    margin-top: 30px;
+    
+    .repeater-item {
+        background: #f9f9f9;
+        border: 1px solid #dcdcde;
+        border-radius: 4px;
+        padding: 20px;
+        margin-bottom: 15px;
+        
+        .repeater-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dcdcde;
+            
+            h4 {
+                margin: 0;
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.checkbox-group-section,
+.multi-select-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+}
+
+// Feedback form styles
+.feedback-page {
+    .feedback-form {
+        margin-top: 20px;
+        
+        .form-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dcdcde;
+        }
+    }
+}

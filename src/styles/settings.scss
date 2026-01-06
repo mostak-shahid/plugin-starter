@@ -1,0 +1,54 @@
+// Settings page specific styles
+
+.plugin-starter-settings {
+    .settings-page {
+        max-width: 900px;
+        
+        .components-card {
+            .components-card__body {
+                padding: 30px;
+            }
+        }
+    }
+
+    // Input field customizations
+    .components-base-control {
+        margin-bottom: 24px;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .components-text-control__input,
+    .components-textarea-control__input {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .components-textarea-control__input {
+        min-height: 100px;
+    }
+
+    // Radio and checkbox styling
+    .components-radio-control__option {
+        margin-bottom: 10px;
+    }
+
+    .components-checkbox-control__input-container {
+        margin-right: 10px;
+    }
+
+    // Select styling
+    .components-select-control__input {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    // Button group styling
+    .components-button-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}

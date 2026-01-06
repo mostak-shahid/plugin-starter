@@ -1,0 +1,158 @@
+plugin-starter/
+├── plugin-starter.php                 
+├── uninstall.php                      
+├── composer.json                      
+├── composer.lock
+├── package.json                       
+├── package-lock.json
+├── webpack.config.js                     
+├── tsconfig.json                      
+├── .gitignore
+├── .distignore                        
+├── README.md
+├── readme.txt                         
+├── LICENSE
+├── phpcs.xml                          
+├── phpunit.xml                        
+│
+├── languages/                         
+│   └── plugin-starter.pot
+│
+├── assets/                            
+│   ├── css/
+│   │   └── admin.css
+│   ├── js/
+│   │   └── admin.js
+│   ├── images/
+│   │   ├── icon-128x128.png
+│   │   ├── icon-256x256.png
+│   │   └── banner-772x250.png
+│   └── fonts/
+│
+├── build/                             
+│   ├── dashboard.js
+│   ├── dashboard.css
+│   ├── settings.js
+│   └── settings.css
+│
+├── src/                               
+│   ├── index.js                       
+│   ├── dashboard/
+│   │   ├── index.jsx
+│   │   ├── Dashboard.jsx
+│   │   └── components/
+│   │       └── ...
+│   ├── settings/
+│   │   ├── index.jsx
+│   │   ├── BaseInputs.jsx
+│   │   ├── ArrayInputs.jsx
+│   │   └── components/
+│   │       └── ...
+│   ├── feedback/
+│   │   ├── index.jsx
+│   │   ├── FeedbackForm.jsx
+│   │   └── components/
+│   │       └── ...
+│   ├── hooks/
+│   │   ├── useSettings.js
+│   │   ├── useApi.js
+│   │   └── useFeedback.js
+│   ├── utils/
+│   │   ├── api.js
+│   │   └── helpers.js
+│   ├── styles/
+│   │   ├── main.scss
+│   │   ├── dashboard.scss
+│   │   └── settings.scss
+│   └── App.jsx
+│
+├── includes/                          
+│   ├── Plugin.php                     
+│   ├── Activator.php                  
+│   ├── Deactivator.php                
+│   │
+│   ├── Admin/
+│   │   ├── Menu.php                   
+│   │   ├── Settings.php               
+│   │   ├── ActionLinks.php            
+│   │   ├── Notices.php                
+│   │   └── Assets.php                 
+│   │
+│   ├── Api/
+│   │   ├── RestController.php         
+│   │   ├── SettingsController.php     
+│   │   ├── FeedbackController.php     
+│   │   └── RestRoutes.php             
+│   │
+│   ├── Core/
+│   │   ├── Container.php              
+│   │   ├── ServiceProvider.php        
+│   │   ├── Loader.php                 
+│   │   └── Config.php                 
+│   │
+│   ├── Database/
+│   │   ├── Migration.php              
+│   │   ├── LogsTable.php              
+│   │   ├── Seeder.php                 
+│   │   └── Models/
+│   │       └── Log.php                
+│   │
+│   ├── Settings/
+│   │   ├── SettingsManager.php        
+│   │   ├── DefaultSettings.php        
+│   │   └── SettingsValidator.php      
+│   │
+│   ├── Email/
+│   │   ├── Mailer.php                 
+│   │   └── Templates/
+│   │       └── feedback.php           
+│   │
+│   ├── Logging/
+│   │   ├── Logger.php                 
+│   │   └── LogTypes.php               
+│   │
+│   ├── Traits/
+│   │   ├── Singleton.php              
+│   │   └── Hookable.php               
+│   │
+│   └── Utils/
+│       ├── Sanitizer.php              
+│       ├── Validator.php              
+│       └── Helper.php                 
+│
+├── templates/                         
+│   ├── admin/
+│   │   ├── settings-wrapper.php       
+│   │   ├── dashboard.php              
+│   │   ├── base-inputs.php            
+│   │   ├── array-inputs.php           
+│   │   └── feedback.php               
+│   └── email/
+│       └── feedback-notification.php
+│
+├── tests/                             
+│   ├── bootstrap.php                  
+│   ├── Unit/
+│   │   ├── SettingsTest.php
+│   │   ├── ApiTest.php
+│   │   ├── LoggerTest.php
+│   │   └── ContainerTest.php
+│   ├── Integration/
+│   │   ├── RestApiTest.php
+│   │   └── DatabaseTest.php
+│   └── Fixtures/
+│       └── test-data.php
+│
+├── config/                            
+│   ├── default-settings.php           
+│   ├── rest-routes.php                
+│   └── constants.php                  
+│
+├── vendor/                            
+│
+├── node_modules/                      
+│
+└── bin/                               
+    ├── build.sh                       
+    ├── dev.sh                         
+    └── deploy.sh                      
