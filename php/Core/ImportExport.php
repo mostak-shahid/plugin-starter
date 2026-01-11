@@ -1,5 +1,8 @@
 <?php
-class Plugin_Starter_Import_Export
+
+namespace MosPress\PluginStarter\Core;
+
+class ImportExport
 {
 	protected $options;
 
@@ -25,4 +28,3 @@ class Plugin_Starter_Import_Export
 	}
 }
 
-new Plugin_Starter_Import_Export();

@@ -1,5 +1,7 @@
 <?php
 
+namespace MosPress\PluginStarter\Core;
+
 /**
  * Fired during plugin activation
  *
@@ -20,7 +22,7 @@
  * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Plugin_Starter_Activator
+class Activator
 {
 
 	/**
@@ -37,3 +39,4 @@ class Plugin_Starter_Activator
 		add_option('plugin_starter_do_activation_redirect', true);
 	}
 }
+

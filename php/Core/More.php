@@ -1,5 +1,8 @@
 <?php
-class Plugin_Starter_More
+
+namespace MosPress\PluginStarter\Core;
+
+class More
 {
 	protected $options;
 
@@ -30,4 +33,3 @@ class Plugin_Starter_More
 	}
 }
 
-new Plugin_Starter_More();

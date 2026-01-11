@@ -145,7 +145,7 @@ class Action_Hook
 		if ($options['action'] == 'update' && $options['type'] == 'plugin' && isset($options['plugins'])) {
 			foreach ($options['plugins'] as $plugin) {
 				// Check to ensure it's my plugin
-				if ($plugin == plugin_basename(__FILE__)) {
+				if ($plugin == plugin_basename(PLUGIN_STARTER_MAIN_FILE)) {
 					// do stuff here
 					$plugin_starter_options = array_replace_recursive(plugin_starter_get_option(), get_option('plugin_starter_options', []));
 					update_option('plugin_starter_options', $plugin_starter_options);

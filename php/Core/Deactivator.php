@@ -1,5 +1,7 @@
 <?php
 
+namespace MosPress\PluginStarter\Core;
+
 /**
  * Fired during plugin deactivation
  *
@@ -20,7 +22,8 @@
  * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Plugin_Starter_Deactivator {
+class Deactivator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -29,8 +32,9 @@ class Plugin_Starter_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
+	public static function deactivate()
+	{
 
 	}
-
 }
+

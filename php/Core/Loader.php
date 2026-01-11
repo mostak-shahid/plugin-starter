@@ -1,5 +1,7 @@
 <?php
 
+namespace MosPress\PluginStarter\Core;
+
 /**
  * Register all actions and filters for the plugin
  *
@@ -21,7 +23,7 @@
  * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Plugin_Starter_Loader
+class Loader
 {
 
 	/**
@@ -156,3 +158,4 @@ class Plugin_Starter_Loader
 		}
 	}
 }
+

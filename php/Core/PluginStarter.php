@@ -1,10 +1,12 @@
 <?php
 
+namespace MosPress\PluginStarter\Core;
 
 use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;
 use MosPress\PluginStarter\HOOK\Action_Hook;
 use MosPress\PluginStarter\HOOK\Filter_Hook;
+
 /**
  * The file that defines the core plugin class
  *
@@ -32,7 +34,7 @@ use MosPress\PluginStarter\HOOK\Filter_Hook;
  * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class Plugin_Starter
+class PluginStarter
 {
 
 	/**
@@ -41,7 +43,7 @@ class Plugin_Starter
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Plugin_Starter_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -59,7 +61,7 @@ class Plugin_Starter
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string    $version    The version of the plugin.
 	 */
 	protected $version;
 
@@ -90,6 +92,10 @@ class Plugin_Starter
 		Rest_API::get_instance();
 		Action_Hook::get_instance();
 		Filter_Hook::get_instance();
+		
+		// Instantiate additional core classes
+		new ImportExport();
+		new More();
 	}
 
 	/**
@@ -97,10 +103,9 @@ class Plugin_Starter
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Plugin_Starter_Loader. Orchestrates the hooks of the plugin.
-	 * - Plugin_Starter_i18n. Defines internationalization functionality.
-	 * - Plugin_Starter_Admin. Defines all hooks for the admin area.
-	 * - Plugin_Starter_Public. Defines all hooks for the public side of the site.
+	 * - Loader. Orchestrates the hooks of the plugin.
+	 * - Admin. Defines all hooks for the admin area.
+	 * - Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -113,26 +118,7 @@ class Plugin_Starter
 
 		require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-loader.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-plugin-starter-admin.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-import-export.php';
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-more.php';
-
-		$this->loader = new Plugin_Starter_Loader();
+		$this->loader = new Loader();
 	}
 
 	/**
@@ -144,7 +130,7 @@ class Plugin_Starter
 	 */
 	private function define_admin_hooks()
 	{
-		$plugin_admin = new Plugin_Starter_Admin($this->get_plugin_name(), $this->get_version());
+		$plugin_admin = new \MosPress\PluginStarter\Admin\Admin($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 9999);
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 9999);
 	}
@@ -159,7 +145,7 @@ class Plugin_Starter
 	private function define_public_hooks()
 	{
 
-		$plugin_public = new Plugin_Starter_Public($this->get_plugin_name(), $this->get_version());
+		$plugin_public = new \MosPress\PluginStarter\Public\PublicClass($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		// Save settings by ajax
@@ -193,7 +179,7 @@ class Plugin_Starter
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Plugin_Starter_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader()
 	{
@@ -211,3 +197,4 @@ class Plugin_Starter
 		return $this->version;
 	}
 }
+

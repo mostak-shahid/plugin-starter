@@ -42,33 +42,28 @@ define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
 define('PLUGIN_STARTER_MAIN_FILE', __FILE__);
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-plugin-starter-activator.php
+ * This action is documented in src/Core/Activator.php
  */
 function plugin_starter_activate()
 {
-	require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-activator.php';
-	Plugin_Starter_Activator::activate();
+	require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
+	\MosPress\PluginStarter\Core\Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-plugin-starter-deactivator.php
+ * This action is documented in src/Core/Deactivator.php
  */
 function plugin_starter_deactivate()
 {
-	require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter-deactivator.php';
-	Plugin_Starter_Deactivator::deactivate();
+	require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
+	\MosPress\PluginStarter\Core\Deactivator::deactivate();
 }
 
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
 require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require_once PLUGIN_STARTER_PATH . 'includes/class-plugin-starter.php';
 require_once PLUGIN_STARTER_PATH . 'plugin-starter-functions.php';
 
 /**
@@ -82,7 +77,7 @@ require_once PLUGIN_STARTER_PATH . 'plugin-starter-functions.php';
  */
 function plugin_starter_run()
 {
-	$plugin = new Plugin_Starter();
+	$plugin = new \MosPress\PluginStarter\Core\PluginStarter();
 	$plugin->run();
 }
 plugin_starter_run();
