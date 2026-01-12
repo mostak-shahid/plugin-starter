@@ -23,7 +23,6 @@
     "@douyinfe/semi-ui": "^2.88.3",
     "@wordpress/api-fetch": "^7.35.0",
     "@wordpress/components": "^28.9.0",
-    "@wordpress/compose": "^6.50.0",
     "react-ace": "^14.0.1",
     "react-router-dom": "^7.5.2"
   },

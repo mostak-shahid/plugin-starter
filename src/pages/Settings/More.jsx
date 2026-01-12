@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import { useMenu } from '../contexts/MenuContext';
-import withForm from '../pages/withForm';
+import { useMenu } from '../../contexts/MenuContext';
+import withForm from '../withForm';
 import { Row, Col, Typography, Skeleton, Switch, } from '@douyinfe/semi-ui';
-import { SkeletonPlaceholder } from '../components';
+import { SkeletonPlaceholder } from '../../components';
 
 import AceEditor from "react-ace";
 // Load modes and theme

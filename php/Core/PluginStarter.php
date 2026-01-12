@@ -4,8 +4,8 @@ namespace MosPress\PluginStarter\Core;
 
 use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;
-use MosPress\PluginStarter\HOOK\Action_Hook;
-use MosPress\PluginStarter\HOOK\Filter_Hook;
+use MosPress\PluginStarter\Hook\Action_Hook;
+use MosPress\PluginStarter\Hook\Filter_Hook;
 
 /**
  * The file that defines the core plugin class
@@ -197,4 +197,5 @@ class PluginStarter
 		return $this->version;
 	}
 }
+
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { __ } from "@wordpress/i18n";
-import { useMenu } from '../contexts/MenuContext';
-import withForm from '../pages/withForm';
+import { useMenu } from '../../contexts/MenuContext';
+import withForm from '../withForm';
 import apiFetch from "@wordpress/api-fetch";
-import { formDataPost, setNestedValue, urlToArr } from "../lib/Helpers"; // Import utility function
+import { formDataPost, setNestedValue, urlToArr } from "../../lib/Helpers"; // Import utility function
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import { IconRefresh } from '@douyinfe/semi-icons';
-import { SkeletonPlaceholder } from '../components';
+import { SkeletonPlaceholder } from '../../components';
 const Tools = ({handleChange}) => {
     const {
         settingData,

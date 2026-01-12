@@ -1,11 +1,11 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useState } from 'react';
-import { useMenu } from '../contexts/MenuContext';
-import withForm from '../pages/withForm';
+import { useMenu } from '../../contexts/MenuContext';
+import withForm from '../withForm';
 import { Row, Col, Typography, Skeleton, Button, Upload, Space, Toast, } from '@douyinfe/semi-ui';
 import { IconDownload, IconUpload, IconTickCircle } from '@douyinfe/semi-icons';
-import { SkeletonPlaceholder } from '../components';
+import { SkeletonPlaceholder } from '../../components';
 const ImportExport = ({handleChange}) => {
     const {
         settingData,

@@ -1,5 +1,5 @@
 <?php
-namespace MosPress\PluginStarter\HOOK;
+namespace MosPress\PluginStarter\Hook;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 

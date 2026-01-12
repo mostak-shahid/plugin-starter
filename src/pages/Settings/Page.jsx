@@ -2,9 +2,9 @@ import { __ } from "@wordpress/i18n";
 
 import { Row, Col, Select, Typography,  Input, Skeleton, Switch, Button } from '@douyinfe/semi-ui';
 import React, {Suspense} from 'react';
-import { useMenu } from '../contexts/MenuContext';
-import withForm from './withForm';
-import { BackgroundControl, BoxShadowControl, ColorPickerControl, FontControl, MediaUploaderControl, MultiColorControl, SkeletonPlaceholder, TextShadowControl, UnitControl } from '../components';
+import { useMenu } from '../../contexts/MenuContext';
+import withForm from '../withForm';
+import { BackgroundControl, BoxShadowControl, ColorPickerControl, FontControl, MediaUploaderControl, MultiColorControl, SkeletonPlaceholder, TextShadowControl, UnitControl } from '../../components';
 const units = [
     { value: 'px', label: 'px' },
     // { value: '%', label: '%' },

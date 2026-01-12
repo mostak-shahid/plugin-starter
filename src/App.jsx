@@ -6,7 +6,7 @@ import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, 
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
 import {  Navigate, Route, Routes } from "react-router-dom";
 //Route Pages
-import {Dashboard, Page, BoxedNoSidebar, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
+import {Dashboard, Page, Page_2, BoxedNoSidebar, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
 import {NotFound, HorizontalMenuControl} from "./components";
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -167,8 +167,9 @@ export default function App() {
                                 {/* <Route path="/" element={<RestrictionsSettings handleChange={handleChange} />} /> */}
                                 {/* <Route path="/"  element={<Navigate to="/restrictions/settings" />} /> */}
                                 <Route path="/" element={<Dashboard />} />
-                                <Route path="/settings" element={<Navigate to="/settings/page" />} />
-                                <Route path="/settings/page" element={<Page />} />
+                                <Route path="/settings" element={<Navigate to="/settings/page/page-1" />} />
+                                <Route path="/settings/page/page-1" element={<Page />} />
+                                <Route path="/settings/page/page-2" element={<Page_2 />} />
 
                                 <Route path="/settings/layouts" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
                                 <Route path="/settings/layouts/boxed" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
