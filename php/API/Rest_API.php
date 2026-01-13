@@ -321,6 +321,9 @@ class Rest_API
 		$plugin_starter_options = map_deep(wp_unslash($request->get_param('plugin_starter_options')), 'wp_kses_post');
 
 		$plugin_starter_options ? update_option('plugin_starter_options', $plugin_starter_options) : '';
+
+		$this->log_settings_change($plugin_starter_options_old, $plugin_starter_options);
+
 		$response = [
 			'success' => true,
 			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter')
@@ -330,18 +333,68 @@ class Rest_API
 		return new WP_REST_Response($response, 200);
 
 		/*
-		
+
 		return new WP_REST_Response([
 			'success' => true,
 			'message' => 'Plugin installed successfully.'
 		], 200);
-		
+
 
 		return new WP_REST_Response([
 			'success' => false,
 			'message' => 'Installed plugin could not be identified'
 		], 404);
 		*/
+	}
+
+	private function log_settings_change($old_data, $new_data)
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+		$changes = [];
+		foreach ($new_data as $key => $value) {
+			if (!isset($old_data[$key]) || $old_data[$key] !== $value) {
+				$changes[$key] = [
+					'old' => isset($old_data[$key]) ? $old_data[$key] : null,
+					'new' => $value
+				];
+			}
+		}
+
+		if (empty($changes)) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+		$ip = $this->get_client_ip();
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '';
+
+		$wpdb->insert(
+			$table_name,
+			[
+				'user_id' => $user_id,
+				'ip' => $ip,
+				'user_agent' => $user_agent,
+				'title' => 'Settings Updated',
+				'description' => count($changes) . ' setting(s) changed',
+				'data' => json_encode($changes),
+				'created_at' => current_time('mysql'),
+				'updated_at' => current_time('mysql')
+			],
+			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+		);
+	}
+
+	private function get_client_ip()
+	{
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			return sanitize_text_field($_SERVER['HTTP_CLIENT_IP']);
+		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			return sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
+		} else {
+			return sanitize_text_field($_SERVER['REMOTE_ADDR']);
+		}
 	}
     private function reset_option_by_path(&$options, $defaults, $path)
 	{
@@ -371,6 +424,7 @@ class Rest_API
             );
         }
         $name = sanitize_text_field(wp_unslash($request->get_param('name')));
+        $plugin_starter_options_old = plugin_starter_get_option();
         $plugin_starter_options = plugin_starter_get_option();
         $plugin_starter_default_options = plugin_starter_get_default_options();
 
@@ -378,6 +432,7 @@ class Rest_API
 
         if ($success) {
             update_option('plugin_starter_options', $plugin_starter_options);
+            $this->log_settings_reset($name, $plugin_starter_options_old[$name] ?? null, $plugin_starter_options[$name] ?? null);
             wp_send_json_success(['message' => __('Settings reset successfully.', 'plugin-starter')]);
         } else {
             wp_send_json_error(['error_message' => __('Invalid settings path.', 'plugin-starter')]);
@@ -390,6 +445,39 @@ class Rest_API
 
 		// return $response;
 		return new WP_REST_Response($response, 200);
+	}
+
+	private function log_settings_reset($section, $old_data, $new_data)
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+		$user_id = get_current_user_id();
+		$ip = $this->get_client_ip();
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '';
+
+		$changes = [
+			$section => [
+				'old' => $old_data,
+				'new' => $new_data,
+				'action' => 'reset'
+			]
+		];
+
+		$wpdb->insert(
+			$table_name,
+			[
+				'user_id' => $user_id,
+				'ip' => $ip,
+				'user_agent' => $user_agent,
+				'title' => 'Settings Reset',
+				'description' => "Reset section: $section",
+				'data' => json_encode($changes),
+				'created_at' => current_time('mysql'),
+				'updated_at' => current_time('mysql')
+			],
+			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+		);
 	}
 	
     public static function rest_feedback($request)

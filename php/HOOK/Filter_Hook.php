@@ -116,7 +116,16 @@ class Filter_Hook {
             'basic' => [
                 'text' => '',
                 'textarea' => '',
-                'radio' => 'radio-1'
+                'radio' => 'radio-1',
+                'select' => 'select-2',
+                'number' => 10,
+                'color' => '#ff0000',
+                'checkbox' => true,
+                'switch' => true,
+                'date' => '',
+                'time' => '',
+                'datetime' => '',
+
             ],
             'array' => [
                 'checkbox' => ['checkbox-1', 'checkbox-3']

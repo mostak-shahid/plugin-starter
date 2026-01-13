@@ -19,12 +19,14 @@ const { Header, Sider, Content } = Layout;
 
 const Settings = () => {
     const [settings, setSettings] = useState({});
+    const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         const fetchSettings = async () => {
+            setSettingsLoading(true);
             try {
                 const data = await apiFetch({
                     path: "/plugin-starter/v1/options",
@@ -35,6 +37,8 @@ const Settings = () => {
                 }
             } catch (error) {
                 console.error("Error fetching settings:", error);
+            } finally {
+                setSettingsLoading(false);
             }
         };
         fetchSettings();
@@ -203,7 +207,7 @@ const Settings = () => {
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
-                <Outlet context={{ settings, handleSubmit, handleReset }} />
+                <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
             </Content>
         </FullWidthLayout>
     );
