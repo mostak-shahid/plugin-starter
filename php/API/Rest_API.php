@@ -46,7 +46,7 @@ class Rest_API
         // GET /wp-json/plugin-starter/v1/posts?page=1&per_page=10&status=publish&search=hello
         register_rest_route( self::NAMESPACE, '/posts', [
             'methods'  => 'GET',
-            'callback' => [$this, 'plugin_starter_get_posts'],
+            'callback' => [$this, 'get_posts'],
             'permission_callback' => function () {
                 return current_user_can( 'edit_posts' );
             },
@@ -65,7 +65,7 @@ class Rest_API
         // { "status": "draft" }
         register_rest_route( self::NAMESPACE, '/post/(?P<id>\d+)/status', [
             'methods'  => 'POST',
-            'callback' => [$this, 'plugin_starter_change_post_status'],
+            'callback' => [$this, 'change_post_status'],
             'permission_callback' => function () {
                 return current_user_can( 'edit_posts' );
             },
@@ -84,7 +84,7 @@ class Rest_API
 
         register_rest_route( self::NAMESPACE, '/posts/status', [
             'methods'  => 'POST',
-            'callback' => [$this, 'plugin_starter_bulk_change_status'],
+            'callback' => [$this, 'bulk_change_status'],
             'permission_callback' => function () {
                 return current_user_can( 'edit_posts' );
             },
@@ -108,7 +108,7 @@ class Rest_API
 			'/options',
 			array(
 				'methods'  => 'GET',
-				'callback' => [$this, 'rest_plugin_starter_get_options'],
+				'callback' => [$this, 'get_settings'],
 				// 'permission_callback' => '__return_true', // Allow public access
 				'permission_callback' => function () {
                     return current_user_can('manage_options');
@@ -122,7 +122,7 @@ class Rest_API
 			'/options',
 			array(
 				'methods'             => 'POST',
-				'callback'            => [$this, 'rest_plugin_starter_update_options'],
+				'callback'            => [$this, 'update_settings'],
 				// 'permission_callback' => '__return_true'
 				'permission_callback' => function () {
                     return current_user_can('manage_options');
@@ -132,10 +132,22 @@ class Rest_API
 
 		register_rest_route(
             self::NAMESPACE,
+            '/options/reset-settings',
+            array(
+                'methods' => 'POST',
+                'callback' => [$this, 'reset_settings'],
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+
+		register_rest_route(
+            self::NAMESPACE,
             '/feedback',
             array(
                 'methods' => 'POST',
-                'callback' => [$this, 'rest_plugin_starter_feedback'],
+                'callback' => [$this, 'rest_feedback'],
 				// 'permission_callback' => '__return_true'
                 'permission_callback' => function () {
                     return current_user_can('manage_options');
@@ -148,23 +160,23 @@ class Rest_API
 			'/set-settings-theme',
 			array(
 				'methods'  => 'GET',
-				'callback' => [$this, 'rest_plugin_starter_set_settings_theme'],
-				'permission_callback' => '__return_true', // Allow public access
-				// 'permission_callback' => function () {
-                //     return current_user_can('manage_options');
-                // },
-                // 'args' => [
-                //     'id' => [
-                //         'required' => true,
-                //         'type'     => 'string',
-                //         'items'    => [ 'type' => 'integer' ],
-                //     ],
-                //     'settings_theme' => [
-                //         'required' => true,
-                //         'type'     => 'string',
-                //         'enum'     => [ 'light', 'dark' ],
-                //     ],
-                // ],
+				'callback' => [$this, 'rest_set_settings_theme'],
+				// 'permission_callback' => '__return_true', // Allow public access
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+                'args' => [
+                    'id' => [
+                        'required' => true,
+                        'type'     => 'string',
+                        'items'    => [ 'type' => 'integer' ],
+                    ],
+                    'settings_theme' => [
+                        'required' => true,
+                        'type'     => 'string',
+                        'enum'     => [ 'light', 'dark' ],
+                    ],
+                ],
 			)
 		);
         register_rest_route(
@@ -172,7 +184,7 @@ class Rest_API
 			'/get-settings-theme',
 			array(
 				'methods'  => 'GET',
-				'callback' => [$this, 'rest_plugin_starter_get_settings_theme'],
+				'callback' => [$this, 'rest_get_settings_theme'],
 				'permission_callback' => '__return_true', // Allow public access
 				// 'permission_callback' => function () {
                 //     return current_user_can('manage_options');
@@ -184,7 +196,7 @@ class Rest_API
     /**
      * Return posts for DataTables (server-side).
      */
-    function plugin_starter_get_posts( WP_REST_Request $request ) {
+    function get_posts( WP_REST_Request $request ) {
         $page     = max( 1, intval( $request->get_param('page') ?: 1 ) );
         $per_page = max( 1, intval( $request->get_param('per_page') ?: 10 ) );
         $status   = sanitize_text_field( $request->get_param('status') ?: 'publish' );
@@ -245,7 +257,7 @@ class Rest_API
     /**
      * Change status for a single post.
      */
-    function plugin_starter_change_post_status( WP_REST_Request $request ) {
+    function change_post_status( WP_REST_Request $request ) {
         $post_id = (int) $request['id'];
         $status  = sanitize_text_field( $request['status'] );
 
@@ -264,7 +276,7 @@ class Rest_API
     /**
      * Bulk change status of posts.
      */
-    function plugin_starter_bulk_change_status( WP_REST_Request $request ) {
+    function bulk_change_status( WP_REST_Request $request ) {
         $ids    = $request['ids'];
         $status = sanitize_text_field( $request['status'] );
 
@@ -283,19 +295,19 @@ class Rest_API
         return [ 'success' => true, 'updated' => $updated, 'status' => $status ];
     }
     
-	public function rest_plugin_starter_get_options(WP_REST_Request $request)
+	public function get_settings(WP_REST_Request $request)
 	{
-		// if (!current_user_can('manage_options')) {
-		// 	return new WP_Error(
-		// 		'rest_update_error',
-		// 		'Sorry, you are not allowed to update the DAEXT UI Test options.',
-		// 		array('status' => 403)
-		// 	);
-		// }
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_update_error',
+				'Sorry, you are not allowed to update the DAEXT UI Test options.',
+				array('status' => 403)
+			);
+		}
 		$plugin_starter_options = plugin_starter_get_option();
 		return new WP_REST_Response($plugin_starter_options, 200);
 	}
-	public function rest_plugin_starter_update_options(WP_REST_Request $request) //WP_REST_Request $request
+	public function update_settings(WP_REST_Request $request) //WP_REST_Request $request
 	{
 		if (!current_user_can('manage_options')) {
 			return new WP_Error(
@@ -331,8 +343,56 @@ class Rest_API
 		], 404);
 		*/
 	}
+    private function reset_option_by_path(&$options, $defaults, $path)
+	{
+		$keys = explode('.', $path);
+		$target = &$options;
+		$default = $defaults;
+
+		foreach ($keys as $key) {
+			if (!isset($target[$key]) || !isset($default[$key])) {
+				return false; // path not found
+			}
+			$target = &$target[$key];
+			$default = $default[$key];
+		}
+
+		// Set the value at the final nested level
+		$target = $default;
+		return true;
+	}
+    public function reset_settings(WP_REST_Request $request)
+	{
+        if (!current_user_can('manage_options')) {
+            return new WP_Error(
+                'rest_update_error',
+                'Sorry, you are not allowed to reset the settings.',
+                array('status' => 403)
+            );
+        }
+        $name = sanitize_text_field(wp_unslash($request->get_param('name')));
+        $plugin_starter_options = plugin_starter_get_option();
+        $plugin_starter_default_options = plugin_starter_get_default_options();
+
+        $success = $this->reset_option_by_path($plugin_starter_options, $plugin_starter_default_options, $name);
+
+        if ($success) {
+            update_option('plugin_starter_options', $plugin_starter_options);
+            wp_send_json_success(['message' => __('Settings reset successfully.', 'plugin-starter')]);
+        } else {
+            wp_send_json_error(['error_message' => __('Invalid settings path.', 'plugin-starter')]);
+        }
+
+		$response = [
+			'success' => true,
+			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter')
+		];
+
+		// return $response;
+		return new WP_REST_Response($response, 200);
+	}
 	
-    public static function rest_plugin_starter_feedback($request)
+    public static function rest_feedback($request)
     {
         $subject = sanitize_text_field(wp_unslash($request->get_param('subject')));
         $message = sanitize_textarea_field(wp_unslash($request->get_param('message')));
@@ -366,7 +426,7 @@ class Rest_API
         ];
         return new WP_REST_Response($response, 200);
     }
-    public function rest_plugin_starter_set_settings_theme(WP_REST_Request $request)
+    public function rest_set_settings_theme(WP_REST_Request $request)
     {
         $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
         // $user_id = get_current_user_id();
@@ -381,7 +441,7 @@ class Rest_API
 
         return new WP_REST_Response($response, 200);
     }
-    public function rest_plugin_starter_get_settings_theme(WP_REST_Request $request)
+    public function rest_get_settings_theme(WP_REST_Request $request)
     {
         $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
         $settings_theme = get_user_meta($user_id, 'plugin_starter_settings_theme', true);
