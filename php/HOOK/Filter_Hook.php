@@ -113,6 +113,14 @@ class Filter_Hook {
                 ],
                 'unitcontrol' => '',
             ],
+            'basic' => [
+                'text' => '',
+                'textarea' => '',
+                'radio' => 'radio-1'
+            ],
+            'array' => [
+                'checkbox' => ['checkbox-1', 'checkbox-3']
+            ],
             'more' => [
                 'enable_scripts' => false,
                 'css' => '/* CSS Code Here */',

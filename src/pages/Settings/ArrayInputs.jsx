@@ -2,10 +2,14 @@ import { Form, Button, Card } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 
 const ArrayInputs = () => {
-    const { settings, handleSubmit } = useOutletContext();
+    const { settings, handleSubmit, handleReset } = useOutletContext();
 
     const onSubmit = (values) => {
         handleSubmit('array', values);
+    };
+
+    const onReset = () => {
+        handleReset('array');
     };
 
     return (
@@ -32,10 +36,10 @@ const ArrayInputs = () => {
                 <Button type="primary" htmlType="submit" size="large">
                     Save Settings
                 </Button>
-                <Button 
-                    type="tertiary" 
+                <Button
+                    type="tertiary"
                     style={{ marginLeft: '12px' }}
-                    onClick={() => window.location.reload()}
+                    onClick={onReset}
                 >
                     Reset
                 </Button>

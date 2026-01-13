@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, Nav, Button, Toast } from '@douyinfe/semi-ui';
 import {FullWidthLayout} from '../../layouts';
 import { 
@@ -13,43 +13,45 @@ import {
   IconLikeThumb 
 } from '@douyinfe/semi-icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import settingsData from '../../data/settings.json';
 import menuData from '../../data/menu.json';
 
 const { Header, Sider, Content } = Layout;
 
 const Settings = () => {
-    const [settings, setSettings] = useState(settingsData);
+    const [settings, setSettings] = useState({});
+    const [settingsReload, setSettingsReload] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Shared handleSubmit function
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const data = await apiFetch({
+                    path: "/plugin-starter/v1/options",
+                    method: 'GET'
+                });
+                if (data) {
+                    setSettings(data);
+                }
+            } catch (error) {
+                console.error("Error fetching settings:", error);
+            }
+        };
+        fetchSettings();
+    }, [settingsReload]);
+
     const handleSubmit = async (section, values) => {
-        console.log(section, values);
-        setSettings(prev => ({
-            ...prev,
-            [section]: values
-        }));
-        
-        // console.log('Settings saved:', { section, values, fullSettings: { ...settings, [section]: values } });
-        
-        // Toast.success({
-        //     content: `${section.charAt(0).toUpperCase() + section.slice(1)} settings saved successfully!`,
-        //     duration: 3,
-        // });
         try {
             const result = await apiFetch({
                 path: "/plugin-starter/v1/options",
                 method: 'POST',
-                data: { plugin_starter_options: { ...settings, [section]: values } },
-                // headers: {
-                //     'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
-                // }
+                data: { plugin_starter_options: { ...settings, [section]: values } }
             });
-            // console.log(result);
             if (result.success) {
-                // window.scrollTo(0, 0);
-                // setSettingReload(Math.random);
+                // setSettings(prev => ({
+                //     ...prev,
+                //     [section]: values
+                // }));
                 Toast.success({
                     content: __("Settings saved successfully!!!", "plugin-starter"),
                     duration: 3,
@@ -63,7 +65,6 @@ const Settings = () => {
                     theme: 'light',
                 });
             }
-            
         } catch (error) {
             console.error("Error saving settings:", error);
             Toast.error({
@@ -72,7 +73,46 @@ const Settings = () => {
                 theme: 'light',
             });
         } finally {
-            // setSaving(false);
+            setSettingsReload(prev => prev + 1);
+        }
+    };
+
+    const handleReset = async (section) => {
+        try {
+            const result = await apiFetch({
+                path: "/plugin-starter/v1/options/reset-settings",
+                method: 'POST',
+                data: { name: section }
+            });
+            console.log(result);
+            if (result.success) {
+                // const data = await apiFetch({
+                //     path: "/plugin-starter/v1/options",
+                //     method: 'GET'
+                // });
+                // setSettings(data);
+                Toast.success({
+                    content: __("Settings reset successfully!", "plugin-starter"),
+                    duration: 3,
+                    theme: 'light',
+                    right: 15,
+                });
+            } else {
+                Toast.error({
+                    content: __("Error resetting settings. Please try again.", "plugin-starter"),
+                    duration: 3,
+                    theme: 'light',
+                });
+            }
+        } catch (error) {
+            console.error("Error resetting settings:", error);
+            Toast.error({
+                content: __("Error resetting settings. Please try again.", "plugin-starter"),
+                duration: 3,
+                theme: 'light',
+            });
+        } finally {
+            setSettingsReload(prev => prev + 1);
         }
     };
 
@@ -163,8 +203,7 @@ const Settings = () => {
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
-                {/* Pass settings and handleSubmit to child routes */}
-                <Outlet context={{ settings, handleSubmit }} />
+                <Outlet context={{ settings, handleSubmit, handleReset }} />
             </Content>
         </FullWidthLayout>
     );
