@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from 'react';
 import {PluginCard} from "../../components";
-import { useMenu } from "../../contexts/MenuContext";
 import Details from '../../data/details.json';
 import './Dashboard.scss';
 // import {
@@ -12,9 +11,6 @@ import './Dashboard.scss';
 // } from '@wordpress/components';
 import { Typography, Card, Col, Row  } from '@douyinfe/semi-ui';
 export default function Dashboard() {
-    const {
-        settingsMenu,
-    } = useMenu();
     const { Text, Paragraph, Title } = Typography;
     const [plugins, setPlugins] = useState([]);
     const [pluginsLoading, setPluginsLoading] = useState(true);
@@ -60,14 +56,14 @@ export default function Dashboard() {
                                 <Paragraph>{feature?.description}</Paragraph>
                             </div>
                         ))} */}
-                        {settingsMenu.map((feature) => (
+                        {/* {settingsMenu.map((feature) => (
                             <div className="feature" key={feature.itemKey}>
                                 <Title heading={4}>{feature.text}</Title>
                                 {feature.description && (
                                     <Paragraph>{feature.description}</Paragraph>
                                 )}
                             </div>
-                        ))}
+                        ))} */}
                         <Paragraph>login details, as a time line</Paragraph>
                         <Paragraph>Traffic Log</Paragraph>
                         <Paragraph>LLM Bot Tracker</Paragraph>
@@ -101,7 +97,7 @@ export default function Dashboard() {
                                 } */}
                                 {plugins.map((plugin, index) => ( 
                                     <Col lg={12} key={index}>
-                                        {console.log(plugin)}
+                                        {/* {console.log(plugin)} */}
                                         <PluginCard 
                                             key={plugin.slug} 
                                             image={plugin.icons['1x']} 

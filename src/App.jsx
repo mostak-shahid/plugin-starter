@@ -1,33 +1,38 @@
-import React, { useState, useEffect, Suspense, } from 'react';
+import React, { useState, useEffect, Suspense  } from 'react';
+import { Routes, Route, Navigate, Link } from 'react-router-dom';
+
 import { __ } from "@wordpress/i18n";
-import "./tailwind.css";
-import "./App.scss";
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
-import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, } from '@douyinfe/semi-icons';
-import {  Navigate, Route, Routes } from "react-router-dom";
-//Route Pages
-import {Dashboard, Page, Page_2, BoxedNoSidebar, ImportExport, More, Tools, Feedback, FreeVsPro, } from "./pages";
-import {NotFound, HorizontalMenuControl} from "./components";
-import { LocaleProvider } from '@douyinfe/semi-ui';
-import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
-import { Logo } from './lib/Illustrations';
-import {useSettingsBodyHeight} from './lib/Helpers';
-import Details from './data/details.json';
-
-
-import Semi from "./pages/Semi/Semi";
 import apiFetch from "@wordpress/api-fetch";
 
+import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
+import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconUserGroup, IconComment, IconTemplate } from '@douyinfe/semi-icons';
+import { LocaleProvider } from '@douyinfe/semi-ui';
+import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
-import { MenuProvider } from "./contexts/MenuContext";
-import { baseMenu } from "./data/baseMenu";
+import { Dashboard, About, Contact, Settings, BasicInputs, ArrayInputs, BasicDemoWithInit, ArrayFieldDemo, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
+import DefaultSettings from './pages/settings/Default';
 
-export default function App() {
+import BoxedLeftSidebar from './pages/layouts/BoxedLeftSidebar';
+import BoxedNoSidebar from './pages/layouts/BoxedNoSidebar';
+import BoxedRightSidebar from './pages/layouts/BoxedRightSidebar'; 
+import FullWidthLeftSidebar from './pages/layouts/FullWidthLeftSidebar';
+import FullWidthNoSidebar from './pages/layouts/FullWidthNoSidebar';
+import FullWidthRightSidebar from './pages/layouts/FullWidthRightSidebar';
+
+import {NotFound, HorizontalMenuControl} from "./components";
+import { Logo } from './lib/Illustrations';
+import Details from './data/details.json';
+
+import './App.scss';
+import "./tailwind.css";
+
+
+const { Header, } = Layout;
+function App() {
     const { Header, Footer } = Layout;
     const { Text } = Typography;
     const [newsVisible, setNewsVisible] = useState(false);
     const [darkmode, setDarkmode] = useState(false);
-    const settingsBodyHeight = useSettingsBodyHeight();
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -73,32 +78,40 @@ export default function App() {
         }
     };
 
-    const [proItems, setProItems] = useState([]);
-    const [remoteItems, setRemoteItems] = useState([]);
-
-    // Load MF remote menu array (NOT the React component)
-    useEffect(() => {
-        if (plugin_starter_ajax_obj?.isPro) {
-            import("pluginstarterpro/MenuItems")
-                .then((mod) => {
-                    setProItems(mod.default || []);
-                })
-                .catch(() => {
-                    console.warn("Pro menu could not be loaded.");
-                    setProItems([]);
-                });
-        }
-    }, []);
-
-    // Optional: load remote injected menu items
-    useEffect(() => {
-        if (plugin_starter_ajax_obj?.extraMenuItems) {
-            setRemoteItems(plugin_starter_ajax_obj.extraMenuItems);
-        }
-    }, []);
-
     const HorizontalMenuItems = [
-        { itemKey: 'welcome', text: 'Welcome', icon: <IconHome />, url: '/' },
+        { itemKey: 'dashboard', text: 'Dashboard', icon: <IconHome />, url: '/' },
+        { 
+            itemKey: 'layouts', 
+            text: 'Layouts', 
+            icon: <IconTemplate />,
+            url: '/layouts',
+            items: [
+                { itemKey: 'about', text: 'About', url: '/about' },
+                { itemKey: 'contact', text: 'Contact', url: '/contact' },
+                { itemKey: 'form', text: 'Form', url: '/form' },
+                { itemKey: 'ArrayFieldDemo', text: 'ArrayFieldDemo', url: '/ArrayFieldDemo' },
+                { 
+                    itemKey: 'layouts-boxed', 
+                    text: 'Boxed Layouts', 
+                    url: '/layouts/boxed',
+                    items: [
+                        { itemKey: 'layouts-boxed-nosidebar', text: 'No Sidebar', url: '/layouts/boxed/nosidebar' },
+                        { itemKey: 'layouts-boxed-left-sidebar', text: 'Left Sidebar', url: '/layouts/boxed/left-sidebar' },
+                        { itemKey: 'layouts-boxed-right-sidebar', text: 'Right Sidebar', url: '/layouts/boxed/right-sidebar' },
+                    ] 
+                },
+                { 
+                    itemKey: 'layouts-full', 
+                    text: 'Full Layouts', 
+                    url: '/layouts/full',
+                    items: [
+                        { itemKey: 'layouts-full-nosidebar', text: 'No Sidebar', url: '/layouts/full/nosidebar' },
+                        { itemKey: 'layouts-full-left-sidebar', text: 'Left Sidebar', url: '/layouts/full/left-sidebar' },
+                        { itemKey: 'layouts-full-right-sidebar', text: 'Right Sidebar', url: '/layouts/full/right-sidebar' },
+                    ] 
+                },
+            ] 
+        },
         { itemKey: 'settings', text: 'Settings', icon: <IconSetting />, url: '/settings' },
         { itemKey: 'feedback', text: 'Feedback', icon: <IconStar />, url: '/feedback' },
 
@@ -115,104 +128,110 @@ export default function App() {
         ),
         // { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
     ];
-
     return (
         <LocaleProvider locale={en_US}>
-            <MenuProvider baseMenu={baseMenu} proItems={proItems} remoteItems={remoteItems}>
-                <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
-                    {!plugin_starter_ajax_obj?.isPro &&
-                        <Banner 
-                            className="plugin-starter-promote-banner"
-                            fullMode={false}
-                            type="info"
-                            description={
-                                <>
-                                    <Text>{__('You\'re currently using the Free plan. ', 'plugin-starter')}</Text>
-                                    <Text>{__('Some settings and features are only available in ', 'plugin-starter')}</Text>
-                                    <b><Text link={{ href: 'https://semi.design', target: '_blank' }}>{__('Pro version.', 'plugin-starter')}</Text></b>
-                                </>
-                            }
-                        />
-                    }
-                    <Layout className="components-layout-demo">
-                        <Header
-                            style={{backgroundColor:'var(--semi-color-bg-3)'}}
-                            className="plugin-starter-header"
-                        >                    
-                            <HorizontalMenuControl
-                                items = {HorizontalMenuItems}
-                                breakpoint = "960"
-                                headerContent = {{
-                                    logo: <Logo width={36} height={36} />,
-                                    text: Details?.name,
-                                }}
-                                footerContent = {(
-                                    <Space align='center'>  
-                                        <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />    
-                                        <Button theme='outline' icon={darkmode?<IconSun />:<IconMoon />} aria-label="Mode" onClick={switchingMode} />
-                                        <Button theme='outline' icon={<IconBookStroked />} aria-label="Screenshot" />
-                                        <Button theme='outline' icon={<IconHelpCircleStroked />} aria-label="Screenshot" />
-                                        <Badge count={5}>
-                                            <Button theme='outline' icon={<IconBellStroked />} onClick={() => setNewsVisible(true)} aria-label="Screenshot" />
-                                        </Badge>
-                                    </Space>
-                                )}
-                            />
-                        </Header>
-                        <div 
-                            className="plugin-starter-settings"
-                            style={{minHeight:settingsBodyHeight,}}
-                        >   
-                            <Routes>
-                                {/* <Route path="/" element={<RestrictionsSettings handleChange={handleChange} />} /> */}
-                                {/* <Route path="/"  element={<Navigate to="/restrictions/settings" />} /> */}
-                                <Route path="/" element={<Dashboard />} />
-                                <Route path="/settings" element={<Navigate to="/settings/page/page-1" />} />
-                                <Route path="/settings/page/page-1" element={<Page />} />
-                                <Route path="/settings/page/page-2" element={<Page_2 />} />
+            <div className="authpress-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
+                {!plugin_starter_ajax_obj?.isPro &&
+                    <Banner 
+                        className="plugin-starter-promote-banner"
+                        fullMode={false}
+                        type="info"
+                        description={
+                            <>
+                                <Text>{__('You\'re currently using the Free plan. ', 'plugin-starter')}</Text>
+                                <Text>{__('Some settings and features are only available in ', 'plugin-starter')}</Text>
+                                <b><Text link={{ href: 'https://semi.design', target: '_blank' }}>{__('Pro version.', 'plugin-starter')}</Text></b>
+                            </>
+                        }
+                    />
+                }
+                <Header
+                    style={{backgroundColor:'var(--semi-color-bg-3)'}}
+                    className="plugin-starter-header"
+                >                    
+                    <HorizontalMenuControl
+                        items = {HorizontalMenuItems}
+                        breakpoint = "960"
+                        headerContent = {{
+                            logo: <Logo width={36} height={36} />,
+                            text: Details?.name,
+                        }}
+                        footerContent = {(
+                            <Space align='center'>  
+                                <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />    
+                                <Button theme='outline' icon={darkmode?<IconSun />:<IconMoon />} aria-label="Mode" onClick={switchingMode} />
+                                <Button theme='outline' icon={<IconBookStroked />} aria-label="Screenshot" />
+                                <Button theme='outline' icon={<IconHelpCircleStroked />} aria-label="Screenshot" />
+                                <Badge count={5}>
+                                    <Button theme='outline' icon={<IconBellStroked />} onClick={() => setNewsVisible(true)} aria-label="Screenshot" />
+                                </Badge>
+                            </Space>
+                        )}
+                    />
+                </Header>
+                <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/form" element={<BasicDemoWithInit />} />
+                    <Route path="/ArrayFieldDemo" element={<ArrayFieldDemo />} />
 
-                                <Route path="/settings/layouts" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
-                                <Route path="/settings/layouts/boxed" element={<Navigate to="/settings/layouts/boxed/nosidebar" />} />
-                                <Route path="/settings/layouts/boxed/nosidebar" element={<BoxedNoSidebar />} />
-                                
-    
-                                <Route path="/settings/import_export" element={<ImportExport />} />
-                                <Route path="/settings/more" element={<More />} />
-                                <Route path="/settings/tools" element={<Tools />} />
-                                <Route path="/feedback" element={<Feedback />} />
-                                <Route path="/free-vs-pro" element={<FreeVsPro />} />
-                                <Route path="/semi" element={<Semi />} />
-    
-                                <Route path="/semi" element={<Semi />}>
-                                    <Route index element={<Semi />} />
-                                    {/* <Route path="profile" element={<ProfilePage />} />
-                                    <Route path="settings" element={<SettingsPage />} /> */}
-                                    <Route path="*" element={<Semi />} />
-                                </Route>
-                                <Route path="*" element={<NotFound />} />
-                            </Routes>
-                        </div>
-                        <Footer
-                            className="p-[15px] w-full plugin-starter-footer" 
-                            style={{borderTop: '1px solid var(--semi-color-border)', backgroundColor:'var(--semi-color-bg-2)'}}
-                        >
-                            <Row type="flex" gutter={24} align="middle" justify="space-between">
-                                <Col xs={24} lg={12} className="text-center lg:text-left mb-2 lg:mb-0">
-                                    <Space align='center' spacing='medium'>
-                                        <img src={`${plugin_starter_ajax_obj.image_url}logo.svg`} alt="" width="30" height="30" />
-                                        <Text>{Details?.name}</Text>
-                                    </Space>
-                                </Col>
-                                <Col xs={24} lg={12} className="text-center lg:text-right">
-                                    <Space align='center' spacing='medium'>
-                                        <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
-                                        <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
-                                    </Space>
-                                </Col>
-                            </Row>
-                        </Footer>
-                    </Layout>
-                </div>
+                    <Route path="/layouts">
+                        <Route index element={<Navigate to="boxed/nosidebar" replace />} />
+                        <Route path="boxed/nosidebar" element={<BoxedNoSidebar />} />
+                        <Route path="boxed/left-sidebar" element={<BoxedLeftSidebar />} />
+                        <Route path="boxed/right-sidebar" element={<BoxedRightSidebar />} />
+                        <Route path="full/nosidebar" element={<FullWidthNoSidebar />} />
+                        <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
+                        <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
+                    </Route>
+                    
+                    <Route path="/settings" element={<Settings />}>
+                        <Route index element={<Navigate to="basic-inputs" replace />} />
+                        <Route path="basic-inputs" element={<BasicInputs />} />
+                        <Route path="array-inputs" element={<ArrayInputs />} />
+                        
+                        {/* Page submenu */}
+                        <Route path="page/page-1" element={<DefaultSettings />} />
+                        <Route path="page/page-2" element={<DefaultSettings />} />
+                        
+                        {/* Layouts submenu - Boxed */}
+                        <Route path="layouts/boxed/nosidebar" element={<DefaultSettings />} />
+                        <Route path="layouts/boxed/leftsidebar" element={<DefaultSettings />} />
+                        <Route path="layouts/boxed/rightsidebar" element={<DefaultSettings />} />
+                        
+                        {/* Layouts submenu - Full Width */}
+                        <Route path="layouts/fullwidth/nosidebar" element={<DefaultSettings />} />
+                        <Route path="layouts/fullwidth/leftsidebar" element={<DefaultSettings />} />
+                        <Route path="layouts/fullwidth/rightsidebar" element={<DefaultSettings />} />
+                        
+                        {/* Other menu items */}
+                        <Route path="import-export" element={<ImportExport />} />
+                        <Route path="more" element={<More />} />
+                        <Route path="tools" element={<Tools />} />
+                    </Route>
+                        <Route path="feedback" element={<Feedback />} />
+                    <Route path="free-vs-pro" element={<FreeVsPro />} />
+                </Routes>
+                <Footer
+                    className="p-[15px] w-full plugin-starter-footer" 
+                    style={{borderTop: '1px solid var(--semi-color-border)', backgroundColor:'var(--semi-color-bg-2)'}}
+                >
+                    <Row type="flex" gutter={24} align="middle" justify="space-between">
+                        <Col xs={24} lg={12} className="text-center lg:text-left mb-2 lg:mb-0">
+                            <Space align='center' spacing='medium'>
+                                <img src={`${plugin_starter_ajax_obj.image_url}logo.svg`} alt="" width="30" height="30" />
+                                <Text>{Details?.name}</Text>
+                            </Space>
+                        </Col>
+                        <Col xs={24} lg={12} className="text-center lg:text-right">
+                            <Space align='center' spacing='medium'>
+                                <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
+                                <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
+                            </Space>
+                        </Col>
+                    </Row>
+                </Footer>
                 
     
                 {/* --- What's New SideSheet --- */}
@@ -225,7 +244,9 @@ export default function App() {
                 >
                     <p>Feature updates and news content go here...</p>
                 </SideSheet>
-            </MenuProvider>
+            </div>
         </LocaleProvider>
     );
 }
+
+export default App;

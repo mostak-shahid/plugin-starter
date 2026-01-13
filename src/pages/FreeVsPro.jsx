@@ -1,9 +1,10 @@
-import React, {useMemo} from 'react'
 import { __ } from "@wordpress/i18n";
-import { Typography, Card, Space,  Table, Button, Carousel, } from '@douyinfe/semi-ui';
-import { IconVerify, IconCrown, IconClose } from '@douyinfe/semi-icons';
-export default function FreeVsPro() {
-    const { Text, Paragraph, Title } = Typography;
+import { Typography, Space, Table, Card, Button} from '@douyinfe/semi-ui';
+import { IconVerify, IconCrown, IconClose, } from '@douyinfe/semi-icons';
+
+import {BoxedLayout} from '../layouts';
+const FreeVsPro = () => {
+    const { Text, Title, Paragraph } = Typography;
     const columns = [
         {
             title: 'Features',
@@ -74,37 +75,16 @@ export default function FreeVsPro() {
             pro: <IconVerify />,
         },
     ];
-    //slider
-    const items = [
-        { id: 1, title: "Item 1" },
-        { id: 2, title: "Item 2" },
-        { id: 3, title: "Item 3" },
-        { id: 4, title: "Item 4" },
-        { id: 5, title: "Item 5" },
-        { id: 6, title: "Item 6" },
-    ];
-
-    // Make "grouped" slides where each slide contains 3 items
-    const groupedSlides = useMemo(() => {
-        let result = [];
-        for (let i = 0; i < items.length; i++) {
-            result.push(items.slice(i, i + 3)); // 3 visible items
-        }
-        return result;
-    }, [items]);
     return (
-        <div className="plugin-starter-settings container mx-auto p-6">
-            <Card
+        <BoxedLayout>
+            <Table 
+                columns={columns} 
+                dataSource={data} 
+                pagination={false}
+                bordered
                 className="mb-6"
-                title={__('Free vs Pro Comparison', "plugin-starter")}
-            >
-                <Table 
-                    columns={columns} 
-                    dataSource={data} 
-                    pagination={false}
-                    bordered
-                    />
-            </Card>
+            />
+            
             <Card
                 className="text-center"
             >
@@ -142,6 +122,8 @@ export default function FreeVsPro() {
                     </Button>
                 </Space>
             </Card>
-        </div>
-    )
-}
+        </BoxedLayout>
+    );
+};
+
+export default FreeVsPro;

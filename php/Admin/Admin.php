@@ -79,7 +79,7 @@ class Admin
 		if ($current_screen->id == 'toplevel_page_plugin-starter') {
 			wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
 		}
-		wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
+		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name . '-admin', PLUGIN_STARTER_URL . 'admin/css/admin-style.css', array(), $this->version, 'all');
 		wp_enqueue_style( 'wp-components' );
@@ -130,8 +130,8 @@ class Admin
 			);
 		}
 
-		wp_enqueue_script($this->plugin_name . '-admin-ajax', plugin_dir_url(__FILE__) . 'js/admin-ajax.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-admin-script', plugin_dir_url(__FILE__) . 'js/admin-script.js', array('jquery', 'jquery-ui-tabs'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-admin-ajax', PLUGIN_STARTER_URL . 'admin/js/admin-ajax.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-admin-script', PLUGIN_STARTER_URL . 'admin/js/admin-script.js', array('jquery', 'jquery-ui-tabs'), $this->version, false);
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'home_url' => home_url(),

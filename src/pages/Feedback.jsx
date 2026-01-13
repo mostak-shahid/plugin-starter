@@ -1,13 +1,16 @@
+import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
-import withForm from '../pages/withForm';
-import { useEffect, useState } from 'react';
-import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
-import { Button, Col, Row, Input, TextArea, Typography, Toast } from '@douyinfe/semi-ui';
-import { IllustrationSuccess, IllustrationSuccessDark } from '@douyinfe/semi-illustrations';
+import { Form, Card } from '@douyinfe/semi-ui';
+import { Button, Col, Row, Typography, Toast } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
-import {IllustrationControl} from "../components";
-const Feedback = () => {
+import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
+import { BoxedLayout } from '../layouts';
+const Feedback = () => {    
+    const [initValues] = useState({
+        subject: '',
+        message: '',
+    });
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
     const [processing, setProcessing] = useState(false); // normal, processing, done
@@ -56,9 +59,39 @@ const Feedback = () => {
     };
     
     const { Title } = Typography; 
+
+    const onSubmit = (values) => {
+        handleSubmit('array', values);
+    };
+    
+    const {
+        Input,
+        InputNumber,
+        Select,
+        Cascader,
+        DatePicker,
+        TimePicker,
+        TextArea,
+        CheckboxGroup,
+        Checkbox,
+        RadioGroup,
+        Radio,
+        Slider,
+        Rating,
+        Switch,
+        TagInput,
+        Section,
+        TreeSelect,
+    } = Form;
+
+    const handleSubmit = (values) => {
+        console.log(values);
+        Toast.info('Submit Success');
+    };
+
     return (
-        <>
-            <div className="setting-unit mx-[3%]">
+        <BoxedLayout>
+            <Card title="Boxed Layout - Right Sidebar" headerLine={true}>
                 <Row type="flex" gutter={[24,24]} align="middle">
                     <Col sx={24} lg={12}>
                         <OnlineSurvey/>
@@ -68,23 +101,45 @@ const Feedback = () => {
                         /> */}
                     </Col> 
                     <Col sx={24} lg={12}>
-                        <div className="mb-3">
-                            <Title heading={6}>{__("Subject", "plugin-starter")}</Title>
-                            <Input                                
-                                value={ subject }
-                                onChange={ ( value ) => setSubject( value ) }
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <Title heading={6}>{__("Message", "plugin-starter")}</Title>
-                            <TextArea
-                                value={ message }
-                                onChange={ ( value ) => setMessage( value ) }
-                                className="mt-2"
-                            />
-                        </div>
-                        <Button 
+                        <Form
+                            initValues={initValues}
+                            // style={{ padding: 10, width: '100%' }}
+                            onValueChange={(v) => console.log(v)}
+                            onSubmit={values => handleSubmit(values)}
+                        >
+                            <div className="mb-3">
+                                <Input                                
+                                    field="subject"
+                                    label={__("Subject", "plugin-starter")}
+                                    trigger="blur"
+                                    // className="mt-2"
+                                    rules={[
+                                        { required: true, message: 'required Error' },
+                                        { type: 'string', message: 'type error' },
+                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                    ]}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <TextArea
+                                    field="message"
+                                    label={__("Message", "plugin-starter")}
+                                    // className="mt-2"
+                                    rules={[
+                                        { required: true, message: 'required Error' },
+                                        { type: 'string', message: 'type error' },
+                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                    ]}
+                                />
+                            </div>
+                            
+                            <Button type="primary" htmlType="submit" className="btn-margin-right">
+                                Submit
+                            </Button>
+                            <Button htmlType="reset">Reset</Button>
+                            
+                        </Form>
+                        {/* <Button 
                             theme="solid"
                             type="primary"
                             icon={<IconSend />}
@@ -95,12 +150,13 @@ const Feedback = () => {
                             {
                                 processing ? __( "Sending...", "plugin-starter" ) : __( "Send", "plugin-starter" )
                             }
-                        </Button>
+                        </Button> */}
                         
                     </Col>  
                 </Row>
-            </div>
-        </>
-    )
-}
-export default withForm(Feedback);
+            </Card>
+        </BoxedLayout>
+    );
+};
+
+export default Feedback;

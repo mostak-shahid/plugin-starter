@@ -77,6 +77,7 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
 
     // --- Shared handlers (horizontal stays as-is, vertical gets accordion) ---
     const handleOpenChange = (data, mode = 'horizontal') => {
+        // console.log('handleOpenChange', data, mode);
         const keys = Array.isArray(data) ? data : data?.openKeys || [];
 
         if (mode === 'vertical') {
@@ -99,9 +100,9 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
     };
 
     const handleSelect = (data, mode = 'horizontal') => {
+        // console.log('xxx');
         const itemKey = data?.itemKey;
         if (!itemKey) return;
-
         const found = findItemByKey(items, itemKey);
 
         if (mode === 'vertical' && found?.items?.length) {
@@ -162,6 +163,7 @@ export default function HorizontalMenuControl({items, breakpoint, headerContent=
                     openKeys={openKeys}
                     onOpenChange={(data) => handleOpenChange(data, 'horizontal')}
                     onSelect={(data) => handleSelect(data, 'horizontal')}
+                    // onClick={data => console.log('trigger onClick: ', data)}
                     header={headerContent}
                     footer={footerContent}
                     style={{backgroundColor:'var(--semi-color-bg-2)'}}
