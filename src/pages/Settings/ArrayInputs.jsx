@@ -1,8 +1,11 @@
 import { Form, Button, Card } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
 
 const ArrayInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
+    const [hasChanges, setHasChanges] = useState(false);
+    const settingsOld = useRef(null);
 
     const onSubmit = (values) => {
         handleSubmit('array', values);
@@ -12,6 +15,20 @@ const ArrayInputs = () => {
         handleReset('array');
     };
 
+    const handleValuesChange = (values) => {
+        if (settingsOld.current && settings.array) {
+            const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.array);
+            setHasChanges(isChanged);
+        }
+    };
+
+    useEffect(() => {
+        if (settings && settings.array) {
+            settingsOld.current = { ...settings };
+            setHasChanges(false);
+        }
+    }, [settings]);
+
     return (
         <Card title="Array Inputs" headerLine={true}>
             <p style={{ marginBottom: '24px', color: 'var(--semi-color-text-2)' }}>
@@ -20,9 +37,10 @@ const ArrayInputs = () => {
             {/* {console.log(settings)}
             {console.log(settingsLoading)} */}
             {!settingsLoading && (
-                <Form 
-                    initValues={settings.array} 
-                    onSubmit={onSubmit} 
+                <Form
+                    initValues={settings.array}
+                    onSubmit={onSubmit}
+                    onValueChange={handleValuesChange}
                     style={{ maxWidth: '600px' }}
                     labelPosition="left"
                     labelWidth="150px"
@@ -33,9 +51,9 @@ const ArrayInputs = () => {
                         <Form.Checkbox value="checkbox-3">Checkbox 3</Form.Checkbox>
                         <Form.Checkbox value="checkbox-4">Checkbox 4</Form.Checkbox>
                     </Form.CheckboxGroup>
-                    
+
                     <div style={{ marginTop: '24px' }}>
-                    <Button type="primary" htmlType="submit" size="large">
+                    <Button type="primary" htmlType="submit" size="large" disabled={!hasChanges}>
                         Save Settings
                     </Button>
                     <Button

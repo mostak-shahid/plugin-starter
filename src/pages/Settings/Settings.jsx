@@ -19,6 +19,7 @@ const { Header, Sider, Content } = Layout;
 
 const Settings = () => {
     const [settings, setSettings] = useState({});
+    const [settingsOld, setSettingsOld] = useState({});
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
     const navigate = useNavigate();
@@ -34,6 +35,7 @@ const Settings = () => {
                 });
                 if (data) {
                     setSettings(data);
+                    setSettingsOld(data);
                 }
             } catch (error) {
                 console.error("Error fetching settings:", error);

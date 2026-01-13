@@ -1,8 +1,11 @@
 import { Form, Button, Card } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
 
 const BasicInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
+    const [hasChanges, setHasChanges] = useState(false);
+    const settingsOld = useRef(null);
 
     const onSubmit = (values) => {
         handleSubmit('basic', values);
@@ -12,6 +15,21 @@ const BasicInputs = () => {
         handleReset('basic');
     };
 
+    const handleValuesChange = (values) => {
+        console.log(values);
+        if (settingsOld.current && settings.basic) {
+            const isChanged = JSON.stringify(values.basic) !== JSON.stringify(settingsOld.current.basic);
+            setHasChanges(isChanged);
+        }
+    };
+
+    useEffect(() => {
+        if (settings && settings.basic) {
+            settingsOld.current = { ...settings };
+            setHasChanges(false);
+        }
+    }, [settings]);
+
     return (
         <Card title="Basic Inputs" headerLine={true}>
             <p style={{ marginBottom: '24px', color: 'var(--semi-color-text-2)' }}>
@@ -20,36 +38,37 @@ const BasicInputs = () => {
             {/* {console.log(settings)}
             {console.log(settingsLoading)} */}
             {!settingsLoading && (
-                <Form 
-                    initValues={settings} 
-                    onSubmit={onSubmit} 
+                <Form
+                    initValues={settings}
+                    onSubmit={onSubmit}
+                    onValueChange={handleValuesChange}
                     style={{ maxWidth: '600px' }}
                     labelPosition="left"
                     labelWidth="150px"
                 >
-                    <Form.Input 
-                        field="basic.text" 
-                        label="Text Input" 
-                        placeholder="Enter text" 
+                    <Form.Input
+                        field="basic.text"
+                        label="Text Input"
+                        placeholder="Enter text"
                         style={{ width: '100%' }}
                     />
-                    
-                    <Form.TextArea 
-                        field="basic.textarea" 
-                        label="Textarea" 
-                        placeholder="Enter textarea content" 
+
+                    <Form.TextArea
+                        field="basic.textarea"
+                        label="Textarea"
+                        placeholder="Enter textarea content"
                         rows={4}
                         style={{ width: '100%' }}
                     />
-                    
+
                     <Form.RadioGroup field="basic.radio" label="Radio Group" type="button">
                         <Form.Radio value="radio-1">Radio 1</Form.Radio>
                         <Form.Radio value="radio-2">Radio 2</Form.Radio>
                         <Form.Radio value="radio-3">Radio 3</Form.Radio>
                     </Form.RadioGroup>
-                    
+
                     <div style={{ marginTop: '24px' }}>
-                        <Button type="primary" htmlType="submit" size="large">
+                        <Button type="primary" htmlType="submit" size="large" disabled={!hasChanges}>
                             Save Settings
                         </Button>
                         <Button
