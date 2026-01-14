@@ -10,6 +10,7 @@ import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
 import { Dashboard, About, Contact, Settings, BasicInputs, ArrayInputs, BasicDemoWithInit, ArrayFieldDemo, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
+import Page from './pages/Page';
 // import DefaultSettings from './pages/settings/Default';
 // import BoxedLeftSidebar from './pages/layouts/BoxedLeftSidebar';
 // import BoxedNoSidebar from './pages/layouts/BoxedNoSidebar';
@@ -172,6 +173,7 @@ function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/page" element={<Page />} />
 
                     {/* <Route path="/layouts">
                         <Route index element={<Navigate to="boxed/nosidebar" replace />} />
