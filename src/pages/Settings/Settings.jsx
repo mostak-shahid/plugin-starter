@@ -14,6 +14,7 @@ import {
 } from '@douyinfe/semi-icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import menuData from '../../data/menu.json';
+import PageInfo from "../../components/PageInfo/PageInfo"
 
 const { Header, Sider, Content } = Layout;
 
@@ -209,7 +210,13 @@ const Settings = () => {
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
-                <Card title="Title" headerLine={true}>
+                <Card 
+                    // title={
+                    //     <PageInfo url={location.pathname} />
+                    // }
+                    title="Title"
+                    headerLine={true}
+                >
                     <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
                 </Card>
             </Content>
