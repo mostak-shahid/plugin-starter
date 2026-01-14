@@ -13,6 +13,7 @@ import {
   IconLikeThumb 
 } from '@douyinfe/semi-icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
 import PageInfo from "../../components/PageInfo/PageInfo"
 
@@ -161,7 +162,7 @@ const Settings = () => {
     };
 
     // Get menu data from menu.js
-    const menuData = getMenu({proItems: proItems, remoteItems:remoteItems});
+    const menuData = getMenu({menuItems:menuItems, proItems: proItems, remoteItems:remoteItems});
     
     // Add icons to menu items
     const menuItemsWithIcons = menuData.map(item => ({

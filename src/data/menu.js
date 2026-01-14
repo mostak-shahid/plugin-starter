@@ -1,5 +1,3 @@
-import menuData from './menu.json';
-
 function injectMenu(menu, item) {
     // 1. Insert before specific itemKey
     if (item.insertBefore) {
@@ -48,8 +46,8 @@ function cleanItem(item) {
     return copy;
 }
 
-export function getMenu({ proItems = [], remoteItems = [] }) {        
-    let menu = [...menuData];
+export function getMenu({ menuItems=[], proItems = [], remoteItems = [] }) {        
+    let menu = [...menuItems];
 
     // Add flat pro items (default: append)
     if (proItems.length) {
