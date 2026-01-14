@@ -1,40 +1,45 @@
+import menuData from './menu.json';
+
 function injectMenu(menu, item) {
+    // Create deep copy of menu to avoid mutation
+    const menuCopy = JSON.parse(JSON.stringify(menu));
+    
     // 1. Insert before specific itemKey
     if (item.insertBefore) {
-        const index = menu.findIndex(m => m.itemKey === item.insertBefore);
+        const index = menuCopy.findIndex(m => m.itemKey === item.insertBefore);
         if (index >= 0) {
-            menu.splice(index, 0, cleanItem(item));
-            return [...menu];
+            menuCopy.splice(index, 0, cleanItem(item));
+            return menuCopy;
         }
     }
 
     // 2. Insert after specific itemKey
     if (item.insertAfter) {
-        const index = menu.findIndex(m => m.itemKey === item.insertAfter);
+        const index = menuCopy.findIndex(m => m.itemKey === item.insertAfter);
         if (index >= 0) {
-            menu.splice(index + 1, 0, cleanItem(item));
-            return [...menu];
+            menuCopy.splice(index + 1, 0, cleanItem(item));
+            return menuCopy;
         }
     }
 
     // 3. Insert as a submenu under a free menu item
     if (item.parentKey) {
-        const parent = menu.find(m => m.itemKey === item.parentKey);
+        const parent = menuCopy.find(m => m.itemKey === item.parentKey);
         if (parent) {
             parent.items = parent.items || [];
             parent.items.push(cleanItem(item));
-            return [...menu];
+            return menuCopy;
         }
     }
 
     // 4. Insert at a defined index
     if (typeof item.position === "number") {
-        menu.splice(item.position, 0, cleanItem(item));
-        return [...menu];
+        menuCopy.splice(item.position, 0, cleanItem(item));
+        return menuCopy;
     }
 
     // 5. Default = append to root level
-    return [...menu, cleanItem(item)];
+    return [...menuCopy, cleanItem(item)];
 }
 
 function cleanItem(item) {
@@ -46,8 +51,9 @@ function cleanItem(item) {
     return copy;
 }
 
-export function getMenu({ menuItems=[], proItems = [], remoteItems = [] }) {        
-    let menu = [...menuItems];
+export function getMenu({ baseMenu = menuData, proItems = [], remoteItems = [] }) {        
+    // Create deep copy of base menu to avoid mutation
+    let menu = JSON.parse(JSON.stringify(baseMenu));
 
     // Add flat pro items (default: append)
     if (proItems.length) {
