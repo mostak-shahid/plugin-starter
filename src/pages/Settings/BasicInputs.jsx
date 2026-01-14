@@ -14,9 +14,8 @@ const BasicInputs = () => {
     };
 
     const handleValuesChange = (values) => {
-        console.log(values);
         if (settingsOld.current && settings.basic) {
-            const isChanged = JSON.stringify(values.basic) !== JSON.stringify(settingsOld.current.basic);
+            const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.basic);
             setHasChanges(isChanged);
         }
     };
@@ -30,9 +29,10 @@ const BasicInputs = () => {
 
     return (
         <>
+            {/* {console.log(settings.basic)} */}
             {!settingsLoading && (
                 <Form
-                    initValues={settings}
+                    initValues={settings.basic}
                     onSubmit={onSubmit}
                     onValueChange={handleValuesChange}
                     style={{ maxWidth: '600px' }}
@@ -40,21 +40,21 @@ const BasicInputs = () => {
                     labelWidth="150px"
                 >
                     <Form.Input
-                        field="basic.text"
+                        field="text"
                         label="Text Input"
                         placeholder="Enter text"
                         style={{ width: '100%' }}
                     />
 
                     <Form.TextArea
-                        field="basic.textarea"
+                        field="textarea"
                         label="Textarea"
                         placeholder="Enter textarea content"
                         rows={4}
                         style={{ width: '100%' }}
                     />
 
-                    <Form.RadioGroup field="basic.radio" label="Radio Group" type="button">
+                    <Form.RadioGroup field="radio" label="Radio Group" type="button">
                         <Form.Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Form.Radio>
                         <Form.Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Form.Radio>
                         <Form.Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Form.Radio>
