@@ -13,7 +13,7 @@ import {
   IconLikeThumb 
 } from '@douyinfe/semi-icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import menuData from '../../data/menu.json';
+import { getMenu } from '../../data/menu.js';
 import PageInfo from "../../components/PageInfo/PageInfo"
 
 const { Header, Sider, Content } = Layout;
@@ -135,6 +135,9 @@ const Settings = () => {
         'feedback': <IconLikeThumb />
     };
 
+    // Get menu data from menu.js
+    const menuData = getMenu({});
+    
     // Add icons to menu items
     const menuItemsWithIcons = menuData.map(item => ({
         ...item,
