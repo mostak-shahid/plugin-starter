@@ -238,10 +238,10 @@ const Settings = () => {
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
                 <Card 
-                    // title={
-                    //     <PageInfo url={location.pathname} />
-                    // }
-                    title="Title"
+                    title={
+                        <PageInfo menu={menuItemsWithIcons} url={location.pathname}  />
+                    }
+                    // title="Title"
                     headerLine={true}
                 >
                     <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
