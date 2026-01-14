@@ -16,6 +16,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
 import PageInfo from "../../components/PageInfo/PageInfo"
+import BreadcrumbControl from "../../components/BreadcrumbControl/BreadcrumbControl.jsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -237,6 +238,7 @@ const Settings = () => {
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
+                <BreadcrumbControl menu={menuItemsWithIcons} url={location.pathname} />
                 <Card 
                     title={
                         <PageInfo menu={menuItemsWithIcons} url={location.pathname}  />

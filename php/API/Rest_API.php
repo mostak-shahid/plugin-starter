@@ -141,6 +141,22 @@ class Rest_API
                 },
             )
         );
+        
+		register_rest_route(
+            self::NAMESPACE,
+            '/options/import-settings', [
+                'methods' => 'POST',
+                'callback' => function ($request) {
+                    $data = $request->get_json_params();
+                    update_option('plugin_starter_options', $data);
+                    return rest_ensure_response(['success' => true]);
+                },
+                // 'permission_callback' => '__return_true',
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            ]
+        );
 
 		register_rest_route(
             self::NAMESPACE,

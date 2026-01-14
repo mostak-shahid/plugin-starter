@@ -8,11 +8,17 @@ export default function ActionButtons({hasChanges, section, handleReset}) {
     };
     return (
         <div className='mt-6'>
-            <Button type="primary" htmlType="submit" size="large" disabled={!hasChanges}>
+            <Button 
+                type="primary" 
+                theme='solid'
+                htmlType="submit" 
+                disabled={!hasChanges}
+            >
                 {__('Save Settings', 'plugin-starter')}
             </Button>
             <Button
-                type="tertiary"
+                type="danger" 
+                theme='solid'
                 style={{ marginLeft: '12px' }}
                 onClick={onReset}
             >

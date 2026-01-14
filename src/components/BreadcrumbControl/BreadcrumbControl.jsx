@@ -1,102 +1,118 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { Breadcrumb } from '@douyinfe/semi-ui';
 
-const BreadcrumbControl = ({menu=[], className=''}) => {
-    
-    // Get current path from window.location.hash
-    const getCurrentPath = () => {
-        const hash = window.location.hash;
-        return hash.replace(/^#?\/?/, '');
-    };
+import { __ } from "@wordpress/i18n";
+import { useMemo } from "react";
+import { Card, Breadcrumb } from '@douyinfe/semi-ui';
 
-    const [currentPath, setCurrentPath] = useState(getCurrentPath());
 
-    // Listen to hash changes
-    useEffect(() => {
-        const handleHashChange = () => {
-            setCurrentPath(getCurrentPath());
-        };
+/**
+ * Generate breadcrumb items from a pathname and menu structure
+ * @param {string} pathname - Current route pathname
+ * @param {Array} menuData - Menu data structure
+ * @returns {Array} Array of breadcrumb items with { name, path, href }
+ */
+const generateBreadcrumbs = (pathname, menuData) => {
+    const breadcrumbs = [
+        {
+            name: __("Home", "plugin-starter"),
+            href: '#/',
+            path: '/'
+        }
+    ];
 
-        window.addEventListener('hashchange', handleHashChange);
-        return () => window.removeEventListener('hashchange', handleHashChange);
-    }, []);
+    // Helper function to find menu item and build breadcrumb path
+    const findInMenu = (items, path, parentCrumbs = []) => {
+        for (const item of items) {
+            // Skip items with invalid URLs
+            if (!item.url || item.url === '#' || item.url.startsWith('http')) {
+                continue;
+            }
 
-    const routes = useMemo(() => {
-        const path = currentPath;
-        const segments = path.split('/').filter(Boolean);
+            // Check if current item matches the path
+            if (path === item.url || path.startsWith(item.url + '/')) {
+                const currentCrumbs = [...parentCrumbs, {
+                    name: item.text,
+                    path: item.url,
+                    href: item.url
+                }];
 
-        if (segments.length === 0) {
-            return [
-                {
-                    name: 'Home',
-                    href: '#/',
-                    path: '/'
+                // If exact match, return
+                if (path === item.url) {
+                    return currentCrumbs;
                 }
-            ];
-        }
 
-        const items = [
-            {
-                name: 'Home',
-                href: '#/',
-                path: '/'
+                // If has submenu, search in submenu
+                if (item.sub && item.sub.length > 0) {
+                    const subResult = findInMenu(item.sub, path, currentCrumbs);
+                    if (subResult) {
+                        return subResult;
+                    }
+                }
+
+                // If path starts with this url but no exact match found in submenu,
+                // return what we have so far
+                return currentCrumbs;
             }
-        ];
-        
-        let buildPath = '';
-        let currentMenu = menu;
 
-        for (let i = 0; i < segments.length; i++) {
-            buildPath += `/${segments[i]}`;
-            
-            // Find matching item in current menu level
-            const menuItem = currentMenu?.find(item => {
-                const itemPath = item.url.replace(/^#?\/?/, '');
-                return itemPath === buildPath.replace(/^\//, '') || 
-                       itemPath.endsWith(segments[i]);
-            });
-
-            if (menuItem) {
-                items.push({
-                    name: menuItem.text,
-                    href: `#${menuItem.url}`,
-                    path: menuItem.url,
-                    // icon: menuItem.icon
-                });
-
-                // Update current menu to nested items if they exist
-                currentMenu = menuItem.items;
-            } else {
-                // If no menu item found, use segment as fallback
-                items.push({
-                    name: segments[i].split(/[-_]/).map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                    ).join(' '),
-                    href: `#${buildPath}`,
-                    path: buildPath
-                });
+            // Search in submenu even if parent doesn't match
+            if (item.sub && item.sub.length > 0) {
+                const subResult = findInMenu(item.sub, path, [...parentCrumbs, {
+                    name: item.text,
+                    path: item.url,
+                    href: item.url
+                }]);
+                if (subResult) {
+                    return subResult;
+                }
             }
         }
-
-        return items;
-    }, [currentPath, menu]);
-
-    const handleClick = (item, e) => {
-        e.preventDefault();
-        if (item.href && item.href !== '#/') {
-            window.location.hash = item.href.replace(/^#/, '');
-        } else {
-            window.location.hash = '/';
-        }
+        return null;
     };
+
+    // Find breadcrumbs in menu structure
+    const foundCrumbs = findInMenu(menuData, pathname);
+
+    if (foundCrumbs && foundCrumbs.length > 0) {
+        breadcrumbs.push(...foundCrumbs);
+    }
+
+    return breadcrumbs;
+};
+const BreadcrumbControl = ({ menu=[], url='', className='', style = {} }) => {
+
+    // Generate breadcrumbs based on current path and menu structure
+    const breadcrumbItems = useMemo(() => {
+        // Add safety check for menuData
+        if (!menu || menu.length === 0) {
+            return [];
+        }
+        return generateBreadcrumbs(url, menu);
+    }, [url, menu]);
+
+    // Don't render if no breadcrumb items
+    if (breadcrumbItems.length === 0) {
+        return null;
+    }
+
+    // // Default style
+    // const defaultStyle = {
+    //     marginBottom: '24px',
+    //     padding: '12px 16px',
+    //     backgroundColor: 'var(--semi-color-bg-3)',
+    //     //borderRadius: '4px',
+    // // boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+    //     ...style
+    // };
 
     return (
-        <Breadcrumb 
-            routes={routes}
-            onClick={handleClick}
-            style={{ marginBottom: '20px' }}
-            className={className}
-        />
+        <Card className={`mb-6 ${className}`} style={style}>
+            <Breadcrumb
+                // style={defaultStyle}
+                routes={breadcrumbItems.map(item => ({
+                    name: item.name,
+                    path: item.path
+                }))}
+            />
+        </Card>
     );
 };
 
