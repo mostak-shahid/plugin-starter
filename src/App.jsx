@@ -10,14 +10,13 @@ import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
 import { Dashboard, About, Contact, Settings, BasicInputs, ArrayInputs, BasicDemoWithInit, ArrayFieldDemo, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
-import DefaultSettings from './pages/settings/Default';
-
-import BoxedLeftSidebar from './pages/layouts/BoxedLeftSidebar';
-import BoxedNoSidebar from './pages/layouts/BoxedNoSidebar';
-import BoxedRightSidebar from './pages/layouts/BoxedRightSidebar'; 
-import FullWidthLeftSidebar from './pages/layouts/FullWidthLeftSidebar';
-import FullWidthNoSidebar from './pages/layouts/FullWidthNoSidebar';
-import FullWidthRightSidebar from './pages/layouts/FullWidthRightSidebar';
+// import DefaultSettings from './pages/settings/Default';
+// import BoxedLeftSidebar from './pages/layouts/BoxedLeftSidebar';
+// import BoxedNoSidebar from './pages/layouts/BoxedNoSidebar';
+// import BoxedRightSidebar from './pages/layouts/BoxedRightSidebar'; 
+// import FullWidthLeftSidebar from './pages/layouts/FullWidthLeftSidebar';
+// import FullWidthNoSidebar from './pages/layouts/FullWidthNoSidebar';
+// import FullWidthRightSidebar from './pages/layouts/FullWidthRightSidebar';
 
 import {NotFound, HorizontalMenuControl} from "./components";
 import { Logo } from './lib/Illustrations';
@@ -173,10 +172,8 @@ function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/form" element={<BasicDemoWithInit />} />
-                    <Route path="/ArrayFieldDemo" element={<ArrayFieldDemo />} />
 
-                    <Route path="/layouts">
+                    {/* <Route path="/layouts">
                         <Route index element={<Navigate to="boxed/nosidebar" replace />} />
                         <Route path="boxed/nosidebar" element={<BoxedNoSidebar />} />
                         <Route path="boxed/left-sidebar" element={<BoxedLeftSidebar />} />
@@ -184,26 +181,12 @@ function App() {
                         <Route path="full/nosidebar" element={<FullWidthNoSidebar />} />
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
-                    </Route>
+                    </Route> */}
                     
                     <Route path="/settings" element={<Settings />}>
                         <Route index element={<Navigate to="basic-inputs" replace />} />
                         <Route path="basic-inputs" element={<BasicInputs />} />
                         <Route path="array-inputs" element={<ArrayInputs />} />
-                        
-                        {/* Page submenu */}
-                        <Route path="page/page-1" element={<DefaultSettings />} />
-                        <Route path="page/page-2" element={<DefaultSettings />} />
-                        
-                        {/* Layouts submenu - Boxed */}
-                        <Route path="layouts/boxed/nosidebar" element={<DefaultSettings />} />
-                        <Route path="layouts/boxed/leftsidebar" element={<DefaultSettings />} />
-                        <Route path="layouts/boxed/rightsidebar" element={<DefaultSettings />} />
-                        
-                        {/* Layouts submenu - Full Width */}
-                        <Route path="layouts/fullwidth/nosidebar" element={<DefaultSettings />} />
-                        <Route path="layouts/fullwidth/leftsidebar" element={<DefaultSettings />} />
-                        <Route path="layouts/fullwidth/rightsidebar" element={<DefaultSettings />} />
                         
                         {/* Other menu items */}
                         <Route path="import-export" element={<ImportExport />} />
