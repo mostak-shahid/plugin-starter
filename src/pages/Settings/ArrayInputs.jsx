@@ -1,6 +1,8 @@
+import { __ } from "@wordpress/i18n";
 import { Form, Button, Card } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
+import ActionButtons from "./ActionButtons";
 
 const ArrayInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
@@ -9,10 +11,6 @@ const ArrayInputs = () => {
 
     const onSubmit = (values) => {
         handleSubmit('array', values);
-    };
-
-    const onReset = () => {
-        handleReset('array');
     };
 
     const handleValuesChange = (values) => {
@@ -30,12 +28,7 @@ const ArrayInputs = () => {
     }, [settings]);
 
     return (
-        <Card title="Array Inputs" headerLine={true}>
-            <p style={{ marginBottom: '24px', color: 'var(--semi-color-text-2)' }}>
-                Configure array input settings with multiple checkbox selections.
-            </p>
-            {/* {console.log(settings)}
-            {console.log(settingsLoading)} */}
+        <>
             {!settingsLoading && (
                 <Form
                     initValues={settings.array}
@@ -46,27 +39,15 @@ const ArrayInputs = () => {
                     labelWidth="150px"
                 >
                     <Form.CheckboxGroup field="checkbox" label="Checkbox Group" direction="vertical">
-                        <Form.Checkbox value="checkbox-1">Checkbox 1</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-2">Checkbox 2</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-3">Checkbox 3</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-4">Checkbox 4</Form.Checkbox>
+                        <Form.Checkbox value="checkbox-1">{__('Checkbox 1', 'plugin-starter')}</Form.Checkbox>
+                        <Form.Checkbox value="checkbox-2">{__('Checkbox 2', 'plugin-starter')}</Form.Checkbox>
+                        <Form.Checkbox value="checkbox-3">{__('Checkbox 3', 'plugin-starter')}</Form.Checkbox>
+                        <Form.Checkbox value="checkbox-4">{__('Checkbox 4', 'plugin-starter')}</Form.Checkbox>
                     </Form.CheckboxGroup>
-
-                    <div style={{ marginTop: '24px' }}>
-                    <Button type="primary" htmlType="submit" size="large" disabled={!hasChanges}>
-                        Save Settings
-                    </Button>
-                    <Button
-                        type="tertiary"
-                        style={{ marginLeft: '12px' }}
-                        onClick={onReset}
-                    >
-                        Reset
-                    </Button>
-                    </div>
+                    <ActionButtons hasChanges={hasChanges} section='array' handleReset={handleReset} />
                 </Form>
             )}
-        </Card>
+        </>
     );
 };
 

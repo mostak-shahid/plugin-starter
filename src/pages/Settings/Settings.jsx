@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from 'react';
-import { Layout, Nav, Button, Toast } from '@douyinfe/semi-ui';
+import { Layout, Nav, Card, Toast } from '@douyinfe/semi-ui';
 import {FullWidthLayout} from '../../layouts';
 import { 
   IconSetting, 
@@ -209,7 +209,9 @@ const Settings = () => {
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
             <Content>
-                <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
+                <Card title="Title" headerLine={true}>
+                    <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
+                </Card>
             </Content>
         </FullWidthLayout>
     );
