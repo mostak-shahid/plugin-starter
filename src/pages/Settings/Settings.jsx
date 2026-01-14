@@ -123,6 +123,31 @@ const Settings = () => {
         }
     };
 
+
+    const [proItems, setProItems] = useState([]);
+    const [remoteItems, setRemoteItems] = useState([]);
+
+    // Load MF remote menu array (NOT the React component)
+    useEffect(() => {
+        if (plugin_starter_ajax_obj?.isPro) {
+            import("pluginstarterpro/MenuItems")
+                .then((mod) => {
+                    setProItems(mod.default || []);
+                })
+                .catch(() => {
+                    console.warn("Pro menu could not be loaded.");
+                    setProItems([]);
+                });
+        }
+    }, []);
+    
+    // Optional: load remote injected menu items
+    useEffect(() => {
+        if (plugin_starter_ajax_obj?.extraMenuItems) {
+            setRemoteItems(plugin_starter_ajax_obj.extraMenuItems);
+        }
+    }, []);
+
     // Icon mapping
     const iconMap = {
         'page': <IconUser />,
@@ -136,7 +161,7 @@ const Settings = () => {
     };
 
     // Get menu data from menu.js
-    const menuData = getMenu({});
+    const menuData = getMenu({proItems: proItems, remoteItems:remoteItems});
     
     // Add icons to menu items
     const menuItemsWithIcons = menuData.map(item => ({
