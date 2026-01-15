@@ -43,7 +43,7 @@ const More = () => {
                     initValues={settings.more}
                     onSubmit={onSubmit}
                     onValueChange={handleValuesChange}
-                    style={{ maxWidth: '600px' }}
+                    // style={{ maxWidth: '600px' }}
                     labelPosition="left"
                     labelWidth="150px"
                 >
@@ -60,6 +60,7 @@ const More = () => {
                                 <Col xs={24} lg={12} xl={10}>
                                     <Form.Switch 
                                         field='enable_scripts'
+                                        noLabel
                                     />   
                                 </Col>
                             }
