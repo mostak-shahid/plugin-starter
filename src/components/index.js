@@ -9,7 +9,7 @@ import HorizontalMenuControl from './HorizontalMenuControl/HorizontalMenuControl
 import IllustrationControl from './IllustrationControl/IllustrationControl';
 import MediaUploaderControl from './MediaUploaderControl/MediaUploaderControl';
 import MultiColorControl from './MultiColorControl/MultiColorControl';
-
+import PageInfo from './PageInfo/PageInfo';
 import PluginCard from './PluginCard/PluginCard';
 import UnitControl from './UnitControl/UnitControl';
 import VerticalMenuControl from './VerticalMenuControl/VerticalMenuControl';
@@ -39,6 +39,7 @@ export {
     MediaUploaderControl,
     MultiColorControl,
     NotFound,
+    PageInfo,
     PluginCard,
     SkeletonPlaceholder,
     TextShadowControl,

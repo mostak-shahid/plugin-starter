@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { Form, Button, Card } from '@douyinfe/semi-ui';
+import { Form } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
@@ -29,7 +29,7 @@ const ArrayInputs = () => {
 
     return (
         <>
-            {!settingsLoading && (
+            {!settingsLoading && settings?.array && (
                 <Form
                     initValues={settings.array}
                     onSubmit={onSubmit}

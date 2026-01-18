@@ -141,6 +141,18 @@ class Rest_API
                 },
             )
         );
+
+		register_rest_route(
+            self::NAMESPACE,
+            '/options/reset-settings-all',
+            array(
+                'methods' => 'POST',
+                'callback' => [$this, 'reset_settings_all'],
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
         
 		register_rest_route(
             self::NAMESPACE,
@@ -453,6 +465,29 @@ class Rest_API
         } else {
             wp_send_json_error(['error_message' => __('Invalid settings path.', 'plugin-starter')]);
         }
+
+		$response = [
+			'success' => true,
+			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter')
+		];
+
+		// return $response;
+		return new WP_REST_Response($response, 200);
+	}
+    public function reset_settings_all(WP_REST_Request $request)
+	{
+        if (!current_user_can('manage_options')) {
+            return new WP_Error(
+                'rest_update_error',
+                'Sorry, you are not allowed to reset the settings.',
+                array('status' => 403)
+            );
+        }
+        $plugin_starter_default_options = plugin_starter_get_default_options();
+
+        update_option('plugin_starter_options', $plugin_starter_default_options);
+        // $this->log_settings_reset($name, $plugin_starter_options_old[$name] ?? null, $plugin_starter_options[$name] ?? null);
+        wp_send_json_success(['message' => __('Settings reset successfully.', 'plugin-starter')]);
 
 		$response = [
 			'success' => true,

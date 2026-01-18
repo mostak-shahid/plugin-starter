@@ -1,118 +1,118 @@
 [
-  {
-    "itemKey": "page",
-    "text": "Page",
-    "description": "Page settings",
-    "url": "/settings/page",
-    "items": [
-      {
-        "itemKey": "page-1",
-        "text": "Page 1",
-        "description": "Page 1 settings",
-        "url": "/settings/page/page-1"
-      },
-      {
-        "itemKey": "page-2",
-        "text": "Page 2",
-        "description": "Page 2 settings",
-        "url": "/settings/page/page-2"
-      }
-    ]
-  },
-  {
-    "itemKey": "layouts",
-    "text": "Layouts",
-    "description": "Layout configurations",
-    "url": "/settings/layouts",
-    "items": [
-      {
-        "itemKey": "layouts-boxed",
-        "text": "Boxed",
-        "description": "Boxed layouts",
-        "url": "/settings/layouts/boxed",
+    {
+        "itemKey": "page",
+        "text": "Page",
+        "description": "Page settings",
+        "url": "/settings/page",
         "items": [
-          {
-            "itemKey": "layouts-boxed-nosidebar",
-            "text": "No Sidebar",
-            "description": "Boxed without sidebar",
-            "url": "/settings/layouts/boxed/nosidebar"
-          },
-          {
-            "itemKey": "layouts-boxed-leftsidebar",
-            "text": "Left Sidebar",
-            "description": "Boxed with left sidebar",
-            "url": "/settings/layouts/boxed/leftsidebar"
-          },
-          {
-            "itemKey": "layouts-boxed-rightsidebar",
-            "text": "Right Sidebar",
-            "description": "Boxed with right sidebar",
-            "url": "/settings/layouts/boxed/rightsidebar"
-          }
+            {
+                "itemKey": "page-1",
+                "text": "Page 1",
+                "description": "Page 1 settings",
+                "url": "/settings/page/page-1"
+            },
+            {
+                "itemKey": "page-2",
+                "text": "Page 2",
+                "description": "Page 2 settings",
+                "url": "/settings/page/page-2"
+            }
         ]
-      },
-      {
-        "itemKey": "layouts-fullwidth",
-        "text": "Full Width",
-        "description": "Full width layouts",
-        "url": "/settings/layouts/fullwidth",
+    },
+    {
+        "itemKey": "layouts",
+        "text": "Layouts",
+        "description": "Layout configurations",
+        "url": "/settings/layouts",
         "items": [
-          {
-            "itemKey": "layouts-fullwidth-nosidebar",
-            "text": "No Sidebar",
-            "description": "Full width without sidebar",
-            "url": "/settings/layouts/fullwidth/nosidebar"
-          },
-          {
-            "itemKey": "layouts-fullwidth-leftsidebar",
-            "text": "Left Sidebar",
-            "description": "Full width with left sidebar",
-            "url": "/settings/layouts/fullwidth/leftsidebar"
-          },
-          {
-            "itemKey": "layouts-fullwidth-rightsidebar",
-            "text": "Right Sidebar",
-            "description": "Full width with right sidebar",
-            "url": "/settings/layouts/fullwidth/rightsidebar"
-          }
+            {
+                "itemKey": "layouts-boxed",
+                "text": "Boxed",
+                "description": "Boxed layouts",
+                "url": "/settings/layouts/boxed",
+                "items": [
+                {
+                    "itemKey": "layouts-boxed-nosidebar",
+                    "text": "No Sidebar",
+                    "description": "Boxed without sidebar",
+                    "url": "/settings/layouts/boxed/nosidebar"
+                },
+                {
+                    "itemKey": "layouts-boxed-leftsidebar",
+                    "text": "Left Sidebar",
+                    "description": "Boxed with left sidebar",
+                    "url": "/settings/layouts/boxed/leftsidebar"
+                },
+                {
+                    "itemKey": "layouts-boxed-rightsidebar",
+                    "text": "Right Sidebar",
+                    "description": "Boxed with right sidebar",
+                    "url": "/settings/layouts/boxed/rightsidebar"
+                }
+                ]
+            },
+            {
+                "itemKey": "layouts-fullwidth",
+                "text": "Full Width",
+                "description": "Full width layouts",
+                "url": "/settings/layouts/fullwidth",
+                "items": [
+                    {
+                        "itemKey": "layouts-fullwidth-nosidebar",
+                        "text": "No Sidebar",
+                        "description": "Full width without sidebar",
+                        "url": "/settings/layouts/fullwidth/nosidebar"
+                    },
+                    {
+                        "itemKey": "layouts-fullwidth-leftsidebar",
+                        "text": "Left Sidebar",
+                        "description": "Full width with left sidebar",
+                        "url": "/settings/layouts/fullwidth/leftsidebar"
+                    },
+                    {
+                        "itemKey": "layouts-fullwidth-rightsidebar",
+                        "text": "Right Sidebar",
+                        "description": "Full width with right sidebar",
+                        "url": "/settings/layouts/fullwidth/rightsidebar"
+                    }
+                ]
+            }
         ]
-      }
-    ]
-  },
-  {
-    "itemKey": "basic-inputs",
-    "text": "Basic Inputs",
-    "description": "Basic input settings",
-    "url": "/settings/basic-inputs"
-  },
-  {
-    "itemKey": "array-inputs",
-    "text": "Array Inputs",
-    "description": "Array input settings",
-    "url": "/settings/array-inputs"
-  },
-  {
-    "itemKey": "import-export",
-    "text": "Import & Export",
-    "description": "Import and Export your settings",
-    "url": "/settings/import-export"
-  },
-  {
-    "itemKey": "more",
-    "text": "More",
-    "description": "Adding more features",
-    "url": "/settings/more"
-  },
-  {
-    "itemKey": "tools",
-    "text": "Tools",
-    "description": "Various tools",
-    "url": "/settings/tools"
-  },
-  {
-    "itemKey": "feedback",
-    "text": "Feedback",
-    "description": "Send us your feedback",
-    "url": "/settings/feedback"
-  }
+    },
+    {
+        "itemKey": "basic-inputs",
+        "text": "Basic Inputs",
+        "description": "Basic input settings",
+        "url": "/settings/basic-inputs"
+    },
+    {
+        "itemKey": "array-inputs",
+        "text": "Array Inputs",
+        "description": "Array input settings",
+        "url": "/settings/array-inputs"
+    },
+    {
+        "itemKey": "import-export",
+        "text": "Import & Export",
+        "description": "Import and Export your settings",
+        "url": "/settings/import-export"
+    },
+    {
+        "itemKey": "more",
+        "text": "More",
+        "description": "Adding more features",
+        "url": "/settings/more"
+    },
+    {
+        "itemKey": "tools",
+        "text": "Tools",
+        "description": "Various tools",
+        "url": "/settings/tools"
+    },
+    {
+        "itemKey": "feedback",
+        "text": "Feedback",
+        "description": "Send us your feedback",
+        "url": "/feedback"
+    }
 ]
