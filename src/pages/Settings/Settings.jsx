@@ -10,15 +10,20 @@ import {
   IconTemplate,
   IconCloud,
   IconPlusCircle,
-  IconLikeThumb 
+  IconLikeThumb,
+  IconHelpCircle, 
+  IconLikeHeart, 
+  IconUserAdd, 
+  IconSend,
 } from '@douyinfe/semi-icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
 import PageInfo from "../../components/PageInfo/PageInfo"
-import BreadcrumbControl from "../../components/BreadcrumbControl/BreadcrumbControl.jsx";
-
+import {BreadcrumbControl, VerticalMenuControl} from "../../components";
+import { Logo } from '../../lib/Illustrations';
 const { Header, Sider, Content } = Layout;
+import Details from '../../data/details.json';
 
 const Settings = () => {
     const [settings, setSettings] = useState({});
@@ -218,19 +223,60 @@ const Settings = () => {
         }
         return null;
     };
+    const headerContent = {
+        logo: <Logo width={36} height={36} />,
+        text: Details?.name,
+    };
+    const footerContent = (
+        <>
+            {/* Your bottom menu */}
+            <Nav 
+                items= {[
+                    {
+                        itemKey: "vip",
+                        text: __("VIP Priority Support", "plugin-starter"),
+                        url: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
+                        target: "_blank",
+                        icon: <IconSend />
+                    },
+                    {
+                        itemKey: "help",
+                        text: __("Help Center", "plugin-starter"),
+                        url: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
+                        target: "_blank",
+                        icon: <IconHelpCircle />
+                    },
+                    {
+                        itemKey: "community",
+                        text: __("Join the Community", "plugin-starter"),
+                        url: "https://www.facebook.com/mospressbd",
+                        target: "_blank",
+                        icon: <IconUserAdd />
+                    },
+                    {
+                        itemKey: "rate",
+                        text: __("Rate Us", "plugin-starter"),
+                        url: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
+                        target: "_blank",
+                        icon: <IconLikeHeart />
+                    },
+                ]}
+                onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
+                style={{ padding: 0, marginBottom: 0, border: 'none' }}
+            />
+
+            {/* Collapse Button */}
+            {/* <Nav.Footer collapseButton={true} /> */}
+        </>
+    );
     
     const sidebar = (
         <>
-            <Nav
-                // isCollapsed={collapsed}
+            <VerticalMenuControl 
                 items={menuItemsWithIcons}
-                selectedKeys={getSelectedKeys()}
-                defaultOpenKeys={getOpenKeys()}
-                onSelect={handleSelect}
-                footer={{
-                    collapseButton: true,
-                }}
-                style={{height: '100%'}}
+                breakpoint={960}
+                headerContent={headerContent}
+                footerContent={footerContent}
             />
         </>
     );

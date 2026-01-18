@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Nav, } from '@douyinfe/semi-ui';
 import { useNavigate, useLocation } from 'react-router-dom';
-export default function VerticalMenuControl({items=[], breakpoint, headerContent={}, footerContent={}}) {
+
+export default function VerticalMenuControl({items=[], breakpoint, headerContent, footerContent}) {
     const navigate = useNavigate();
     const location = useLocation();
     
@@ -46,17 +47,13 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
         return null;
     };
 
-    // ✅ Accordion behavior per level
     const handleOpenChange = (data) => {
         const keys = Array.isArray(data) ? data : data?.openKeys || [];
 
-        // Determine which menu level changed
         if (keys.length > openKeys.length) {
-            // A new key was opened
             const newlyOpenedKey = keys.find((k) => !openKeys.includes(k));
             const parentKeys = findParentKeys(items, newlyOpenedKey);
 
-            // Remove siblings at the same level as the newly opened key
             const filteredKeys = openKeys.filter((k) => {
                 const parentOfK = findParentKeys(items, k);
                 return !isSameLevel(parentOfK, parentKeys);
@@ -64,7 +61,6 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
 
             setOpenKeys([...filteredKeys, newlyOpenedKey]);
         } else {
-            // A key was closed
             setOpenKeys(keys);
         }
     };
@@ -94,7 +90,6 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
             const isOpen = openKeys.includes(itemKey);
             const parentKeys = findParentKeys(items, itemKey);
 
-            // Close siblings and toggle the selected one
             setOpenKeys((prev) => {
                 const filtered = prev.filter((k) => {
                     const parentOfK = findParentKeys(items, k);
@@ -117,12 +112,14 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
             onOpenChange={handleOpenChange}
             onSelect={handleSelect}
             onCollapseChange={setIsCollapse}
-            header={headerContent}
+            {...(headerContent && { header: headerContent })}
             style={{height: '100%'}}
         >
-            <Nav.Footer style={{padding: 0, marginTop: 'auto'}}>
-                {footerContent}
-            </Nav.Footer>
+            {footerContent && (
+                <Nav.Footer style={{padding: 0, marginTop: 'auto'}}>
+                    {footerContent}
+                </Nav.Footer>
+            )}
             {breakpoint && <Nav.Footer collapseButton={true} />}
         </Nav>
     );
