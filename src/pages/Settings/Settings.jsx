@@ -233,7 +233,7 @@ const Settings = () => {
                     // title="Title"
                     headerLine={true}
                 >
-                    <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset }} />
+                    <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} />
                 </Card>
             </Content>
         </FullWidthLayout>
