@@ -34,7 +34,19 @@ class Deactivator
 	 */
 	public static function deactivate()
 	{
+        // Clean up the deactivation key
+        delete_option( 'plugin_starter_deactive_key' );
 
+        // Flush rewrite rules
+        flush_rewrite_rules();
+
+        // Clean up transients
+        delete_transient( 'plugin_starter_activation_notice' );
+
+        // Log deactivation if debugging is enabled
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Plugin Starter deactivated and cleaned up' );
+        }
 	}
 }
 

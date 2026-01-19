@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 use Plugin_Upgrader;
 use WP_Ajax_Upgrader_Skin;
 
+use MosPress\PluginStarter\Helpers\CryptoHelper;
+
 class Ajax_API
 {
     private static $instance = null;
@@ -23,6 +25,12 @@ class Ajax_API
 		add_action('wp_ajax_plugin_starter_set_login_url', [$this, 'plugin_starter_set_login_url']);
 		add_action('wp_ajax_plugin_starter_send_email_login_url', [$this, 'plugin_starter_send_email_login_url']);
 		add_action('init', [$this, 'plugin_starter_maybe_flush_rules'], 99);
+
+
+		// Handle deactivation via admin-post
+        add_action( 'admin_post_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
+        add_action( 'admin_post_nopriv_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
+    
 		
     }    
 	public function plugin_starter_ajax_plugins_status()
@@ -326,6 +334,92 @@ class Ajax_API
 			delete_option('plugin_starter_flush_rewrite');
 		}
 	}	
+	/**
+     * Handle plugin deactivation via URL.
+     *
+     * Verifies the secret key and deactivates the plugin if valid.
+     */
+    public function handle_deactivation() {
+        // Verify nonce is not required here as we're using a secure encrypted key
+        // Get the secret key from the URL
+        $provided_key = isset( $_GET['secret_key'] ) ? sanitize_text_field( wp_unslash( $_GET['secret_key'] ) ) : '';
+
+        if ( empty( $provided_key ) ) {
+            $this->deactivation_error( __( 'Invalid deactivation request. Secret key is missing.', 'plugin-starter' ) );
+            return;
+        }
+
+        // Get the encrypted key from options
+        $encrypted_key = get_option( 'plugin_starter_deactive_key' );
+
+        if ( false === $encrypted_key ) {
+            $this->deactivation_error( __( 'Deactivation key not found. The plugin may already be deactivated.', 'plugin-starter' ) );
+            return;
+        }
+
+        // Decrypt the stored key
+        $stored_key = CryptoHelper::decrypt( $encrypted_key );
+
+        if ( false === $stored_key ) {
+            $this->deactivation_error( __( 'Failed to decrypt deactivation key. Please contact support.', 'plugin-starter' ) );
+            return;
+        }
+
+        // Compare the keys using timing-safe comparison
+        if ( ! hash_equals( $stored_key, $provided_key ) ) {
+            $this->deactivation_error( __( 'Invalid secret key. Deactivation failed.', 'plugin-starter' ) );
+            return;
+        }
+
+        // Keys match - proceed with deactivation
+        // Remove the deactivation key to prevent reuse
+        delete_option( 'plugin_starter_deactive_key' );
+
+        // Deactivate the plugin
+        $plugin_file = 'plugin-starter/plugin-starter.php'; // Adjust this to match your main plugin file
+
+        if ( ! function_exists( 'deactivate_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        deactivate_plugins( $plugin_file );
+
+        // Log successful deactivation
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Plugin Starter deactivated via secure URL' );
+        }
+
+        // Redirect to plugins page with success message
+        $redirect_url = add_query_arg(
+            array(
+                'deactivate' => 'true',
+                'plugin_status' => 'all',
+                'paged' => '1',
+                's' => '',
+                'plugin_starter_deactivated' => '1',
+            ),
+            admin_url( 'plugins.php' )
+        );
+
+        wp_safe_redirect( $redirect_url );
+        exit;
+    }
+
+    /**
+     * Handle deactivation errors.
+     *
+     * @param string $message Error message to display.
+     */
+    private function deactivation_error( $message ) {
+        wp_die(
+            esc_html( $message ),
+            esc_html__( 'Plugin Deactivation Error', 'plugin-starter' ),
+            array(
+                'response' => 403,
+                'back_link' => true,
+            )
+        );
+    }
 }
 
 // new Ajax_API();

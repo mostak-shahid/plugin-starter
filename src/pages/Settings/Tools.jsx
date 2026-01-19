@@ -18,12 +18,60 @@ import ActionButtons from "./ActionButtons";
 const { Title, Paragraph } = Typography;
 
 /* ----------------------------------
-   Clipboard helper
+   Clipboard helper with fallback
 ----------------------------------- */
 const copyToClipboard = (value) => {
-    navigator.clipboard.writeText(value).then(() => {
-        Toast.success("Copied to clipboard");
-    });
+    if (!value) {
+        Toast.error("No text to copy");
+        return;
+    }
+
+    // Modern approach - works in HTTPS and localhost
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value)
+            .then(() => {
+                Toast.success("Copied to clipboard");
+            })
+            .catch((err) => {
+                console.error("Clipboard API failed:", err);
+                fallbackCopyToClipboard(value);
+            });
+    } else {
+        // Fallback for older browsers or non-HTTPS contexts
+        fallbackCopyToClipboard(value);
+    }
+};
+
+/* ----------------------------------
+   Fallback clipboard method
+----------------------------------- */
+const fallbackCopyToClipboard = (value) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = value;
+    
+    // Make it invisible
+    textArea.style.position = "fixed";
+    textArea.style.top = "-9999px";
+    textArea.style.left = "-9999px";
+    textArea.style.opacity = "0";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            Toast.success("Copied to clipboard");
+        } else {
+            Toast.error("Failed to copy");
+        }
+    } catch (err) {
+        console.error("Fallback copy failed:", err);
+        Toast.error("Copy not supported in this browser");
+    } finally {
+        document.body.removeChild(textArea);
+    }
 };
 
 const Tools = () => {
@@ -37,9 +85,52 @@ const Tools = () => {
 
     const [hasChanges, setHasChanges] = useState(false);
     const [processing, setProcessing] = useState(false);
+    const [deactivationUrl, setDeactivationUrl] = useState("");
+    const [deactivationLoading, setDeactivationLoading] = useState(true);
+    const [deactivationError, setDeactivationError] = useState(null);
 
     const formApi = useRef(null);
     const settingsOld = useRef(null);
+    
+    /* ----------------------------------
+       Fetch deactivation link
+    ----------------------------------- */
+    useEffect(() => {
+        const fetchDeactiveLink = async () => {
+            setDeactivationLoading(true);
+            setDeactivationError(null);
+            
+            try {
+                const response = await apiFetch({ 
+                    path: `/plugin-starter/v1/deactivation-link` 
+                });
+                
+                if (response.success && response.deactivation_url) {
+                    setDeactivationUrl(response.deactivation_url);
+                    
+                    // Set the URL in the form
+                    formApi.current?.setValue("deactivation_url", response.deactivation_url);
+                } else {
+                    throw new Error(response.message || "Failed to fetch deactivation URL");
+                }
+            } catch (error) {
+                console.error("Error fetching deactivation link:", error);
+                setDeactivationError(error.message || "Failed to load deactivation URL");
+                
+                Toast.error({
+                    content: __("Error fetching deactivation URL", "plugin-starter"),
+                    theme: "light",
+                });
+            } finally {
+                setDeactivationLoading(false);
+            }
+        };
+        
+        // Only fetch if form API is ready
+        if (formApi.current) {
+            fetchDeactiveLink();
+        }
+    }, [settings]); // Re-fetch when settings change
 
     /* ----------------------------------
        Submit
@@ -69,12 +160,12 @@ const Tools = () => {
 
             formApi.current?.setValues({
                 ...settings.tools,
-                text: "Your text to copy",
+                deactivation_url: deactivationUrl || __("Loading...", "plugin-starter"),
             });
 
             setHasChanges(false);
         }
-    }, [settings]);
+    }, [settings, deactivationUrl]);
 
     /* ----------------------------------
        Reset handler
@@ -120,7 +211,7 @@ const Tools = () => {
                     getFormApi={(api) => (formApi.current = api)}
                     initValues={{
                         ...settings.tools,
-                        text: "Your text to copy",
+                        deactivation_url: deactivationUrl || __("Loading...", "plugin-starter"),
                     }}
                     onSubmit={onSubmit}
                     onValueChange={handleValuesChange}
@@ -230,24 +321,38 @@ const Tools = () => {
                     <div className="setting-unit pt-4">
                         <Row gutter={[24, 24]} align="middle">
                             <Col xs={24} lg={12} xl={14}>
-                                <Title heading={4}>Deactivate Plugin URL</Title>
+                                <Title heading={4}>
+                                    {__("Deactivate Plugin URL", "plugin-starter")}
+                                </Title>
                                 <Paragraph>
-                                    Enable/Disable "Scripts" functionalities
+                                    {deactivationError 
+                                        ? deactivationError
+                                        : __("Use this secure URL to deactivate the plugin. This link will only work once.", "plugin-starter")
+                                    }
                                 </Paragraph>
                             </Col>
 
                             <Col xs={24} lg={12} xl={10}>
                                 <Form.Input
                                     noLabel
-                                    field="text"
+                                    field="deactivation_url"
                                     readOnly
+                                    disabled={deactivationLoading || !!deactivationError}
+                                    placeholder={
+                                        deactivationLoading 
+                                            ? __("Loading...", "plugin-starter")
+                                            : deactivationError
+                                            ? __("Failed to load URL", "plugin-starter")
+                                            : __("Deactivation URL", "plugin-starter")
+                                    }
                                     suffix={
                                         <Button
                                             theme="borderless"
                                             icon={<IconCopy />}
+                                            disabled={deactivationLoading || !!deactivationError || !deactivationUrl}
                                             onClick={() =>
                                                 copyToClipboard(
-                                                    formApi.current?.getValue("text")
+                                                    formApi.current?.getValue("deactivation_url")
                                                 )
                                             }
                                         />

@@ -67,6 +67,17 @@ require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
 require_once PLUGIN_STARTER_PATH . 'plugin-starter-functions.php';
 
 /**
+ * Register WP-CLI commands only if file exists
+ */
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+    $cli_file = plugin_dir_path( __FILE__ ) . 'php/CLI/CLI_Command.php';
+    
+    if ( file_exists( $cli_file ) ) {
+        WP_CLI::add_command( 'plugin-starter', 'MosPress\PluginStarter\CLI\CLI_Command' );
+    }
+}
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,

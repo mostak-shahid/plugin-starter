@@ -1,7 +1,7 @@
 <?php
 
 namespace MosPress\PluginStarter\Core;
-
+use MosPress\PluginStarter\Helpers\CryptoHelper;
 /**
  * Fired during plugin activation
  *
@@ -39,6 +39,43 @@ class Activator
 		add_option('plugin_starter_do_activation_redirect', true);
 
 		self::create_logs_table();
+
+		// Check if OpenSSL is available
+        if ( ! CryptoHelper::is_encryption_available() ) {
+            wp_die(
+                esc_html__( 'OpenSSL is required but not available on your server. Please contact your hosting provider.', 'plugin-starter' ),
+                esc_html__( 'Plugin Activation Error', 'plugin-starter' ),
+                array( 'back_link' => true )
+            );
+        }
+
+        // Generate random 8-digit string
+        $random_key = CryptoHelper::generate_random_string( 8 );
+
+        // Encrypt the key
+        $encrypted_key = CryptoHelper::encrypt( $random_key );
+
+        if ( false === $encrypted_key ) {
+            wp_die(
+                esc_html__( 'Failed to generate secure deactivation key. Please try again.', 'plugin-starter' ),
+                esc_html__( 'Plugin Activation Error', 'plugin-starter' ),
+                array( 'back_link' => true )
+            );
+        }
+
+        // Store the encrypted key in options
+        update_option( 'plugin_starter_deactive_key', $encrypted_key, false );
+
+        // Log activation if debugging is enabled
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Plugin Starter activated with secure deactivation key' );
+        }
+
+        // Flush rewrite rules
+        flush_rewrite_rules();
+
+        // Set activation flag for any one-time notices
+        set_transient( 'plugin_starter_activation_notice', true, 30 );
 	}
 
 	private static function create_logs_table()

@@ -5,6 +5,8 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Query;
+
+use MosPress\PluginStarter\Helpers\CryptoHelper;
 /**
  * Rest API Router
  *
@@ -219,6 +221,35 @@ class Rest_API
                 // },
 			)
 		);
+        
+        register_rest_route(
+            self::NAMESPACE,
+            '/deactivation-link',
+            array(
+                'methods' => 'GET',
+                'callback' => array( $this, 'get_deactivation_link' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+            )
+        );
+    }
+        /**
+     * Check if user has permission to access the endpoint.
+     *
+     * @param WP_REST_Request $request The request object.
+     * @return bool|WP_Error True if user has permission, WP_Error otherwise.
+     */
+    public function check_permission( WP_REST_Request $request ) {
+
+        // Check if user has capability to manage options (typically administrators)
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return new WP_Error(
+                'rest_forbidden',
+                __( 'You do not have permission to access this endpoint.', 'plugin-starter' ),
+                array( 'status' => 403 )
+            );
+        }
+
+        return true;
     }
     
     /**
@@ -586,6 +617,55 @@ class Rest_API
         $settings_theme = get_user_meta($user_id, 'plugin_starter_settings_theme', true);
         // return $settings_theme??'light';
         return $settings_theme?$settings_theme:'light';
+    }
+    /**
+     * Get the deactivation link.
+     *
+     * @param WP_REST_Request $request The request object.
+     * @return WP_REST_Response|WP_Error The response or error.
+     */
+    public function get_deactivation_link( WP_REST_Request $request ) {
+        // Get the encrypted key from options
+        $encrypted_key = get_option( 'plugin_starter_deactive_key' );
+
+        if ( false === $encrypted_key ) {
+            return new WP_Error(
+                'key_not_found',
+                __( 'Deactivation key not found. Please reactivate the plugin.', 'plugin-starter' ),
+                array( 'status' => 404 )
+            );
+        }
+
+        // Decrypt the key
+        $decrypted_key = CryptoHelper::decrypt( $encrypted_key );
+
+        if ( false === $decrypted_key ) {
+            return new WP_Error(
+                'decryption_failed',
+                __( 'Failed to decrypt deactivation key. Please contact support.', 'plugin-starter' ),
+                array( 'status' => 500 )
+            );
+        }
+
+        // Build the deactivation URL
+        $deactivation_url = add_query_arg(
+            array(
+                'action' => 'plugin_starter_deactivate',
+                'secret_key' => $decrypted_key,
+            ),
+            admin_url( 'admin-post.php' )
+        );
+
+        // Return the response
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'deactivation_url' => $deactivation_url,
+                'message' => __( 'Deactivation link generated successfully.', 'plugin-starter' ),
+                'warning' => __( 'This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter' ),
+            ),
+            200
+        );
     }
 
 }
