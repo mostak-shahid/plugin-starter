@@ -219,6 +219,37 @@ const Tools = () => {
                     labelWidth="150px"
                 >
                     {/* -------------------------
+                       Hide Plugin section
+                    -------------------------- */}
+                    <div className="setting-unit py-4">
+                        <Row gutter={[24, 24]}>
+                            <Col xs={24} lg={12} xl={14}>
+                                <Skeleton
+                                    placeholder={<SkeletonPlaceholder />}
+                                    loading={settingsLoading}
+                                    active
+                                >
+                                    <Title heading={4}>
+                                        {__(
+                                            "Hide Plugin",
+                                            "plugin-starter"
+                                        )}
+                                    </Title>
+                                    <Paragraph>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    </Paragraph>
+                                </Skeleton>
+                            </Col>
+
+                            <Col xs={24} lg={12} xl={10}>
+                                <Form.Switch 
+                                    field='hide-plugin' 
+                                    noLabel
+                                />
+                            </Col>
+                        </Row>
+                    </div>
+                    {/* -------------------------
                        Self Defense section
                     -------------------------- */}
                     <div className="setting-unit py-4">
