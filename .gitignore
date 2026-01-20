@@ -41,6 +41,7 @@ wp-config-local.php
 *.swp
 *.swo
 *~
+*.map
 *.map.js
 *.map.css
 
