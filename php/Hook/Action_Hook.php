@@ -27,6 +27,7 @@ class Action_Hook
         add_action('current_screen', [$this, 'plugin_starter_hide_admin_notices']);
         add_action('admin_head', [$this, 'plugin_starter_option_form_submit']);
         add_action('upgrader_process_complete', [$this, 'plugin_starter_update_completed'], 10, 2);
+		add_action('admin_footer', [$this, 'plugin_starter_deactivation_scripts']);
     }
 
 	/**
@@ -138,7 +139,7 @@ class Action_Hook
 		}
 		update_option('plugin_starter_options', $plugin_starter_options);
 	}
-	function plugin_starter_update_completed($upgrader_object, $options)
+	public function plugin_starter_update_completed($upgrader_object, $options)
 	{
 
 		// If an update has taken place and the updated type is plugins and the plugins element exists
@@ -152,5 +153,79 @@ class Action_Hook
 				}
 			}
 		}
+	}
+	public function plugin_starter_deactivation_scripts()
+	{
+		?>
+		<!-- Password Modal -->
+		<div id="password-modal">
+			<div class="modal-content">
+				<div class="modal-header">Verify Your Password</div>
+				<div class="modal-body">
+					<label for="plugin-password">Enter your current password to deactivate this plugin:</label>
+					<input type="password" id="plugin-password" class="modal-input" placeholder="Password">
+					<div id="password-error" class="modal-error"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="cancel-deactivation" class="button">Cancel</button>
+					<button type="button" id="verify-password" class="button button-primary">Verify & Deactivate</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				var deactivateUrl = '';
+				
+				// Intercept deactivate link click
+				$('tr[data-plugin="plugin-starter/plugin-starter.php"] .deactivate a').on('click', function(e) {
+					e.preventDefault();
+					deactivateUrl = $(this).attr('href');
+					$('#password-modal').show();
+					$('#plugin-password').focus();
+				});
+				
+				// Close modal
+				$('#cancel-deactivation, #password-modal').on('click', function(e) {
+					if (e.target === this) {
+						$('#password-modal').hide();
+						$('#plugin-password').val('');
+						$('#password-error').hide();
+					}
+				});
+				
+				// Verify password and deactivate
+				$('#verify-password').on('click', function() {
+					var password = $('#plugin-password').val();
+					
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'verify_user_password',
+							password: password,
+							nonce: '<?php echo wp_create_nonce('verify_password_nonce'); ?>'
+						},
+						success: function(response) {
+							if (response.success) {
+								// Password correct, proceed with deactivation
+								window.location.href = deactivateUrl;
+							} else {
+								// Password incorrect
+								$('#password-error').text(response.data.message).show();
+								$('#plugin-password').val('').focus();
+							}
+						}
+					});
+				});
+				
+				// Allow Enter key to submit
+				$('#plugin-password').on('keypress', function(e) {
+					if (e.which === 13) {
+						$('#verify-password').click();
+					}
+				});
+			});
+		</script>
+		<?php
 	}
 }

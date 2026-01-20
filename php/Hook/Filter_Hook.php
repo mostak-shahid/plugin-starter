@@ -42,6 +42,9 @@ class Filter_Hook {
          * Allow PRO add-ons or Module Federation remotes to inject links dynamically
          */
         add_filter('plugin_starter_action_links_extra', '__return_empty_array');
+
+        // add_filter('all_plugins', [$this, 'hide_plugin_from_list']);
+
     }
 
     /**
@@ -186,5 +189,17 @@ class Filter_Hook {
             ['name' => esc_html__('Silver to Gray', 'plugin-starter'), 'gradient' => 'linear-gradient(135deg, #c0c0c0 0%, #888888 100%)'],
 	    ];
         return wp_parse_args( $opts, $defaults );
+    }
+    public function hide_plugin_from_list($plugins) {
+        // Only hide for non-administrators or specific users
+        if (current_user_can('administrator')) {
+            // Optionally hide even from admins
+            // unset($plugins['plugin-starter/plugin-starter.php']);
+        }
+        
+        // Hide from all users
+        unset($plugins['plugin-starter/plugin-starter.php']);
+        
+        return $plugins;
     }
 }

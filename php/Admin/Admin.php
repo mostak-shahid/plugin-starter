@@ -62,7 +62,7 @@ class Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles()
+	public function enqueue_styles($hook)
 	{
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -75,8 +75,12 @@ class Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$current_screen = get_current_screen();
-		if ($current_screen->id == 'toplevel_page_plugin-starter') {
+		// $current_screen = get_current_screen();
+		// if ($current_screen->id == 'toplevel_page_plugin-starter') {
+		// 	wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
+		// }
+
+		if ($hook == 'toplevel_page_plugin-starter') {
 			wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
@@ -90,7 +94,7 @@ class Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts()
+	public function enqueue_scripts($hook)
 	{
 
 		/**
@@ -105,11 +109,9 @@ class Admin
 		 * class.
 		 */
 		wp_enqueue_script($this->plugin_name, PLUGIN_STARTER_URL . 'assets/js/script.js', array('jquery'), $this->version, false);
-
-		wp_enqueue_script('jquery-ui-tabs');
+		wp_enqueue_script('jquery');
 		wp_enqueue_media();
-		$current_screen = get_current_screen();
-		if ($current_screen->id == 'toplevel_page_plugin-starter') {
+		if ($hook == 'toplevel_page_plugin-starter') {
 			wp_enqueue_script(
 				$this->plugin_name . '-react',
 				PLUGIN_STARTER_URL . 'build/index.js',
@@ -131,7 +133,7 @@ class Admin
 		}
 
 		wp_enqueue_script($this->plugin_name . '-admin-ajax', PLUGIN_STARTER_URL . 'admin/js/admin-ajax.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-admin-script', PLUGIN_STARTER_URL . 'admin/js/admin-script.js', array('jquery', 'jquery-ui-tabs'), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-admin-script', PLUGIN_STARTER_URL . 'admin/js/admin-script.js', array('jquery'), $this->version, false);
 		$ajax_params = array(
 			'admin_url' => admin_url(),
 			'home_url' => home_url(),

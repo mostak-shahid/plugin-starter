@@ -30,6 +30,10 @@ class Ajax_API
 		// Handle deactivation via admin-post
         add_action( 'admin_post_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
         add_action( 'admin_post_nopriv_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
+
+		// AJAX handler to verify password
+		add_action('wp_ajax_verify_user_password', [$this, 'verify_user_password_ajax']);
+		
     
 		
     }    
@@ -420,6 +424,19 @@ class Ajax_API
             )
         );
     }
+	public function verify_user_password_ajax() {
+		check_ajax_referer('verify_password_nonce', 'nonce');
+		
+		$password = isset($_POST['password']) ? $_POST['password'] : '';
+		$user = wp_get_current_user();
+		
+		// Verify password
+		if (wp_check_password($password, $user->user_pass, $user->ID)) {
+			wp_send_json_success(array('message' => 'Password verified'));
+		} else {
+			wp_send_json_error(array('message' => 'Incorrect password. Please try again.'));
+		}
+	}
 }
 
 // new Ajax_API();
