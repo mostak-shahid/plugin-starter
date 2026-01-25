@@ -214,7 +214,7 @@ const Settings = () => {
                         },
                     },
                 ]}
-                onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
+                // onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
                 style={{ padding: 0, marginBottom: 0, border: 'none' }}
             />
 

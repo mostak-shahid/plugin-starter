@@ -5,7 +5,7 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
 import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
-import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconUserGroup, IconComment, IconTemplate } from '@douyinfe/semi-icons';
+import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
