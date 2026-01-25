@@ -176,30 +176,42 @@ const Settings = () => {
                     {
                         itemKey: "vip",
                         text: __("VIP Priority Support", "plugin-starter"),
-                        url: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
-                        target: "_blank",
-                        icon: <IconSend />
+                        icon: <IconSend />,
+                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
+                        linkOptions: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer', // recommended for security
+                        },
                     },
                     {
                         itemKey: "help",
                         text: __("Help Center", "plugin-starter"),
-                        url: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
-                        target: "_blank",
-                        icon: <IconHelpCircle />
+                        icon: <IconHelpCircle />,
+                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
+                        linkOptions: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer', // recommended for security
+                        },
                     },
                     {
                         itemKey: "community",
                         text: __("Join the Community", "plugin-starter"),
-                        url: "https://www.facebook.com/mospressbd",
-                        target: "_blank",
-                        icon: <IconUserAdd />
+                        icon: <IconUserAdd />,
+                        link: "https://www.facebook.com/mospressbd",
+                        linkOptions: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer', // recommended for security
+                        },
                     },
                     {
                         itemKey: "rate",
                         text: __("Rate Us", "plugin-starter"),
-                        url: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
-                        target: "_blank",
-                        icon: <IconLikeHeart />
+                        icon: <IconLikeHeart />,
+                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
+                        linkOptions: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer', // recommended for security
+                        },
                     },
                 ]}
                 onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
