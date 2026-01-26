@@ -20,66 +20,6 @@
         ]
     },
     {
-        "itemKey": "layouts",
-        "text": "Layouts",
-        "description": "Layout configurations",
-        "url": "/settings/layouts",
-        "items": [
-            {
-                "itemKey": "layouts-boxed",
-                "text": "Boxed",
-                "description": "Boxed layouts",
-                "url": "/settings/layouts/boxed",
-                "items": [
-                {
-                    "itemKey": "layouts-boxed-nosidebar",
-                    "text": "No Sidebar",
-                    "description": "Boxed without sidebar",
-                    "url": "/settings/layouts/boxed/nosidebar"
-                },
-                {
-                    "itemKey": "layouts-boxed-leftsidebar",
-                    "text": "Left Sidebar",
-                    "description": "Boxed with left sidebar",
-                    "url": "/settings/layouts/boxed/leftsidebar"
-                },
-                {
-                    "itemKey": "layouts-boxed-rightsidebar",
-                    "text": "Right Sidebar",
-                    "description": "Boxed with right sidebar",
-                    "url": "/settings/layouts/boxed/rightsidebar"
-                }
-                ]
-            },
-            {
-                "itemKey": "layouts-fullwidth",
-                "text": "Full Width",
-                "description": "Full width layouts",
-                "url": "/settings/layouts/fullwidth",
-                "items": [
-                    {
-                        "itemKey": "layouts-fullwidth-nosidebar",
-                        "text": "No Sidebar",
-                        "description": "Full width without sidebar",
-                        "url": "/settings/layouts/fullwidth/nosidebar"
-                    },
-                    {
-                        "itemKey": "layouts-fullwidth-leftsidebar",
-                        "text": "Left Sidebar",
-                        "description": "Full width with left sidebar",
-                        "url": "/settings/layouts/fullwidth/leftsidebar"
-                    },
-                    {
-                        "itemKey": "layouts-fullwidth-rightsidebar",
-                        "text": "Right Sidebar",
-                        "description": "Full width with right sidebar",
-                        "url": "/settings/layouts/fullwidth/rightsidebar"
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "itemKey": "basic-inputs",
         "text": "Basic Inputs",
         "description": "Basic input settings",

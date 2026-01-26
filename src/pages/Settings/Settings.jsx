@@ -17,7 +17,6 @@ const Settings = () => {
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
     const location = useLocation();
-    console.log(settingsReload);
     useEffect(() => {
         const fetchSettings = async () => {
             setSettingsLoading(true);

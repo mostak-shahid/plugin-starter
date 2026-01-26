@@ -9,15 +9,20 @@ import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpC
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
-import { Dashboard, About, Contact, Settings, BasicInputs, ArrayInputs, BasicDemoWithInit, ArrayFieldDemo, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
+import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
+
+import {
+    BasicInputs, 
+    ArrayInputs,
+    ArrayFieldDemo,
+    BoxedLeftSidebar,
+    BoxedNoSidebar,
+    BoxedRightSidebar,
+    FullWidthLeftSidebar,
+    FullWidthNoSidebar,
+    FullWidthRightSidebar,
+} from './pages';
 import Page from './pages/Page';
-// import DefaultSettings from './pages/settings/Default';
-// import BoxedLeftSidebar from './pages/layouts/BoxedLeftSidebar';
-// import BoxedNoSidebar from './pages/layouts/BoxedNoSidebar';
-// import BoxedRightSidebar from './pages/layouts/BoxedRightSidebar'; 
-// import FullWidthLeftSidebar from './pages/layouts/FullWidthLeftSidebar';
-// import FullWidthNoSidebar from './pages/layouts/FullWidthNoSidebar';
-// import FullWidthRightSidebar from './pages/layouts/FullWidthRightSidebar';
 
 import {NotFound, HorizontalMenuControl} from "./components";
 import { Logo } from './lib/Illustrations';
@@ -130,7 +135,7 @@ function App() {
     ];
     return (
         <LocaleProvider locale={en_US}>
-            <div className="authpress-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
+            <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
                 {!plugin_starter_ajax_obj?.isPro &&
                     <Banner 
                         className="plugin-starter-promote-banner"
@@ -174,8 +179,9 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/page" element={<Page />} />
+                    <Route path="/ArrayFieldDemo" element={<ArrayFieldDemo />} />
 
-                    {/* <Route path="/layouts">
+                    <Route path="/layouts">
                         <Route index element={<Navigate to="boxed/nosidebar" replace />} />
                         <Route path="boxed/nosidebar" element={<BoxedNoSidebar />} />
                         <Route path="boxed/left-sidebar" element={<BoxedLeftSidebar />} />
@@ -183,7 +189,7 @@ function App() {
                         <Route path="full/nosidebar" element={<FullWidthNoSidebar />} />
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
-                    </Route> */}
+                    </Route>
                     
                     <Route path="/settings" element={<Settings />}>
                         <Route index element={<Navigate to="basic-inputs" replace />} />

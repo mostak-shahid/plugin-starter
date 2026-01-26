@@ -1,9 +1,11 @@
 import { __ } from "@wordpress/i18n";
-import { Form, Button, Card } from '@douyinfe/semi-ui';
+import { Form, Row, Col, Skeleton, Typography} from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
+import { SkeletonPlaceholder } from "../../components";
 
+const { Title, Paragraph } = Typography;
 const BasicInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
     const [hasChanges, setHasChanges] = useState(false);
@@ -35,31 +37,73 @@ const BasicInputs = () => {
                     initValues={settings.basic}
                     onSubmit={onSubmit}
                     onValueChange={handleValuesChange}
-                    style={{ maxWidth: '600px' }}
                     labelPosition="left"
                     labelWidth="150px"
                 >
-                    <Form.Input
-                        field="text"
-                        label="Text Input"
-                        placeholder="Enter text"
-                        style={{ width: '100%' }}
-                    />
-
-                    <Form.TextArea
-                        field="textarea"
-                        label="Textarea"
-                        placeholder="Enter textarea content"
-                        rows={4}
-                        style={{ width: '100%' }}
-                    />
-
-                    <Form.RadioGroup field="radio" label="Radio Group" type="button">
-                        <Form.Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Form.Radio>
-                        <Form.Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Form.Radio>
-                        <Form.Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Form.Radio>
-                    </Form.RadioGroup>
-                    <ActionButtons hasChanges={hasChanges} section='array' handleReset={handleReset} />
+                    <div className="setting-unit py-4">
+                        <Row type="flex" gutter={[24, 24]}>
+                            <Col xs={24} lg={12} xl={14}>
+                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                                    <Title heading={4}>{__("Text Input", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                                </Skeleton>
+                            </Col>    
+                            {
+                                !settingsLoading &&                               
+                                <Col xs={24} lg={12} xl={10}>
+                                    <Form.Input
+                                        field="text"
+                                        noLabel
+                                        placeholder={__("Enter text", "plugin-starter")}
+                                        style={{ width: '100%' }}
+                                    /> 
+                                </Col>
+                            }
+                        </Row>
+                    </div>
+                    <div className="setting-unit py-4">
+                        <Row type="flex" gutter={[24, 24]}>
+                            <Col xs={24} lg={12} xl={14}>
+                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                                    <Title heading={4}>{__("Text Area", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                                </Skeleton>
+                            </Col>    
+                            {
+                                !settingsLoading &&                               
+                                <Col xs={24} lg={12} xl={10}>
+                                    <Form.TextArea
+                                        field="textarea"
+                                        noLabel
+                                        placeholder={__("Enter textarea content", "plugin-starter")}
+                                        rows={4}
+                                        style={{ width: '100%' }}
+                                    />
+                                </Col>
+                            }
+                        </Row>
+                    </div>
+                    <div className="setting-unit py-4">
+                        <Row type="flex" gutter={[24, 24]}>
+                            <Col xs={24} lg={12} xl={14}>
+                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                                    <Title heading={4}>{__("Radio Group", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                                </Skeleton>
+                            </Col>    
+                            {
+                                !settingsLoading &&                               
+                                <Col xs={24} lg={12} xl={10}>
+                                    <Form.RadioGroup field="radio" noLabel type="button">
+                                        <Form.Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Form.Radio>
+                                        <Form.Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Form.Radio>
+                                        <Form.Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Form.Radio>
+                                    </Form.RadioGroup>
+                                </Col>
+                            }
+                        </Row>
+                    </div>
+                    <ActionButtons hasChanges={hasChanges} section='basic' handleReset={handleReset} />
                 </Form>
             )}
         </>

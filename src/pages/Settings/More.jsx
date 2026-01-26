@@ -60,8 +60,8 @@ const More = () => {
                         <Row type="flex" gutter={[24, 24]}>
                             <Col xs={24} lg={12} xl={14}>
                                 <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Enable Scripts", "authpress")}</Title>
-                                    <Paragraph>{__("Enable/Disable \"Scripts\" functionalities", "authpress")}</Paragraph>
+                                    <Title heading={4}>{__("Enable Scripts", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</Paragraph>
                                 </Skeleton>
                             </Col>    
                             {
@@ -80,8 +80,8 @@ const More = () => {
                         <Row type="flex" gutter={[24, 24]}>
                             <Col xs={24} lg={12} xl={14}>
                                 <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("CSS Editor", "authpress")}</Title>
-                                    <Paragraph>{__("Add any custom CSS code if necessary", "authpress")}</Paragraph>
+                                    <Title heading={4}>{__("CSS Editor", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Add any custom CSS code if necessary", "plugin-starter")}</Paragraph>
                                 </Skeleton>
                             </Col>    
                             {
@@ -108,8 +108,8 @@ const More = () => {
                         <Row type="flex" gutter={[24, 24]}>
                             <Col xs={24} lg={12} xl={14}>
                                 <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("JavaScript Editor", "authpress")}</Title>
-                                    <Paragraph>{__("Add any custom JS code if necessary", "authpress")}</Paragraph>
+                                    <Title heading={4}>{__("JavaScript Editor", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Add any custom JS code if necessary", "plugin-starter")}</Paragraph>
                                 </Skeleton>
                             </Col>    
                             {
@@ -136,8 +136,8 @@ const More = () => {
                         <Row type="flex" gutter={[24, 24]}>
                             <Col xs={24} lg={12} xl={14}>
                                 <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Header Code", "authpress")}</Title>
-                                    <Paragraph>{__("This code will be placed inside &lt;head&gt; tag", "authpress")}</Paragraph>
+                                    <Title heading={4}>{__("Header Code", "plugin-starter")}</Title>
+                                    <Paragraph>{__("This code will be placed inside &lt;head&gt; tag", "plugin-starter")}</Paragraph>
                                 </Skeleton>
                             </Col>    
                             {
@@ -164,8 +164,8 @@ const More = () => {
                         <Row type="flex" gutter={[24, 24]}>
                             <Col xs={24} lg={12} xl={14}>
                                 <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Footer Code", "authpress")}</Title>
-                                    <Paragraph>{__("This code will be placed inside &lt;body&gt; tag", "authpress")}</Paragraph>
+                                    <Title heading={4}>{__("Footer Code", "plugin-starter")}</Title>
+                                    <Paragraph>{__("This code will be placed inside &lt;body&gt; tag", "plugin-starter")}</Paragraph>
                                 </Skeleton>
                             </Col>    
                             {

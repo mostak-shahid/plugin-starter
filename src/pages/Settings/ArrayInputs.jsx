@@ -1,9 +1,10 @@
 import { __ } from "@wordpress/i18n";
-import { Form } from '@douyinfe/semi-ui';
+import { Form, Row, Col, Skeleton, Typography } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
-
+import { SkeletonPlaceholder } from "../../components";
+const { Title, Paragraph } = Typography;
 const ArrayInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
     const [hasChanges, setHasChanges] = useState(false);
@@ -36,14 +37,30 @@ const ArrayInputs = () => {
                     onValueChange={handleValuesChange}
                     style={{ maxWidth: '600px' }}
                     labelPosition="left"
-                    labelWidth="150px"
                 >
-                    <Form.CheckboxGroup field="checkbox" label="Checkbox Group" direction="vertical">
-                        <Form.Checkbox value="checkbox-1">{__('Checkbox 1', 'plugin-starter')}</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-2">{__('Checkbox 2', 'plugin-starter')}</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-3">{__('Checkbox 3', 'plugin-starter')}</Form.Checkbox>
-                        <Form.Checkbox value="checkbox-4">{__('Checkbox 4', 'plugin-starter')}</Form.Checkbox>
-                    </Form.CheckboxGroup>
+
+                    <div className="setting-unit py-4">
+                        <Row type="flex" gutter={[24, 24]}>
+                            <Col xs={24} lg={12} xl={14}>
+                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                                    <Title heading={4}>{__("Checkbox Group", "plugin-starter")}</Title>
+                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                                </Skeleton>
+                            </Col>    
+                            {
+                                !settingsLoading &&                               
+                                <Col xs={24} lg={12} xl={10}>
+                                    <Form.CheckboxGroup field="checkbox" noLabel direction="vertical">
+                                        <Form.Checkbox value="checkbox-1">{__('Checkbox 1', 'plugin-starter')}</Form.Checkbox>
+                                        <Form.Checkbox value="checkbox-2">{__('Checkbox 2', 'plugin-starter')}</Form.Checkbox>
+                                        <Form.Checkbox value="checkbox-3">{__('Checkbox 3', 'plugin-starter')}</Form.Checkbox>
+                                        <Form.Checkbox value="checkbox-4">{__('Checkbox 4', 'plugin-starter')}</Form.Checkbox>
+                                    </Form.CheckboxGroup>
+                                </Col>
+                            }
+                        </Row>
+                    </div>
+                    
                     <ActionButtons hasChanges={hasChanges} section='array' handleReset={handleReset} />
                 </Form>
             )}
