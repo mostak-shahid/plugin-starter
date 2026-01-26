@@ -103,11 +103,16 @@ export default function Dashboard() {
                                             image={plugin.icons['1x']} 
                                             name={plugin.name} 
                                             intro={plugin.short_description} 
+                                            author={plugin.author}
                                             plugin_source='internal'
                                             plugin_slug={plugin.slug} 
                                             plugin_file={`${plugin.file}/${plugin.slug}`} 
                                             download_url={plugin.download_link}
                                             version={plugin.version}
+                                            rating={plugin.rating}
+                                            num_ratings={plugin.num_ratings}
+                                            active_installs={plugin.active_installs}
+                                            tested={plugin.tested}
                                         /> 
                                     </Col> 
                                     ))

@@ -3,8 +3,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { formDataPost } from "../../lib/Helpers"; // Import utility function
 import './PluginCard.scss';
 import { Space, Button, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
+import { Rating } from '@douyinfe/semi-ui';
 export default function PluginCard(plugin) {
-    const {image, name, intro, plugin_source='internal', plugin_slug='', plugin_file='', download_url='', version='1.0.0'} = plugin;
+    const {image, name, intro, author, plugin_source='internal', plugin_slug='', plugin_file='', download_url='', version='1.0.0', rating='0', num_ratings='0', active_installs='0', tested} = plugin;
     const { Text, Paragraph, Title } = Typography;
     /*
     data-sub_action="install_activate" 
@@ -141,18 +142,25 @@ export default function PluginCard(plugin) {
 		pluginStatus,
 	);
     return (
-        <Space align='center'>
-            {console.log()}
-            <img
-                alt={name}
-                src={image}
-                style={{flex: '0 0 90px'}} 
-            />
-            <Space vertical align='start'>
-                <Title heading={6}>{name}</Title>
-                <Paragraph ellipsis={{ showTooltip: true }} style={{ maxWidth: 250 }}>{intro}</Paragraph>
-                <Tag color='green' size='large'>{version}</Tag>
+        <div className="plugin-starter-plugin-card">
+            <Space align='center'>
+                <img
+                    alt={name}
+                    src={image}
+                    style={{flex: '0 0 80px', maxWidth: '80px'}} 
+                />
+                <div>
+                    <Title heading={6} style={{fontSize: 18, marginBottom: 0}} >{name}</Title>
+                    <Space align='center'>
+                        <Rating allowHalf defaultValue={(rating/20).toFixed(2)} disabled/>   
+                        <Text type="quaternary">({num_ratings})</Text>
+                    </Space> 
+                </div>
             </Space>
-        </Space>
+            {/* <Paragraph ellipsis={{ showTooltip: true }} style={{ maxWidth: 250 }}>{intro}</Paragraph> */}
+            <Paragraph>{intro}</Paragraph>
+            <Tag color='green' size='large'>{version}</Tag>
+            
+        </div>
     )
 }
