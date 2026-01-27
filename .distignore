@@ -16,7 +16,8 @@ Thumbs.db
 behat.yml
 bitbucket-pipelines.yml
 bin
-.circleci/config.yml
+.bin
+.circleci
 composer.json
 composer.lock
 dependencies.yml
@@ -42,3 +43,10 @@ node_modules
 *.tar.gz
 *.zip
 php/CLI/
+*.scss
+Resources
+src
+tests
+build
+postcss.config.js
+tailwind.config.js
