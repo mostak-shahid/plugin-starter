@@ -11,11 +11,13 @@
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
     "plugin-zip": "wp-scripts plugin-zip",
+    "makepot": "wp i18n make-pot . languages/plugin-starter.pot --skip-js --exclude=src,vendor,node_modules --merge=languages/js.pot",    
     "version": "node bin/version-replace",
     "clean-files": "node bin/clean-useless-files",
     "zip": "node bin/zip",
     "release": "npm install && npm run build && npm run clean-files && npm run version && npm run zip",
-    "release:dev": "npm install && npm run build && npm run clean-files && npm run zip"
+    "release:dev": "npm install && npm run build && npm run clean-files && npm run zip",
+    "postinstall": "composer install"
   },
   "dependencies": {
     "@coreui/icons": "^1.0.0",
