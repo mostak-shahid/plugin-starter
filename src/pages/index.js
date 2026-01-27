@@ -7,6 +7,7 @@ import More from './Settings/More';
 import Tools from './Settings/Tools';
 import Feedback from './Feedback';
 import FreeVsPro from './FreeVsPro';
+import NotFound from './NotFound';
 //layouts
 import About from './About';
 import Contact from './Contact';
@@ -28,6 +29,7 @@ export {
     Tools,
     Feedback,
     FreeVsPro,
+    NotFound,
     //Delete these
     BoxedLeftSidebar,
     BoxedNoSidebar,

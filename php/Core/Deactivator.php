@@ -44,9 +44,9 @@ class Deactivator
         delete_transient( 'plugin_starter_activation_notice' );
 
         // Log deactivation if debugging is enabled
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            error_log( 'Plugin Starter deactivated and cleaned up' );
-        }
+        // if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        //     error_log( 'Plugin Starter deactivated and cleaned up' );
+        // }
 	}
 }
 

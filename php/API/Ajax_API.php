@@ -389,9 +389,9 @@ class Ajax_API
         deactivate_plugins( $plugin_file );
 
         // Log successful deactivation
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            error_log( 'Plugin Starter deactivated via secure URL' );
-        }
+        // if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        //     error_log( 'Plugin Starter deactivated via secure URL' );
+        // }
 
         // Redirect to plugins page with success message
         $redirect_url = add_query_arg(
@@ -427,7 +427,7 @@ class Ajax_API
 	public function verify_user_password_ajax() {
 		check_ajax_referer('verify_password_nonce', 'nonce');
 		
-		$password = isset($_POST['password']) ? $_POST['password'] : '';
+		$password = isset($_POST['password']) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
 		$user = wp_get_current_user();
 		
 		// Verify password

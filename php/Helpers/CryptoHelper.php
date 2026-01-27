@@ -60,9 +60,9 @@ class CryptoHelper {
 
         } catch ( \Exception $e ) {
             // Log error if WP_DEBUG is enabled
-            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                error_log( 'Encryption error: ' . $e->getMessage() );
-            }
+            // if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            //     error_log( 'Encryption error: ' . $e->getMessage() );
+            // }
             return false;
         }
     }
@@ -108,9 +108,9 @@ class CryptoHelper {
 
         } catch ( \Exception $e ) {
             // Log error if WP_DEBUG is enabled
-            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                error_log( 'Decryption error: ' . $e->getMessage() );
-            }
+            // if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            //     error_log( 'Decryption error: ' . $e->getMessage() );
+            // }
             return false;
         }
     }

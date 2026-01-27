@@ -5,11 +5,11 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
 import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
-import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate } from '@douyinfe/semi-icons';
+import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
-import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Feedback, FreeVsPro} from './pages';
+import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Feedback, FreeVsPro, NotFound} from './pages';
 
 import {
     BasicInputs, 
@@ -23,7 +23,7 @@ import {
 } from './pages';
 import Page from './pages/Page';
 
-import {NotFound, HorizontalMenuControl} from "./components";
+import {HorizontalMenuControl} from "./components";
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 
@@ -159,11 +159,35 @@ function App() {
                             text: Details?.name,
                         }}
                         footerContent = {(
-                            <Space align='center'>  
+                            <Space className="header-menu-footer-content" align='center'>  
                                 <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />    
                                 <Button theme='outline' icon={darkmode?<IconSun />:<IconMoon />} aria-label="Mode" onClick={switchingMode} />
-                                <Button theme='outline' icon={<IconBookStroked />} aria-label="Screenshot" />
-                                <Button theme='outline' icon={<IconHelpCircleStroked />} aria-label="Screenshot" />
+                                <a
+									href="https://wordpress.org/support/plugin/plugin-starter/"
+									target="_blank"
+									rel="noreferrer noopener"
+									aria-label={ __(
+										'Get support (opens in new tab)',
+										'plugin-starter'
+									) }
+								>
+									<IconCustomerSupport/>
+								</a>
+								<a
+									href="https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post"
+									target="_blank"
+									rel="noreferrer noopener"
+									aria-label={ __(
+										'Leave a review (opens in new tab)',
+										'plugin-starter'
+									) }
+								>
+									<IconStar/>
+								</a>
+
+                                {/* <Button theme='outline' icon={<IconBookStroked />} aria-label={__("Documentation", 'plugin-starter')}/>
+                                <Button theme='outline' icon={<IconHelpCircleStroked />} aria-label={__("Help Center", 'plugin-starter')} /> */}
+
                                 <Badge count={5}>
                                     <Button theme='outline' icon={<IconBellStroked />} onClick={() => setNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
@@ -206,6 +230,7 @@ function App() {
                         <Route path="settings" element={<SettingsPage />} /> */}
                         <Route path="*" element={<Semi />} />
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer
                     className="p-[15px] w-full plugin-starter-footer" 

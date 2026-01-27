@@ -427,7 +427,7 @@ class Rest_API
 
 		$user_id = get_current_user_id();
 		$ip = $this->get_client_ip();
-		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '';
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
 
 		$wpdb->insert(
 			$table_name,
@@ -448,11 +448,11 @@ class Rest_API
 	private function get_client_ip()
 	{
 		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-			return sanitize_text_field($_SERVER['HTTP_CLIENT_IP']);
+			return sanitize_text_field( wp_unslash($_SERVER['HTTP_CLIENT_IP']));
 		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
-		} else {
-			return sanitize_text_field($_SERVER['REMOTE_ADDR']);
+			return sanitize_text_field( wp_unslash($_SERVER['HTTP_X_FORWARDED_FOR']));
+		} elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+			return sanitize_text_field( wp_unslash($_SERVER['REMOTE_ADDR']));
 		}
 	}
     private function reset_option_by_path(&$options, $defaults, $path)
@@ -536,7 +536,7 @@ class Rest_API
 
 		$user_id = get_current_user_id();
 		$ip = $this->get_client_ip();
-		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '';
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
 
 		$changes = [
 			$section => [
@@ -606,7 +606,7 @@ class Rest_API
                 
         $response = [
             'success' => true,
-            'msg' => esc_html__('Theme set successfully.' . $user_id . $settings_theme, 'plugin-starter'),
+            'msg' => esc_html__('Theme set successfully.', 'plugin-starter'),
         ];
 
         return new WP_REST_Response($response, 200);

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 function plugin_starter_get_default_options()
 {
 	$plugin_starter_default_options = [];

@@ -1,6 +1,7 @@
 <?php
 
 namespace MosPress\PluginStarter\Core;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 class More
 {

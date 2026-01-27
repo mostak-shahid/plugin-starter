@@ -4,9 +4,9 @@ import {useSettingsBodyHeight} from '../lib/Helpers';
 
 const { Header, Sider, Content } = Layout;
 
-const FullWidthLayout = ({ children, sidebar, sidebarPosition='none' }) => {
+const FullWidthLayout = ({ children, sidebar, sidebarPosition='none', className='' }) => {
     return (
-        <Layout style={{ minHeight: useSettingsBodyHeight() }}>
+        <Layout className={className} style={{ minHeight: useSettingsBodyHeight() }}>
             {sidebarPosition === 'left' &&
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-2)' }}>
                     {sidebar}

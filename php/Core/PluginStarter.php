@@ -1,6 +1,7 @@
 <?php
 
 namespace MosPress\PluginStarter\Core;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;

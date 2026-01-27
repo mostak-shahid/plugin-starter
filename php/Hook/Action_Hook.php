@@ -203,7 +203,7 @@ class Action_Hook
 						data: {
 							action: 'verify_user_password',
 							password: password,
-							nonce: '<?php echo wp_create_nonce('verify_password_nonce'); ?>'
+							nonce: '<?php echo esc_html( wp_create_nonce( 'verify_password_nonce' ) ); ?>'
 						},
 						success: function(response) {
 							if (response.success) {

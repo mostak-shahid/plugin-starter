@@ -67,9 +67,9 @@ class Activator
         update_option( 'plugin_starter_deactive_key', $encrypted_key, false );
 
         // Log activation if debugging is enabled
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            error_log( 'Plugin Starter activated with secure deactivation key' );
-        }
+        // if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        //     error_log( 'Plugin Starter activated with secure deactivation key' );
+        // }
 
         // Flush rewrite rules
         flush_rewrite_rules();

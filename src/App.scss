@@ -72,4 +72,14 @@
         max-width: 100%;
         height: auto;
     }
+    .header-menu-footer-content {
+        a {
+            padding: 8px;
+            color: var(--semi-color-primary);
+            border: 1px solid var(--semi-color-border); 
+            width: 32px; 
+            height: 32px;
+            line-height: 14px;
+        }
+    }
 }
