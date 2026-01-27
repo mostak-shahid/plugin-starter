@@ -1,5 +1,6 @@
 import { __ } from "@wordpress/i18n";
-import { Form, Row, Col, Skeleton, Typography } from '@douyinfe/semi-ui';
+import { Form, Button, Row, Col, Skeleton, Typography, ArrayField, } from '@douyinfe/semi-ui';
+import { IconPlusCircle, IconMinusCircle } from '@douyinfe/semi-icons';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
@@ -27,6 +28,11 @@ const ArrayInputs = () => {
             setHasChanges(false);
         }
     }, [settings]);
+
+    const [data] = useState([
+        { name: 'Semi D2C', role: 'Engineer' },
+        { name: 'Semi C2D', role: 'Designer' },
+    ]);
 
     return (
         <>
@@ -60,6 +66,64 @@ const ArrayInputs = () => {
                             }
                         </Row>
                     </div>
+
+                    <ArrayField field="rules" initValue={data}>
+                        {({ add, arrayFields, addWithInitValue }) => (
+                            <>
+                                <Button
+                                    onClick={add}
+                                    icon={<IconPlusCircle />}
+                                    theme="light"
+                                >
+                                    Add new line
+                                </Button>
+
+                                <Button
+                                    icon={<IconPlusCircle />}
+                                    onClick={() =>
+                                        addWithInitValue({
+                                            name: 'Semi DSM',
+                                            role: 'Designer',
+                                        })
+                                    }
+                                    style={{ marginLeft: 8 }}
+                                >
+                                    Add new line with init value
+                                </Button>
+
+                                {arrayFields.map(({ field, key, remove }) => (
+                                    <div
+                                        key={key}
+                                        style={{ width: 1000, display: 'flex' }}
+                                    >
+                                        <Form.Input
+                                            field={`${field}[name]`}
+                                            label={`${field}.name`}
+                                            style={{ width: 200, marginRight: 16 }}
+                                        />
+
+                                        <Form.Select
+                                            field={`${field}[role]`}
+                                            label={`${field}.role`}
+                                            style={{ width: 120 }}
+                                            optionList={[
+                                                { label: 'Engineer', value: 'Engineer' },
+                                                { label: 'Designer', value: 'Designer' },
+                                            ]}
+                                        />
+
+                                        <Button
+                                            type="danger"
+                                            theme="borderless"
+                                            icon={<IconMinusCircle />}
+                                            onClick={remove}
+                                            style={{ margin: 12 }}
+                                        />
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                    </ArrayField>
                     
                     <ActionButtons hasChanges={hasChanges} section='array' handleReset={handleReset} />
                 </Form>

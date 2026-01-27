@@ -16,7 +16,6 @@ import BoxedRightSidebar from './Layouts/BoxedRightSidebar';
 import FullWidthLeftSidebar from './Layouts/FullWidthLeftSidebar';
 import FullWidthNoSidebar from './Layouts/FullWidthNoSidebar';
 import FullWidthRightSidebar from './Layouts/FullWidthRightSidebar';
-import ArrayFieldDemo from './Layouts/form/ArrayFieldDemo';
 export {
     Dashboard,
     About,
@@ -30,7 +29,6 @@ export {
     Feedback,
     FreeVsPro,
     //Delete these
-    ArrayFieldDemo,
     BoxedLeftSidebar,
     BoxedNoSidebar,
     BoxedRightSidebar,

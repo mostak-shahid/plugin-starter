@@ -14,7 +14,6 @@ import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Feedbac
 import {
     BasicInputs, 
     ArrayInputs,
-    ArrayFieldDemo,
     BoxedLeftSidebar,
     BoxedNoSidebar,
     BoxedRightSidebar,
@@ -93,8 +92,6 @@ function App() {
             items: [
                 { itemKey: 'about', text: 'About', url: '/about' },
                 { itemKey: 'contact', text: 'Contact', url: '/contact' },
-                { itemKey: 'form', text: 'Form', url: '/form' },
-                { itemKey: 'ArrayFieldDemo', text: 'ArrayFieldDemo', url: '/ArrayFieldDemo' },
                 { 
                     itemKey: 'layouts-boxed', 
                     text: 'Boxed Layouts', 
@@ -178,8 +175,6 @@ function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/page" element={<Page />} />
-                    <Route path="/ArrayFieldDemo" element={<ArrayFieldDemo />} />
 
                     <Route path="/layouts">
                         <Route index element={<Navigate to="boxed/nosidebar" replace />} />
@@ -195,6 +190,8 @@ function App() {
                         <Route index element={<Navigate to="basic-inputs" replace />} />
                         <Route path="basic-inputs" element={<BasicInputs />} />
                         <Route path="array-inputs" element={<ArrayInputs />} />
+                        <Route path="page/page-1" element={<Page />} />
+                        <Route path="page/page-2" element={<Page />} />
                         
                         {/* Other menu items */}
                         <Route path="import-export" element={<ImportExport />} />
