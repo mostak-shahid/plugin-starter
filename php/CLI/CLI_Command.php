@@ -24,12 +24,6 @@ class CLI_Command {
      * [--count=<number>]
      * : Number of log entries to create. Default: 10
      *
-     * [--user-id=<id>]
-     * : User ID for the logs. Default: 1
-     *
-     * [--ip=<address>]
-     * : IP address for the logs. Default: ::1
-     *
      * ## EXAMPLES
      *
      *     # Create 10 log entries (default)
@@ -37,9 +31,6 @@ class CLI_Command {
      *
      *     # Create 50 log entries
      *     wp plugin-starter seed-logs --count=50
-     *
-     *     # Create logs with custom user ID
-     *     wp plugin-starter seed-logs --count=20 --user-id=5
      *
      * @param array $args       Positional arguments.
      * @param array $assoc_args Associative arguments.
@@ -49,22 +40,13 @@ class CLI_Command {
 
         // Get parameters with defaults
         $count = isset( $assoc_args['count'] ) ? absint( $assoc_args['count'] ) : 10;
-        $user_id = isset( $assoc_args['user-id'] ) ? absint( $assoc_args['user-id'] ) : 1;
-        $ip = isset( $assoc_args['ip'] ) ? sanitize_text_field( $assoc_args['ip'] ) : '::1';
         
         $table_name = $wpdb->prefix . 'plugin_starter_logs';
-        $user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36';
 
         // Check if table exists
         if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
             WP_CLI::error( "Table {$table_name} does not exist. Please activate the plugin first." );
             return;
-        }
-
-        // Verify user exists
-        $user = get_user_by( 'ID', $user_id );
-        if ( ! $user ) {
-            WP_CLI::warning( "User ID {$user_id} does not exist, but continuing anyway..." );
         }
 
         WP_CLI::log( "Starting to seed {$count} log entries..." );
@@ -75,6 +57,12 @@ class CLI_Command {
         $failed = 0;
 
         for ( $i = 1; $i <= $count; $i++ ) {
+            // Generate random data for each log entry
+            $user_id = rand( 1, 10 );
+            $ip = $this->generate_random_ip();
+            $user_agent = $this->generate_random_user_agent();
+            $created_at = $this->generate_random_date_last_10_days();
+            
             $title = $this->generate_lorem_title();
             $description = $this->generate_lorem_description();
             $data = $this->generate_lorem_data();
@@ -88,6 +76,7 @@ class CLI_Command {
                     'title'       => $title,
                     'description' => $description,
                     'data'        => $data,
+                    'created_at'  => $created_at,
                 ),
                 array(
                     '%d', // user_id
@@ -96,6 +85,7 @@ class CLI_Command {
                     '%s', // title
                     '%s', // description
                     '%s', // data
+                    '%s', // created_at
                 )
             );
 
@@ -231,6 +221,86 @@ class CLI_Command {
         }
 
         WP_CLI\Utils\format_items( $format, $results, array( 'ID', 'user_id', 'ip', 'title', 'description', 'created_at' ) );
+    }
+
+    /**
+     * Generate a random valid IP address (IPv4).
+     *
+     * @return string
+     */
+    private function generate_random_ip() {
+        // Generate random IPv4 address
+        // Avoid special ranges (like 0.x.x.x, 127.x.x.x, 224-255.x.x.x)
+        $first_octet = rand( 1, 223 );
+        if ( $first_octet == 127 ) {
+            $first_octet = 128; // Skip localhost range
+        }
+        
+        return sprintf(
+            '%d.%d.%d.%d',
+            $first_octet,
+            rand( 0, 255 ),
+            rand( 0, 255 ),
+            rand( 1, 254 )
+        );
+    }
+
+    /**
+     * Generate a random user agent string.
+     *
+     * @return string
+     */
+    private function generate_random_user_agent() {
+        $user_agents = array(
+            // Chrome on Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            // Chrome on Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            // Firefox on Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
+            // Firefox on Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0',
+            // Safari on Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+            // Edge on Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+            // Chrome on Linux
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            // Mobile Chrome
+            'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/120.0.0.0 Mobile/15E148 Safari/604.1',
+            // Mobile Safari
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
+        );
+
+        return $user_agents[ array_rand( $user_agents ) ];
+    }
+
+    /**
+     * Generate a random date within the last 10 days.
+     *
+     * @return string Date in MySQL format (Y-m-d H:i:s)
+     */
+    private function generate_random_date_last_10_days() {
+        // Get current timestamp
+        $now = current_time( 'timestamp' );
+        
+        // Calculate 10 days ago in seconds (10 days * 24 hours * 60 minutes * 60 seconds)
+        $ten_days_ago = $now - ( 10 * 24 * 60 * 60 );
+        
+        // Generate random timestamp between 10 days ago and now
+        $random_timestamp = rand( $ten_days_ago, $now );
+        
+        // Convert to MySQL datetime format
+        return date( 'Y-m-d H:i:s', $random_timestamp );
     }
 
     /**

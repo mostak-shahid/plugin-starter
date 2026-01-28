@@ -50,6 +50,12 @@
         "url": "/settings/tools"
     },
     {
+        "itemKey": "logs",
+        "text": "Logs",
+        "description": "Plugin logs",
+        "url": "/settings/logs"
+    },
+    {
         "itemKey": "feedback",
         "text": "Feedback",
         "description": "Send us your feedback",

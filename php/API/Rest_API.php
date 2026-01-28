@@ -5,6 +5,7 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Query;
+use WP_REST_Server;
 
 use MosPress\PluginStarter\Helpers\CryptoHelper;
 /**
@@ -17,6 +18,12 @@ class Rest_API
     
     private const NAMESPACE = 'plugin-starter/v1';
     private static $instance = null;
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    private $logs_table_name;
     public static function get_instance()
     {
         if (self::$instance === null) {
@@ -26,6 +33,9 @@ class Rest_API
     }
     public function __construct()
     {
+        global $wpdb;
+        $this->logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+        
         add_action('rest_api_init', [$this, 'rest_api_init']);
     }
     public function rest_api_init()
@@ -231,8 +241,207 @@ class Rest_API
                 'permission_callback' => array( $this, 'check_permission' ),
             )
         );
-    }
+
+        //Log table REST routes
         /**
+         * Register REST API routes
+         */
+        // Get logs with filters
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_logs' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'page'       => array(
+                        'default'           => 1,
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'per_page'   => array(
+                        'default'           => 10,
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'user_name'  => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'ip'         => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'title'      => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'created_at' => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'orderby'    => array(
+                        'default'           => 'ID',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'order'      => array(
+                        'default'           => 'DESC',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                ),
+            )
+        );
+
+        // Search logs
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/search',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'search_logs' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'q'        => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'page'     => array(
+                        'default'           => 1,
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'per_page' => array(
+                        'default'           => 10,
+                        'sanitize_callback' => 'absint',
+                    ),
+                ),
+            )
+        );
+
+        // Insert new log
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs',
+            array(
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => array( $this, 'create_log' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'user_id'     => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'ip'          => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'user_agent'  => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'title'       => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'description' => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_textarea_field',
+                    ),
+                    'data'        => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'sanitize_textarea_field',
+                    ),
+                ),
+            )
+        );
+
+        // Update log by ID
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
+            array(
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => array( $this, 'update_log' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'id'          => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'user_id'     => array(
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'ip'          => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'user_agent'  => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'title'       => array(
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'description' => array(
+                        'sanitize_callback' => 'sanitize_textarea_field',
+                    ),
+                    'data'        => array(
+                        'sanitize_callback' => 'sanitize_textarea_field',
+                    ),
+                ),
+            )
+        );
+
+        // Delete log by ID
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( $this, 'delete_log' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'id' => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'absint',
+                    ),
+                ),
+            )
+        );
+
+        // Delete all logs
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/delete-all',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( $this, 'delete_all_logs' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+            )
+        );
+
+        // Get single log by ID
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_log' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'id' => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'absint',
+                    ),
+                ),
+            )
+        );
+    }
+    /**
+     * Check permission for API access
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return bool
+     */
+    // public function check_permission( $request ) {
+    //     // Change this based on your requirements
+    //     // For development, you might want to allow all users
+    //     // For production, restrict to specific capabilities
+    //     return current_user_can( 'manage_options' );
+    // }
+    /**
      * Check if user has permission to access the endpoint.
      *
      * @param WP_REST_Request $request The request object.
@@ -255,7 +464,7 @@ class Rest_API
     /**
      * Return posts for DataTables (server-side).
      */
-    function get_posts( WP_REST_Request $request ) {
+    public function get_posts( WP_REST_Request $request ) {
         $page     = max( 1, intval( $request->get_param('page') ?: 1 ) );
         $per_page = max( 1, intval( $request->get_param('per_page') ?: 10 ) );
         $status   = sanitize_text_field( $request->get_param('status') ?: 'publish' );
@@ -316,7 +525,7 @@ class Rest_API
     /**
      * Change status for a single post.
      */
-    function change_post_status( WP_REST_Request $request ) {
+    public function change_post_status( WP_REST_Request $request ) {
         $post_id = (int) $request['id'];
         $status  = sanitize_text_field( $request['status'] );
 
@@ -335,7 +544,7 @@ class Rest_API
     /**
      * Bulk change status of posts.
      */
-    function bulk_change_status( WP_REST_Request $request ) {
+    public function bulk_change_status( WP_REST_Request $request ) {
         $ids    = $request['ids'];
         $status = sanitize_text_field( $request['status'] );
 
@@ -663,6 +872,440 @@ class Rest_API
                 'deactivation_url' => $deactivation_url,
                 'message' => __( 'Deactivation link generated successfully.', 'plugin-starter' ),
                 'warning' => __( 'This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter' ),
+            ),
+            200
+        );
+    }
+
+    /**
+     * Get logs with filtering
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function get_logs( $request ) {
+        global $wpdb;
+
+        $page       = $request->get_param( 'page' );
+        $per_page   = $request->get_param( 'per_page' );
+        $user_name  = $request->get_param( 'user_name' );
+        $ip         = $request->get_param( 'ip' );
+        $title      = $request->get_param( 'title' );
+        $created_at = $request->get_param( 'created_at' );
+        $orderby    = $request->get_param( 'orderby' );
+        $order      = strtoupper( $request->get_param( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+
+        // Validate orderby field
+        $allowed_orderby = array( 'ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at' );
+        if ( ! in_array( $orderby, $allowed_orderby ) ) {
+            $orderby = 'ID';
+        }
+
+        $offset = ( $page - 1 ) * $per_page;
+
+        // Build query
+        $where_clauses = array( '1=1' );
+        $join          = '';
+
+        // Join with users table if user_name filter is present
+        if ( ! empty( $user_name ) ) {
+            $join            = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
+            $where_clauses[] = $wpdb->prepare( 'u.display_name LIKE %s', '%' . $wpdb->esc_like( $user_name ) . '%' );
+        }
+
+        if ( ! empty( $ip ) ) {
+            $where_clauses[] = $wpdb->prepare( 'l.ip LIKE %s', '%' . $wpdb->esc_like( $ip ) . '%' );
+        }
+
+        if ( ! empty( $title ) ) {
+            $where_clauses[] = $wpdb->prepare( 'l.title LIKE %s', '%' . $wpdb->esc_like( $title ) . '%' );
+        }
+
+        if ( ! empty( $created_at ) ) {
+            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $created_at );
+        }
+
+        $where = implode( ' AND ', $where_clauses );
+
+        // Get total count
+        $count_query = "SELECT COUNT(*) FROM {$this->logs_table_name} l {$join} WHERE {$where}";
+        $total       = $wpdb->get_var( $count_query );
+
+        // Get data
+        $query = "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
+                  FROM {$this->logs_table_name} l 
+                  LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID 
+                  WHERE {$where} 
+                  ORDER BY l.{$orderby} {$order} 
+                  LIMIT %d OFFSET %d";
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare( $query, $per_page, $offset ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+                'total'   => (int) $total,
+                'page'    => $page,
+                'per_page' => $per_page,
+                'total_pages' => ceil( $total / $per_page ),
+            ),
+            200
+        );
+    }
+
+    /**
+     * Search logs
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function search_logs( $request ) {
+        global $wpdb;
+
+        $search   = $request->get_param( 'q' );
+        $page     = $request->get_param( 'page' );
+        $per_page = $request->get_param( 'per_page' );
+        $offset   = ( $page - 1 ) * $per_page;
+
+        $search_like = '%' . $wpdb->esc_like( $search ) . '%';
+
+        // Get total count
+        $count_query = $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$this->logs_table_name} l 
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.title LIKE %s 
+            OR l.description LIKE %s 
+            OR l.ip LIKE %s 
+            OR u.display_name LIKE %s
+            OR l.data LIKE %s",
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like
+        );
+
+        $total = $wpdb->get_var( $count_query );
+
+        // Get results
+        $query = $wpdb->prepare(
+            "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
+            FROM {$this->logs_table_name} l 
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.title LIKE %s 
+            OR l.description LIKE %s 
+            OR l.ip LIKE %s 
+            OR u.display_name LIKE %s
+            OR l.data LIKE %s
+            ORDER BY l.ID DESC 
+            LIMIT %d OFFSET %d",
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $per_page,
+            $offset
+        );
+
+        $results = $wpdb->get_results( $query, ARRAY_A );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+                'total'   => (int) $total,
+                'page'    => $page,
+                'per_page' => $per_page,
+                'total_pages' => ceil( $total / $per_page ),
+                'search_term' => $search,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Get single log by ID
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function get_log( $request ) {
+        global $wpdb;
+
+        $id = $request->get_param( 'id' );
+
+        $query = $wpdb->prepare(
+            "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
+            FROM {$this->logs_table_name} l 
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.ID = %d",
+            $id
+        );
+
+        $result = $wpdb->get_row( $query, ARRAY_A );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $result,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Create new log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function create_log( $request ) {
+        global $wpdb;
+
+        $data = array(
+            'user_id'     => $request->get_param( 'user_id' ),
+            'ip'          => $request->get_param( 'ip' ),
+            'user_agent'  => $request->get_param( 'user_agent' ),
+            'title'       => $request->get_param( 'title' ),
+            'description' => $request->get_param( 'description' ),
+            'data'        => $request->get_param( 'data' ),
+        );
+
+        $format = array(
+            '%d', // user_id
+            '%s', // ip
+            '%s', // user_agent
+            '%s', // title
+            '%s', // description
+            '%s', // data
+        );
+
+        $result = $wpdb->insert( $this->logs_table_name, $data, $format );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'insert_failed',
+                'Failed to insert log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        $inserted_id = $wpdb->insert_id;
+
+        // Get the inserted record
+        $inserted_log = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
+                FROM {$this->logs_table_name} l 
+                LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+                WHERE l.ID = %d",
+                $inserted_id
+            ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry created successfully',
+                'data'    => $inserted_log,
+                'id'      => $inserted_id,
+            ),
+            201
+        );
+    }
+
+    /**
+     * Update log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function update_log( $request ) {
+        global $wpdb;
+
+        $id = $request->get_param( 'id' );
+
+        // Check if log exists
+        $exists = $wpdb->get_var(
+            $wpdb->prepare( "SELECT ID FROM {$this->logs_table_name} WHERE ID = %d", $id )
+        );
+
+        if ( ! $exists ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        // Build update data
+        $data   = array();
+        $format = array();
+
+        $fields = array(
+            'user_id'     => '%d',
+            'ip'          => '%s',
+            'user_agent'  => '%s',
+            'title'       => '%s',
+            'description' => '%s',
+            'data'        => '%s',
+        );
+
+        foreach ( $fields as $field => $field_format ) {
+            $value = $request->get_param( $field );
+            if ( null !== $value ) {
+                $data[ $field ]   = $value;
+                $format[]         = $field_format;
+            }
+        }
+
+        if ( empty( $data ) ) {
+            return new WP_Error(
+                'no_data',
+                'No data provided for update',
+                array( 'status' => 400 )
+            );
+        }
+
+        $result = $wpdb->update(
+            $this->logs_table_name,
+            $data,
+            array( 'ID' => $id ),
+            $format,
+            array( '%d' )
+        );
+
+        if ( false === $result ) {
+            return new WP_Error(
+                'update_failed',
+                'Failed to update log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        // Get the updated record
+        $updated_log = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
+                FROM {$this->logs_table_name} l 
+                LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+                WHERE l.ID = %d",
+                $id
+            ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry updated successfully',
+                'data'    => $updated_log,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Delete log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function delete_log( $request ) {
+        global $wpdb;
+
+        $id = $request->get_param( 'id' );
+
+        // Get the record before deleting
+        $log = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM {$this->logs_table_name} WHERE ID = %d", $id ),
+            ARRAY_A
+        );
+
+        if ( ! $log ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        $result = $wpdb->delete(
+            $this->logs_table_name,
+            array( 'ID' => $id ),
+            array( '%d' )
+        );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'delete_failed',
+                'Failed to delete log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry deleted successfully',
+                'data'    => $log,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Delete all log entries
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function delete_all_logs( $request ) {
+        global $wpdb;
+
+        // Get count before deletion
+        $count = $wpdb->get_var( "SELECT COUNT(*) FROM {$this->logs_table_name}" );
+
+        if ( $count == 0 ) {
+            return new WP_REST_Response(
+                array(
+                    'success' => true,
+                    'message' => 'No logs to delete',
+                    'count'   => 0,
+                ),
+                200
+            );
+        }
+
+        $result = $wpdb->query( "TRUNCATE TABLE {$this->logs_table_name}" );
+
+        if ( false === $result ) {
+            return new WP_Error(
+                'delete_failed',
+                'Failed to delete all logs: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => sprintf( 'Successfully deleted %d log entries', $count ),
+                'count'   => (int) $count,
             ),
             200
         );
