@@ -95,6 +95,7 @@ export default function Logs() {
             dataIndex: 'user_name',
             key: 'user_name',
             width: 150,
+            sorter: true,
             render: (text, record) => (
                 <div>
                 <Text strong>{text || 'Unknown'}</Text>
@@ -110,7 +111,16 @@ export default function Logs() {
             dataIndex: 'ip',
             key: 'ip',
             width: 140,
+            sorter: true,
             render: (text) => <Tag color="blue">{text}</Tag>,
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+            width: 140,
+            render: (text) => <Tag color="success">{text}</Tag>,
+            sorter: true,
         },
         {
             title: 'Title',
@@ -215,12 +225,13 @@ export default function Logs() {
                 showClear
                 style={ { width: 300 } }
             />
-            <Spin spinning={ loading }>
+			<Spin spinning={ loading }>
 				<Table
 					columns={ columns }
 					dataSource={ data }
 					rowKey="ID"
 					rowSelection={rowSelection}
+					scroll={{ y: 'calc(100vh - 250px)' }}
 					// expandedRowRender={ expandedRowRender }
 					// expandedRowKeys={ expandedRowKeys }
 					// onExpand={ ( expanded, record ) => {

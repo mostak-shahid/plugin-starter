@@ -97,6 +97,7 @@ class PluginStarter
 		// Instantiate additional core classes
 		new ImportExport();
 		new More();
+		new Tools();
 	}
 
 	/**

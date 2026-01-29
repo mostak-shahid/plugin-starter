@@ -1,0 +1,548 @@
+<?php
+namespace MosPress\PluginStarter\API;
+
+use MosPress\PluginStarter\Helpers\Utils;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_Query;
+use WP_REST_Server;
+class LogsController
+{
+
+    private $logs_table_name;
+    public function __construct()
+    {
+        global $wpdb;
+        $this->logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+    }
+
+	public static function log_settings_reset($section, $old_data, $new_data)
+	{
+		global $wpdb;
+		$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+		$user_id = get_current_user_id();
+		$ip = Utils::get_client_ip();
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
+
+		$changes = [
+			$section => [
+				'old' => $old_data,
+				'new' => $new_data,
+				'action' => 'reset'
+			]
+		];
+
+		$wpdb->insert(
+			$logs_table_name,
+			[
+				'user_id' => $user_id,
+				'ip' => $ip,
+				'user_agent' => $user_agent,
+				'title' => 'Settings Reset',
+				'description' => "Reset section: $section",
+				'data' => json_encode($changes),
+				'created_at' => current_time('mysql'),
+				'updated_at' => current_time('mysql')
+			],
+			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+		);
+	}
+
+	public static function log_settings_change($old_data, $new_data)
+	{
+		global $wpdb;
+		$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+		$changes = [];
+		foreach ($new_data as $key => $value) {
+			if (!isset($old_data[$key]) || $old_data[$key] !== $value) {
+				$changes[$key] = [
+					'old' => isset($old_data[$key]) ? $old_data[$key] : null,
+					'new' => $value
+				];
+			}
+		}
+
+		if (empty($changes)) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+		$ip = Utils::get_client_ip();
+		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
+
+		$wpdb->insert(
+			$logs_table_name,
+			[
+				'user_id' => $user_id,
+				'ip' => $ip,
+				'user_agent' => $user_agent,
+				'title' => 'Settings Updated',
+                'category' => __('Settings Change', 'plugin-starter'),
+				'description' => count($changes) . ' setting(s) changed',
+				// 'data' => json_encode($changes),
+				'created_at' => current_time('mysql'),
+				'updated_at' => current_time('mysql')
+			],
+			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+		);
+	}
+
+    /**
+     * Get logs with filtering
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function get_logs( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $page     = max( 1, (int) $request->get_param( 'page' ) );
+        $per_page = max( 1, (int) $request->get_param( 'per_page' ) );
+        $search   = trim( (string) $request->get_param( 'search' ) );
+
+        $orderby = $request->get_param( 'sort_field' );
+        $order   = strtoupper( $request->get_param( 'sort_order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+
+        // Allowed order by columns
+        $allowed_orderby = array( 'ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at' );
+        if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
+            $orderby = 'ID';
+        }
+
+        $offset = ( $page - 1 ) * $per_page;
+
+        $join            = '';
+        $where_clauses   = array( '1=1' );
+        $search_clauses  = array();
+
+        /**
+         * Search logic
+         */
+        if ( $search !== '' ) {
+            $join = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
+
+            $like = '%' . $wpdb->esc_like( $search ) . '%';
+
+            $search_clauses[] = $wpdb->prepare( 'u.display_name LIKE %s', $like );
+            $search_clauses[] = $wpdb->prepare( 'l.ip LIKE %s', $like );
+            $search_clauses[] = $wpdb->prepare( 'l.title LIKE %s', $like );
+
+            // Date search only if valid YYYY-MM-DD
+            if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $search ) ) {
+                $search_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $search );
+            }
+        }
+
+        if ( ! empty( $search_clauses ) ) {
+            $where_clauses[] = '(' . implode( ' OR ', $search_clauses ) . ')';
+        }
+
+        $where = implode( ' AND ', $where_clauses );
+
+        /**
+         * Total count query
+         */
+        $count_query = "
+            SELECT COUNT(*)
+            FROM {$logs_table_name} l
+            {$join}
+            WHERE {$where}
+        ";
+
+        $total = (int) $wpdb->get_var( $count_query );
+
+        /**
+         * Data query
+         */
+        $data_query = "
+            SELECT l.*, u.display_name AS user_name, u.user_login, u.user_email
+            FROM {$logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE {$where}
+            ORDER BY l.{$orderby} {$order}
+            LIMIT %d OFFSET %d
+        ";
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare( $data_query, $per_page, $offset ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success'      => true,
+                'data'         => $results,
+                'total'        => $total,
+                'page'         => $page,
+                'per_page'     => $per_page,
+                'total_pages'  => (int) ceil( $total / $per_page ),
+            ),
+            200
+        );
+    }
+
+
+    /**
+     * Search logs
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function search_logs( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $search   = $request->get_param( 'q' );
+        $page     = $request->get_param( 'page' );
+        $per_page = $request->get_param( 'per_page' );
+        $offset   = ( $page - 1 ) * $per_page;
+
+        $search_like = '%' . $wpdb->esc_like( $search ) . '%';
+
+        // Get total count
+        $count_query = $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.title LIKE %s 
+            OR l.description LIKE %s 
+            OR l.ip LIKE %s 
+            OR u.display_name LIKE %s
+            OR l.data LIKE %s",
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like
+        );
+
+        $total = $wpdb->get_var( $count_query );
+
+        // Get results
+        $query = $wpdb->prepare(
+            "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
+            FROM {$logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.title LIKE %s 
+            OR l.description LIKE %s 
+            OR l.ip LIKE %s 
+            OR u.display_name LIKE %s
+            OR l.data LIKE %s
+            ORDER BY l.ID DESC 
+            LIMIT %d OFFSET %d",
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $search_like,
+            $per_page,
+            $offset
+        );
+
+        $results = $wpdb->get_results( $query, ARRAY_A );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+                'total'   => (int) $total,
+                'page'    => $page,
+                'per_page' => $per_page,
+                'total_pages' => ceil( $total / $per_page ),
+                'search_term' => $search,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Get single log by ID
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function get_log( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $id = $request->get_param( 'id' );
+
+        $query = $wpdb->prepare(
+            "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
+            FROM {$logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE l.ID = %d",
+            $id
+        );
+
+        $result = $wpdb->get_row( $query, ARRAY_A );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $result,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Create new log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function create_log( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $data = array(
+            'user_id'     => $request->get_param( 'user_id' ),
+            'ip'          => $request->get_param( 'ip' ),
+            'user_agent'  => $request->get_param( 'user_agent' ),
+            'title'       => $request->get_param( 'title' ),
+            'description' => $request->get_param( 'description' ),
+            'data'        => $request->get_param( 'data' ),
+        );
+
+        $format = array(
+            '%d', // user_id
+            '%s', // ip
+            '%s', // user_agent
+            '%s', // title
+            '%s', // description
+            '%s', // data
+        );
+
+        $result = $wpdb->insert( $logs_table_name, $data, $format );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'insert_failed',
+                'Failed to insert log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        $inserted_id = $wpdb->insert_id;
+
+        // Get the inserted record
+        $inserted_log = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
+                FROM {$logs_table_name} l
+                LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+                WHERE l.ID = %d",
+                $inserted_id
+            ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry created successfully',
+                'data'    => $inserted_log,
+                'id'      => $inserted_id,
+            ),
+            201
+        );
+    }
+
+    /**
+     * Update log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function update_log( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $id = $request->get_param( 'id' );
+
+        // Check if log exists
+        $exists = $wpdb->get_var(
+            $wpdb->prepare( "SELECT ID FROM {$logs_table_name} WHERE ID = %d", $id )
+        );
+
+        if ( ! $exists ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        // Build update data
+        $data   = array();
+        $format = array();
+
+        $fields = array(
+            'user_id'     => '%d',
+            'ip'          => '%s',
+            'user_agent'  => '%s',
+            'title'       => '%s',
+            'description' => '%s',
+            'data'        => '%s',
+        );
+
+        foreach ( $fields as $field => $field_format ) {
+            $value = $request->get_param( $field );
+            if ( null !== $value ) {
+                $data[ $field ]   = $value;
+                $format[]         = $field_format;
+            }
+        }
+
+        if ( empty( $data ) ) {
+            return new WP_Error(
+                'no_data',
+                'No data provided for update',
+                array( 'status' => 400 )
+            );
+        }
+
+        $result = $wpdb->update(
+            $logs_table_name,
+            $data,
+            array( 'ID' => $id ),
+            $format,
+            array( '%d' )
+        );
+
+        if ( false === $result ) {
+            return new WP_Error(
+                'update_failed',
+                'Failed to update log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        // Get the updated record
+        $updated_log = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
+                FROM {$logs_table_name} l
+                LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+                WHERE l.ID = %d",
+                $id
+            ),
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry updated successfully',
+                'data'    => $updated_log,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Delete log entry
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function delete_log( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $id = $request->get_param( 'id' );
+
+        // Get the record before deleting
+        $log = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM {$logs_table_name} WHERE ID = %d", $id ),
+            ARRAY_A
+        );
+
+        if ( ! $log ) {
+            return new WP_Error(
+                'log_not_found',
+                'Log entry not found',
+                array( 'status' => 404 )
+            );
+        }
+
+        $result = $wpdb->delete(
+            $logs_table_name,
+            array( 'ID' => $id ),
+            array( '%d' )
+        );
+
+        if ( ! $result ) {
+            return new WP_Error(
+                'delete_failed',
+                'Failed to delete log entry: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => 'Log entry deleted successfully',
+                'data'    => $log,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Delete all log entries
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public static function delete_all_logs( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        // Get count before deletion
+        $count = $wpdb->get_var( "SELECT COUNT(*) FROM {$logs_table_name}" );
+
+        if ( $count == 0 ) {
+            return new WP_REST_Response(
+                array(
+                    'success' => true,
+                    'message' => 'No logs to delete',
+                    'count'   => 0,
+                ),
+                200
+            );
+        }
+
+        $result = $wpdb->query( "TRUNCATE TABLE {$logs_table_name}" );
+
+        if ( false === $result ) {
+            return new WP_Error(
+                'delete_failed',
+                'Failed to delete all logs: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => sprintf( 'Successfully deleted %d log entries', $count ),
+                'count'   => (int) $count,
+            ),
+            200
+        );
+    }
+}

@@ -24,17 +24,7 @@ class Ajax_API
 		add_action('wp_ajax_plugin_starter_ajax_plugins_status', [$this, 'plugin_starter_ajax_plugins_status']);
 		add_action('wp_ajax_plugin_starter_set_login_url', [$this, 'plugin_starter_set_login_url']);
 		add_action('wp_ajax_plugin_starter_send_email_login_url', [$this, 'plugin_starter_send_email_login_url']);
-		add_action('init', [$this, 'plugin_starter_maybe_flush_rules'], 99);
-
-
-		// Handle deactivation via admin-post
-        add_action( 'admin_post_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
-        add_action( 'admin_post_nopriv_plugin_starter_deactivate', array( $this, 'handle_deactivation' ) );
-
-		// AJAX handler to verify password
-		add_action('wp_ajax_verify_user_password', [$this, 'verify_user_password_ajax']);
-		
-    
+		add_action('init', [$this, 'plugin_starter_maybe_flush_rules'], 99);   
 		
     }    
 	public function plugin_starter_ajax_plugins_status()

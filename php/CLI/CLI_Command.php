@@ -65,7 +65,7 @@ class CLI_Command {
             
             $title = $this->generate_lorem_title();
             $description = $this->generate_lorem_description();
-            $data = $this->generate_lorem_data();
+            $category = $this->generate_random_category();
 
             $result = $wpdb->insert(
                 $table_name,
@@ -74,8 +74,8 @@ class CLI_Command {
                     'ip'          => $ip,
                     'user_agent'  => $user_agent,
                     'title'       => $title,
+                    'category'    => $category,
                     'description' => $description,
-                    'data'        => $data,
                     'created_at'  => $created_at,
                 ),
                 array(
@@ -355,20 +355,26 @@ class CLI_Command {
      *
      * @return string
      */
-    private function generate_lorem_data() {
-        $data = array(
-            'status' => array_rand( array_flip( array( 'success', 'pending', 'failed', 'processing' ) ) ),
-            'code' => rand( 100, 999 ),
-            'message' => $this->generate_lorem_description(),
-            'timestamp' => current_time( 'mysql' ),
-            'metadata' => array(
-                'source' => 'cli-seeder',
-                'version' => '1.0.0',
-                'random_value' => wp_generate_password( 12, false ),
-            ),
+    private function generate_random_category() {
+        $categories = array(
+            'Lorem ipsum',
+            'Consectetur',
+            'Sed do eiusmod',
+            'Ut labore',
+            'Aliqua enim',
+            'Quis nostrud',
+            'Laboris nisi',
+            'Ex ea commodo',
+            'Duis aute',
+            'Reprehenderit',
+            'Esse cillum',
+            'Nulla',
+            'Occaecat',
+            'Sunt in',
+            'Deserunt',
         );
 
-        return wp_json_encode( $data );
+        return $categories[ array_rand( $categories ) ];
     }
 
     /**

@@ -5,7 +5,7 @@ import ArrayInputs from './Settings/ArrayInputs';
 import ImportExport from './Settings/ImportExport';
 import More from './Settings/More';
 import Tools from './Settings/Tools';
-import Logs from './Settings/Logs';
+import Logs from './Settings/Logs/Logs';
 import Feedback from './Feedback';
 import FreeVsPro from './FreeVsPro';
 import NotFound from './NotFound';
