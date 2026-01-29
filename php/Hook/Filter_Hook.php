@@ -141,6 +141,8 @@ class Filter_Hook {
                 'footer_content' => '<!-- Content inside BODY tag -->',
             ],
             'tools' => [
+                'hide_plugin' => false, // delete, uninstall, none
+                'self_defense' => false, // delete, uninstall, none
                 'delete_data_on' => 'none', // delete, uninstall, none
             ]
         ];

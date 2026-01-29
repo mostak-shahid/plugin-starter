@@ -243,7 +243,7 @@ const Tools = () => {
 
                             <Col xs={24} lg={12} xl={10}>
                                 <Form.Switch 
-                                    field='hide-plugin' 
+                                    field='hide_plugin' 
                                     noLabel
                                 />
                             </Col>
@@ -274,7 +274,7 @@ const Tools = () => {
 
                             <Col xs={24} lg={12} xl={10}>
                                 <Form.Switch 
-                                    field='self-defense' 
+                                    field='self_defense' 
                                     noLabel
                                 />
                             </Col>

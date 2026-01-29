@@ -27,7 +27,7 @@ class Action_Hook
         add_action('current_screen', [$this, 'plugin_starter_hide_admin_notices']);
         add_action('admin_head', [$this, 'plugin_starter_option_form_submit']);
         add_action('upgrader_process_complete', [$this, 'plugin_starter_update_completed'], 10, 2);
-		add_action('admin_footer', [$this, 'plugin_starter_deactivation_scripts']);
+		
     }
 
 	/**
@@ -154,7 +154,7 @@ class Action_Hook
 			}
 		}
 	}
-	public function plugin_starter_deactivation_scripts()
+	public static function plugin_starter_deactivation_scripts()
 	{
 		?>
 		<!-- Password Modal -->
