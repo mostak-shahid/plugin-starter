@@ -254,36 +254,14 @@ class Rest_API
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( $this, 'get_logs' ),
                 'permission_callback' => array( $this, 'check_permission' ),
-                'args'                => array(
-                    'page'       => array(
-                        'default'           => 1,
-                        'sanitize_callback' => 'absint',
-                    ),
-                    'per_page'   => array(
-                        'default'           => 10,
-                        'sanitize_callback' => 'absint',
-                    ),
-                    'user_name'  => array(
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                    'ip'         => array(
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                    'title'      => array(
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                    'created_at' => array(
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                    'orderby'    => array(
-                        'default'           => 'ID',
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                    'order'      => array(
-                        'default'           => 'DESC',
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ),
-                ),
+                'args' => [
+                    'page' => ['sanitize_callback' => 'absint','default' => 1],
+                    'per_page' => ['sanitize_callback' => 'absint','default' => 5,],
+                    'search' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'sort_field' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'sort_order' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'filter' => ['sanitize_callback' => 'sanitize_text_field'],
+                ],
             )
         );
 
@@ -886,76 +864,91 @@ class Rest_API
     public function get_logs( $request ) {
         global $wpdb;
 
-        $page       = $request->get_param( 'page' );
-        $per_page   = $request->get_param( 'per_page' );
-        $user_name  = $request->get_param( 'user_name' );
-        $ip         = $request->get_param( 'ip' );
-        $title      = $request->get_param( 'title' );
-        $created_at = $request->get_param( 'created_at' );
-        $orderby    = $request->get_param( 'orderby' );
-        $order      = strtoupper( $request->get_param( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+        $page     = max( 1, (int) $request->get_param( 'page' ) );
+        $per_page = max( 1, (int) $request->get_param( 'per_page' ) );
+        $search   = trim( (string) $request->get_param( 'search' ) );
 
-        // Validate orderby field
+        $orderby = $request->get_param( 'sort_field' );
+        $order   = strtoupper( $request->get_param( 'sort_order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+
+        // Allowed order by columns
         $allowed_orderby = array( 'ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at' );
-        if ( ! in_array( $orderby, $allowed_orderby ) ) {
+        if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
             $orderby = 'ID';
         }
 
         $offset = ( $page - 1 ) * $per_page;
 
-        // Build query
-        $where_clauses = array( '1=1' );
-        $join          = '';
+        $join            = '';
+        $where_clauses   = array( '1=1' );
+        $search_clauses  = array();
 
-        // Join with users table if user_name filter is present
-        if ( ! empty( $user_name ) ) {
-            $join            = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
-            $where_clauses[] = $wpdb->prepare( 'u.display_name LIKE %s', '%' . $wpdb->esc_like( $user_name ) . '%' );
+        /**
+         * Search logic
+         */
+        if ( $search !== '' ) {
+            $join = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
+
+            $like = '%' . $wpdb->esc_like( $search ) . '%';
+
+            $search_clauses[] = $wpdb->prepare( 'u.display_name LIKE %s', $like );
+            $search_clauses[] = $wpdb->prepare( 'l.ip LIKE %s', $like );
+            $search_clauses[] = $wpdb->prepare( 'l.title LIKE %s', $like );
+
+            // Date search only if valid YYYY-MM-DD
+            if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $search ) ) {
+                $search_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $search );
+            }
         }
 
-        if ( ! empty( $ip ) ) {
-            $where_clauses[] = $wpdb->prepare( 'l.ip LIKE %s', '%' . $wpdb->esc_like( $ip ) . '%' );
-        }
-
-        if ( ! empty( $title ) ) {
-            $where_clauses[] = $wpdb->prepare( 'l.title LIKE %s', '%' . $wpdb->esc_like( $title ) . '%' );
-        }
-
-        if ( ! empty( $created_at ) ) {
-            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $created_at );
+        if ( ! empty( $search_clauses ) ) {
+            $where_clauses[] = '(' . implode( ' OR ', $search_clauses ) . ')';
         }
 
         $where = implode( ' AND ', $where_clauses );
 
-        // Get total count
-        $count_query = "SELECT COUNT(*) FROM {$this->logs_table_name} l {$join} WHERE {$where}";
-        $total       = $wpdb->get_var( $count_query );
+        /**
+         * Total count query
+         */
+        $count_query = "
+            SELECT COUNT(*)
+            FROM {$this->logs_table_name} l
+            {$join}
+            WHERE {$where}
+        ";
 
-        // Get data
-        $query = "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email 
-                  FROM {$this->logs_table_name} l 
-                  LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID 
-                  WHERE {$where} 
-                  ORDER BY l.{$orderby} {$order} 
-                  LIMIT %d OFFSET %d";
+        $total = (int) $wpdb->get_var( $count_query );
+
+        /**
+         * Data query
+         */
+        $data_query = "
+            SELECT l.*, u.display_name AS user_name, u.user_login, u.user_email
+            FROM {$this->logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            WHERE {$where}
+            ORDER BY l.{$orderby} {$order}
+            LIMIT %d OFFSET %d
+        ";
 
         $results = $wpdb->get_results(
-            $wpdb->prepare( $query, $per_page, $offset ),
+            $wpdb->prepare( $data_query, $per_page, $offset ),
             ARRAY_A
         );
 
         return new WP_REST_Response(
             array(
-                'success' => true,
-                'data'    => $results,
-                'total'   => (int) $total,
-                'page'    => $page,
-                'per_page' => $per_page,
-                'total_pages' => ceil( $total / $per_page ),
+                'success'      => true,
+                'data'         => $results,
+                'total'        => $total,
+                'page'         => $page,
+                'per_page'     => $per_page,
+                'total_pages'  => (int) ceil( $total / $per_page ),
             ),
             200
         );
     }
+
 
     /**
      * Search logs
