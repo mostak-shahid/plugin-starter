@@ -53,7 +53,21 @@
         "itemKey": "logs",
         "text": "Logs",
         "description": "Plugin logs",
-        "url": "/settings/logs"
+        "url": "/settings/logs",
+        "items": [
+            {
+                "itemKey": "table",
+                "text": "Table",
+                "description": "View logs in table format",
+                "url": "/settings/logs/table"
+            },
+            {
+                "itemKey": "analytics",
+                "text": "Analytics",
+                "description": "View logs analytics",
+                "url": "/settings/logs/analytics"
+            }
+        ]
     },
     {
         "itemKey": "feedback",

@@ -16,13 +16,9 @@ export default function Logs() {
 
     return (
         <div>
-            <LogsCharts ref={chartsRef} />
-
-            <Divider margin="12px" />
-            <Title heading={5}>Logs Data</Title>
-            <Divider margin="12px" />
-
             <LogsTable onDataRefresh={handleDataRefresh} />
+            <Divider margin="12px" />
+            <LogsCharts ref={chartsRef} />
         </div>
     );
 }
