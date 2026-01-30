@@ -23,6 +23,8 @@
     "@coreui/icons": "^1.0.0",
     "@douyinfe/semi-icons": "^2.88.3",
     "@douyinfe/semi-ui": "^2.88.3",
+    "@visactor/react-vchart": "^2.0.15",
+    "@visactor/vchart-semi-theme": "^1.12.3",
     "@wordpress/api-fetch": "^7.35.0",
     "@wordpress/components": "^28.9.0",
     "react-ace": "^14.0.1",

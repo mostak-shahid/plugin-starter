@@ -21,6 +21,9 @@ class Tools
             // AJAX handler to verify password
             add_action('wp_ajax_verify_user_password', [Ajax_API::class, 'verify_user_password_ajax']);
         }
+
+
+        add_action('wp_ajax_plugin_starter_reset_all_settings', [Ajax_API::class, 'plugin_starter_reset_all_settings']);	
         		
         // Handle deactivation via admin-post
         add_action( 'admin_post_plugin_starter_deactivate', array( Ajax_API::class, 'handle_deactivation' ) );

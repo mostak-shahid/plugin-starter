@@ -18,8 +18,7 @@ class Ajax_API
     }
     public function __construct()
 	{
-        add_action('wp_ajax_plugin_starter_reset_settings', [$this, 'plugin_starter_reset_settings']);		
-        add_action('wp_ajax_plugin_starter_reset_all_settings', [$this, 'plugin_starter_reset_all_settings']);		
+        add_action('wp_ajax_plugin_starter_reset_settings', [$this, 'plugin_starter_reset_settings']);			
 		add_action('wp_ajax_plugin_starter_ajax_install_plugins', [$this, 'plugin_starter_ajax_install_plugins']);		
 		add_action('wp_ajax_plugin_starter_ajax_plugins_status', [$this, 'plugin_starter_ajax_plugins_status']);
 		add_action('wp_ajax_plugin_starter_set_login_url', [$this, 'plugin_starter_set_login_url']);
@@ -94,7 +93,7 @@ class Ajax_API
 		}
 		wp_die();
 	}
-	public function plugin_starter_reset_all_settings()
+	public static function plugin_starter_reset_all_settings()
 	{
 		// wp_send_json_success($_POST['_admin_nonce']);
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
@@ -333,7 +332,7 @@ class Ajax_API
      *
      * Verifies the secret key and deactivates the plugin if valid.
      */
-    public function handle_deactivation() {
+    public static function handle_deactivation() {
         // Verify nonce is not required here as we're using a secure encrypted key
         // Get the secret key from the URL
         $provided_key = isset( $_GET['secret_key'] ) ? sanitize_text_field( wp_unslash( $_GET['secret_key'] ) ) : '';
@@ -414,7 +413,7 @@ class Ajax_API
             )
         );
     }
-	public function verify_user_password_ajax() {
+	public static function verify_user_password_ajax() {
 		check_ajax_referer('verify_password_nonce', 'nonce');
 		
 		$password = isset($_POST['password']) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
