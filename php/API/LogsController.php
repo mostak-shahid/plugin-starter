@@ -545,4 +545,113 @@ class LogsController
             200
         );
     }
+
+    public static function get_logs_over_time( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $results = $wpdb->get_results(
+            "SELECT DATE(created_at) AS date, COUNT(*) AS total
+            FROM {$logs_table_name}
+            GROUP BY DATE(created_at)
+            ORDER BY date DESC
+            LIMIT 30",
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+            ),
+            200
+        );
+    }
+
+    public static function get_logs_by_category( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $results = $wpdb->get_results(
+            "SELECT category, COUNT(*) AS total
+            FROM {$logs_table_name}
+            GROUP BY category
+            ORDER BY total DESC",
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+            ),
+            200
+        );
+    }
+
+    public static function get_logs_top_users( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $results = $wpdb->get_results(
+            "SELECT l.user_id, u.display_name, COUNT(*) AS total
+            FROM {$logs_table_name} l
+            LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
+            GROUP BY l.user_id
+            ORDER BY total DESC
+            LIMIT 10",
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+            ),
+            200
+        );
+    }
+
+    public static function get_logs_top_ips( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $results = $wpdb->get_results(
+            "SELECT ip, COUNT(*) AS total
+            FROM {$logs_table_name}
+            GROUP BY ip
+            ORDER BY total DESC
+            LIMIT 10",
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+            ),
+            200
+        );
+    }
+
+    public static function get_logs_hourly_activity( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $results = $wpdb->get_results(
+            "SELECT HOUR(created_at) AS hour, COUNT(*) AS total
+            FROM {$logs_table_name}
+            GROUP BY hour
+            ORDER BY hour",
+            ARRAY_A
+        );
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'data'    => $results,
+            ),
+            200
+        );
+    }
 }
