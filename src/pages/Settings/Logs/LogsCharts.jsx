@@ -68,7 +68,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         xField: 'date',
         yField: 'total',
-        title: { text: 'Logs Over Time' },
+        // title: { text: 'Logs Over Time' },
         point: { size: 5 },
         smooth: true,
     };
@@ -81,7 +81,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         xField: 'category',
         yField: 'total',
-        title: { text: 'Logs by Category' },
+        // title: { text: 'Logs by Category' },
         label: { visible: true },
         axis: {
             y: {
@@ -98,7 +98,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         xField: 'user',
         yField: 'total',
-        title: { text: 'Top 10 Users' },
+        // title: { text: 'Top 10 Users' },
         label: { visible: true },
         axis: {
             y: {
@@ -115,7 +115,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         valueField: 'total',
         categoryField: 'category',
-        title: { text: 'Category Share' },
+        // title: { text: 'Category Share' },
         label: { visible: true },
         outerRadius: 0.8,
         innerRadius: 0.5,
@@ -134,7 +134,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         xField: 'ip',
         yField: 'total',
-        title: { text: 'Top 10 IPs' },
+        // title: { text: 'Top 10 IPs' },
         label: { visible: true },
         axis: {
             y: {
@@ -151,7 +151,7 @@ const LogsCharts = forwardRef((props, ref) => {
         },
         xField: 'hour',
         yField: 'total',
-        title: { text: 'Hourly Activity' },
+        // title: { text: 'Hourly Activity' },
         label: { visible: true },
         axis: {
             y: {
@@ -162,39 +162,35 @@ const LogsCharts = forwardRef((props, ref) => {
 
     return (
         <div>
-            <Title heading={5}>Logs Statistics</Title>
-            <Divider margin="12px" />
             <Spin spinning={chartsLoading}>
                 <Row gutter={16}>
-                    <Col span={8}>
-                        <Card style={{ height: '300px', marginBottom: 16 }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Logs Over Time', 'plugin-starter')} headerLine={true}>
                             <VChart spec={overTimeSpec} />
                         </Card>
                     </Col>
-                    <Col span={8}>
-                        <Card style={{ height: '300px', marginBottom: 16 }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Logs by Category', 'plugin-starter')} headerLine={true}>
                             <VChart spec={byCategorySpec} />
                         </Card>
                     </Col>
-                    <Col span={8}>
-                        <Card style={{ height: '300px', marginBottom: 16 }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Top Users', 'plugin-starter')} headerLine={true}>
                             <VChart spec={topUsersSpec} />
                         </Card>
                     </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
-                        <Card style={{ height: '300px' }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Category Share', 'plugin-starter')} headerLine={true}>
                             <VChart spec={categoryPieSpec} />
                         </Card>
                     </Col>
-                    <Col span={8}>
-                        <Card style={{ height: '300px' }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Top IPs', 'plugin-starter')} headerLine={true}>
                             <VChart spec={topIpsSpec} />
                         </Card>
                     </Col>
-                    <Col span={8}>
-                        <Card style={{ height: '300px' }}>
+                    <Col xs={24} md={12}>
+                        <Card style={{ marginBottom: 16 }} bodyStyle={{padding: 0}} title={__('Hourly Activity', 'plugin-starter')} headerLine={true}>
                             <VChart spec={hourlyActivitySpec} />
                         </Card>
                     </Col>

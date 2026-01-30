@@ -23,6 +23,7 @@ import {
     IconEdit,
     IconCalendar,
     IconChevronDown,
+    IconClose,
 } from '@douyinfe/semi-icons';
 
 const { Text } = Typography;
@@ -168,6 +169,13 @@ export default function LogsTable({ onDataRefresh }) {
         setDateRange(dates || []);
         setFilter('any');
         setPage(1);
+    };
+
+    const handleClearDateRange = () => {
+        setDateRange([]);
+        setFilter('any');
+        setPage(1);
+        console.log('Date range cleared');
     };
 
     const columns = [
@@ -321,17 +329,23 @@ export default function LogsTable({ onDataRefresh }) {
                                 <Text strong style={{ marginLeft: 16 }}>
                                     {__('Selected:', 'plugin-starter')} {selectedRowKeys.length}
                                 </Text>
-                                <Button
-                                    type="primary"
-                                    theme="solid"
-                                    loading={deleting}
-                                    onClick={handleBulkDelete}
+                                <Popconfirm
+                                    title={`${__('Are you sure you want to delete', 'plugin-starter')} ${selectedRowKeys.length} ${__('selected log(s)?', 'plugin-starter')}`}
+                                    onConfirm={handleBulkDelete}
+                                    okText={__('Yes, Delete', 'plugin-starter')}
+                                    cancelText={__('Cancel', 'plugin-starter')}
                                 >
-                                    <Space>
-                                        <IconDelete />
-                                        <IconChevronDown />
-                                    </Space>
-                                </Button>
+                                    <Button
+                                        type="primary"
+                                        theme="solid"
+                                        loading={deleting}
+                                    >
+                                        <Space>
+                                            <IconDelete />
+                                            <IconChevronDown />
+                                        </Space>
+                                    </Button>
+                                </Popconfirm>
                             </>
                         )}
                     </Space>
@@ -346,13 +360,25 @@ export default function LogsTable({ onDataRefresh }) {
                             showClear
                             style={{ width: 250 }}
                         />
-                        <DatePicker
-                            type="dateRange"
-                            value={dateRange}
-                            onChange={handleDateRangeChange}
-                            placeholder={[__('Start Date', 'plugin-starter'), __('End Date', 'plugin-starter')]}
-                            style={{ width: 280 }}
-                        />
+                        <Space align="center">
+                            <DatePicker
+                                type="dateRange"
+                                value={dateRange}
+                                onChange={handleDateRangeChange}
+                                placeholder={[__('Start Date', 'plugin-starter'), __('End Date', 'plugin-starter')]}
+                                style={{ width: 280 }}
+                            />
+                            {dateRange && dateRange.length > 0 && (
+                                <Button
+                                    icon={<IconClose />}
+                                    type="tertiary"
+                                    size="small"
+                                    onClick={handleClearDateRange}
+                                >
+                                    {__('Clear', 'plugin-starter')}
+                                </Button>
+                            )}
+                        </Space>
                     </Space>
                 </Col>
             </Row>
@@ -363,7 +389,8 @@ export default function LogsTable({ onDataRefresh }) {
                     dataSource={data}
                     rowKey="ID"
                     rowSelection={rowSelection}
-                    scroll={{ y: 'calc(100vh - 700px)' }}
+                    // scroll={{ y: 'calc(100vh - 700px)' }}
+                    scroll={{ y: 'calc(700px)' }}
                     pagination={{
                         currentPage: page,
                         pageSize,
