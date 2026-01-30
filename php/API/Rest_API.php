@@ -253,12 +253,14 @@ class Rest_API
                 'callback'            => array( LogsController::class, 'get_logs' ),
                 'permission_callback' => array( $this, 'check_permission' ),
                 'args' => [
-                    'page' => ['sanitize_callback' => 'absint','default' => 1],
-                    'per_page' => ['sanitize_callback' => 'absint','default' => 5,],
+                    'page' => ['sanitize_callback' => 'absint', 'default' => 1],
+                    'per_page' => ['sanitize_callback' => 'absint', 'default' => 5],
                     'search' => ['sanitize_callback' => 'sanitize_text_field'],
                     'sort_field' => ['sanitize_callback' => 'sanitize_text_field'],
                     'sort_order' => ['sanitize_callback' => 'sanitize_text_field'],
                     'filter' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'date_from' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'date_to' => ['sanitize_callback' => 'sanitize_text_field'],
                 ],
             )
         );
@@ -457,6 +459,24 @@ class Rest_API
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_hourly_activity' ),
                 'permission_callback' => array( $this, 'check_permission' ),
+            )
+        );
+
+        // Bulk Delete Logs
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/bulk-delete',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( LogsController::class, 'bulk_delete_logs' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'ids' => array(
+                        'required'          => true,
+                        'type'     => 'array',
+                        'items'    => array( 'type' => 'integer' ),
+                    ),
+                ),
             )
         );
     }

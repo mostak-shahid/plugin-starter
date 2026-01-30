@@ -103,6 +103,9 @@ class LogsController
         $page     = max( 1, (int) $request->get_param( 'page' ) );
         $per_page = max( 1, (int) $request->get_param( 'per_page' ) );
         $search   = trim( (string) $request->get_param( 'search' ) );
+        $date_from = $request->get_param( 'date_from' );
+        $date_to   = $request->get_param( 'date_to' );
+        $filter    = $request->get_param( 'filter' );
 
         $orderby = $request->get_param( 'sort_field' );
         $order   = strtoupper( $request->get_param( 'sort_order' ) ) === 'ASC' ? 'ASC' : 'DESC';
@@ -139,6 +142,37 @@ class LogsController
 
         if ( ! empty( $search_clauses ) ) {
             $where_clauses[] = '(' . implode( ' OR ', $search_clauses ) . ')';
+        }
+
+        /**
+         * Time-based filter (today, week, month)
+         */
+        if ( ! empty( $filter ) && $filter !== 'any' ) {
+            $current_date = date( 'Y-m-d' );
+            switch ( $filter ) {
+                case 'today':
+                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $current_date );
+                    break;
+                case 'week':
+                    $week_start = date( 'Y-m-d', strtotime( 'this week monday' ) );
+                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $week_start );
+                    break;
+                case 'month':
+                    $month_start = date( 'Y-m-01' );
+                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $month_start );
+                    break;
+            }
+        }
+
+        /**
+         * Date range filter
+         */
+        if ( ! empty( $date_from ) ) {
+            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', sanitize_text_field( $date_from ) );
+        }
+
+        if ( ! empty( $date_to ) ) {
+            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) <= %s', sanitize_text_field( $date_to ) );
         }
 
         $where = implode( ' AND ', $where_clauses );
@@ -650,6 +684,48 @@ class LogsController
             array(
                 'success' => true,
                 'data'    => $results,
+            ),
+            200
+        );
+    }
+
+    public static function bulk_delete_logs( $request ) {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+        $ids = $request->get_param( 'ids' );
+
+        if ( empty( $ids ) || ! is_array( $ids ) ) {
+            return new WP_Error(
+                'invalid_ids',
+                'Invalid or empty IDs provided',
+                array( 'status' => 400 )
+            );
+        }
+
+        $ids = array_map( 'intval', $ids );
+        $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+        $result = $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM {$logs_table_name} WHERE ID IN ({$placeholders})",
+                $ids
+            )
+        );
+
+        if ( false === $result ) {
+            return new WP_Error(
+                'delete_failed',
+                'Failed to delete logs: ' . $wpdb->last_error,
+                array( 'status' => 500 )
+            );
+        }
+
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'message' => sprintf( 'Successfully deleted %d log entries', count( $ids ) ),
+                'deleted_count' => count( $ids ),
             ),
             200
         );

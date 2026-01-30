@@ -4,29 +4,46 @@ import apiFetch from '@wordpress/api-fetch';
 import {
     Table,
     Input,
+    Select,
     Space,
     Button,
     Typography,
     Spin,
     Tag,
     Popconfirm,
+    DatePicker,
+    Dropdown,
+    Toast,
+    Row,
+    Col,
 } from '@douyinfe/semi-ui';
 import {
     IconSearch,
     IconDelete,
     IconEdit,
+    IconCalendar,
+    IconChevronDown,
 } from '@douyinfe/semi-icons';
 
 const { Text } = Typography;
 
+const timeFilterOptions = [
+    { label: __('All Time', 'plugin-starter'), value: 'any' },
+    { label: __('Today', 'plugin-starter'), value: 'today' },
+    { label: __('Last 7 Days', 'plugin-starter'), value: 'week' },
+    { label: __('This Month', 'plugin-starter'), value: 'month' },
+];
+
 export default function LogsTable({ onDataRefresh }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(20);
     const [total, setTotal] = useState(0);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState('any');
+    const [dateRange, setDateRange] = useState([]);
     const [sortField, setSortField] = useState('created_at');
     const [sortOrder, setSortOrder] = useState('DESC');
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -41,12 +58,43 @@ export default function LogsTable({ onDataRefresh }) {
                 path: `/plugin-starter/v1/logs/${id}`,
                 method: 'DELETE',
             });
+            Toast.success(__('Log deleted successfully', 'plugin-starter'));
             fetchData();
             if (onDataRefresh) {
                 onDataRefresh();
             }
         } catch (error) {
             console.error('Error deleting log:', error);
+            Toast.error(__('Failed to delete log', 'plugin-starter'));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        console.log('Bulk delete clicked, selected keys:', selectedRowKeys);
+        if (selectedRowKeys.length === 0) {
+            Toast.warning(__('Please select logs to delete', 'plugin-starter'));
+            return;
+        }
+
+        setDeleting(true);
+        try {
+            console.log('Sending bulk delete request for:', selectedRowKeys);
+            await apiFetch({
+                path: '/plugin-starter/v1/logs/bulk-delete',
+                method: 'DELETE',
+                data: { ids: selectedRowKeys },
+            });
+            Toast.success(`${selectedRowKeys.length} ${__('logs deleted successfully', 'plugin-starter')}`);
+            setSelectedRowKeys([]);
+            fetchData();
+            if (onDataRefresh) {
+                onDataRefresh();
+            }
+        } catch (error) {
+            console.error('Error bulk deleting logs:', error);
+            Toast.error(__('Failed to delete logs', 'plugin-starter'));
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -56,13 +104,32 @@ export default function LogsTable({ onDataRefresh }) {
             const params = new URLSearchParams({
                 page,
                 per_page: pageSize,
-                search: encodeURIComponent(search),
+                search: search,
                 filter,
                 sort_field: sortField,
                 sort_order: sortOrder,
             });
+
+            if (dateRange && dateRange.length === 2) {
+                const formatDate = (date) => {
+                    const d = new Date(date);
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+                const startDate = formatDate(dateRange[0]);
+                const endDate = formatDate(dateRange[1]);
+                console.log('Adding date range:', startDate, endDate);
+                params.append('date_from', startDate);
+                params.append('date_to', endDate);
+            }
+
+            const queryString = params.toString();
+            console.log('Fetching logs with params:', queryString);
+
             const response = await apiFetch({
-                path: `/plugin-starter/v1/logs?${params.toString()}`,
+                path: `/plugin-starter/v1/logs?${queryString}`,
             });
             setData(response.data || []);
             setTotal(response.total || 0);
@@ -80,9 +147,28 @@ export default function LogsTable({ onDataRefresh }) {
         pageSize,
         search,
         filter,
+        dateRange,
         sortField,
         sortOrder,
     ]);
+
+    const handleSearchChange = (value) => {
+        setSearch(value);
+        setPage(1);
+    };
+
+    const handleFilterChange = (value) => {
+        setFilter(value);
+        setDateRange([]);
+        setPage(1);
+    };
+
+    const handleDateRangeChange = (dates) => {
+        console.log('Date range changed:', dates);
+        setDateRange(dates || []);
+        setFilter('any');
+        setPage(1);
+    };
 
     const columns = [
         {
@@ -179,10 +265,10 @@ export default function LogsTable({ onDataRefresh }) {
                     onClick={() => handleEdit(record)}
                 />
                 <Popconfirm
-                    title="Are you sure you want to delete this log?"
+                    title={__('Are you sure you want to delete this log?', 'plugin-starter')}
                     onConfirm={() => handleDelete(record.ID)}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={__('Yes', 'plugin-starter')}
+                    cancelText={__('No', 'plugin-starter')}
                 >
                     <Button
                     icon={<IconDelete />}
@@ -198,7 +284,10 @@ export default function LogsTable({ onDataRefresh }) {
 
     const rowSelection = {
         selectedRowKeys,
-        onChange: (keys) => setSelectedRowKeys(keys),
+        onChange: (keys) => {
+            console.log('Row selection changed:', keys);
+            setSelectedRowKeys(keys);
+        },
         getCheckboxProps: (record) => ({
             name: record.id,
         }),
@@ -217,36 +306,64 @@ export default function LogsTable({ onDataRefresh }) {
 
     return (
         <div>
-            <div className="flex justify-center md:justify-between">
-                <div className="table-action-left text-center md:text-left">
-                    <div>All/Today/This Week/This Month</div>
-                    <div className="bulk-actions">Select field with a button for delete selected rows</div>
-                </div>
-                <div className="table-action-right text-center md:text-right">
-                    <div>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                    <Space align="center">
+                        <Text strong>{__('Time Filter:', 'plugin-starter')}</Text>
+                        <Select
+                            value={filter}
+                            onChange={handleFilterChange}
+                            optionList={timeFilterOptions}
+                            style={{ width: 150 }}
+                        />
+                        {selectedRowKeys.length > 0 && (
+                            <>
+                                <Text strong style={{ marginLeft: 16 }}>
+                                    {__('Selected:', 'plugin-starter')} {selectedRowKeys.length}
+                                </Text>
+                                <Button
+                                    type="primary"
+                                    theme="solid"
+                                    loading={deleting}
+                                    onClick={handleBulkDelete}
+                                >
+                                    <Space>
+                                        <IconDelete />
+                                        <IconChevronDown />
+                                    </Space>
+                                </Button>
+                            </>
+                        )}
+                    </Space>
+                </Col>
+                <Col span={12} style={{ textAlign: 'right' }}>
+                    <Space align="center">
                         <Input
                             prefix={<IconSearch />}
                             placeholder={__('Search…', 'plugin-starter')}
                             value={search}
-                            onChange={(value) => {
-                                setSearch(value);
-                                setPage(1);
-                            }}
+                            onChange={handleSearchChange}
                             showClear
-                            style={{ width: 300 }}
+                            style={{ width: 250 }}
                         />
-                    </div>
-                    <div>Date range filter</div>
-                </div>
-            </div>
+                        <DatePicker
+                            type="dateRange"
+                            value={dateRange}
+                            onChange={handleDateRangeChange}
+                            placeholder={[__('Start Date', 'plugin-starter'), __('End Date', 'plugin-starter')]}
+                            style={{ width: 280 }}
+                        />
+                    </Space>
+                </Col>
+            </Row>
+
             <Spin spinning={loading}>
                 <Table
                     columns={columns}
                     dataSource={data}
                     rowKey="ID"
                     rowSelection={rowSelection}
-                    // scroll={{ y: 'calc(100vh - 700px)' }}
-                    scroll={{ y: '600px' }}
+                    scroll={{ y: 'calc(100vh - 700px)' }}
                     pagination={{
                         currentPage: page,
                         pageSize,
