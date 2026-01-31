@@ -308,9 +308,9 @@ const Tools = () => {
                                     noLabel
                                     field="delete_data_on"
                                     optionList={[
-                                        { label: "None", value: "none" },
-                                        { label: "Delete", value: "delete" },
-                                        { label: "Uninstall", value: "uninstall" },
+                                        { label: __("None", "plugin-starter"), value: "none" },
+                                        { label: __("Delete", "plugin-starter"), value: "delete" },
+                                        { label: __("Deactivate", "plugin-starter"), value: "deactivate" },
                                     ]}
                                 />
                             </Col>
