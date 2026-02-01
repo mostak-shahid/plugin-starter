@@ -84,8 +84,6 @@ class PluginStarter
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'plugin-starter';
-
-		$this->load_dependencies();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -101,29 +99,6 @@ class PluginStarter
 	}
 
 	/**
-	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - Loader. Orchestrates the hooks of the plugin.
-	 * - Admin. Defines all hooks for the admin area.
-	 * - Public. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function load_dependencies()
-	{
-
-		require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-
-		$this->loader = new Loader();
-	}
-
-	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
@@ -133,8 +108,8 @@ class PluginStarter
 	private function define_admin_hooks()
 	{
 		$plugin_admin = new \MosPress\PluginStarter\Admin\Admin($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 9999);
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 9999);
+		add_action('admin_enqueue_scripts', [$plugin_admin, 'enqueue_styles'], 9999);
+		add_action('admin_enqueue_scripts', [$plugin_admin, 'enqueue_scripts'], 9999);
 	}
 
 	/**
@@ -148,21 +123,11 @@ class PluginStarter
 	{
 
 		$plugin_public = new \MosPress\PluginStarter\Public\PublicClass($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+		add_action('wp_enqueue_scripts', [$plugin_public, 'enqueue_styles']);
+		add_action('wp_enqueue_scripts', [$plugin_public, 'enqueue_scripts']);
 		// Save settings by ajax
-		$this->loader->add_action('wp_ajax_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
-		$this->loader->add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', $plugin_public, 'plugin_starter_ajax_callback');
-	}
-
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run()
-	{
-		$this->loader->run();
+		add_action('wp_ajax_plugin_starter_ajax_callback', [$plugin_public, 'plugin_starter_ajax_callback']);
+		add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', [$plugin_public, 'plugin_starter_ajax_callback']);
 	}
 
 	/**

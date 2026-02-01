@@ -89,6 +89,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 function plugin_starter_run()
 {
 	$plugin = new \MosPress\PluginStarter\Core\PluginStarter();
-	$plugin->run();
+	// $plugin->run();
 }
 plugin_starter_run();

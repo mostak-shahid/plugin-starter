@@ -41,8 +41,9 @@ class LogsController
 				'ip' => $ip,
 				'user_agent' => $user_agent,
 				'title' => 'Settings Reset',
+                'category' => __('Settings Reset', 'plugin-starter'),
 				'description' => "Reset section: $section",
-				'data' => json_encode($changes),
+				// 'data' => json_encode($changes),
 				'created_at' => current_time('mysql'),
 				'updated_at' => current_time('mysql')
 			],
