@@ -12,3 +12,7 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
+$options = plugin_starter_get_option();
+if (isset($options['tools']['delete_data_on']) && $options['tools']['delete_data_on'] == 'delete') {
+    plugin_starter_data_cleanup();
+}

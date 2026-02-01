@@ -22,11 +22,12 @@ class Tools
             // AJAX handler to verify password
             add_action('wp_ajax_verify_user_password', [Ajax_API::class, 'verify_user_password_ajax']);
         }
-        if (isset($this->options['tools']['delete_data_on']) && $this->options['tools']['delete_data_on'] == 'deactivate') {
-            // Cleaning up on Deactive
-        } else if (isset($this->options['tools']['delete_data_on']) && $this->options['tools']['delete_data_on'] == 'delete') {
-            // Cleaning up on Delete
-        }
+
+        // if (isset($this->options['tools']['delete_data_on']) && $this->options['tools']['delete_data_on'] == 'deactivate') {
+        //     // Cleaning up on Deactive
+        // } else if (isset($this->options['tools']['delete_data_on']) && $this->options['tools']['delete_data_on'] == 'delete') {
+        //     // Cleaning up on Delete
+        // }
 
         add_action('wp_ajax_plugin_starter_reset_all_settings', [Ajax_API::class, 'plugin_starter_reset_all_settings']);	
         		
