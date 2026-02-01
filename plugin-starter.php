@@ -64,7 +64,7 @@ register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
 require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
-require_once PLUGIN_STARTER_PATH . 'plugin-starter-functions.php';
+require_once PLUGIN_STARTER_PATH . '/includes/plugin-starter-functions.php';
 
 /**
  * Register WP-CLI commands only if file exists

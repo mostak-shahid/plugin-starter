@@ -37,6 +37,7 @@ class Filter_Hook {
         add_filter('plugin_starter_default_options_modify', [ $this, 'modify_plugin_starter_default_options' ]);
         add_filter('plugin_starter_default_colors_modify', [ $this, 'modify_plugin_starter_default_colors' ]);
         add_filter('plugin_starter_default_gradients_modify', [ $this, 'modify_plugin_starter_default_gradients' ]);
+        add_filter('plugin_starter_default_tables_modify', [ $this, 'modify_plugin_starter_default_tables' ]);
 
         /**
          * Allow PRO add-ons or Module Federation remotes to inject links dynamically
@@ -192,16 +193,14 @@ class Filter_Hook {
 	    ];
         return wp_parse_args( $opts, $defaults );
     }
-    public static function hide_plugin_from_list($plugins) {
-        // Only hide for non-administrators or specific users
-        if (current_user_can('administrator')) {
-            // Optionally hide even from admins
-            // unset($plugins['plugin-starter/plugin-starter.php']);
-        }
 
-        // Hide from all users
-        unset($plugins['plugin-starter/plugin-starter.php']);
-
-        return $plugins;
+    /**
+     * Default options filter (still dynamic)
+     */
+    public function modify_plugin_starter_default_tables( $opts ) {
+        $defaults = [
+            ['plugin_starter_logs'],
+	    ];
+        return wp_parse_args( $opts, $defaults );
     }
 }

