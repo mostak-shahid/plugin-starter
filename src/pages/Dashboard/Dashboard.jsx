@@ -66,9 +66,9 @@ export default function Dashboard() {
                                     )}
                                 </div>
                             ))} */}
-                            <Paragraph>login details, as a time line</Paragraph>
-                            <Paragraph>Traffic Log</Paragraph>
-                            <Paragraph>LLM Bot Tracker</Paragraph>
+                            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto blanditiis repudiandae quod, aliquam laborum dolores aliquid dolorem alias ratione facere ab enim unde et, tempore repellendus molestias quaerat neque, reiciendis voluptate quas necessitatibus. Tenetur quos laudantium, magnam totam excepturi id incidunt aspernatur corporis ducimus pariatur omnis dolorum minus explicabo iusto veniam inventore cupiditate provident eum laborum. Quibusdam rem neque maiores fugiat, unde similique saepe expedita natus dolor est pariatur tempore excepturi soluta maxime voluptate facere cupiditate fugit modi enim accusantium? Dignissimos magni, ut, sit deserunt eaque in ea modi autem cum, ex beatae similique aperiam obcaecati eius eligendi perferendis quasi.</Paragraph>
+                            <Paragraph>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi modi libero repellat optio dolor sunt in ipsam dicta numquam quas magnam nam quidem praesentium vitae quod earum, qui iusto consectetur repellendus exercitationem eligendi tempore tenetur commodi labore! Tempora aspernatur ducimus odit nihil rem veniam dignissimos a officia id, voluptate perspiciatis!</Paragraph>
+                            <Paragraph>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum, rerum labore? Doloribus eaque exercitationem eligendi odio! Maiores voluptatum soluta voluptatem distinctio quos blanditiis consectetur ea?</Paragraph>
                         </Card>
                         <Card 
                             title={__("Extend Your Website", "plugin-starter")}
