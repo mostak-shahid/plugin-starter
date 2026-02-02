@@ -144,7 +144,7 @@ export default function PluginCard(plugin) {
 		pluginStatus,
 	);
     return (
-        <div className="plugin-starter-plugin-card">
+        <div className="plugin-starter-plugin-card p-4">
             <Space align='center'>
                 <img
                     alt={name}

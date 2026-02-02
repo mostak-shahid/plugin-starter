@@ -74,7 +74,7 @@ export default function Dashboard() {
                             title={__("Extend Your Website", "plugin-starter")}
                             className=""
                         >
-                            <Row type="flex" gutter={[16, 24]}>
+                            <Row type="flex" gutter={[16, 16]}>
                                 {
                                     pluginsLoading 
                                     ? 
