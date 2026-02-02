@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { Form, Card } from '@douyinfe/semi-ui';
-import { Button, Col, Row, Typography, Toast } from '@douyinfe/semi-ui';
+import { Button, Col, Row, Typography, Toast, Space } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { BoxedLayout } from '../layouts';
+import { PageInfo } from '../components';
+import menuItems from '../data/menu.json';
 const Feedback = () => {    
     const [initValues] = useState({
         subject: '',
@@ -91,7 +93,13 @@ const Feedback = () => {
 
     return (
         <BoxedLayout>
-            <Card title="Boxed Layout - Right Sidebar" headerLine={true}>
+            <Card 
+                    title={
+                        <PageInfo menu={menuItems} url="/feedback"  />
+                    }
+                    // title="Title"
+                    headerLine={true}
+                >
                 <Row type="flex" gutter={[24,24]} align="middle">
                     <Col sx={24} lg={12}>
                         <OnlineSurvey/>
@@ -132,11 +140,13 @@ const Feedback = () => {
                                     ]}
                                 />
                             </div>
-                            
-                            <Button type="primary" htmlType="submit" className="btn-margin-right">
-                                Submit
-                            </Button>
-                            <Button htmlType="reset">Reset</Button>
+                            <Space>
+                                <Button theme="solid" type="primary" htmlType="submit" className="btn-margin-right">
+                                    {__("Submit", "plugin-starter")}
+                                </Button>
+                                <Button theme='solid' type='danger' htmlType="reset">{__("Reset", "plugin-starter")}</Button>
+
+                            </Space>
                             
                         </Form>
                         {/* <Button 

@@ -34,37 +34,37 @@
     {
         "itemKey": "import-export",
         "text": "Import & Export",
-        "description": "Import and Export your settings",
+        "description": "Easily import or export plugin settings for backup, migration, or reuse.",
         "url": "/settings/import-export"
     },
     {
         "itemKey": "more",
         "text": "More",
-        "description": "Adding more features",
+        "description": "Enable additional features, extensions, and advanced options.",
         "url": "/settings/more"
     },
     {
         "itemKey": "tools",
         "text": "Tools",
-        "description": "Various tools",
+        "description": "Access helpful utilities for maintenance, debugging, and optimization.",
         "url": "/settings/tools"
     },
     {
         "itemKey": "logs",
         "text": "Logs",
-        "description": "Plugin logs",
+        "description": "Review and manage plugin activity logs.",
         "url": "/settings/logs",
         "items": [
             {
                 "itemKey": "table",
                 "text": "Table",
-                "description": "View logs in table format",
+                "description": "Browse detailed logs in a searchable table view.",
                 "url": "/settings/logs/table"
             },
             {
                 "itemKey": "analytics",
                 "text": "Analytics",
-                "description": "View logs analytics",
+                "description": "Analyze log data with charts and usage insights.",
                 "url": "/settings/logs/analytics"
             }
         ]
@@ -72,7 +72,7 @@
     {
         "itemKey": "feedback",
         "text": "Feedback",
-        "description": "Send us your feedback",
+        "description": "Share feedback, report issues, or suggest improvements.",
         "url": "/feedback"
     }
 ]

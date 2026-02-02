@@ -21,8 +21,6 @@ class Ajax_API
         add_action('wp_ajax_plugin_starter_reset_settings', [$this, 'plugin_starter_reset_settings']);			
 		add_action('wp_ajax_plugin_starter_ajax_install_plugins', [$this, 'plugin_starter_ajax_install_plugins']);		
 		add_action('wp_ajax_plugin_starter_ajax_plugins_status', [$this, 'plugin_starter_ajax_plugins_status']);
-		add_action('wp_ajax_plugin_starter_set_login_url', [$this, 'plugin_starter_set_login_url']);
-		add_action('wp_ajax_plugin_starter_send_email_login_url', [$this, 'plugin_starter_send_email_login_url']);
 		add_action('init', [$this, 'plugin_starter_maybe_flush_rules'], 99);   
 		
     }    
@@ -49,44 +47,6 @@ class Ajax_API
 					'success_message' => esc_html($status)
 				)
 			);
-		} else {
-			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
-			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
-		}
-		wp_die();
-	}
-	public function plugin_starter_set_login_url()
-	{
-		// wp_send_json_success($_POST['_admin_nonce']);
-		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
-			$login_url = isset($_POST['login_url'])?sanitize_text_field(wp_unslash($_POST['login_url'])):'';
-			$plugin_starter_options = plugin_starter_get_option();
-			$plugin_starter_options['hide_login']['login_url'] = $login_url;
-            update_option('plugin_starter_options', $plugin_starter_options);
-            update_option('plugin_starter_flush_rewrite', true);
-            wp_send_json_success(['message' => __('Login URL reset successfully.', 'plugin-starter')]);			
-		} else {
-			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
-			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
-		}
-		wp_die();
-	}
-	public function plugin_starter_send_email_login_url()
-	{
-		// wp_send_json_success($_POST['_admin_nonce']);
-		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
-			$options = plugin_starter_get_option();
-			$login_url = (isset($options['hide_login']['login_url']) & !empty($options['hide_login']['login_url']))?sanitize_text_field(wp_unslash($options['hide_login']['login_url'])):home_url('/wp-login.php/');
-			$emails = isset($_POST['emails'])?sanitize_text_field(wp_unslash($_POST['emails'])):'';
-			if($emails) {
-				$emails_arr = explode(',',$emails);
-				$subject = 'New Login Link';
-				$body = 'Your New Login Link is '. home_url('/'.$login_url.'/');
-				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-				wp_mail( $emails_arr, $subject, $body, $headers, array( '' ) );
-				wp_send_json_success(['message' => __('Email successfully.', 'plugin-starter')]);			
-			}
-			wp_send_json_error(array('error_message' => esc_html__('No email address found.', 'plugin-starter')));
 		} else {
 			wp_send_json_error(array('error_message' => esc_html__('Nonce verification failed. Please try again.', 'plugin-starter')));
 			// wp_die(esc_html__('Nonce verification failed. Please try again.', 'plugin-starter'));
@@ -325,22 +285,6 @@ class Ajax_API
 			delete_option('plugin_starter_flush_rewrite');
 		}
 	}	
-
-    /**
-     * Handle deactivation errors.
-     *
-     * @param string $message Error message to display.
-     */
-    private function deactivation_error( $message ) {
-        wp_die(
-            esc_html( $message ),
-            esc_html__( 'Plugin Deactivation Error', 'plugin-starter' ),
-            array(
-                'response' => 403,
-                'back_link' => true,
-            )
-        );
-    }
 	public static function verify_user_password_ajax() {
 		check_ajax_referer('verify_password_nonce', 'nonce');
 		
