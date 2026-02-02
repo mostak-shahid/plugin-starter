@@ -29,7 +29,6 @@ import Details from './data/details.json';
 
 import './App.scss';
 import "./tailwind.css";
-import Semi from "./pages/Semi/Semi";
 
 const { Header, } = Layout;
 function App() {
@@ -249,12 +248,6 @@ function App() {
                     </Route>
                     <Route path="feedback" element={<Feedback />} />
                     <Route path="free-vs-pro" element={<FreeVsPro />} />
-                    <Route path="/semi" element={<Semi />}>
-                        <Route index element={<Semi />} />
-                        {/* <Route path="profile" element={<ProfilePage />} />
-                        <Route path="settings" element={<SettingsPage />} /> */}
-                        <Route path="*" element={<Semi />} />
-                    </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer
