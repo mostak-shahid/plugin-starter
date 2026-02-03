@@ -336,7 +336,7 @@ class Ajax_API
 							'The following plugin(s) have been deactivated successfully: '
 							. implode(', ', array_map('esc_html', $plugins_deactivated))
 						),
-						esc_html__('Plugin Deactivated', 'ultimate-security'),
+						esc_html__('Plugin Deactivated', 'plugin-starter'),
 						['response' => 200]
 					);
 

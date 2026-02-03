@@ -149,17 +149,17 @@ class LogsController
          * Time-based filter (today, week, month)
          */
         if ( ! empty( $filter ) && $filter !== 'any' ) {
-            $current_date = date( 'Y-m-d' );
+            $current_date = gmdate( 'Y-m-d' );
             switch ( $filter ) {
                 case 'today':
                     $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $current_date );
                     break;
                 case 'week':
-                    $week_start = date( 'Y-m-d', strtotime( 'this week monday' ) );
+                    $week_start = gmdate( 'Y-m-d', strtotime( 'this week monday' ) );
                     $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $week_start );
                     break;
                 case 'month':
-                    $month_start = date( 'Y-m-01' );
+                    $month_start = gmdate( 'Y-m-01' );
                     $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $month_start );
                     break;
             }
