@@ -50,7 +50,7 @@ function plugin_starter_is_plugin_page()
 	}
 	return false;
 }
-function hide_plugin_from_list($plugins) {
+function plugin_starter_hide_plugin_from_list($plugins) {
 	// Only hide for non-administrators or specific users
 	if (current_user_can('administrator')) {
 		// Optionally hide even from admins

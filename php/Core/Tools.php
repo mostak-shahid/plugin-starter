@@ -15,7 +15,7 @@ class Tools
 		$this->options = plugin_starter_get_option();
         if (isset($this->options['tools']['hide_plugin']) && $this->options['tools']['hide_plugin'] == 1) {
             // Hide plugin from plugins list
-            add_filter('all_plugins', 'hide_plugin_from_list');
+            add_filter('all_plugins', 'plugin_starter_hide_plugin_from_list');
         }
         if (isset($this->options['tools']['self_defense']) && $this->options['tools']['self_defense'] == 1) {
             add_action('admin_footer', [Action_Hook::class, 'plugin_starter_deactivation_scripts']);

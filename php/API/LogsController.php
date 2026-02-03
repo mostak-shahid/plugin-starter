@@ -237,8 +237,12 @@ class LogsController
         $total = (int) $wpdb->get_var( $count_query );
 
         /**
-         * Data query
+         * Data query - add per_page and offset to params
          */
+        $data_query_params = $where_params;
+        $data_query_params[] = $per_page;
+        $data_query_params[] = $offset;
+
         $data_query = $wpdb->prepare(
             "SELECT l.*, u.display_name AS user_name, u.user_login, u.user_email
             FROM {$logs_table_name} l
@@ -246,9 +250,7 @@ class LogsController
             WHERE {$prepared_where}
             ORDER BY {$wpdb->prefix}plugin_starter_logs.{$orderby} {$order}
             LIMIT %d OFFSET %d",
-            ...$where_params,
-            $per_page,
-            $offset
+            ...$data_query_params
         );
 
         $results = $wpdb->get_results( $data_query, ARRAY_A );

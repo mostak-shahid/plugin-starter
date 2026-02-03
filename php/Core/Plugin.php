@@ -35,7 +35,7 @@ use MosPress\PluginStarter\Hook\Filter_Hook;
  * @subpackage Plugin_Starter/includes
  * @author     Programmelab <mostak.shahid@gmail.com>
  */
-class PluginStarter
+class Plugin
 {
 
 	/**
