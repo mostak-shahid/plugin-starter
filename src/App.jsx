@@ -36,6 +36,7 @@ function App() {
     const { Text } = Typography;
     const [newsVisible, setNewsVisible] = useState(false);
     const [darkmode, setDarkmode] = useState(false);
+    const [newsItems, setNewsItems] = useState([]);
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -78,6 +79,29 @@ function App() {
             console.log(response);
         } catch (error) {
             console.error("Error fetching settings data:", error);
+        }
+    };
+
+    const truncateText = (text, wordLimit = 15) => {
+        const words = text.split(/\s+/);
+        if (words.length <= wordLimit) return text;
+        return words.slice(0, wordLimit).join(' ') + '...';
+    };
+
+    const fetchNews = async () => {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json');
+            const data = await response.json();
+            setNewsItems(data);
+        } catch (error) {
+            console.error("Error fetching news:", error);
+        }
+    };
+
+    const handleNewsVisible = (visible) => {
+        setNewsVisible(visible);
+        if (visible && newsItems.length === 0) {
+            fetchNews();
         }
     };
 
@@ -208,8 +232,8 @@ function App() {
                                     }
                                 />
 
-                                <Badge count={5}>
-                                    <Button theme='outline' icon={<IconBellStroked />} onClick={() => setNewsVisible(true)} aria-label="Screenshot" />
+                                <Badge count={newsItems.length || 5}>
+                                    <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
                             </Space>
                         )}
@@ -288,11 +312,34 @@ function App() {
                 <SideSheet
                     placement="right"
                     visible={newsVisible}
-                    onCancel={() => setNewsVisible(false)}
+                    onCancel={() => handleNewsVisible(false)}
                     title={__("What's New?", "plugin-starter")}
                     closeOnEsc={true}
                 >
-                    <p>Feature updates and news content go here...</p>
+                    {newsItems.length === 0 ? (
+                        <p>Loading news...</p>
+                    ) : (
+                        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                            {newsItems.map((item) => (
+                                <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
+                                    <Text strong style={{ fontSize: '16px' }}>{item.slug}</Text>
+                                    <div style={{ marginTop: '10px' }}>
+                                        <Text type="secondary">
+                                            {truncateText(item.news)}
+                                            <Button
+                                                type="link"
+                                                size="small"
+                                                onClick={() => alert('Read more: ' + item.news)}
+                                                style={{ padding: 0, marginLeft: '5px' }}
+                                            >
+                                                Read more
+                                            </Button>
+                                        </Text>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </SideSheet>
             </div>
         </LocaleProvider>
