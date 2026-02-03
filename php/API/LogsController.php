@@ -248,7 +248,7 @@ class LogsController
             FROM {$logs_table_name} l
             LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
             WHERE {$prepared_where}
-            ORDER BY {$wpdb->prefix}plugin_starter_logs.{$orderby} {$order}
+            ORDER BY l.{$orderby} {$order}
             LIMIT %d OFFSET %d",
             ...$data_query_params
         );
