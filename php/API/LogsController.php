@@ -176,36 +176,82 @@ class LogsController
             $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) <= %s', sanitize_text_field( $date_to ) );
         }
 
-        $where = implode( ' AND ', $where_clauses );
+        /**
+         * Build prepared where clause with placeholders
+         */
+        $prepared_where = '1=1';
+        $where_params = array();
+
+        if ( $search !== '' ) {
+            $join = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
+            $like = '%' . $wpdb->esc_like( $search ) . '%';
+            $prepared_where .= " AND (u.display_name LIKE %s OR l.ip LIKE %s OR l.title LIKE %s";
+            $where_params[] = $like;
+            $where_params[] = $like;
+            $where_params[] = $like;
+
+            if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $search ) ) {
+                $prepared_where .= " OR DATE(l.created_at) = %s";
+                $where_params[] = $search;
+            }
+            $prepared_where .= ')';
+        }
+
+        if ( ! empty( $filter ) && $filter !== 'any' ) {
+            $current_date = gmdate( 'Y-m-d' );
+            if ( $filter === 'today' ) {
+                $prepared_where .= " AND DATE(l.created_at) = %s";
+                $where_params[] = $current_date;
+            } elseif ( $filter === 'week' ) {
+                $week_start = gmdate( 'Y-m-d', strtotime( 'this week monday' ) );
+                $prepared_where .= " AND DATE(l.created_at) >= %s";
+                $where_params[] = $week_start;
+            } elseif ( $filter === 'month' ) {
+                $month_start = gmdate( 'Y-m-01' );
+                $prepared_where .= " AND DATE(l.created_at) >= %s";
+                $where_params[] = $month_start;
+            }
+        }
+
+        if ( ! empty( $date_from ) ) {
+            $prepared_where .= " AND DATE(l.created_at) >= %s";
+            $where_params[] = sanitize_text_field( $date_from );
+        }
+
+        if ( ! empty( $date_to ) ) {
+            $prepared_where .= " AND DATE(l.created_at) <= %s";
+            $where_params[] = sanitize_text_field( $date_to );
+        }
 
         /**
          * Total count query
          */
-        $count_query = "
-            SELECT COUNT(*)
+        $count_query = $wpdb->prepare(
+            "SELECT COUNT(*)
             FROM {$logs_table_name} l
             {$join}
-            WHERE {$where}
-        ";
+            WHERE {$prepared_where}",
+            ...$where_params
+        );
 
         $total = (int) $wpdb->get_var( $count_query );
 
         /**
          * Data query
          */
-        $data_query = "
-            SELECT l.*, u.display_name AS user_name, u.user_login, u.user_email
+        $data_query = $wpdb->prepare(
+            "SELECT l.*, u.display_name AS user_name, u.user_login, u.user_email
             FROM {$logs_table_name} l
             LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID
-            WHERE {$where}
-            ORDER BY l.{$orderby} {$order}
-            LIMIT %d OFFSET %d
-        ";
-
-        $results = $wpdb->get_results(
-            $wpdb->prepare( $data_query, $per_page, $offset ),
-            ARRAY_A
+            WHERE {$prepared_where}
+            ORDER BY {$wpdb->prefix}plugin_starter_logs.{$orderby} {$order}
+            LIMIT %d OFFSET %d",
+            ...$where_params,
+            $per_page,
+            $offset
         );
+
+        $results = $wpdb->get_results( $data_query, ARRAY_A );
 
         return new WP_REST_Response(
             array(
@@ -231,9 +277,9 @@ class LogsController
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $search   = $request->get_param( 'q' );
-        $page     = $request->get_param( 'page' );
-        $per_page = $request->get_param( 'per_page' );
+        $search   = sanitize_text_field( $request->get_param( 'q' ) );
+        $page     = max( 1, absint( $request->get_param( 'page' ) ) );
+        $per_page = max( 1, absint( $request->get_param( 'per_page' ) ) );
         $offset   = ( $page - 1 ) * $per_page;
 
         $search_like = '%' . $wpdb->esc_like( $search ) . '%';
@@ -303,7 +349,7 @@ class LogsController
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = $request->get_param( 'id' );
+        $id = absint( $request->get_param( 'id' ) );
 
         $query = $wpdb->prepare(
             "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
@@ -343,12 +389,12 @@ class LogsController
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
         $data = array(
-            'user_id'     => $request->get_param( 'user_id' ),
-            'ip'          => $request->get_param( 'ip' ),
-            'user_agent'  => $request->get_param( 'user_agent' ),
-            'title'       => $request->get_param( 'title' ),
-            'description' => $request->get_param( 'description' ),
-            'data'        => $request->get_param( 'data' ),
+            'user_id'     => absint( $request->get_param( 'user_id' ) ),
+            'ip'          => sanitize_text_field( $request->get_param( 'ip' ) ),
+            'user_agent'  => sanitize_text_field( $request->get_param( 'user_agent' ) ),
+            'title'       => sanitize_text_field( $request->get_param( 'title' ) ),
+            'description' => sanitize_textarea_field( $request->get_param( 'description' ) ),
+            'data'        => sanitize_textarea_field( $request->get_param( 'data' ) ),
         );
 
         $format = array(
@@ -405,7 +451,7 @@ class LogsController
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = $request->get_param( 'id' );
+        $id = absint( $request->get_param( 'id' ) );
 
         // Check if log exists
         $exists = $wpdb->get_var(
@@ -436,6 +482,13 @@ class LogsController
         foreach ( $fields as $field => $field_format ) {
             $value = $request->get_param( $field );
             if ( null !== $value ) {
+                if ( $field === 'user_id' ) {
+                    $value = absint( $value );
+                } elseif ( $field === 'ip' || $field === 'user_agent' || $field === 'title' ) {
+                    $value = sanitize_text_field( $value );
+                } elseif ( $field === 'description' || $field === 'data' ) {
+                    $value = sanitize_textarea_field( $value );
+                }
                 $data[ $field ]   = $value;
                 $format[]         = $field_format;
             }
@@ -497,7 +550,7 @@ class LogsController
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = $request->get_param( 'id' );
+        $id = absint( $request->get_param( 'id' ) );
 
         // Get the record before deleting
         $log = $wpdb->get_row(
@@ -704,7 +757,7 @@ class LogsController
             );
         }
 
-        $ids = array_map( 'intval', $ids );
+        $ids = array_map( 'absint', $ids );
         $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
 
         $result = $wpdb->query(
