@@ -11,6 +11,7 @@ import {BreadcrumbControl, PageInfo, VerticalMenuControl} from "../../components
 import { Logo } from '../../lib/Illustrations';
 const { Header, Sider, Content } = Layout;
 import Details from '../../data/details.json';
+import './Settings.scss';
 
 const Settings = () => {
     const [settings, setSettings] = useState({});
@@ -229,6 +230,7 @@ const Settings = () => {
                 breakpoint={960}
                 // headerContent={headerContent}
                 footerContent={footerContent}
+                className="settings-page-menu"
             />
         </>
     );

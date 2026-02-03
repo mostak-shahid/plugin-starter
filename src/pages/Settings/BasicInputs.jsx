@@ -31,7 +31,7 @@ const BasicInputs = () => {
 
     return (
         <>
-            {/* {console.log(settings.basic)} */}
+            {console.log(settings.basic)}
             {!settingsLoading && settings?.basic && (
                 <Form
                     initValues={settings.basic}

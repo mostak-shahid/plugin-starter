@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Nav, } from '@douyinfe/semi-ui';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function VerticalMenuControl({items=[], breakpoint, headerContent, footerContent}) {
+export default function VerticalMenuControl({items=[], breakpoint, headerContent, footerContent, className=""}) {
     const navigate = useNavigate();
     const location = useLocation();
     
@@ -114,6 +114,7 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
             onCollapseChange={setIsCollapse}
             {...(headerContent && { header: headerContent })}
             style={{height: '100%'}}
+            className={className}
         >
             {footerContent && (
                 <Nav.Footer style={{padding: 0, marginTop: 'auto'}}>

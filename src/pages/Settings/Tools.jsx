@@ -236,7 +236,10 @@ const Tools = () => {
                                         )}
                                     </Title>
                                     <Paragraph>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                        {__(
+                                            "Hide this plugin from plugin list.",
+                                            "plugin-starter"
+                                        )}
                                     </Paragraph>
                                 </Skeleton>
                             </Col>
@@ -267,7 +270,10 @@ const Tools = () => {
                                         )}
                                     </Title>
                                     <Paragraph>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                        {__(
+                                            "Password requirement for Deactivation.",
+                                            "plugin-starter"
+                                        )}
                                     </Paragraph>
                                 </Skeleton>
                             </Col>
@@ -298,7 +304,10 @@ const Tools = () => {
                                         )}
                                     </Title>
                                     <Paragraph>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                        {__(
+                                            "Plugin data management.",
+                                            "plugin-starter"
+                                        )}
                                     </Paragraph>
                                 </Skeleton>
                             </Col>
@@ -327,7 +336,7 @@ const Tools = () => {
                                     {__("Reset Plugin", "plugin-starter")}
                                 </Title>
                                 <Paragraph>
-                                    Enable/Disable "Scripts" functionalities
+                                    {__("Reset Plugin to it's default settings", "plugin-starter")}
                                 </Paragraph>
                             </Col>
 
