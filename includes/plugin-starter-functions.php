@@ -188,19 +188,25 @@ function plugin_starter_delete_directory( $dir ) {
         return false;
     }
 
+    global $wp_filesystem;
+
+    if ( ! $wp_filesystem ) {
+        WP_Filesystem();
+    }
+
     $files = array_diff( scandir( $dir ), array( '.', '..' ) );
 
     foreach ( $files as $file ) {
         $path = $dir . '/' . $file;
-        
+
         if ( is_dir( $path ) ) {
             plugin_starter_delete_directory( $path );
         } else {
-            unlink( $path );
+            wp_delete_file( $path );
         }
     }
 
-    return rmdir( $dir );
+    return $wp_filesystem->rmdir( $dir );
 }
 
 /**
