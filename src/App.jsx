@@ -87,22 +87,24 @@ function App() {
         if (words.length <= wordLimit) return text;
         return words.slice(0, wordLimit).join(' ') + '...';
     };
-
-    const fetchNews = async () => {
-        try {
-            const response = await fetch('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json');
-            const data = await response.json();
-            setNewsItems(data);
-        } catch (error) {
-            console.error("Error fetching news:", error);
-        }
-    };
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json');
+                const data = await response.json();
+                setNewsItems(data);
+            } catch (error) {
+                console.error("Error fetching news:", error);
+            }
+        };
+        fetchNews();
+    }, []); 
 
     const handleNewsVisible = (visible) => {
         setNewsVisible(visible);
-        if (visible && newsItems.length === 0) {
-            fetchNews();
-        }
+        // if (visible && newsItems.length === 0) {
+        //     fetchNews();
+        // }
     };
 
     const HorizontalMenuItems = [
@@ -232,7 +234,7 @@ function App() {
                                     }
                                 />
 
-                                <Badge count={newsItems.length || 5}>
+                                <Badge count={newsItems.length || 0}>
                                     <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
                             </Space>
