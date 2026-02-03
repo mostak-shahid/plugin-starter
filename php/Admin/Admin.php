@@ -134,7 +134,7 @@ class Admin
 
 		wp_enqueue_script($this->plugin_name . '-admin-ajax', PLUGIN_STARTER_URL . 'admin/js/admin-ajax.js', array('jquery'), $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-admin-script', PLUGIN_STARTER_URL . 'admin/js/admin-script.js', array('jquery'), $this->version, false);
-		$ajax_params = array(
+		$ajax_params = [
 			'admin_url' => admin_url(),
 			'home_url' => home_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
@@ -146,9 +146,15 @@ class Admin
     		'nonce' => wp_create_nonce('wp_rest'),
 			'default_colors' => plugin_starter_get_default_colors(),
 			'default_gradients' => plugin_starter_get_default_gradients(),
-			'isPro' => is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' ) ? true : false,
+			// 'isPro' => is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' ) ? true : false,
 			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
-		);
+		];
+		if (is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' )) {
+			$plugins = get_plugins();
+			$version = $plugins['plugin-starter-pro/plugin-starter-pro.php']['Version'];
+			$ajax_params['isPro'] = true;
+			$ajax_params['proVersion'] = $version;
+		}
 		wp_localize_script($this->plugin_name . '-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 	}
 }

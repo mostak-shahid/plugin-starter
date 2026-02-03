@@ -29,7 +29,7 @@ import Details from './data/details.json';
 
 import './App.scss';
 import "./tailwind.css";
-
+const year = new Date().getFullYear();
 const { Header, } = Layout;
 function App() {
     const { Header, Footer } = Layout;
@@ -159,7 +159,7 @@ function App() {
                         }}
                         footerContent = {(
                             <Space className="header-menu-footer-content" align='center'>  
-                                <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />    
+                                {/* <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />     */}
                                 <Button theme='outline' icon={darkmode?<IconSun />:<IconMoon />} aria-label="Mode" onClick={switchingMode} />
                                 {/* <a
 									href="https://wordpress.org/support/plugin/plugin-starter/"
@@ -256,15 +256,28 @@ function App() {
                 >
                     <Row type="flex" gutter={24} align="middle" justify="space-between">
                         <Col xs={24} lg={12} className="text-center lg:text-left mb-2 lg:mb-0">
-                            <Space align='center' spacing='medium'>
+                            <Text>{__(`Copyright © ${year} `, 'plugin-starter')}</Text>
+                            <Text link={{ href: Details?.authorURI, target: '_blank' }}>{Details?.author}. </Text>
+                            <Text>{__(`All Rights Reserved.`, 'plugin-starter')}</Text>
+                            {/* <Space align='center' spacing='medium'>
                                 <img src={`${plugin_starter_ajax_obj.image_url}logo.svg`} alt="" width="30" height="30" />
                                 <Text>{Details?.name}</Text>
-                            </Space>
+                            </Space> */}
                         </Col>
                         <Col xs={24} lg={12} className="text-center lg:text-right">
                             <Space align='center' spacing='medium'>
-                                <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
-                                <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
+                                {plugin_starter_ajax_obj?.isPro === '1'?
+                                    <>
+                                        <Badge count={__( 'Pro', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
+                                        <Badge count={plugin_starter_ajax_obj?.proVersion} theme='light' style={{padding: 8, height: 'auto'}} />
+                                    </>
+                                    :
+                                    <>                                    
+                                        <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
+                                        <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
+                                    </>
+                                }
+                                
                             </Space>
                         </Col>
                     </Row>
