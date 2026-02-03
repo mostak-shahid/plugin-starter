@@ -106,14 +106,14 @@ function plugin_starter_delete_options() {
     // Delete all options with prefix
     $wpdb->query(
         "DELETE FROM {$wpdb->options} 
-        WHERE option_name LIKE 'plugin\_starter\_%'"
+        WHERE option_name LIKE '%plugin_starter%'"
     );
 
     // For multisite
     if ( is_multisite() ) {
         $wpdb->query(
             "DELETE FROM {$wpdb->sitemeta} 
-            WHERE meta_key LIKE 'plugin\_starter\_%'"
+            WHERE meta_key LIKE '%plugin_starter%'"
         );
     }
 }
@@ -126,7 +126,7 @@ function plugin_starter_delete_user_meta() {
 
     $wpdb->query(
         "DELETE FROM {$wpdb->usermeta} 
-        WHERE meta_key LIKE 'plugin\_starter\_%'"
+        WHERE meta_key LIKE '%plugin_starter%'"
     );
 }
 
@@ -138,7 +138,7 @@ function plugin_starter_delete_post_meta() {
 
     $wpdb->query(
         "DELETE FROM {$wpdb->postmeta} 
-        WHERE meta_key LIKE 'plugin\_starter\_%'"
+        WHERE meta_key LIKE '%plugin_starter%'"
     );
 }
 
