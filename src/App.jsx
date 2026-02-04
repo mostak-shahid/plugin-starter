@@ -4,7 +4,7 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, } from '@douyinfe/semi-ui';
+import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, } from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, IconFile, } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -30,13 +30,15 @@ import Details from './data/details.json';
 import './App.scss';
 import "./tailwind.css";
 const year = new Date().getFullYear();
-const { Header, } = Layout;
+const { Header, Footer } = Layout;
+const { Text, Paragraph } = Typography;
 function App() {
-    const { Header, Footer } = Layout;
-    const { Text, Paragraph } = Typography;
-    const [newsVisible, setNewsVisible] = useState(false);
     const [darkmode, setDarkmode] = useState(false);
+
+    const [newsVisible, setNewsVisible] = useState(false);
     const [newsItems, setNewsItems] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [activeNews, setActiveNews] = useState(null);
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -233,7 +235,6 @@ function App() {
                                         )
                                     }
                                 />
-
                                 <Badge count={newsItems.length || 0}>
                                     <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
@@ -308,8 +309,6 @@ function App() {
                         </Col>
                     </Row>
                 </Footer>
-                
-    
                 {/* --- What's New SideSheet --- */}
                 <SideSheet
                     placement="right"
@@ -341,7 +340,12 @@ function App() {
                                         <Button
                                             type="link"
                                             size="small"
-                                            onClick={() => alert(item.news)}
+
+                                            onClick={() => {
+                                                setActiveNews(item);
+                                                setModalVisible(true);
+                                            }}
+                                            // onClick={() => alert(item.news)}
                                             // style={{ padding: 0, marginLeft: '5px' }}
                                         >
                                             {__("Read more", "plugin-starter")}
@@ -353,6 +357,29 @@ function App() {
                     )}
                 </SideSheet>
             </div>
+            <Modal
+                title={activeNews?.title}
+                visible={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                footer={null}
+                style={{ maxWidth: 700 }}
+            >
+                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+                    {activeNews?.tags?.length > 0 && (
+                        <Space style={{ marginBottom: 12 }}>
+                            {activeNews.tags.map((tag, index) => (
+                                <Tag key={index} size="small" shape="circle" color="amber">
+                                    {tag}
+                                </Tag>
+                            ))}
+                        </Space>
+                    )}
+
+                    <Paragraph>
+                        {activeNews?.news}
+                    </Paragraph>
+                </div>
+            </Modal>
         </LocaleProvider>
     );
 }
