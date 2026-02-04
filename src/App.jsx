@@ -4,7 +4,7 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row,  } from '@douyinfe/semi-ui';
+import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, } from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, IconFile, } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -33,7 +33,7 @@ const year = new Date().getFullYear();
 const { Header, } = Layout;
 function App() {
     const { Header, Footer } = Layout;
-    const { Text } = Typography;
+    const { Text, Paragraph } = Typography;
     const [newsVisible, setNewsVisible] = useState(false);
     const [darkmode, setDarkmode] = useState(false);
     const [newsItems, setNewsItems] = useState([]);
@@ -319,24 +319,33 @@ function App() {
                     closeOnEsc={true}
                 >
                     {newsItems.length === 0 ? (
-                        <p>Loading news...</p>
+                        <p>{__("Loading news...", "plugin-starter")}</p>
                     ) : (
                         <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
                             {newsItems.map((item) => (
                                 <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
-                                    <Text strong style={{ fontSize: '16px' }}>{item.slug}</Text>
-                                    <div style={{ marginTop: '10px' }}>
-                                        <Text type="secondary">
+                                    <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
+                                    {item?.tags && item.tags.length > 0 && (
+                                        <div className='mt-2'>
+                                            <Space>
+                                                {item.tags.map((tag, index) => (
+                                                    <Tag key={index} size="small" shape='circle' color='amber'>{tag}</Tag>
+                                                ))}
+                                            </Space>
+                                        </div>
+                                    )}
+                                    <div className='mt-2'>
+                                        <Paragraph type="secondary">
                                             {truncateText(item.news)}
-                                            <Button
-                                                type="link"
-                                                size="small"
-                                                onClick={() => alert('Read more: ' + item.news)}
-                                                style={{ padding: 0, marginLeft: '5px' }}
-                                            >
-                                                Read more
-                                            </Button>
-                                        </Text>
+                                        </Paragraph>
+                                        <Button
+                                            type="link"
+                                            size="small"
+                                            onClick={() => alert(item.news)}
+                                            // style={{ padding: 0, marginLeft: '5px' }}
+                                        >
+                                            {__("Read more", "plugin-starter")}
+                                        </Button>
                                     </div>
                                 </div>
                             ))}
