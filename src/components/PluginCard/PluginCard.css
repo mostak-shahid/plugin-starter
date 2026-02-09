@@ -1,0 +1,6 @@
+.plugin-starter-plugin-card {
+  border: 1px solid var(--semi-color-border);
+}
+.plugin-starter-plugin-card .semi-icon-star svg {
+  max-width: unset;
+}/*# sourceMappingURL=PluginCard.css.map */
