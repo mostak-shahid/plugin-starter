@@ -1,7 +1,7 @@
 <?php
 
 namespace MosPress\PluginStarter\Public;
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -22,7 +22,7 @@ namespace MosPress\PluginStarter\Public;
  * @subpackage Plugin_Starter/public
  * @author     Md. Mostak Shahid <mostak.shahid@gmail.com>
  */
-class PublicClass
+class Frontend
 {
 
 	/**
