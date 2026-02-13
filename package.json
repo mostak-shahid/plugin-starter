@@ -27,7 +27,9 @@
     "@visactor/vchart-semi-theme": "^1.12.3",
     "@wordpress/api-fetch": "^7.35.0",
     "@wordpress/components": "^28.9.0",
+    "bootstrap": "^5.3.8",
     "react-ace": "^14.0.1",
+    "react-bootstrap": "^2.10.10",
     "react-router-dom": "^7.5.2"
   },
   "devDependencies": {

@@ -10,7 +10,8 @@ import {FullWidthLayout} from '../../layouts';
 //     CardHeader,
 //     CardBody,
 // } from '@wordpress/components';
-import { Typography, Card, Col, Row  } from '@douyinfe/semi-ui';
+import { Typography, Card,  } from '@douyinfe/semi-ui';
+import { Modal, Row, Col, Button, Badge, Offcanvas }  from 'react-bootstrap';
 export default function Dashboard() {
     const { Text, Paragraph, Title } = Typography;
     const [plugins, setPlugins] = useState([]);
@@ -36,7 +37,7 @@ export default function Dashboard() {
         <FullWidthLayout>
             <div className="">
                 <Card
-                    className="mb-6"
+                    className="mb-4"
                 >
                     <Title heading={2}>{__(`Welcome to ${Details?.name}`, "plugin-starter")}</Title>
                     <Paragraph>
@@ -47,10 +48,10 @@ export default function Dashboard() {
                     </Paragraph>
                 </Card>
                 <Row type="flex" gutter={[24,24]}>
-                    <Col lg={16}>
+                    <Col lg={8}>
                         <Card 
                             title={__("Features", "plugin-starter")}
-                            className="dashboard-features-card mb-6"
+                            className="dashboard-features-card mb-4"
                         >
                             {/* {Object.values(settingsMenu).map((feature, index) => (
                                 <div className="feature" key={index}>
@@ -127,9 +128,9 @@ export default function Dashboard() {
                             </Row>
                         </Card>
                     </Col>
-                    <Col lg={8}>
+                    <Col lg={4}>
                         <Card 
-                            className="mb-6"
+                            className="mb-4"
                             title={__("VIP Priority Support", "plugin-starter")}
                         >
                             <Paragraph>
@@ -139,7 +140,7 @@ export default function Dashboard() {
                         </Card>
 
                         <Card 
-                            className="mb-6"
+                            className="mb-4"
                             title={__("Help Center", "plugin-starter")}
                         >
                             <Paragraph>
@@ -149,7 +150,7 @@ export default function Dashboard() {
                         </Card>
                         
                         <Card 
-                            className="mb-6"
+                            className="mb-4"
                             title={__("Join the Community", "plugin-starter")}  
                         >                   
                             <Paragraph>

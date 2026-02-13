@@ -1,44 +1,75 @@
-import React, { useState, useEffect, Suspense  } from 'react';
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
-
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, } from '@douyinfe/semi-ui';
-import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, IconFile, } from '@douyinfe/semi-icons';
-import { LocaleProvider } from '@douyinfe/semi-ui';
-import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
+import * as Bootstrap from 'react-bootstrap';
+const { Modal, Row, Col, Button, Badge, Offcanvas } = Bootstrap;
 
-import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Logs, LogsCharts, LogsTable, Feedback, FreeVsPro, NotFound} from './pages';
-
-import {
-    BasicInputs, 
-    ArrayInputs,
-    BoxedLeftSidebar,
-    BoxedNoSidebar,
-    BoxedRightSidebar,
-    FullWidthLeftSidebar,
-    FullWidthNoSidebar,
-    FullWidthRightSidebar,
-} from './pages';
-import Page from './pages/Page';
-
-import {HorizontalMenuControl} from "./components";
+import { HorizontalMenuControl } from "./components";
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 
 import './App.scss';
-import "./tailwind.css";
+
 const year = new Date().getFullYear();
-const { Header, Footer } = Layout;
-const { Text, Paragraph } = Typography;
+
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Settings = lazy(() => import('./pages/Settings/Settings'));
+const ImportExport = lazy(() => import('./pages/Settings/ImportExport'));
+const More = lazy(() => import('./pages/Settings/More'));
+const Tools = lazy(() => import('./pages/Settings/Tools'));
+const LogsTable = lazy(() => import('./pages/Settings/Logs/LogsTable'));
+const LogsCharts = lazy(() => import('./pages/Settings/Logs/LogsCharts'));
+const Feedback = lazy(() => import('./pages/Feedback'));
+const FreeVsPro = lazy(() => import('./pages/FreeVsPro'));
+const BoxedNoSidebar = lazy(() => import('./pages/Layouts/BoxedNoSidebar'));
+const BoxedLeftSidebar = lazy(() => import('./pages/Layouts/BoxedLeftSidebar'));
+const BoxedRightSidebar = lazy(() => import('./pages/Layouts/BoxedRightSidebar'));
+const FullWidthNoSidebar = lazy(() => import('./pages/Layouts/FullWidthNoSidebar'));
+const FullWidthLeftSidebar = lazy(() => import('./pages/Layouts/FullWidthLeftSidebar'));
+const FullWidthRightSidebar = lazy(() => import('./pages/Layouts/FullWidthRightSidebar'));
+
+const HorizontalMenuItems = [
+    { itemKey: 'dashboard', text: 'Dashboard', icon: '🏠', url: '/' },
+    { 
+        itemKey: 'layouts', 
+        text: 'Layouts', 
+        icon: '📐',
+        url: '/layouts',
+        items: [
+            { itemKey: 'about', text: 'About', url: '/about' },
+            { itemKey: 'contact', text: 'Contact', url: '/contact' },
+            { itemKey: 'layouts-boxed', text: 'Boxed Layouts', url: '/layouts/boxed',
+                items: [
+                    { itemKey: 'layouts-boxed-nosidebar', text: 'No Sidebar', url: '/layouts/boxed/nosidebar' },
+                    { itemKey: 'layouts-boxed-left-sidebar', text: 'Left Sidebar', url: '/layouts/boxed/left-sidebar' },
+                    { itemKey: 'layouts-boxed-right-sidebar', text: 'Right Sidebar', url: '/layouts/boxed/right-sidebar' },
+                ] 
+            },
+            { itemKey: 'layouts-full', text: 'Full Layouts', url: '/layouts/full',
+                items: [
+                    { itemKey: 'layouts-full-nosidebar', text: 'No Sidebar', url: '/layouts/full/nosidebar' },
+                    { itemKey: 'layouts-full-left-sidebar', text: 'Left Sidebar', url: '/layouts/full/left-sidebar' },
+                    { itemKey: 'layouts-full-right-sidebar', text: 'Right Sidebar', url: '/layouts/full/right-sidebar' },
+                ] 
+            },
+        ] 
+    },
+    { itemKey: 'settings', text: 'Settings', icon: '⚙️', url: '/settings' },
+    { itemKey: 'feedback', text: 'Feedback', icon: '⭐', url: '/feedback' },
+    ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: '👤', url: '/free-vs-pro' }] : []),
+];
+
 function App() {
     const [darkmode, setDarkmode] = useState(false);
-
     const [newsVisible, setNewsVisible] = useState(false);
     const [newsItems, setNewsItems] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [activeNews, setActiveNews] = useState(null);
+
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -48,37 +79,29 @@ function App() {
                 const theme = await apiFetch({
                     path: `/plugin-starter/v1/get-settings-theme?${params.toString()}`,
                     method: 'GET'
-                });      
-
-                // console.log('Theme received:', theme);
-                document.body.setAttribute('theme-mode', theme);
-
-                const isDark = theme === 'dark' || theme.value === 'dark';
+                });
+                const isDark = theme === 'dark' || (theme && theme.value === 'dark');
                 setDarkmode(isDark);
+                document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
             } catch (err) {
                 console.error('API error:', err);
             }
         };
-
         fetchSettingTheme();
-    }, []); 
+    }, []);
+
     const switchingMode = async () => {
         const switchMode = !darkmode;
         setDarkmode(switchMode);
+        document.documentElement.setAttribute('data-bs-theme', switchMode ? 'dark' : 'light');
         try {
             const params = new URLSearchParams({
                 id: plugin_starter_ajax_obj.get_current_user_id,
                 settings_theme: switchMode ? 'dark' : 'light',
             });
-
-            const response = await apiFetch({
+            await apiFetch({
                 path: `/plugin-starter/v1/set-settings-theme?${params.toString()}`,
-                // method: 'GET'
             });
-            if (response.success) {
-                document.body.setAttribute('theme-mode', switchMode?'dark':'light');
-            }
-            console.log(response);
         } catch (error) {
             console.error("Error fetching settings data:", error);
         }
@@ -89,6 +112,7 @@ function App() {
         if (words.length <= wordLimit) return text;
         return words.slice(0, wordLimit).join(' ') + '...';
     };
+
     useEffect(() => {
         const fetchNews = async () => {
             try {
@@ -100,153 +124,59 @@ function App() {
             }
         };
         fetchNews();
-    }, []); 
+    }, []);
 
-    const handleNewsVisible = (visible) => {
-        setNewsVisible(visible);
-        // if (visible && newsItems.length === 0) {
-        //     fetchNews();
-        // }
-    };
-
-    const HorizontalMenuItems = [
-        { itemKey: 'dashboard', text: 'Dashboard', icon: <IconHome />, url: '/' },
-        { 
-            itemKey: 'layouts', 
-            text: 'Layouts', 
-            icon: <IconTemplate />,
-            url: '/layouts',
-            items: [
-                { itemKey: 'about', text: 'About', url: '/about' },
-                { itemKey: 'contact', text: 'Contact', url: '/contact' },
-                { 
-                    itemKey: 'layouts-boxed', 
-                    text: 'Boxed Layouts', 
-                    url: '/layouts/boxed',
-                    items: [
-                        { itemKey: 'layouts-boxed-nosidebar', text: 'No Sidebar', url: '/layouts/boxed/nosidebar' },
-                        { itemKey: 'layouts-boxed-left-sidebar', text: 'Left Sidebar', url: '/layouts/boxed/left-sidebar' },
-                        { itemKey: 'layouts-boxed-right-sidebar', text: 'Right Sidebar', url: '/layouts/boxed/right-sidebar' },
-                    ] 
-                },
-                { 
-                    itemKey: 'layouts-full', 
-                    text: 'Full Layouts', 
-                    url: '/layouts/full',
-                    items: [
-                        { itemKey: 'layouts-full-nosidebar', text: 'No Sidebar', url: '/layouts/full/nosidebar' },
-                        { itemKey: 'layouts-full-left-sidebar', text: 'Left Sidebar', url: '/layouts/full/left-sidebar' },
-                        { itemKey: 'layouts-full-right-sidebar', text: 'Right Sidebar', url: '/layouts/full/right-sidebar' },
-                    ] 
-                },
-            ] 
-        },
-        { itemKey: 'settings', text: 'Settings', icon: <IconSetting />, url: '/settings' },
-        { itemKey: 'feedback', text: 'Feedback', icon: <IconStar />, url: '/feedback' },
-
-        ...(!plugin_starter_ajax_obj?.isPro
-            ? [
-                {
-                    itemKey: 'free-vs-pro',
-                    text: 'Free vs Pro',
-                    icon: <IconMember />,
-                    url: '/free-vs-pro'
-                }
-            ]
-            : []
-        ),
-        // { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
-    ];
     return (
-        <LocaleProvider locale={en_US}>
-            <div className="plugin-starter-settings-container semi-scope" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
-                {!plugin_starter_ajax_obj?.isPro &&
-                    <Banner 
-                        className="plugin-starter-promote-banner"
-                        fullMode={false}
-                        type="info"
-                        description={
-                            <>
-                                <Text>{__('You\'re currently using the Free plan. ', 'plugin-starter')}</Text>
-                                <Text>{__('Some settings and features are only available in ', 'plugin-starter')}</Text>
-                                <b><Text link={{ href: 'https://semi.design', target: '_blank' }}>{__('Pro version.', 'plugin-starter')}</Text></b>
-                            </>
-                        }
-                    />
-                }
-                <Header
-                    style={{backgroundColor:'var(--semi-color-bg-3)'}}
-                    className="plugin-starter-header"
-                >                    
-                    <HorizontalMenuControl
-                        items = {HorizontalMenuItems}
-                        breakpoint = "960"
-                        headerContent = {{
-                            logo: <Logo width={36} height={36} />,
-                            text: Details?.name,
-                        }}
-                        footerContent = {(
-                            <Space className="header-menu-footer-content" align='center'>  
-                                {/* <Badge count={Details?.version} theme='light' countStyle={{padding: 8, height: 'auto'}} />     */}
-                                <Button theme='outline' icon={darkmode?<IconSun />:<IconMoon />} aria-label="Mode" onClick={switchingMode} />
-                                {/* <a
-									href="https://wordpress.org/support/plugin/plugin-starter/"
-									target="_blank"
-									rel="noreferrer noopener"
-									aria-label={ __(
-										'Get support (opens in new tab)',
-										'plugin-starter'
-									) }
-								>
-									<IconCustomerSupport/>
-								</a>
-								<a
-									href="https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post"
-									target="_blank"
-									rel="noreferrer noopener"
-									aria-label={ __(
-										'Leave a review (opens in new tab)',
-										'plugin-starter'
-									) }
-								>
-									<IconStar/>
-								</a> */}
+        <div className="plugin-starter-settings-container">
+            {!plugin_starter_ajax_obj?.isPro && (
+                <div className="alert alert-info mb-0 d-flex align-items-center rounded-0" role="alert">
+                    <span className="me-2">{__('You\'re currently using the Free plan. ', 'plugin-starter')}</span>
+                    <span className="me-2">{__('Some settings and features are only available in ', 'plugin-starter')}</span>
+                    <a href="https://semi.design" target="_blank" rel="noopener noreferrer" className="alert-link">
+                        {__('Pro version.', 'plugin-starter')}
+                    </a>
+                </div>
+            )}
+            
+            <header className="plugin-starter-header border-bottom">
+                <HorizontalMenuControl
+                    items={HorizontalMenuItems}
+                    breakpoint="960"
+                    headerContent={{
+                        logo: <Logo width={36} height={36} />,
+                        text: Details?.name,
+                    }}
+                    footerContent={(
+                        <div className="d-flex align-items-center gap-2">
+                            <Button variant="outline-secondary" aria-label="Mode" onClick={switchingMode}>
+                                {darkmode ? '☀️' : '🌙'}
+                            </Button>
+                            <Button variant="outline-secondary" aria-label={__("Documentation", 'plugin-starter')} onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/', '_blank')}>
+                                📄
+                            </Button>
+                            <Button variant="outline-secondary" aria-label={__("Help Center", 'plugin-starter')} onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post', '_blank')}>
+                                ⭐
+                            </Button>
+                            <div className="position-relative">
+                                <Button variant="outline-secondary" onClick={() => setNewsVisible(true)} aria-label="News">
+                                    🔔
+                                </Button>
+                                {newsItems.length > 0 && (
+                                    <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                                        {newsItems.length}
+                                    </Badge>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                />
+            </header>
 
-                                <Button 
-                                    theme='outline' 
-                                    icon={<IconFile />} 
-                                    aria-label={__("Documentation", 'plugin-starter')}
-                                    onClick={ () =>
-                                        window.open(
-                                            'https://wordpress.org/support/plugin/plugin-starter/',
-                                            '_blank'
-                                        )
-                                    }
-                                />
-                                <Button 
-                                    theme='outline' 
-                                    icon={<IconStar />} 
-                                    aria-label={__("Help Center", 'plugin-starter')} 
-
-                                    onClick={ () =>
-                                        window.open(
-                                            'https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post',
-                                            '_blank'
-                                        )
-                                    }
-                                />
-                                <Badge count={newsItems.length || 0}>
-                                    <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
-                                </Badge>
-                            </Space>
-                        )}
-                    />
-                </Header>
+            <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
-
                     <Route path="/layouts">
                         <Route index element={<Navigate to="boxed/nosidebar" replace />} />
                         <Route path="boxed/nosidebar" element={<BoxedNoSidebar />} />
@@ -256,18 +186,10 @@ function App() {
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
                     </Route>
-                    
                     <Route path="/settings" element={<Settings />}>
                         <Route index element={<Navigate to="basic-inputs" replace />} />
-                        <Route path="basic-inputs" element={<BasicInputs />} />
-                        <Route path="array-inputs" element={<ArrayInputs />} />
-                        <Route path="page/page-1" element={<Page />} />
-                        <Route path="page/page-2" element={<Page />} />
-                        
-                        {/* Other menu items */}
                         <Route path="import-export" element={<ImportExport />} />
                         <Route path="more" element={<More />} />
-                        {/* <Route path="logs" element={<Logs />} /> */}
                         <Route path="logs" element={<Navigate to="table" replace />} />
                         <Route path="logs/table" element={<LogsTable />} />
                         <Route path="logs/analytics" element={<LogsCharts />} />
@@ -275,112 +197,98 @@ function App() {
                     </Route>
                     <Route path="feedback" element={<Feedback />} />
                     <Route path="free-vs-pro" element={<FreeVsPro />} />
-                    <Route path="*" element={<NotFound />} />
                 </Routes>
-                <Footer
-                    className="p-[15px] w-full plugin-starter-footer" 
-                    style={{borderTop: '1px solid var(--semi-color-border)', backgroundColor:'var(--semi-color-bg-2)'}}
-                >
-                    <Row type="flex" gutter={24} align="middle" justify="space-between">
-                        <Col xs={24} lg={12} className="text-center lg:text-left mb-2 lg:mb-0">
-                            <Text>{__(`Copyright © ${year} `, 'plugin-starter')}</Text>
-                            <Text link={{ href: Details?.authorURI, target: '_blank' }}>{Details?.author}. </Text>
-                            <Text>{__(`All Rights Reserved.`, 'plugin-starter')}</Text>
-                            {/* <Space align='center' spacing='medium'>
-                                <img src={`${plugin_starter_ajax_obj.image_url}logo.svg`} alt="" width="30" height="30" />
-                                <Text>{Details?.name}</Text>
-                            </Space> */}
-                        </Col>
-                        <Col xs={24} lg={12} className="text-center lg:text-right">
-                            <Space align='center' spacing='medium'>
-                                {plugin_starter_ajax_obj?.isPro === '1'?
-                                    <>
-                                        <Badge count={__( 'Pro', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
-                                        <Badge count={plugin_starter_ajax_obj?.proVersion} theme='light' style={{padding: 8, height: 'auto'}} />
-                                    </>
-                                    :
-                                    <>                                    
-                                        <Badge count={__( 'Free', "plugin-starter" )} theme='light' style={{padding: 8, height: 'auto'}} />
-                                        <Badge count={Details?.version} theme='light' style={{padding: 8, height: 'auto'}} />
-                                    </>
-                                }
-                                
-                            </Space>
-                        </Col>
-                    </Row>
-                </Footer>
-                {/* --- What's New SideSheet --- */}
-                <SideSheet
-                    placement="right"
-                    visible={newsVisible}
-                    onCancel={() => handleNewsVisible(false)}
-                    title={__("What's New?", "plugin-starter")}
-                    closeOnEsc={true}
-                >
-                    {newsItems.length === 0 ? (
-                        <p>{__("Loading news...", "plugin-starter")}</p>
-                    ) : (
-                        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                            {newsItems.map((item) => (
-                                <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
-                                    <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
-                                    {item?.tags && item.tags.length > 0 && (
-                                        <div className='mt-2'>
-                                            <Space>
-                                                {item.tags.map((tag, index) => (
-                                                    <Tag key={index} size="small" shape='circle' color='amber'>{tag}</Tag>
-                                                ))}
-                                            </Space>
-                                        </div>
-                                    )}
-                                    <div className='mt-2'>
-                                        <Paragraph type="secondary">
-                                            {truncateText(item.news)}
-                                        </Paragraph>
-                                        <Button
-                                            type="link"
-                                            size="small"
+            </Suspense>
 
-                                            onClick={() => {
-                                                setActiveNews(item);
-                                                setModalVisible(true);
-                                            }}
-                                            // onClick={() => alert(item.news)}
-                                            // style={{ padding: 0, marginLeft: '5px' }}
-                                        >
-                                            {__("Read more", "plugin-starter")}
-                                        </Button>
+            <footer className="p-3 w-100" style={{ borderTop: '1px solid #dee2e6', backgroundColor: 'var(--bs-body-bg)' }}>
+                <Row className="align-items-center justify-content-between">
+                    <Col xs={24} lg={12} className="text-center text-lg-start mb-2 mb-lg-0">
+                        <span>{__(`Copyright © ${year} `, 'plugin-starter')}</span>
+                        <a href={Details?.authorURI} target="_blank" rel="noopener noreferrer">{Details?.author}. </a>
+                        <span>{__(` All Rights Reserved.`, 'plugin-starter')}</span>
+                    </Col>
+                    <Col xs={24} lg={12} className="text-center text-lg-end">
+                        <div className="d-flex align-items-center justify-content-lg-end gap-2 flex-wrap">
+                            {plugin_starter_ajax_obj?.isPro === '1' ? (
+                                <>
+                                    <Badge bg="warning" text="dark">{__( 'Pro', "plugin-starter" )}</Badge>
+                                    <Badge bg="info">{plugin_starter_ajax_obj?.proVersion}</Badge>
+                                </>
+                            ) : (
+                                <>
+                                    <Badge bg="secondary">{__( 'Free', "plugin-starter" )}</Badge>
+                                    <Badge bg="info">{Details?.version}</Badge>
+                                </>
+                            )}
+                        </div>
+                    </Col>
+                </Row>
+            </footer>
+
+            <Offcanvas
+                placement="end"
+                show={newsVisible}
+                onHide={() => setNewsVisible(false)}
+                title={__("What's New?", "plugin-starter")}
+            >
+                {newsItems.length === 0 ? (
+                    <p className="p-3">{__("Loading news...", "plugin-starter")}</p>
+                ) : (
+                    <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                        {newsItems.map((item) => (
+                            <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid #dee2e6' }}>
+                                <h5 className="mb-2">{item.title}</h5>
+                                {item?.tags && item.tags.length > 0 && (
+                                    <div className="mb-2">
+                                        <div className="d-flex flex-wrap gap-1">
+                                            {item.tags.map((tag, index) => (
+                                                <Badge key={index} bg="warning" text="dark">{tag}</Badge>
+                                            ))}
+                                        </div>
                                     </div>
+                                )}
+                                <div className="mb-2">
+                                    <p className="text-muted mb-2">{truncateText(item.news)}</p>
+                                    <Button
+                                        variant="link"
+                                        size="sm"
+                                        onClick={() => {
+                                            setActiveNews(item);
+                                            setModalVisible(true);
+                                        }}
+                                    >
+                                        {__("Read more", "plugin-starter")}
+                                    </Button>
                                 </div>
-                            ))}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </Offcanvas>
+
+            <Modal
+                show={modalVisible}
+                onHide={() => setModalVisible(false)}
+                size="lg"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>{activeNews?.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                    {activeNews?.tags?.length > 0 && (
+                        <div className="mb-3">
+                            <div className="d-flex flex-wrap gap-1">
+                                {activeNews.tags.map((tag, index) => (
+                                    <Badge key={index} bg="warning" text="dark">{tag}</Badge>
+                                ))}
+                            </div>
                         </div>
                     )}
-                </SideSheet>
-            </div>
-            <Modal
-                title={activeNews?.title}
-                visible={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                footer={null}
-                style={{ maxWidth: 700 }}
-            >
-                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-                    {activeNews?.tags?.length > 0 && (
-                        <Space style={{ marginBottom: 12 }}>
-                            {activeNews.tags.map((tag, index) => (
-                                <Tag key={index} size="small" shape="circle" color="amber">
-                                    {tag}
-                                </Tag>
-                            ))}
-                        </Space>
-                    )}
-
-                    <Paragraph>
-                        {activeNews?.news}
-                    </Paragraph>
-                </div>
+                    <p className="mb-0">{activeNews?.news}</p>
+                </Modal.Body>
             </Modal>
-        </LocaleProvider>
+        </div>
     );
 }
 

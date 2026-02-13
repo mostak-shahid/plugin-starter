@@ -12,14 +12,6 @@
   --semi-color-bg-4: rgba(255, 255, 255, 1);
 }
 
-body[theme-mode=dark], body .semi-always-dark, :host([theme-mode=dark]), :host .semi-always-dark {
-  --semi-color-bg-0: rgba(22, 22, 26, 1);
-  --semi-color-bg-1: rgba(35, 36, 41, 1);
-  --semi-color-bg-2: rgba(53, 54, 60, 1);
-  --semi-color-bg-3: rgba(67, 68, 74, 1);
-  --semi-color-bg-4: rgba(79, 81, 89, 1);
-}
-
 .plugin-starter-settings-template {
   position: relative;
 }
