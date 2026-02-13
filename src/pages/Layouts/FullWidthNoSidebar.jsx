@@ -1,19 +1,17 @@
-import { Card, Typography } from '@douyinfe/semi-ui';
+import * as Bootstrap from 'react-bootstrap';
+const { Card } = Bootstrap;
 import { FullWidthLayout } from '../../layouts';
-const { Title, Paragraph } = Typography;
-
 
 const FullWidthNoSidebar = () => {
     return (
         <FullWidthLayout>     
-            <Card title="Boxed Layout - No Sidebar" headerLine={true}>
-                <Title heading={3}>Boxed Layout without Sidebar</Title>
-                <Paragraph>
-                    This layout demonstrates a boxed container with a right sidebar for navigation.
-                </Paragraph>
-                <Paragraph>
-                    Ideal for content that needs contextual navigation on the right side.
-                </Paragraph>
+            <Card className="mb-4 rounded-0">
+                <Card.Header>Full Width Layout - No Sidebar</Card.Header>
+                <Card.Body>
+                    <h3>Full Width Layout without Sidebar</h3>
+                    <p>This layout demonstrates a full-width container with no sidebar.</p>
+                    <p>Ideal for content that spans the entire width of the screen.</p>
+                </Card.Body>
             </Card>
         </FullWidthLayout>
     );

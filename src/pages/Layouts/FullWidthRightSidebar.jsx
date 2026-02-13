@@ -1,52 +1,42 @@
-import { Card, Typography, Nav } from '@douyinfe/semi-ui';
-import { IconStar, IconUser, IconUserGroup, IconSetting } from '@douyinfe/semi-icons';
+import * as Bootstrap from 'react-bootstrap';
+const { Card, Nav } = Bootstrap;
 import { FullWidthLayout } from '../../layouts';
-const { Title, Paragraph } = Typography;
-
 
 const FullWidthRightSidebar = () => {
-    const sidebar = (        
-        <>
-            <Nav
-                // bodyStyle={{ height: 320 }}
-                style={{height: '100%', borderLeft: '1px solid var(--semi-color-border)', borderRight: 'none'}}
-                items={[
-                    { itemKey: 'user', text: 'User Management', icon: <IconUser /> },
-                    { itemKey: 'union', text: 'Union Center', icon: <IconStar /> },
-                    {
-                        itemKey: 'union-management',
-                        text: 'Union Management',
-                        icon: <IconUserGroup />,
-                        items: ['Announcement Settings', 'Union Query', 'Entry Information']
-                    },
-                    {
-                        text: 'Task Platform',
-                        icon: <IconSetting />,
-                        itemKey: 'job',
-                        items: ['Task Management', 'User Task Query'],
-                    },
-                ]}
-                onSelect={key => console.log(key)}
-                header={{
-                    logo: <img src="https://sf6-cdn-tos.douyinstatic.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/webcast_logo.svg" />,
-                    text: 'Live Platform'
-                }}
-                footer={{
-                    collapseButton: true,
-                }}
-            />
-        </>
+    const sidebar = (
+        <Nav className="flex-column p-2" variant="pills">
+            <Nav.Item><Nav.Link href="#">👤 User Management</Nav.Link></Nav.Item>
+            <Nav.Item><Nav.Link href="#">⭐ Union Center</Nav.Link></Nav.Item>
+            <NavDropdownCustom title="👥 Union Management">
+                <NavDropdown.Item>Announcement Settings</NavDropdown.Item>
+                <NavDropdown.Item>Union Query</NavDropdown.Item>
+                <NavDropdown.Item>Entry Information</NavDropdown.Item>
+            </NavDropdownCustom>
+            <NavDropdownCustom title="⚙️ Task Platform">
+                <NavDropdown.Item>Task Management</NavDropdown.Item>
+                <NavDropdown.Item>User Task Query</NavDropdown.Item>
+            </NavDropdownCustom>
+        </Nav>
     );
+
+    const NavDropdownCustom = ({ title, children }) => (
+        <div className="nav-item dropdown">
+            <button className="nav-link dropdown-toggle btn btn-link text-start w-100" data-bs-toggle="dropdown">
+                {title}
+            </button>
+            <ul className="dropdown-menu w-100">{children}</ul>
+        </div>
+    );
+
     return (
         <FullWidthLayout sidebarPosition="right" sidebar={sidebar}>     
-            <Card title="Boxed Layout - Right Sidebar" headerLine={true}>
-                <Title heading={3}>Boxed Layout with Right Sidebar</Title>
-                <Paragraph>
-                    This layout demonstrates a boxed container with a right sidebar for navigation.
-                </Paragraph>
-                <Paragraph>
-                    Ideal for content that needs contextual navigation on the right side.
-                </Paragraph>
+            <Card className="mb-4 rounded-0">
+                <Card.Header>Full Width Layout - Right Sidebar</Card.Header>
+                <Card.Body>
+                    <h3>Full Width Layout with Right Sidebar</h3>
+                    <p>This layout demonstrates a full-width container with a right sidebar.</p>
+                    <p>Ideal for content that needs contextual navigation on the right side.</p>
+                </Card.Body>
             </Card>
         </FullWidthLayout>
     );

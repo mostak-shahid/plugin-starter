@@ -1,25 +1,28 @@
-import { Card, Avatar, Space } from '@douyinfe/semi-ui';
-import { IconGithubLogo, IconTwitter, IconFacebook } from '@douyinfe/semi-icons';
-import {BoxedLayout} from '../layouts';
+import * as Bootstrap from 'react-bootstrap';
+const { Card } = Bootstrap;
+import { BoxedLayout } from '../layouts';
 
 const About = () => {
     const sidebar = (
         <div style={{ padding: '24px', textAlign: 'center' }}>
-            <Avatar size="extra-large" src="https://picsum.photos/150/150">U</Avatar>
-            <h3 style={{ marginTop: '16px' }}>John Doe</h3>
-            <Space style={{ marginTop: '16px' }}>
-                <IconGithubLogo size="large" />
-                <IconTwitter size="large" />
-                <IconFacebook size="large" />
-            </Space>
+            <img src="https://picsum.photos/150/150" alt="avatar" className="rounded-circle mb-3" style={{ width: '80px', height: '80px', objectFit: 'cover' }} />
+            <h3>John Doe</h3>
+            <div className="d-flex justify-content-center gap-3 mt-3">
+                <span>🐙</span>
+                <span>🐦</span>
+                <span>📘</span>
+            </div>
         </div>
     );
 
     return (
         <BoxedLayout sidebar={sidebar} sidebarPosition="left">
-            <Card title="About">
-                <p>This is the About page with left sidebar layout.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <Card className="mb-0 rounded-0">
+                <Card.Header>About</Card.Header>
+                <Card.Body>
+                    <p>This is the About page with left sidebar layout.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </Card.Body>
             </Card>
         </BoxedLayout>
     );

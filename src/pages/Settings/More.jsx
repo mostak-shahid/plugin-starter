@@ -1,195 +1,165 @@
 import { __ } from "@wordpress/i18n";
-import { Form, Button, Card, Typography, Row, Col, Skeleton } from '@douyinfe/semi-ui';
+import * as Bootstrap from 'react-bootstrap';
+const { Card, Form, Row, Col } = Bootstrap;
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
-import { SkeletonPlaceholder } from "../../components";
 
 import AceEditor from "react-ace";
-// Load modes and theme
 import "ace-builds/src-noconflict/mode-css";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const { Title, Paragraph } = Typography;
-
 const More = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
     const [hasChanges, setHasChanges] = useState(false);
     const settingsOld = useRef(null);
-    const formApi = useRef(null);
-
-    const onSubmit = (values) => {
-        handleSubmit('more', values);
-    };
-
-    const handleValuesChange = (values) => {
-        if (settingsOld.current && settings.more) {
-            const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.more);
-            setHasChanges(isChanged);
-        }
-    };
-
-    const handleAceEditorChange = (field, value) => {
-        // Update the form field value using the form API
-        if (formApi.current) {
-            formApi.current.setValue(field, value);
-        }
-    };
+    const [formData, setFormData] = useState({
+        enable_scripts: false,
+        css: '',
+        js: '',
+        header_content: '',
+        footer_content: ''
+    });
 
     useEffect(() => {
         if (settings && settings.more) {
             settingsOld.current = { ...settings };
+            setFormData({
+                enable_scripts: settings.more.enable_scripts || false,
+                css: settings.more.css || '',
+                js: settings.more.js || '',
+                header_content: settings.more.header_content || '',
+                footer_content: settings.more.footer_content || ''
+            });
             setHasChanges(false);
         }
     }, [settings]);
 
+    const handleChange = (field, value) => {
+        setFormData(prev => {
+            const newData = { ...prev, [field]: value };
+            if (settingsOld.current && settingsOld.current.more) {
+                const isChanged = JSON.stringify(newData) !== JSON.stringify(settingsOld.current.more);
+                setHasChanges(isChanged);
+            }
+            return newData;
+        });
+    };
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        handleSubmit('more', formData);
+    };
+
     return (
         <>
             {!settingsLoading && (
-                <Form
-                    getFormApi={(api) => formApi.current = api}
-                    initValues={settings.more}
-                    onSubmit={onSubmit}
-                    onValueChange={handleValuesChange}
-                    labelPosition="left"
-                    labelWidth="150px"
-                >
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
+                <form onSubmit={onSubmit}>
+                    <div className="py-4">
+                        <Row className="g-4">
                             <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Enable Scripts", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</Paragraph>
-                                </Skeleton>
+                                <h4>{__("Enable Scripts", "plugin-starter")}</h4>
+                                <p className="text-muted">{__("Enable/Disable 'Scripts' functionalities", "plugin-starter")}</p>
                             </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24} lg={12} xl={10}>
-                                    <Form.Switch 
-                                        field='enable_scripts'
-                                        noLabel
-                                    />   
-                                </Col>
-                            }
+                            <Col xs={24} lg={12} xl={10}>
+                                <Form.Check 
+                                    type="switch"
+                                    checked={formData.enable_scripts}
+                                    onChange={(e) => handleChange('enable_scripts', e.target.checked)}
+                                    label={formData.enable_scripts ? 'Enabled' : 'Disabled'}
+                                />
+                            </Col>
                         </Row>
                     </div>
 
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
+                    <div className="py-4 border-top">
+                        <Row className="g-4">
                             <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("CSS Editor", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Add any custom CSS code if necessary", "plugin-starter")}</Paragraph>
-                                </Skeleton>
+                                <h4>{__("CSS Editor", "plugin-starter")}</h4>
+                                <p className="text-muted">{__("Add any custom CSS code if necessary", "plugin-starter")}</p>
                             </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24}>
-                                    <Form.Slot noLabel>
-                                        <AceEditor
-                                            mode="css"
-                                            theme="monokai"
-                                            value={formApi.current?.getValue('css') || settings?.more?.css || ''}
-                                            onChange={(value) => handleAceEditorChange('css', value)}
-                                            name="css-editor"
-                                            width="100%"
-                                            height="200px"
-                                            editorProps={{ $blockScrolling: true }}
-                                        />
-                                    </Form.Slot>
-                                </Col>
-                            }
+                            <Col xs={24}>
+                                <AceEditor
+                                    mode="css"
+                                    theme="monokai"
+                                    value={formData.css}
+                                    onChange={(value) => handleChange('css', value)}
+                                    name="css-editor"
+                                    width="100%"
+                                    height="200px"
+                                    editorProps={{ $blockScrolling: true }}
+                                />
+                            </Col>
                         </Row>
                     </div>
 
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
+                    <div className="py-4 border-top">
+                        <Row className="g-4">
                             <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("JavaScript Editor", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Add any custom JS code if necessary", "plugin-starter")}</Paragraph>
-                                </Skeleton>
+                                <h4>{__("JavaScript Editor", "plugin-starter")}</h4>
+                                <p className="text-muted">{__("Add any custom JS code if necessary", "plugin-starter")}</p>
                             </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24}>
-                                    <Form.Slot noLabel>
-                                        <AceEditor
-                                            mode="javascript"
-                                            theme="monokai"
-                                            value={formApi.current?.getValue('js') || settings?.more?.js || ''}
-                                            onChange={(value) => handleAceEditorChange('js', value)}
-                                            name="js-editor"
-                                            width="100%"
-                                            height="200px"
-                                            editorProps={{ $blockScrolling: true }}
-                                        />
-                                    </Form.Slot>
-                                </Col>
-                            }
+                            <Col xs={24}>
+                                <AceEditor
+                                    mode="javascript"
+                                    theme="monokai"
+                                    value={formData.js}
+                                    onChange={(value) => handleChange('js', value)}
+                                    name="js-editor"
+                                    width="100%"
+                                    height="200px"
+                                    editorProps={{ $blockScrolling: true }}
+                                />
+                            </Col>
                         </Row>
                     </div>
 
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
+                    <div className="py-4 border-top">
+                        <Row className="g-4">
                             <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Header Code", "plugin-starter")}</Title>
-                                    <Paragraph>{__("This code will be placed inside &lt;head&gt; tag", "plugin-starter")}</Paragraph>
-                                </Skeleton>
+                                <h4>{__("Header Code", "plugin-starter")}</h4>
+                                <p className="text-muted">{__("This code will be placed inside <head> tag", "plugin-starter")}</p>
                             </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24}>
-                                    <Form.Slot noLabel>
-                                        <AceEditor
-                                            mode="html"
-                                            theme="monokai"
-                                            value={formApi.current?.getValue('header_content') || settings?.more?.header_content || ''}
-                                            onChange={(value) => handleAceEditorChange('header_content', value)}
-                                            name="html-editor-1"
-                                            width="100%"
-                                            height="200px"
-                                            editorProps={{ $blockScrolling: true }}
-                                        />
-                                    </Form.Slot>
-                                </Col>
-                            }
+                            <Col xs={24}>
+                                <AceEditor
+                                    mode="html"
+                                    theme="monokai"
+                                    value={formData.header_content}
+                                    onChange={(value) => handleChange('header_content', value)}
+                                    name="html-editor-1"
+                                    width="100%"
+                                    height="200px"
+                                    editorProps={{ $blockScrolling: true }}
+                                />
+                            </Col>
                         </Row>
                     </div>
 
-                    <div className="setting-unit pt-4">
-                        <Row type="flex" gutter={[24, 24]}>
+                    <div className="pt-4 border-top">
+                        <Row className="g-4">
                             <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Footer Code", "plugin-starter")}</Title>
-                                    <Paragraph>{__("This code will be placed inside &lt;body&gt; tag", "plugin-starter")}</Paragraph>
-                                </Skeleton>
+                                <h4>{__("Footer Code", "plugin-starter")}</h4>
+                                <p className="text-muted">{__("This code will be placed inside <body> tag", "plugin-starter")}</p>
                             </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24}>
-                                    <Form.Slot noLabel>
-                                        <AceEditor
-                                            mode="html"
-                                            theme="monokai"
-                                            value={formApi.current?.getValue('footer_content') || settings?.more?.footer_content || ''}
-                                            onChange={(value) => handleAceEditorChange('footer_content', value)}
-                                            name="html-editor-2"
-                                            width="100%"
-                                            height="200px"
-                                            editorProps={{ $blockScrolling: true }}
-                                        />
-                                    </Form.Slot>
-                                </Col>
-                            }
+                            <Col xs={24}>
+                                <AceEditor
+                                    mode="html"
+                                    theme="monokai"
+                                    value={formData.footer_content}
+                                    onChange={(value) => handleChange('footer_content', value)}
+                                    name="html-editor-2"
+                                    width="100%"
+                                    height="200px"
+                                    editorProps={{ $blockScrolling: true }}
+                                />
+                            </Col>
                         </Row>
                     </div>
 
-                    <ActionButtons hasChanges={hasChanges} section='array' handleReset={handleReset} />
-                </Form>
+                    <ActionButtons hasChanges={hasChanges} section='more' handleReset={handleReset} />
+                </form>
             )}
         </>
     );

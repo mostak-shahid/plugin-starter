@@ -1,4 +1,10 @@
 .plugin-starter-settings-template {
+    .card {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        max-width: unset;
+    }
     .dropdown-menu .dropdown-menu {
         left: 100%;
         top: 0;

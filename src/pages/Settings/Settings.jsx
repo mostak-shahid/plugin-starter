@@ -1,15 +1,15 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from 'react';
-import { Layout, Nav, Card, Toast } from '@douyinfe/semi-ui';
-import {FullWidthLayout} from '../../layouts';
+import * as Bootstrap from 'react-bootstrap';
+const { Card, Toast } = Bootstrap;
+import { FullWidthLayout } from '../../layouts';
 import { IconSetting, IconListView, IconUser, IconTemplate, IconCloud, IconPlusCircle, IconLikeThumb, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 import { Outlet, useLocation } from 'react-router-dom';
 import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
-import {BreadcrumbControl, PageInfo, VerticalMenuControl} from "../../components";
+import { BreadcrumbControl, PageInfo, VerticalMenuControl } from "../../components";
 import { Logo } from '../../lib/Illustrations';
-const { Header, Sider, Content } = Layout;
 import Details from '../../data/details.json';
 import './Settings.scss';
 
@@ -18,6 +18,8 @@ const Settings = () => {
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
     const location = useLocation();
+    const [toast, setToast] = useState(null);
+
     useEffect(() => {
         const fetchSettings = async () => {
             setSettingsLoading(true);
@@ -38,6 +40,11 @@ const Settings = () => {
         fetchSettings();
     }, [settingsReload]);
 
+    const showToast = (message, type = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    };
+
     const handleSubmit = async (section, values) => {
         try {
             const result = await apiFetch({
@@ -47,26 +54,13 @@ const Settings = () => {
             });
             if (result.success) {
                 setSettingsReload(Math.random());
-                Toast.success({
-                    content: __("Settings saved successfully!!!", "plugin-starter"),
-                    duration: 3,
-                    theme: 'light',
-                    right: 15,
-                });
+                showToast(__("Settings saved successfully!!!", "plugin-starter"), 'success');
             } else {
-                Toast.error({
-                    content: __("Error saving settings. Please try again.", "plugin-starter"),
-                    duration: 3,
-                    theme: 'light',
-                });
+                showToast(__("Error saving settings. Please try again.", "plugin-starter"), 'error');
             }
         } catch (error) {
             console.error("Error saving settings:", error);
-            Toast.error({
-                content: __("Error saving settings. Please try again.", "plugin-starter"),
-                duration: 3,
-                theme: 'light',
-            });
+            showToast(__("Error saving settings. Please try again.", "plugin-starter"), 'error');
         } finally {
             setSettingsReload(prev => prev + 1);
         }
@@ -82,36 +76,19 @@ const Settings = () => {
             console.log(result);
             if (result.success) {
                 setSettingsReload(Math.random());
-                Toast.success({
-                    content: __("Settings reset successfully!", "plugin-starter"),
-                    duration: 3,
-                    theme: 'light',
-                    right: 15,
-                });
+                showToast(__("Settings reset successfully!", "plugin-starter"), 'success');
             } else {
-                Toast.error({
-                    content: __("Error resetting settings. Please try again.", "plugin-starter"),
-                    duration: 3,
-                    theme: 'light',
-                });
+                showToast(__("Error resetting settings. Please try again.", "plugin-starter"), 'error');
             }
         } catch (error) {
             console.error("Error resetting settings:", error);
-            Toast.error({
-                content: __("Error resetting settings. Please try again.", "plugin-starter"),
-                duration: 3,
-                theme: 'light',
-            });
-        } finally {
-            // setSettingsReload(prev => prev + 1);
+            showToast(__("Error resetting settings. Please try again.", "plugin-starter"), 'error');
         }
     };
-
 
     const [proItems, setProItems] = useState([]);
     const [remoteItems, setRemoteItems] = useState([]);
 
-    // Load MF remote menu array (NOT the React component)
     useEffect(() => {
         if (plugin_starter_ajax_obj?.isPro) {
             import("pluginstarterpro/MenuItems")
@@ -125,14 +102,12 @@ const Settings = () => {
         }
     }, []);
     
-    // Optional: load remote injected menu items
     useEffect(() => {
         if (plugin_starter_ajax_obj?.extraMenuItems) {
             setRemoteItems(plugin_starter_ajax_obj.extraMenuItems);
         }
     }, []);
 
-    // Icon mapping
     const iconMap = {
         'page': <IconUser />,
         'layouts': <IconTemplate />,
@@ -144,111 +119,56 @@ const Settings = () => {
         'feedback': <IconLikeThumb />
     };
 
-    // Get menu data from menu.js
     const menuData = getMenu({menuItems:menuItems, proItems: proItems, remoteItems:remoteItems});
     
-    // Add icons to menu items
     const menuItemsWithIcons = menuData.map(item => ({
         ...item,
         icon: iconMap[item.itemKey] || <IconSetting />
     }));
 
-    // Helper function to find menu item by key
-    const findMenuItem = (items, key) => {
-        for (const item of items) {
-            if (item.itemKey === key) return item;
-            if (item.items) {
-                const found = findMenuItem(item.items, key);
-                if (found) return found;
-            }
-        }
-        return null;
-    };
     const headerContent = {
         logo: <Logo width={36} height={36} />,
         text: Details?.name,
     };
-    const footerContent = (
-        <>
-            {/* Your bottom menu */}
-            <Nav 
-                items= {[
-                    {
-                        itemKey: "vip",
-                        text: __("VIP Priority Support", "plugin-starter"),
-                        icon: <IconSend />,
-                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
-                        linkOptions: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer', // recommended for security
-                        },
-                    },
-                    {
-                        itemKey: "help",
-                        text: __("Help Center", "plugin-starter"),
-                        icon: <IconHelpCircle />,
-                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
-                        linkOptions: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer', // recommended for security
-                        },
-                    },
-                    {
-                        itemKey: "community",
-                        text: __("Join the Community", "plugin-starter"),
-                        icon: <IconUserAdd />,
-                        link: "https://www.facebook.com/mospressbd",
-                        linkOptions: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer', // recommended for security
-                        },
-                    },
-                    {
-                        itemKey: "rate",
-                        text: __("Rate Us", "plugin-starter"),
-                        icon: <IconLikeHeart />,
-                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
-                        linkOptions: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer', // recommended for security
-                        },
-                    },
-                ]}
-                // onSelect={(data) => footerContentHandleSelect(data.selectedItems[0])}
-                style={{ padding: 0, marginBottom: 0, border: 'none' }}
-            />
 
-            {/* Collapse Button */}
-            {/* <Nav.Footer collapseButton={true} /> */}
-        </>
+    const footerContent = (
+        <div className="d-flex flex-column gap-2">
+            <a href="https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/" target="_blank" rel="noopener noreferrer">✉️ {__("VIP Priority Support", "plugin-starter")}</a>
+            <a href="https://mostak-shahid.github.io/plugin/plugin-starter/docs/" target="_blank" rel="noopener noreferrer">❓ {__("Help Center", "plugin-starter")}</a>
+            <a href="https://www.facebook.com/mospressbd" target="_blank" rel="noopener noreferrer">👥 {__("Join the Community", "plugin-starter")}</a>
+            <a href="https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post" target="_blank" rel="noopener noreferrer">❤️ {__("Rate Us", "plugin-starter")}</a>
+        </div>
     );
     
     const sidebar = (
-        <>
-            <VerticalMenuControl 
-                items={menuItemsWithIcons}
-                breakpoint={960}
-                // headerContent={headerContent}
-                footerContent={footerContent}
-                className="settings-page-menu"
-            />
-        </>
+        <VerticalMenuControl 
+            items={menuItemsWithIcons}
+            breakpoint={960}
+            footerContent={footerContent}
+            className="settings-page-menu"
+        />
     );
 
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
-            <Content>
+            <div className="ps-3 pe-3 pt-3">
+                {toast && (
+                    <div className={`toast-container position-fixed top-0 end-0 m-3 ${toast.type === 'error' ? 'text-bg-danger' : 'text-bg-success'}`}>
+                        <div className="toast show">
+                            <div className="toast-body">{toast.message}</div>
+                        </div>
+                    </div>
+                )}
                 <BreadcrumbControl menu={menuItemsWithIcons} url={location.pathname} />
-                <Card 
-                    title={
-                        <PageInfo menu={menuItemsWithIcons} url={location.pathname}  />
-                    }
-                    // title="Title"
-                    headerLine={true}
-                >
-                    <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} />
+                <Card className="mb-4 rounded-0">
+                    <Card.Header>
+                        <PageInfo menu={menuItemsWithIcons} url={location.pathname} />
+                    </Card.Header>
+                    <Card.Body className="p-0">
+                        <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} />
+                    </Card.Body>
                 </Card>
-            </Content>
+            </div>
         </FullWidthLayout>
     );
 };

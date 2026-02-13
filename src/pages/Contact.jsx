@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import {BoxedLayout} from '../layouts';
-import { Card, Form, Button, Toast } from '@douyinfe/semi-ui';
+import { BoxedLayout } from '../layouts';
+import * as Bootstrap from 'react-bootstrap';
+const { Card, Form, Button } = Bootstrap;
 
 const Contact = () => {
     const [formData, setFormData] = useState({});
 
-    const handleSubmit = (values) => {
-        // In a real app, you'd save to backend
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const values = Object.fromEntries(formData);
         console.log('Form submitted:', values);
-        Toast.success('Contact form submitted successfully!');
+        alert('Contact form submitted successfully!');
     };
 
     const sidebar = (
@@ -27,13 +30,25 @@ const Contact = () => {
 
     return (
         <BoxedLayout sidebar={sidebar} sidebarPosition='right'>
-            <Card title="Contact Us">
-                <Form onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
-                <Form.Input field="name" label="Name" placeholder="Enter your name" rules={[{ required: true }]} />
-                <Form.Input field="email" label="Email" placeholder="Enter your email" rules={[{ required: true, type: 'email' }]} />
-                <Form.TextArea field="message" label="Message" placeholder="Enter your message" rules={[{ required: true }]} />
-                <Button type="primary" htmlType="submit">Submit</Button>
-                </Form>
+            <Card className="mb-0 rounded-0">
+                <Card.Header>Contact Us</Card.Header>
+                <Card.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" name="name" placeholder="Enter your name" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" name="email" placeholder="Enter your email" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Message</Form.Label>
+                            <Form.Control as="textarea" name="message" rows={4} placeholder="Enter your message" required />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">Submit</Button>
+                    </Form>
+                </Card.Body>
             </Card>
         </BoxedLayout>
     );
