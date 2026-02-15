@@ -5,6 +5,12 @@
         width: 100%;
         max-width: unset;
     }
+    .breadcrumb {
+        margin: 0;
+        li {
+            margin: 0;
+        }
+    }
     .dropdown-menu .dropdown-menu {
         left: 100%;
         top: 0;

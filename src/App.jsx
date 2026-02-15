@@ -11,12 +11,15 @@ import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 
 import './App.scss';
+// import ArrayInputs from './pages/Settings/ArrayInputs';
 
 const year = new Date().getFullYear();
 
 const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
+const BasicInputs = lazy(() => import('./pages/Settings/BasicInputs'));
+const ArrayInputs = lazy(() => import('./pages/Settings/ArrayInputs'));
 const Settings = lazy(() => import('./pages/Settings/Settings'));
 const ImportExport = lazy(() => import('./pages/Settings/ImportExport'));
 const More = lazy(() => import('./pages/Settings/More'));
@@ -188,6 +191,8 @@ function App() {
                     </Route>
                     <Route path="/settings" element={<Settings />}>
                         <Route index element={<Navigate to="basic-inputs" replace />} />
+                        <Route path="basic-inputs" element={<BasicInputs />} />
+                        <Route path="array-inputs" element={<ArrayInputs />} />
                         <Route path="import-export" element={<ImportExport />} />
                         <Route path="more" element={<More />} />
                         <Route path="logs" element={<Navigate to="table" replace />} />

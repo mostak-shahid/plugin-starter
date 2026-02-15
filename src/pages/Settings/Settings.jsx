@@ -151,7 +151,7 @@ const Settings = () => {
 
     return (
         <FullWidthLayout sidebar={sidebar} sidebarPosition="left">
-            <div className="ps-3 pe-3 pt-3">
+            <div className="p-3">
                 {toast && (
                     <div className={`toast-container position-fixed top-0 end-0 m-3 ${toast.type === 'error' ? 'text-bg-danger' : 'text-bg-success'}`}>
                         <div className="toast show">
@@ -164,7 +164,7 @@ const Settings = () => {
                     <Card.Header>
                         <PageInfo menu={menuItemsWithIcons} url={location.pathname} />
                     </Card.Header>
-                    <Card.Body className="p-0">
+                    <Card.Body>
                         <Outlet context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} />
                     </Card.Body>
                 </Card>

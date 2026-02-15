@@ -45,21 +45,19 @@ const BreadcrumbControl = ({ menu=[], url='', className='', style = {} }) => {
     if (breadcrumbItems.length === 0) return null;
 
     return (
-        <Card className={`mb-4 ${className}`} style={style}>
-            <Card.Body className="py-2 rounded-0">
-                <Breadcrumb>
-                    {breadcrumbItems.map((item, index) => (
-                        <Breadcrumb.Item 
-                            key={index} 
-                            href={item.href}
-                            active={index === breadcrumbItems.length - 1}
-                        >
-                            {item.name}
-                        </Breadcrumb.Item>
-                    ))}
-                </Breadcrumb>
-            </Card.Body>
-        </Card>
+        <div className={`mb-4 border rounded-0 p-2 ${className}`} style={style}>
+            <Breadcrumb>
+                {breadcrumbItems.map((item, index) => (
+                    <Breadcrumb.Item 
+                        key={index} 
+                        href={item.href}
+                        active={index === breadcrumbItems.length - 1}
+                    >
+                        {item.name}
+                    </Breadcrumb.Item>
+                ))}
+            </Breadcrumb>
+        </div>
     );
 };
 

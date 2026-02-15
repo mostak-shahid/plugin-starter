@@ -1,26 +1,34 @@
-import { Layout, } from '@douyinfe/semi-ui';
+import { Container, Row, Col } from 'react-bootstrap';
 
-import {useSettingsBodyHeight} from '../lib/Helpers';
+import { useSettingsBodyHeight } from '../lib/Helpers';
 
-const { Header, Sider, Content } = Layout;
+const FullWidthLayout = ({ children, sidebar, sidebarPosition = 'none', className = '' }) => {
+    const minHeight = useSettingsBodyHeight();
 
-const FullWidthLayout = ({ children, sidebar, sidebarPosition='none', className='' }) => {
-    return (
-        <Layout className={className} style={{ minHeight: useSettingsBodyHeight() }}>
-            {sidebarPosition === 'left' &&
-                <Sider style={{ backgroundColor: 'var(--semi-color-bg-2)' }}>
-                    {sidebar}
-                </Sider>            
-            }
-            <Content style={{ padding: '24px' }}>
+    if (sidebarPosition === 'none') {
+        return (
+            <div className={`p-4 ${className}`} style={{ minHeight }}>
                 {children}
-            </Content>
-            {sidebarPosition === 'right' &&
-                <Sider style={{ backgroundColor: 'var(--semi-color-bg-2)' }}>
+            </div>
+        );
+    }
+
+    return (
+        <div className={`d-flex ${className}`} style={{ minHeight }}>
+            {sidebarPosition === 'left' && (
+                <div className="flex-shrink-0" style={{ width: '250px' }}>
                     {sidebar}
-                </Sider>            
-            }
-        </Layout>
+                </div>
+            )}
+            <div className="flex-grow-1 p-4">
+                {children}
+            </div>
+            {sidebarPosition === 'right' && (
+                <div className="flex-shrink-0" style={{ width: '250px' }}>
+                    {sidebar}
+                </div>
+            )}
+        </div>
     );
 };
 

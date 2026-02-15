@@ -1,20 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Nav, } from '@douyinfe/semi-ui';
+import { Nav, Collapse } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function VerticalMenuControl({items=[], breakpoint, headerContent, footerContent, className=""}) {
+export default function VerticalMenuControl({ items = [], breakpoint, headerContent, footerContent, className = "" }) {
     const navigate = useNavigate();
     const location = useLocation();
-    
-    const [isCollapse, setIsCollapse] = useState(window.innerWidth <= breakpoint);
+
+    const [isCollapse, setIsCollapse] = useState(false);
     const [openKeys, setOpenKeys] = useState([]);
     const [selectedKeys, setSelectedKeys] = useState([]);
-
-    useEffect(() => {
-        const handleResize = () => setIsCollapse(window.innerWidth <= breakpoint);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     useEffect(() => {
         const path = location.pathname;
@@ -47,24 +41,6 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
         return null;
     };
 
-    const handleOpenChange = (data) => {
-        const keys = Array.isArray(data) ? data : data?.openKeys || [];
-
-        if (keys.length > openKeys.length) {
-            const newlyOpenedKey = keys.find((k) => !openKeys.includes(k));
-            const parentKeys = findParentKeys(items, newlyOpenedKey);
-
-            const filteredKeys = openKeys.filter((k) => {
-                const parentOfK = findParentKeys(items, k);
-                return !isSameLevel(parentOfK, parentKeys);
-            });
-
-            setOpenKeys([...filteredKeys, newlyOpenedKey]);
-        } else {
-            setOpenKeys(keys);
-        }
-    };
-
     const findParentKeys = (menuItems, targetKey, parents = []) => {
         for (const item of menuItems) {
             if (item.itemKey === targetKey) return parents;
@@ -81,8 +57,7 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
         return a.every((v, i) => v === b[i]);
     };
 
-    const handleSelect = (data) => {
-        const itemKey = data?.itemKey;
+    const handleSelect = (itemKey) => {
         if (!itemKey) return;
         const found = findItemByKey(items, itemKey);
 
@@ -103,25 +78,135 @@ export default function VerticalMenuControl({items=[], breakpoint, headerContent
         setSelectedKeys([itemKey]);
     };
 
+    const toggleSubmenu = (itemKey) => {
+        if (isCollapse) return;
+        setOpenKeys(prev => 
+            prev.includes(itemKey) 
+                ? prev.filter(k => k !== itemKey)
+                : [...prev, itemKey]
+        );
+    };
+
+    const renderMenuItems = (menuItems, level = 0) => {
+        return menuItems.map((item) => {
+            const hasSubmenu = item.items && item.items.length > 0;
+            const isOpen = openKeys.includes(item.itemKey);
+            const isActive = selectedKeys.includes(item.itemKey);
+
+            if (hasSubmenu) {
+                return (
+                    <div key={item.itemKey} className="nav-item">
+                        <button
+                            className={`nav-link d-flex align-items-center justify-content-between w-100 ${isActive ? 'active' : ''}`}
+                            onClick={() => toggleSubmenu(item.itemKey)}
+                            aria-expanded={isOpen}
+                            style={{ 
+                                padding: isCollapse ? '0.5rem 0.75rem' : '0.5rem 1rem',
+                                border: 'none',
+                                background: 'transparent',
+                                cursor: 'pointer',
+                                color: isActive ? 'var(--bs-primary)' : 'inherit',
+                                fontSize: isCollapse ? '0' : 'inherit'
+                            }}
+                        >
+                            <span className="d-flex align-items-center gap-2" style={{ justifyContent: isCollapse ? 'center' : 'flex-start' }}>
+                                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                                <Collapse in={!isCollapse}>
+                                    <span>{item.text}</span>
+                                </Collapse>
+                            </span>
+                            <Collapse in={!isCollapse}>
+                                <span className={`dropdown-toggle ${isOpen ? 'show' : ''}`}></span>
+                            </Collapse>
+                        </button>
+                        <Collapse in={isOpen && !isCollapse}>
+                            <div>
+                                <Nav className={`flex-column ${level > 0 ? 'ps-3' : ''}`}>
+                                    {renderMenuItems(item.items, level + 1)}
+                                </Nav>
+                            </div>
+                        </Collapse>
+                    </div>
+                );
+            }
+
+            return (
+                <Nav.Item key={item.itemKey}>
+                    <Nav.Link
+                        eventKey={item.itemKey}
+                        onClick={() => handleSelect(item.itemKey)}
+                        active={isActive}
+                        className="d-flex align-items-center"
+                        style={{ 
+                            padding: isCollapse ? '0.5rem 0.75rem' : '0.5rem 1rem',
+                            justifyContent: isCollapse ? 'center' : 'flex-start'
+                        }}
+                    >
+                        <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                        <Collapse in={!isCollapse}>
+                            <span className="ms-2">{item.text}</span>
+                        </Collapse>
+                    </Nav.Link>
+                </Nav.Item>
+            );
+        });
+    };
+
     return (
-        <Nav
-            isCollapsed={isCollapse}
-            items={items}
-            selectedKeys={selectedKeys}
-            openKeys={openKeys}
-            onOpenChange={handleOpenChange}
-            onSelect={handleSelect}
-            onCollapseChange={setIsCollapse}
-            {...(headerContent && { header: headerContent })}
-            style={{height: '100%'}}
-            className={className}
+        <div 
+            className={`d-flex flex-column ${className}`} 
+            style={{ 
+                height: '100%',
+                width: isCollapse ? '60px' : '250px',
+                transition: 'width 0.2s ease',
+                overflow: 'hidden'
+            }}
         >
-            {footerContent && (
-                <Nav.Footer style={{padding: 0, marginTop: 'auto'}}>
-                    {footerContent}
-                </Nav.Footer>
+            {headerContent && (
+                <div 
+                    className="p-3 border-bottom d-flex align-items-center" 
+                    style={{ justifyContent: isCollapse ? 'center' : 'flex-start', minHeight: '60px' }}
+                >
+                    <Collapse in={!isCollapse}>
+                        <div>{headerContent}</div>
+                    </Collapse>
+                </div>
             )}
-            {breakpoint && <Nav.Footer collapseButton={true} />}
-        </Nav>
+            
+            <Nav 
+                variant="pills" 
+                className="flex-column flex-grow-1" 
+                activeKey={selectedKeys[0]}
+                onSelect={handleSelect}
+            >
+                {renderMenuItems(items)}
+            </Nav>
+
+            {footerContent && (
+                <div 
+                    className="mt-auto p-3 border-top d-flex align-items-center" 
+                    style={{ justifyContent: isCollapse ? 'center' : 'flex-start' }}
+                >
+                    <Collapse in={!isCollapse}>
+                        <div className="w-100">{footerContent}</div>
+                    </Collapse>
+                </div>
+            )}
+
+            <div className="p-2 border-top">
+                <button 
+                    className="btn btn-sm btn-outline-secondary w-100 d-flex align-items-center justify-content-center"
+                    onClick={() => setIsCollapse(!isCollapse)}
+                    title={isCollapse ? 'Expand Menu' : 'Collapse Menu'}
+                >
+                    <span style={{ transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                        ‹
+                    </span>
+                    <Collapse in={!isCollapse}>
+                        <span className="ms-2">Collapse</span>
+                    </Collapse>
+                </button>
+            </div>
+        </div>
     );
 }
