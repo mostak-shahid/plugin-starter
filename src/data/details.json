@@ -1,8 +1,0 @@
-{
-  "name": "Plugin Starter",
-  "description": "Plugin boilerplate for WordPress",
-  "version": "1.0.0",
-  "author": "Md. Mostak Shahid",
-  "authorURI": "https://mostak-shahid.github.io/",
-  "pluginURI": "https://mostak-shahid.github.io/plugin-starter/"
-}

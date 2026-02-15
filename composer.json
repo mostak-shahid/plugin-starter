@@ -5,7 +5,7 @@
   "license": "GPLv2",
   "autoload": {
     "psr-4": {
-      "MosPress\\PluginStarter\\": "php/"
+      "MosPress\\PluginStarter\\": "includes/"
     }
   },
   "authors": [
