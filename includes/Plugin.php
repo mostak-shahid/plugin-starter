@@ -4,6 +4,12 @@ namespace MosPress\PluginStarter;
 
 defined('ABSPATH') || exit;
 
+
+use MosPress\PluginStarter\API\Ajax_API;
+use MosPress\PluginStarter\API\Rest_API;
+use MosPress\PluginStarter\Hook\Action_Hook;
+use MosPress\PluginStarter\Hook\Filter_Hook;
+
 class Plugin {
 
     private static $instance = null;
@@ -17,6 +23,12 @@ class Plugin {
     }
 
     public function init() {
+
+		Ajax_API::get_instance();
+		Rest_API::get_instance();
+		Action_Hook::get_instance();
+		Filter_Hook::get_instance();
+
         add_action('admin_menu', [$this, 'register_admin_page']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
     }
