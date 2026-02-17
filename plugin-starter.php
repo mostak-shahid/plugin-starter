@@ -24,4 +24,5 @@ require_once __DIR__ . '/plugin-starter-functions.php';
 
 use MosPress\PluginStarter\Plugin;
 
-Plugin::get_instance();
+// Plugin::get_instance();
+new Plugin();

@@ -71,7 +71,8 @@ class Action_Hook
 		if (!current_user_can('manage_options')) {
 			return;
 		}
-		include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display.php');
+		// include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display.php');
+		echo '<div id="plugin-starter-settings-react-app"></div>';
 	}
 	public function plugin_starter_dashboard_react_page_html()
 	{

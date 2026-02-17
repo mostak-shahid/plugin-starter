@@ -81,7 +81,16 @@ class AdminClass
 		// }
 
 		if ($hook == 'toplevel_page_plugin-starter') {
-			wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
+			// wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
+
+			$asset_path = PLUGIN_STARTER_URL . 'assets/build/';
+
+			wp_enqueue_style(
+				$this->plugin_name . '-react',
+				$asset_path . 'app.css',
+				[],
+				filemtime($asset_path . 'app.css')
+			);
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
@@ -112,11 +121,19 @@ class AdminClass
 		wp_enqueue_script('jquery');
 		wp_enqueue_media();
 		if ($hook == 'toplevel_page_plugin-starter') {
+			// wp_enqueue_script(
+			// 	$this->plugin_name . '-react',
+			// 	PLUGIN_STARTER_URL . 'build/index.js',
+			// 	array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
+			// 	$this->version,
+			// 	true
+			// );
+			$asset_path = PLUGIN_STARTER_URL . 'assets/build/';
 			wp_enqueue_script(
 				$this->plugin_name . '-react',
-				PLUGIN_STARTER_URL . 'build/index.js',
-				array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
-				$this->version,
+				$asset_path . 'app.js',
+				[],
+				filemtime($asset_path . 'app.js'),
 				true
 			);
 			
