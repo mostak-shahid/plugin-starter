@@ -32,4 +32,6 @@ if (container) {
             <App />
         </HashRouter>
     );
+} else {
+    console.error("Target container '#plugin-starter-settings-react-app' not found in the DOM.");
 }

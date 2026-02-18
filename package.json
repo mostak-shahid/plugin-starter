@@ -7,9 +7,12 @@
   },
   "dependencies": {
     "@douyinfe/semi-ui": "^2.0.0",
+    "@visactor/vchart-semi-theme": "^1.12.3",
     "@wordpress/api-fetch": "^7.39.0",
+    "@wordpress/components": "^32.1.0",
     "@wordpress/i18n": "^6.12.0",
     "react": "^18.2.0",
+    "react-ace": "^14.0.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.0"
   },
