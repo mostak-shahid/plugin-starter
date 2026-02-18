@@ -39,16 +39,6 @@ class Plugin
 {
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
-
-	/**
 	 * The unique identifier of this plugin.
 	 *
 	 * @since    1.0.0
@@ -107,7 +97,7 @@ class Plugin
 	 */
 	private function define_admin_hooks()
 	{
-		$plugin_admin = new \MosPress\PluginStarter\Admin\Admin($this->get_plugin_name(), $this->get_version());
+		$plugin_admin = new \MosPress\PluginStarter\Admin\Admin($this->plugin_name, $this->version);
 		add_action('admin_enqueue_scripts', [$plugin_admin, 'enqueue_styles'], 9999);
 		add_action('admin_enqueue_scripts', [$plugin_admin, 'enqueue_scripts'], 9999);
 	}
@@ -122,46 +112,12 @@ class Plugin
 	private function define_public_hooks()
 	{
 
-		$plugin_public = new \MosPress\PluginStarter\Public\Frontend($this->get_plugin_name(), $this->get_version());
+		$plugin_public = new \MosPress\PluginStarter\Public\Frontend($this->plugin_name, $this->version);
 		add_action('wp_enqueue_scripts', [$plugin_public, 'enqueue_styles']);
 		add_action('wp_enqueue_scripts', [$plugin_public, 'enqueue_scripts']);
 		// Save settings by ajax
 		add_action('wp_ajax_plugin_starter_ajax_callback', [$plugin_public, 'plugin_starter_ajax_callback']);
 		add_action('wp_ajax_nopriv_plugin_starter_ajax_callback', [$plugin_public, 'plugin_starter_ajax_callback']);
-	}
-
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name()
-	{
-		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader()
-	{
-		return $this->loader;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function get_version()
-	{
-		return $this->version;
 	}
 }
 
