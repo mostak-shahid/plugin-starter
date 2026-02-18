@@ -10,7 +10,7 @@ const units = [
     // { value: 'rem', label: 'rem' },
     // { value: 'vw', label: 'vw' },
 ];
-const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
+// const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
 const Page = () => {
     const settingLoading = false;
     const settingData = {};
@@ -269,14 +269,14 @@ const Page = () => {
                                 <Paragraph>{__("Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delectus, odio.", "plugin-starter")}</Paragraph>
                             </Skeleton>
                         </Col>    
-                        {
+                        {/* {
                             !settingLoading &&                               
                             <Col xs={24} lg={12} xl={10}>
                                 <Suspense fallback={<div>{__("Loading remote component...", "plugin-starter")}</div>}>
                                     <RemoteLoginForm settingData={settingData} />
                                 </Suspense>
                             </Col>
-                        }
+                        } */}
                     </Row>
                 </div>                            
             }
