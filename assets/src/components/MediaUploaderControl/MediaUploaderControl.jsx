@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from 'react';
-import './MediaUploaderControl.scss';
+import './MediaUploaderControl.css';
 import { Dashicon } from '@wordpress/components';
 
 import { Row, Col, Input, InputGroup, Skeleton, Button } from '@douyinfe/semi-ui';

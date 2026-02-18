@@ -11,7 +11,7 @@ import {BreadcrumbControl, PageInfo, VerticalMenuControl} from "../../components
 import { Logo } from '../../lib/Illustrations';
 const { Header, Sider, Content } = Layout;
 import Details from '../../data/details.json';
-import './Settings.scss';
+import './Settings.css';
 
 const Settings = () => {
     const [settings, setSettings] = useState({});

@@ -3,7 +3,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from 'react';
 import {PluginCard} from "../../components";
 import Details from '../../data/details.json';
-import './Dashboard.scss';
+import './Dashboard.css';
 import {FullWidthLayout} from '../../layouts';
 // import {
 //     Card,

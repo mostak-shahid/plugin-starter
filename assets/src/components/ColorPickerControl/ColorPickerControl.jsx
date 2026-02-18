@@ -3,7 +3,7 @@ import { GRADIENTS, COLORS } from '../../lib/Constants';
 import { ColorIndicator, ColorPalette, GradientPicker, Popover, TabPanel, } from '@wordpress/components';
 import { Typography, Space } from '@douyinfe/semi-ui';
 import { IconCopy, IconTickCircle, } from '@douyinfe/semi-icons';
-import './ColorPickerControl.scss';
+import './ColorPickerControl.css';
 
 const DEFAULT_COLOR = '#ffffff';
 const DEFAULT_GRADIENT =

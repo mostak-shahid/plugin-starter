@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Nav, SideSheet, Button, } from '@douyinfe/semi-ui';
 import { IconMenu, } from '@douyinfe/semi-icons';
-import './HorizontalMenuControl.scss';
+import './HorizontalMenuControl.css';
 
 export default function HorizontalMenuControl({items, breakpoint, headerContent={}, footerContent={}}) {
     const navigate = useNavigate();

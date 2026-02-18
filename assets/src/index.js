@@ -21,7 +21,7 @@ if (typeof window.wpApiSettings !== 'undefined') {
 
 // import "@douyinfe/semi-ui/dist/css/semi.min.css";
 import "./styles/tailwind.css";
-import "./styles/index.scss";
+import "./styles/index.css";
 
 const container = document.getElementById("plugin-starter-settings-react-app");
 

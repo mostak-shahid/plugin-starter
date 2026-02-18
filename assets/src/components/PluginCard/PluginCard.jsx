@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { useCallback, useEffect, useState } from 'react';
 import { formDataPost } from "../../lib/Helpers"; // Import utility function
-import './PluginCard.scss';
+import './PluginCard.css';
 import { Space, Tag, Typography } from '@douyinfe/semi-ui';
 import {IconHistogram} from '@douyinfe/semi-icons';
 import { Rating } from '@douyinfe/semi-ui';
