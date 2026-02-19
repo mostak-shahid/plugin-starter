@@ -89,7 +89,8 @@ class AdminClass
 				$this->plugin_name . '-react',
 				$asset_path . 'app.css',
 				[],
-				filemtime($asset_path . 'app.css')
+				// filemtime($asset_path . 'app.css'),
+				time(),
 			);
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
@@ -133,7 +134,8 @@ class AdminClass
 				$this->plugin_name . '-react',
 				$asset_path . 'app.js',
 				[],
-				filemtime($asset_path . 'app.js'),
+				// filemtime($asset_path . 'app.js'),
+				time(),
 				true
 			);
 			
