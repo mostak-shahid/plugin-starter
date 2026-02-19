@@ -1,13 +1,25 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 module.exports = {
-  entry: path.resolve(__dirname, "src/index.js"),
+  mode: "production",
+
+  entry: {
+    app:     path.resolve(__dirname, "src/index.js"),
+    profile: path.resolve(__dirname, "src/profile.js"),
+  },
 
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "app.js",
+    filename: "[name].js",   // → app.js, profile.js
     clean: true,
+    publicPath: "auto",
+  },
+
+  optimization: {
+    splitChunks: false,
+    runtimeChunk: false,
   },
 
   module: {
@@ -48,9 +60,18 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "app.css",
+      filename: "[name].css",   // → app.css, profile.css
+    }),
+
+    new ModuleFederationPlugin({
+      name: "pluginstarter",
+      remotes: {
+        pluginstarterpro: `pluginstarterpro@/wp-content/plugins/plugin-starter-pro/build/pluginstarterprocomponents.js`,
+      },
+      shared: {
+        react: { singleton: true, requiredVersion: false, eager: false },
+        "react-dom": { singleton: true, requiredVersion: false, eager: false },
+      },
     }),
   ],
-
-  mode: "production",
 };

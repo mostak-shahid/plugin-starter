@@ -83,15 +83,22 @@ class AdminClass
 		if ($hook == 'toplevel_page_plugin-starter') {
 			// wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
 
-			$asset_path = PLUGIN_STARTER_URL . 'assets/build/';
+			// $asset_path = PLUGIN_STARTER_URL . 'assets/build/';
 
-			wp_enqueue_style(
-				$this->plugin_name . '-react',
-				$asset_path . 'app.css',
-				[],
-				// filemtime($asset_path . 'app.css'),
-				time(),
-			);
+			// wp_enqueue_style(
+			// 	$this->plugin_name . '-react',
+			// 	$asset_path . 'app.css',
+			// 	[],
+			// 	// filemtime($asset_path . 'app.css'),
+			// 	time(),
+			// );
+			// wp_enqueue_style(
+			// 	$this->plugin_name . '-tailwind',
+			// 	$asset_path . 'tailwind.css',
+			// 	[],
+			// 	// filemtime($asset_path . 'app.css'),
+			// 	time(),
+			// );
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
