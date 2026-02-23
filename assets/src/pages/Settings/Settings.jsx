@@ -181,7 +181,7 @@ const Settings = () => {
                         itemKey: "vip",
                         text: __("VIP Priority Support", "plugin-starter"),
                         icon: <IconSend />,
-                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
+                        link: "https://wordpress.org/support/plugin/plugin-starter/",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security
@@ -191,7 +191,7 @@ const Settings = () => {
                         itemKey: "help",
                         text: __("Help Center", "plugin-starter"),
                         icon: <IconHelpCircle />,
-                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
+                        link: "https://mostak-shahid.github.io/plugins/plugin-starter.html",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security

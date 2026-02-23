@@ -57,7 +57,7 @@ class Filter_Hook {
             '<a href="' . admin_url("admin.php?page={$this->plugin_slug}") . '">' .
                 esc_html__('Settings', 'plugin-starter') .
             '</a>',
-            '<a href="https://mostak-shahid.github.io/plugin/plugin-starter/docs/" target="_blank">' .
+            '<a href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target="_blank">' .
                 esc_html__('Docs', 'plugin-starter') .
             '</a>',
             '<a href="https://www.facebook.com/mospressbd" target="_blank">' .
