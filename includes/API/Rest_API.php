@@ -229,7 +229,37 @@ class Rest_API
                 // },
 			)
 		);
-        
+
+		register_rest_route(
+			self::NAMESPACE,
+			'/get-option',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'rest_get_option'],
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+                'args' => [
+                    'option_name' => [
+                        'required' => true,
+                        'type'     => 'string',
+                    ],
+                ],
+			)
+		);
+
+		register_rest_route(
+			self::NAMESPACE,
+			'/set-option',
+			array(
+				'methods'  => 'POST',
+				'callback' => [$this, 'rest_set_option'],
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+			)
+		);
+
         register_rest_route(
             self::NAMESPACE,
             '/deactivation-link',
@@ -795,6 +825,50 @@ class Rest_API
         // return $settings_theme??'light';
         return $settings_theme?$settings_theme:'light';
     }
+
+	public function rest_get_option(WP_REST_Request $request)
+	{
+		$option_name = sanitize_text_field(wp_unslash($request->get_param('option_name')));
+		$option_value = get_option($option_name);
+
+		if ($option_value === false) {
+			return [];
+		}
+
+		return new WP_REST_Response($option_value, 200);
+	}
+
+	public function rest_set_option(WP_REST_Request $request)
+	{
+		$option_name = sanitize_text_field(wp_unslash($request->get_param('option_name')));
+		$option_value = $request->get_param('option_value');
+
+		if (empty($option_name)) {
+			return new WP_Error(
+				'rest_invalid_param',
+				__('Option name is required.', 'plugin-starter'),
+				array('status' => 400)
+			);
+		}
+
+		$updated = update_option($option_name, $option_value);
+
+		if ($updated === false) {
+			return new WP_Error(
+				'rest_update_failed',
+				__('Failed to update option.', 'plugin-starter'),
+				array('status' => 500)
+			);
+		}
+
+		$response = [
+			'success' => true,
+			'msg' => esc_html__('Option updated successfully.', 'plugin-starter'),
+		];
+
+		return new WP_REST_Response($response, 200);
+	}
+
     /**
      * Get the deactivation link.
      *

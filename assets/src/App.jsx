@@ -38,6 +38,9 @@ export default function App() {
     const [newsItems, setNewsItems] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [activeNews, setActiveNews] = useState(null);
+    const [readNewsIds, setReadNewsIds] = useState([]);
+    const [newsCurrentPage, setNewsCurrentPage] = useState(1);
+    const itemsPerPage = 5;
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -88,6 +91,26 @@ export default function App() {
         if (words.length <= wordLimit) return text;
         return words.slice(0, wordLimit).join(' ') + '...';
     };
+
+    const markNewsAsRead = async (newsId) => {
+        if (!readNewsIds.includes(newsId)) {
+            const updatedReadIds = [...readNewsIds, newsId];
+            setReadNewsIds(updatedReadIds);
+            try {
+                await apiFetch({
+                    path: '/plugin-starter/v1/set-option',
+                    method: 'POST',
+                    data: {
+                        option_name: 'mospress_read_news',
+                        option_value: updatedReadIds
+                    }
+                });
+            } catch (error) {
+                console.error("Error saving read news:", error);
+            }
+        }
+    };
+
     useEffect(() => {
         const fetchNews = async () => {
             try {
@@ -99,13 +122,28 @@ export default function App() {
             }
         };
         fetchNews();
+
+        const fetchReadNews = async () => {
+            try {
+                const response = await apiFetch({
+                    path: '/plugin-starter/v1/get-option?option_name=mospress_read_news',
+                    method: 'GET'
+                });
+                if (response && Array.isArray(response)) {
+                    setReadNewsIds(response);
+                }
+            } catch (error) {
+                console.error("Error fetching read news:", error);
+            }
+        };
+        fetchReadNews();
     }, []); 
 
     const handleNewsVisible = (visible) => {
         setNewsVisible(visible);
-        // if (visible && newsItems.length === 0) {
-        //     fetchNews();
-        // }
+        if (visible) {
+            setNewsCurrentPage(1);
+        }
     };
 
     const HorizontalMenuItems = [
@@ -234,7 +272,7 @@ export default function App() {
                                         )
                                     }
                                 />
-                                <Badge count={newsItems.length || 0}>
+                                <Badge count={newsItems.filter(item => !readNewsIds.includes(item.id)).length || 0}>
                                     <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
                             </Space>
@@ -319,40 +357,64 @@ export default function App() {
                     {newsItems.length === 0 ? (
                         <p>{__("Loading news...", "plugin-starter")}</p>
                     ) : (
-                        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                            {newsItems.map((item) => (
-                                <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
-                                    <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
-                                    {item?.tags && item.tags.length > 0 && (
+                        <>
+                            <div style={{ maxHeight: '500px', overflowY: 'auto', marginBottom: '20px' }}>
+                                {newsItems
+                                    .slice((newsCurrentPage - 1) * itemsPerPage, newsCurrentPage * itemsPerPage)
+                                    .map((item) => (
+                                    <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
+                                        <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
+                                        {item?.tags && item.tags.length > 0 && (
+                                            <div className='mt-2'>
+                                                <Space>
+                                                    {item.tags.map((tag, index) => (
+                                                        <Tag key={index} size="small" shape='circle' color='amber'>{tag}</Tag>
+                                                    ))}
+                                                </Space>
+                                            </div>
+                                        )}
                                         <div className='mt-2'>
-                                            <Space>
-                                                {item.tags.map((tag, index) => (
-                                                    <Tag key={index} size="small" shape='circle' color='amber'>{tag}</Tag>
-                                                ))}
-                                            </Space>
-                                        </div>
-                                    )}
-                                    <div className='mt-2'>
-                                        <Paragraph type="secondary">
-                                            {truncateText(item.news)}
-                                        </Paragraph>
-                                        <Button
-                                            type="link"
-                                            size="small"
+                                            <Paragraph type="secondary">
+                                                {truncateText(item.news)}
+                                            </Paragraph>
+                                            <Button
+                                                type="link"
+                                                size="small"
 
-                                            onClick={() => {
-                                                setActiveNews(item);
-                                                setModalVisible(true);
-                                            }}
-                                            // onClick={() => alert(item.news)}
-                                            // style={{ padding: 0, marginLeft: '5px' }}
-                                        >
-                                            {__("Read more", "plugin-starter")}
-                                        </Button>
+                                                onClick={() => {
+                                                    markNewsAsRead(item.id);
+                                                    setActiveNews(item);
+                                                    setModalVisible(true);
+                                                }}
+                                            >
+                                                {__("Read more", "plugin-starter")}
+                                            </Button>
+                                        </div>
                                     </div>
+                                ))}
+                            </div>
+                            {Math.ceil(newsItems.length / itemsPerPage) > 1 && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid var(--semi-color-border)' }}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setNewsCurrentPage(newsCurrentPage - 1)}
+                                        disabled={newsCurrentPage === 1}
+                                    >
+                                        {__("Previous", "plugin-starter")}
+                                    </Button>
+                                    <Text>
+                                        {__("Page", "plugin-starter")} {newsCurrentPage} {__("of", "plugin-starter")} {Math.ceil(newsItems.length / itemsPerPage)}
+                                    </Text>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setNewsCurrentPage(newsCurrentPage + 1)}
+                                        disabled={newsCurrentPage === Math.ceil(newsItems.length / itemsPerPage)}
+                                    >
+                                        {__("Next", "plugin-starter")}
+                                    </Button>
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                        </>
                     )}
                 </SideSheet>
             </div>
