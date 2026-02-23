@@ -357,8 +357,8 @@ export default function App() {
                     {newsItems.length === 0 ? (
                         <p>{__("Loading news...", "plugin-starter")}</p>
                     ) : (
-                        <>
-                            <div style={{ maxHeight: '500px', overflowY: 'auto', marginBottom: '20px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            <div style={{ flex: 1, overflowY: 'auto', paddingRight: '10px' }}>
                                 {newsItems
                                     .slice((newsCurrentPage - 1) * itemsPerPage, newsCurrentPage * itemsPerPage)
                                     .map((item) => (
@@ -377,6 +377,7 @@ export default function App() {
                                             <Paragraph type="secondary">
                                                 {truncateText(item.news)}
                                             </Paragraph>
+                                            <br />
                                             <Button
                                                 type="link"
                                                 size="small"
@@ -394,7 +395,7 @@ export default function App() {
                                 ))}
                             </div>
                             {Math.ceil(newsItems.length / itemsPerPage) > 1 && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid var(--semi-color-border)' }}>
+                                <div style={{ borderTop: '1px solid var(--semi-color-border)', flexShrink: 0 }} className='flex justify-between items-center py-4 mt-4'>
                                     <Button
                                         size="small"
                                         onClick={() => setNewsCurrentPage(newsCurrentPage - 1)}
@@ -414,7 +415,7 @@ export default function App() {
                                     </Button>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
                 </SideSheet>
             </div>
@@ -426,7 +427,7 @@ export default function App() {
                 footer={null}
                 style={{ maxWidth: 700 }}
             >
-                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+                <div style={{ maxHeight: 400, overflowY: 'auto' }} className='pb-6'>
                     {activeNews?.tags?.length > 0 && (
                         <Space style={{ marginBottom: 12 }}>
                             {activeNews.tags.map((tag, index) => (
