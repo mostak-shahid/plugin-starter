@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from 'react';
-import { Layout, Nav, Card, Toast } from '@douyinfe/semi-ui';
+import { Layout, Nav, Card, Notification } from '@douyinfe/semi-ui';
 import {FullWidthLayout} from '../../layouts';
 import { IconSetting, IconListView, IconUser, IconTemplate, IconCloud, IconPlusCircle, IconLikeThumb, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -47,25 +47,27 @@ const Settings = () => {
             });
             if (result.success) {
                 setSettingsReload(Math.random());
-                Toast.success({
+                Notification.success({
+                    title: __("Success", "plugin-starter"),
                     content: __("Settings saved successfully!!!", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
-                    right: 15,
+                    position: 'topRight',
                 });
             } else {
-                Toast.error({
+                Notification.error({
+                    title: __("Error", "plugin-starter"),
                     content: __("Error saving settings. Please try again.", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
+                    position: 'topRight',
                 });
             }
         } catch (error) {
             console.error("Error saving settings:", error);
-            Toast.error({
+            Notification.error({
+                title: __("Error", "plugin-starter"),
                 content: __("Error saving settings. Please try again.", "plugin-starter"),
                 duration: 3,
-                theme: 'light',
+                position: 'topRight',
             });
         } finally {
             setSettingsReload(prev => prev + 1);
@@ -82,25 +84,27 @@ const Settings = () => {
             console.log(result);
             if (result.success) {
                 setSettingsReload(Math.random());
-                Toast.success({
+                Notification.success({
+                    title: __("Success", "plugin-starter"),
                     content: __("Settings reset successfully!", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
-                    right: 15,
+                    position: 'topRight',
                 });
             } else {
-                Toast.error({
+                Notification.error({
+                    title: __("Error", "plugin-starter"),
                     content: __("Error resetting settings. Please try again.", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
+                    position: 'topRight',
                 });
             }
         } catch (error) {
             console.error("Error resetting settings:", error);
-            Toast.error({
+            Notification.error({
+                title: __("Error", "plugin-starter"),
                 content: __("Error resetting settings. Please try again.", "plugin-starter"),
                 duration: 3,
-                theme: 'light',
+                position: 'topRight',
             });
         } finally {
             // setSettingsReload(prev => prev + 1);

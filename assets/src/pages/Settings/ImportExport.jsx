@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useState } from 'react';
-import { Row, Col, Typography, Skeleton, Button, Upload, Space, Toast, } from '@douyinfe/semi-ui';
+import { Row, Col, Typography, Skeleton, Button, Upload, Space, Notification } from '@douyinfe/semi-ui';
 import { IconDownload, IconUpload, IconTickCircle } from '@douyinfe/semi-icons';
 import { SkeletonPlaceholder } from '../../components';
 
@@ -85,11 +85,11 @@ const ImportExport = () => {
                 setProcessingImport(false);
                 setFileList([]);
                 setImportData('');
-                Toast.success({
+                Notification.success({
+                    title: __("Success", "plugin-starter"),
                     content: __("Settings imported successfully!", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
-                    right: 15,
+                    position: 'topRight',
                 });
                 setTimeout(() => {
                     window.location.reload();
