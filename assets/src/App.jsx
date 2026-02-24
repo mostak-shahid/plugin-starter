@@ -362,8 +362,8 @@ export default function App() {
                                 {newsItems
                                     .slice((newsCurrentPage - 1) * itemsPerPage, newsCurrentPage * itemsPerPage)
                                     .map((item) => (
-                                    <Card key={item.id} style={{ marginBottom: 12 }} bodyStyle={{ padding: 10 }}>
-                                        <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
+                                    <Card key={item.id} style={{ marginBottom: 12, backgroundColor: !readNewsIds.includes(item.id) ? 'var(--semi-color-primary-light-default)' : '' }} bodyStyle={{ padding: 10 }}>
+                                        <Text strong style={{ fontSize: '16px' }}>{!readNewsIds.includes(item.id) ? '• ' : ''}{item.title}</Text>
                                         {item?.tags && item.tags.length > 0 && (
                                             <div className='mt-2'>
                                                 <Space>
