@@ -43,6 +43,18 @@ function plugin_starter_deactivate()
 register_activation_hook(__FILE__, 'plugin_starter_activate');
 register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 
+
+/**
+ * Register WP-CLI commands only if file exists
+ */
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+    $cli_file = plugin_dir_path( __FILE__ ) . 'includes/CLI/CLI_Command.php';
+    
+    if ( file_exists( $cli_file ) ) {
+        WP_CLI::add_command( 'plugin-starter', 'MosPress\PluginStarter\CLI\CLI_Command' );
+    }
+}
+
 use MosPress\PluginStarter\Plugin;
 
 // Plugin::get_instance();
