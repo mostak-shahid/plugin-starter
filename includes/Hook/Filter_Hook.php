@@ -82,7 +82,7 @@ class Filter_Hook {
      * Add body classes on plugin pages
      */
     public function plugin_starter_admin_body_class( $classes ) {
-        error_log("Filter_Hook constructor called");
+        // error_log("Filter_Hook constructor called");
         if (function_exists('plugin_starter_is_plugin_page') && plugin_starter_is_plugin_page()) {
             $classes .= ' ' . sanitize_html_class( $this->plugin_slug . '-settings-template' ) . ' ';
         }
