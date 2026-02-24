@@ -47,7 +47,7 @@ register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
 /**
  * Register WP-CLI commands only if file exists
  */
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
+if ( defined( 'WP_CLI' ) && WP_CLI && file_exists( plugin_dir_path( __FILE__ ) . 'includes/CLI/CLI_Command.php' ) ) {
     $cli_file = plugin_dir_path( __FILE__ ) . 'includes/CLI/CLI_Command.php';
     
     if ( file_exists( $cli_file ) ) {

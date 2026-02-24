@@ -25,7 +25,7 @@ Gruntfile.js
 src/
 tests/
 Resources/
-php/CLI/
+includes/CLI/
 
 # Git / meta
 .git/
