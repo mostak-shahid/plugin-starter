@@ -4,7 +4,7 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, } from '@douyinfe/semi-ui';
+import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, Card} from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, IconFile, } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
@@ -362,7 +362,7 @@ export default function App() {
                                 {newsItems
                                     .slice((newsCurrentPage - 1) * itemsPerPage, newsCurrentPage * itemsPerPage)
                                     .map((item) => (
-                                    <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
+                                    <Card key={item.id} style={{ marginBottom: 12 }} bodyStyle={{ padding: 10 }}>
                                         <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
                                         {item?.tags && item.tags.length > 0 && (
                                             <div className='mt-2'>
@@ -391,7 +391,7 @@ export default function App() {
                                                 {__("Read more", "plugin-starter")}
                                             </Button>
                                         </div>
-                                    </div>
+                                    </Card>
                                 ))}
                             </div>
                             {Math.ceil(newsItems.length / itemsPerPage) > 1 && (
