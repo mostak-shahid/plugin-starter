@@ -31,7 +31,7 @@ class Deactivator
      * It handles cleanup of custom tables and options.
      */
     public static function deactivate() {
-        $options = plugin_starter_get_option();
+        $options = get_option('plugin_starter_options', []);
         if (isset($options['tools']['delete_data_on']) && $options['tools']['delete_data_on'] == 'deactivate') {
             plugin_starter_data_cleanup();
         }
