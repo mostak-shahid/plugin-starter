@@ -1,6 +1,9 @@
 {
   "name": "plugin-starter",
   "version": "1.0.0",
+  "description": "Plugin boilerplate for WordPress",
+  "author": "Md. Mostak Shahid",
+  "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "webpack --config assets/webpack.config.js",
     "dev": "webpack --config assets/webpack.config.js --watch"

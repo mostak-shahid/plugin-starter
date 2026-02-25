@@ -46,13 +46,14 @@ class UserMeta {
      */
     public function render_field($user) {
         ?>
-        <h2>Plugin Starter Info</h2>
+        <h2><?php echo esc_html__('Plugin Starter Info', 'plugin-starter'); ?></h2>
         <div id="plugin-starter-profile-react-app"></div>
+        <?php wp_nonce_field( 'mos_email_form_action', 'mos_email_form_field' ); ?>
         <table class="form-table">
             <tr>
                 <th>
                     <label for="plugin_starter_company">
-                        Company Name
+                        <?php echo esc_html__('Company Name', 'plugin-starter'); ?>
                     </label>
                 </th>
                 <td>
@@ -64,7 +65,7 @@ class UserMeta {
                         class="regular-text"
                     />
                     <p class="description">
-                        Enter the user's company name.
+                        <?php echo esc_html__('Enter the user\'s company name.', 'plugin-starter'); ?>
                     </p>
                 </td>
             </tr>
@@ -80,13 +81,14 @@ class UserMeta {
         if (!current_user_can('edit_user', $user_id)) {
             return;
         }
-
-        if (isset($_POST['plugin_starter_company'])) {
+        if ( isset( $_POST['mos_email_form_field'] ) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mos_email_form_field'])), 'mos_email_form_action' ) ) {
+            $plugin_starter_company = isset($_POST['plugin_starter_company']) ? sanitize_text_field(wp_unslash($_POST['plugin_starter_company'])) : '';            
             update_user_meta(
                 $user_id,
                 'plugin_starter_company',
-                sanitize_text_field($_POST['plugin_starter_company'])
+                $plugin_starter_company
             );
+            
         }
     }
 }

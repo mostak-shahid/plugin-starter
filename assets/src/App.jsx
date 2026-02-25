@@ -9,9 +9,11 @@ import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpC
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
-import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Logs, LogsCharts, LogsTable, Feedback, FreeVsPro, NotFound} from './pages';
+import { Dashboard, Settings, ImportExport, More, Tools, Logs, LogsCharts, LogsTable, Feedback, FreeVsPro, NotFound} from './pages';
 
 import {
+    About, 
+    Contact,
     BasicInputs, 
     ArrayInputs,
     BoxedLeftSidebar,
@@ -251,7 +253,7 @@ export default function App() {
 
                                 <Button 
                                     theme='outline' 
-                                    icon={<IconFile />} 
+                                    icon={<IconCustomerSupport />} 
                                     aria-label={__("Documentation", 'plugin-starter')}
                                     onClick={ () =>
                                         window.open(
