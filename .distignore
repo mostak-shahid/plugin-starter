@@ -63,3 +63,6 @@ README.md
 **/*.scss
 **/*.map
 **/*.css.map
+**/*.js.LICENSE.txt
+
+Resources/
