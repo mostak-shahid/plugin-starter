@@ -165,7 +165,7 @@ export default function Dashboard() {
                             <Paragraph>
                                 {__("We love to hear from you, we would appreciate every single review.", "plugin-starter")}                                    
                             </Paragraph>
-                            <Text link={{ href: 'https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post', target:"_blank" }}>
+                            <Text link={{ href: 'https://wordpress.org/support/plugin/plugin-starter/reviews/', target:"_blank" }}>
                                 {__("Rate", "plugin-starter")}
                             </Text>                            
                         </Card>

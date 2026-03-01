@@ -151,7 +151,7 @@ class AdminClass
 				$this->plugin_name . '-react',
 				sprintf(
 					'window.wpApiSettings = { root: "%s", nonce: "%s" };',
-					esc_url_raw( rest_url() ),
+					esc_url( rest_url() ),
 					wp_create_nonce( 'wp_rest' )
 				),
 				'before'
@@ -168,7 +168,7 @@ class AdminClass
 			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
 			'api_nonce' => esc_attr(wp_create_nonce('wp_rest')),
 			'get_current_user_id' => get_current_user_id(),
-			'root'  => esc_url_raw( rest_url() ),
+			'root'  => esc_url( rest_url() ),
     		'nonce' => wp_create_nonce('wp_rest'),
 			'default_colors' => plugin_starter_get_default_colors(),
 			'default_gradients' => plugin_starter_get_default_gradients(),

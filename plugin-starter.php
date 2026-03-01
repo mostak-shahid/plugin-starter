@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Starter
- * Plugin URI:        https://mostak-shahid.github.io/plugin-starter/
+ * Plugin URI:        https://mostak-shahid.github.io/plugins/plugin-starter.html
  * Description:       Plugin boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Md. Mostak Shahid

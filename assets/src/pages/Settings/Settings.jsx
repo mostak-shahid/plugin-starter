@@ -211,7 +211,7 @@ const Settings = () => {
                         itemKey: "rate",
                         text: __("Rate Us", "plugin-starter"),
                         icon: <IconLikeHeart />,
-                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
+                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security
