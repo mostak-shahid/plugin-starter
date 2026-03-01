@@ -2,70 +2,81 @@ import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { Form, Card } from '@douyinfe/semi-ui';
-import { Button, Col, Row, Typography, Toast, Space } from '@douyinfe/semi-ui';
+import { Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { BoxedLayout } from '../layouts';
 import { PageInfo } from '../components';
 import menuItems from '../data/menu.json';
 const Feedback = () => {    
-    const [initValues] = useState({
+    const [initValues, setInitValues] = useState({
         subject: '',
+        email: '',
+        phone: '',
         message: '',
     });
-    const [subject, setSubject] = useState('')
-    const [message, setMessage] = useState('')
-    const [processing, setProcessing] = useState(false); // normal, processing, done
-    const handleForm = async () => {
-        if (subject && message) {
+    const [processing, setProcessing] = useState(false);
+    const [formApi, setFormApi] = useState(null); // normal, processing, done
+
+    const handleValuesChange = (values) => {
+        // setFormValues(values);
+        // if (settingsOld.current && settings.general) {
+        //     const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.general);
+        //     setHasChanges(isChanged);
+        // }
+        setInitValues(values);
+    };
+
+    const handleForm = async (values) => {
+        console.log(values);
+        if (values.subject && values.message) {
             setProcessing(true);
             try {
                 const result = await apiFetch({
                     path: "/plugin-starter/v1/feedback",
                     method: "POST",
                     data: {
-                        subject,
-                        message
+                        subject: values.subject,
+                        email: values.email,
+                        phone: values.phone,
+                        message: values.message
                     },
                     headers: {
-                        'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
+                        'X-WP-Nonce': mos_product_specifications_tab_ajax_obj.api_nonce
                     }
                 });
-                // You might want to handle success here
                 console.log(result);
                 if (result.success) {
-                    setSubject('');
-                    setMessage('');
-                    Toast.success({
-						content: __("Feedback send successfully!", "plugin-starter"),
-						duration: 3,
-                        theme: 'light',
-                        left,
-					});
+                    if (formApi) {
+                        formApi.reset();
+                    }
+                    Notification.success({
+                        title: __("Success", "plugin-starter"),
+                        content: __("Feedback send successfully!", "plugin-starter"),
+                        duration: 3,
+                    });
                 }
 
             } catch (error) {
                 console.error("Mail Sending Error:", error);
-                Toast.error({
+                Notification.error({
+                    title: __("Error", "plugin-starter"),
                     content: __("Please try again!", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
-                    left,
                 });
             } finally {
                 setProcessing(false);
             }
         } else {
-            alert('Subject or Message can\'t be Empty')
+            Notification.warning({
+                title: __("Warning", "plugin-starter"),
+                content: __("Subject or Message can't be Empty", "plugin-starter"),
+                duration: 3,
+            });
         }
     };
-    
-    const { Title } = Typography; 
 
-    const onSubmit = (values) => {
-        handleSubmit('array', values);
-    };
-    
+
     const {
         Input,
         InputNumber,
@@ -86,10 +97,10 @@ const Feedback = () => {
         TreeSelect,
     } = Form;
 
-    const handleSubmit = (values) => {
-        console.log(values);
-        Toast.info('Submit Success');
-    };
+    // const handleSubmit = (values) => {
+    //     console.log(values);
+    //     Toast.info('Submit Success');
+    // };
 
     return (
         <BoxedLayout>
@@ -112,8 +123,11 @@ const Feedback = () => {
                         <Form
                             initValues={initValues}
                             // style={{ padding: 10, width: '100%' }}
-                            onValueChange={(v) => console.log(v)}
-                            onSubmit={values => handleSubmit(values)}
+                            // onValueChange={(v) => console.log(v)}
+                            onValueChange={handleValuesChange}
+                            // onSubmit={values => handleSubmit(values)}
+                            onSubmit={handleForm}
+                            getFormApi={setFormApi}
                         >
                             <div className="mb-3">
                                 <Input                                
@@ -124,8 +138,34 @@ const Feedback = () => {
                                     rules={[
                                         { required: true, message: 'required Error' },
                                         { type: 'string', message: 'type error' },
-                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                        // { validator: (rule, value) => value === 'semi', message: 'not semi' }
                                     ]}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <Input                                
+                                    field="email"
+                                    label={__("Email", "plugin-starter")}
+                                    // trigger="blur"
+                                    // className="mt-2"
+                                    // rules={[
+                                    //     { required: true, message: 'required Error' },
+                                    //     { type: 'string', message: 'type error' },
+                                    //     { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                    // ]}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <Input                                
+                                    field="phone"
+                                    label={__("Phone", "plugin-starter")}
+                                    // trigger="blur"
+                                    // className="mt-2"
+                                    // rules={[
+                                    //     { required: true, message: 'required Error' },
+                                    //     { type: 'string', message: 'type error' },
+                                    //     { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                    // ]}
                                 />
                             </div>
                             <div className="mb-3">
@@ -136,15 +176,15 @@ const Feedback = () => {
                                     rules={[
                                         { required: true, message: 'required Error' },
                                         { type: 'string', message: 'type error' },
-                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
+                                        // { validator: (rule, value) => value === 'semi', message: 'not semi' }
                                     ]}
                                 />
                             </div>
                             <Space>
                                 <Button theme="solid" type="primary" htmlType="submit" className="btn-margin-right">
-                                    {__("Submit", "plugin-starter")}
+                                    {__("Send", "plugin-starter")}
                                 </Button>
-                                <Button theme='solid' type='danger' htmlType="reset">{__("Reset", "plugin-starter")}</Button>
+                                {/* <Button theme='solid' type='danger' htmlType="reset">{__("Reset", "plugin-starter")}</Button> */}
 
                             </Space>
                             
