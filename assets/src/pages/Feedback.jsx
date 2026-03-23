@@ -1,45 +1,41 @@
 import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
-import { Form, Card } from '@douyinfe/semi-ui';
-import { Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
+import { Card, Input, Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { BoxedLayout } from '../layouts';
 import { PageInfo } from '../components';
 import menuItems from '../data/menu.json';
 const Feedback = () => {    
-    const [initValues, setInitValues] = useState({
+    const [formData, setFormData] = useState({
         subject: '',
         email: '',
         phone: '',
         message: '',
     });
     const [processing, setProcessing] = useState(false);
-    const [formApi, setFormApi] = useState(null); // normal, processing, done
 
-    const handleValuesChange = (values) => {
-        // setFormValues(values);
-        // if (settingsOld.current && settings.general) {
-        //     const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.general);
-        //     setHasChanges(isChanged);
-        // }
-        setInitValues(values);
+    const handleFieldChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
     };
 
-    const handleForm = async (values) => {
-        console.log(values);
-        if (values.subject && values.message) {
+    const handleForm = async () => {
+        console.log(formData);
+        if (formData.subject && formData.message) {
             setProcessing(true);
             try {
                 const result = await apiFetch({
                     path: "/plugin-starter/v1/feedback",
                     method: "POST",
                     data: {
-                        subject: values.subject,
-                        email: values.email,
-                        phone: values.phone,
-                        message: values.message
+                        subject: formData.subject,
+                        email: formData.email,
+                        phone: formData.phone,
+                        message: formData.message
                     },
                     headers: {
                         'X-WP-Nonce': mos_product_specifications_tab_ajax_obj.api_nonce
@@ -47,9 +43,12 @@ const Feedback = () => {
                 });
                 console.log(result);
                 if (result.success) {
-                    if (formApi) {
-                        formApi.reset();
-                    }
+                    setFormData({
+                        subject: '',
+                        email: '',
+                        phone: '',
+                        message: '',
+                    });
                     Notification.success({
                         title: __("Success", "plugin-starter"),
                         content: __("Feedback send successfully!", "plugin-starter"),
@@ -76,32 +75,6 @@ const Feedback = () => {
         }
     };
 
-
-    const {
-        Input,
-        InputNumber,
-        Select,
-        Cascader,
-        DatePicker,
-        TimePicker,
-        TextArea,
-        CheckboxGroup,
-        Checkbox,
-        RadioGroup,
-        Radio,
-        Slider,
-        Rating,
-        Switch,
-        TagInput,
-        Section,
-        TreeSelect,
-    } = Form;
-
-    // const handleSubmit = (values) => {
-    //     console.log(values);
-    //     Toast.info('Submit Success');
-    // };
-
     return (
         <BoxedLayout>
             <Card 
@@ -120,75 +93,53 @@ const Feedback = () => {
                         /> */}
                     </Col> 
                     <Col sx={24} lg={12}>
-                        <Form
-                            initValues={initValues}
-                            // style={{ padding: 10, width: '100%' }}
-                            // onValueChange={(v) => console.log(v)}
-                            onValueChange={handleValuesChange}
-                            // onSubmit={values => handleSubmit(values)}
-                            onSubmit={handleForm}
-                            getFormApi={setFormApi}
-                        >
+                        <div>
                             <div className="mb-3">
                                 <Input                                
-                                    field="subject"
                                     label={__("Subject", "plugin-starter")}
-                                    trigger="blur"
-                                    // className="mt-2"
-                                    rules={[
-                                        { required: true, message: 'required Error' },
-                                        { type: 'string', message: 'type error' },
-                                        // { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    ]}
+                                    value={formData.subject}
+                                    onChange={(value) => handleFieldChange('subject', value)}
+                                    placeholder={__("Subject", "plugin-starter")}
                                 />
                             </div>
                             <div className="mb-3">
                                 <Input                                
-                                    field="email"
                                     label={__("Email", "plugin-starter")}
-                                    // trigger="blur"
-                                    // className="mt-2"
-                                    // rules={[
-                                    //     { required: true, message: 'required Error' },
-                                    //     { type: 'string', message: 'type error' },
-                                    //     { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    // ]}
+                                    value={formData.email}
+                                    onChange={(value) => handleFieldChange('email', value)}
+                                    placeholder={__("Email", "plugin-starter")}
                                 />
                             </div>
                             <div className="mb-3">
                                 <Input                                
-                                    field="phone"
                                     label={__("Phone", "plugin-starter")}
-                                    // trigger="blur"
-                                    // className="mt-2"
-                                    // rules={[
-                                    //     { required: true, message: 'required Error' },
-                                    //     { type: 'string', message: 'type error' },
-                                    //     { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    // ]}
+                                    value={formData.phone}
+                                    onChange={(value) => handleFieldChange('phone', value)}
+                                    placeholder={__("Phone", "plugin-starter")}
                                 />
                             </div>
                             <div className="mb-3">
-                                <TextArea
-                                    field="message"
+                                <Input.TextArea
                                     label={__("Message", "plugin-starter")}
-                                    // className="mt-2"
-                                    rules={[
-                                        { required: true, message: 'required Error' },
-                                        { type: 'string', message: 'type error' },
-                                        // { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    ]}
+                                    value={formData.message}
+                                    onChange={(value) => handleFieldChange('message', value)}
+                                    placeholder={__("Message", "plugin-starter")}
+                                    rows={4}
                                 />
                             </div>
                             <Space>
-                                <Button theme="solid" type="primary" htmlType="submit" className="btn-margin-right">
+                                <Button 
+                                    theme="solid" 
+                                    type="primary" 
+                                    onClick={handleForm}
+                                    loading={processing}
+                                >
                                     {__("Send", "plugin-starter")}
                                 </Button>
-                                {/* <Button theme='solid' type='danger' htmlType="reset">{__("Reset", "plugin-starter")}</Button> */}
 
                             </Space>
                             
-                        </Form>
+                        </div>
                         {/* <Button 
                             theme="solid"
                             type="primary"

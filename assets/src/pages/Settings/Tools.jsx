@@ -1,13 +1,14 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import {
-    Form,
     Row,
     Col,
     Skeleton,
     Button,
     Typography,
     Toast,
+    Switch,
+    Select,
 } from "@douyinfe/semi-ui";
 import { IconRefresh, IconCopy } from "@douyinfe/semi-icons";
 import { useOutletContext } from "react-router-dom";
@@ -88,8 +89,12 @@ const Tools = () => {
     const [deactivationUrl, setDeactivationUrl] = useState("");
     const [deactivationLoading, setDeactivationLoading] = useState(true);
     const [deactivationError, setDeactivationError] = useState(null);
-
-    const formApi = useRef(null);
+    
+    const [formData, setFormData] = useState({
+        hide_plugin: false,
+        self_defense: false,
+        delete_data_on: 'none'
+    });
     const settingsOld = useRef(null);
     
     /* ----------------------------------
@@ -134,38 +139,41 @@ const Tools = () => {
 
     /* ----------------------------------
        Submit
-    ----------------------------------- */
-    const onSubmit = (values) => {
-        handleSubmit("tools", values);
+     ----------------------------------- */
+    const onSubmit = () => {
+        handleSubmit("tools", formData);
     };
 
     /* ----------------------------------
        Detect changes
-    ----------------------------------- */
-    const handleValuesChange = (values) => {
-        if (settingsOld.current?.tools) {
-            const isChanged =
-                JSON.stringify(values) !==
-                JSON.stringify(settingsOld.current.tools);
-            setHasChanges(isChanged);
-        }
+     ----------------------------------- */
+    const handleFieldChange = (field, value) => {
+        setFormData(prev => {
+            const newFormData = { ...prev, [field]: value };
+            if (settingsOld.current?.tools) {
+                const isChanged =
+                    JSON.stringify(newFormData) !==
+                    JSON.stringify(settingsOld.current.tools);
+                setHasChanges(isChanged);
+            }
+            return newFormData;
+        });
     };
 
     /* ----------------------------------
        Sync form when settings load
-    ----------------------------------- */
+     ----------------------------------- */
     useEffect(() => {
         if (settings?.tools) {
             settingsOld.current = { ...settings };
-
-            formApi.current?.setValues({
-                ...settings.tools,
-                deactivation_url: deactivationUrl || __("Loading...", "plugin-starter"),
+            setFormData({
+                hide_plugin: settings.tools.hide_plugin || false,
+                self_defense: settings.tools.self_defense || false,
+                delete_data_on: settings.tools.delete_data_on || 'none'
             });
-
             setHasChanges(false);
         }
-    }, [settings, deactivationUrl]);
+    }, [settings]);
 
     /* ----------------------------------
        Reset handler
@@ -206,212 +214,197 @@ const Tools = () => {
 
     return (
         <>
-            {!settingsLoading && settings?.tools && (
-                <Form
-                    getFormApi={(api) => (formApi.current = api)}
-                    initValues={{
-                        ...settings.tools,
-                        deactivation_url: deactivationUrl || __("Loading...", "plugin-starter"),
-                    }}
-                    onSubmit={onSubmit}
-                    onValueChange={handleValuesChange}
-                    labelPosition="left"
-                    labelWidth="150px"
-                >
-                    {/* -------------------------
-                       Hide Plugin section
-                    -------------------------- */}
-                    <div className="setting-unit py-4">
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton
-                                    placeholder={<SkeletonPlaceholder />}
-                                    loading={settingsLoading}
-                                    active
-                                >
-                                    <Title heading={4}>
-                                        {__(
-                                            "Hide Plugin",
-                                            "plugin-starter"
-                                        )}
-                                    </Title>
-                                    <Paragraph>
-                                        {__(
-                                            "Hide this plugin from plugin list.",
-                                            "plugin-starter"
-                                        )}
-                                    </Paragraph>
-                                </Skeleton>
-                            </Col>
+            {/* -------------------------
+                Hide Plugin section
+            -------------------------- */}
+            <div className="setting-unit py-4">
+                <Row gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton
+                            placeholder={<SkeletonPlaceholder />}
+                            loading={settingsLoading}
+                            active
+                        >
+                            <Title heading={4}>
+                                {__(
+                                    "Hide Plugin",
+                                    "plugin-starter"
+                                )}
+                            </Title>
+                            <Paragraph>
+                                {__(
+                                    "Hide this plugin from plugin list.",
+                                    "plugin-starter"
+                                )}
+                            </Paragraph>
+                        </Skeleton>
+                    </Col>
 
-                            <Col xs={24} lg={12} xl={10}>
-                                <Form.Switch 
-                                    field='hide_plugin' 
-                                    noLabel
-                                />
-                            </Col>
-                        </Row>
-                    </div>
-                    {/* -------------------------
-                       Self Defense section
-                    -------------------------- */}
-                    <div className="setting-unit py-4">
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton
-                                    placeholder={<SkeletonPlaceholder />}
-                                    loading={settingsLoading}
-                                    active
-                                >
-                                    <Title heading={4}>
-                                        {__(
-                                            "Self Defense",
-                                            "plugin-starter"
-                                        )}
-                                    </Title>
-                                    <Paragraph>
-                                        {__(
-                                            "Password requirement for Deactivation.",
-                                            "plugin-starter"
-                                        )}
-                                    </Paragraph>
-                                </Skeleton>
-                            </Col>
+                    <Col xs={24} lg={12} xl={10}>
+                        <Switch 
+                            checked={formData.hide_plugin}
+                            onChange={(checked) => handleFieldChange('hide_plugin', checked)}
+                        />
+                    </Col>
+                </Row>
+            </div>
+            {/* -------------------------
+                Self Defense section
+            -------------------------- */}
+            <div className="setting-unit py-4">
+                <Row gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton
+                            placeholder={<SkeletonPlaceholder />}
+                            loading={settingsLoading}
+                            active
+                        >
+                            <Title heading={4}>
+                                {__(
+                                    "Self Defense",
+                                    "plugin-starter"
+                                )}
+                            </Title>
+                            <Paragraph>
+                                {__(
+                                    "Password requirement for Deactivation.",
+                                    "plugin-starter"
+                                )}
+                            </Paragraph>
+                        </Skeleton>
+                    </Col>
 
-                            <Col xs={24} lg={12} xl={10}>
-                                <Form.Switch 
-                                    field='self_defense' 
-                                    noLabel
-                                />
-                            </Col>
-                        </Row>
-                    </div>
-                    {/* -------------------------
-                       Delete data section
-                    -------------------------- */}
-                    <div className="setting-unit py-4">
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton
-                                    placeholder={<SkeletonPlaceholder />}
-                                    loading={settingsLoading}
-                                    active
-                                >
-                                    <Title heading={4}>
-                                        {__(
-                                            "Delete all the plugin data upon",
-                                            "plugin-starter"
-                                        )}
-                                    </Title>
-                                    <Paragraph>
-                                        {__(
-                                            "Plugin data management.",
-                                            "plugin-starter"
-                                        )}
-                                    </Paragraph>
-                                </Skeleton>
-                            </Col>
+                    <Col xs={24} lg={12} xl={10}>
+                        <Switch 
+                            checked={formData.self_defense}
+                            onChange={(checked) => handleFieldChange('self_defense', checked)}
+                        />
+                    </Col>
+                </Row>
+            </div>
+            {/* -------------------------
+                Delete data section
+            -------------------------- */}
+            <div className="setting-unit py-4">
+                <Row gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton
+                            placeholder={<SkeletonPlaceholder />}
+                            loading={settingsLoading}
+                            active
+                        >
+                            <Title heading={4}>
+                                {__(
+                                    "Delete all the plugin data upon",
+                                    "plugin-starter"
+                                )}
+                            </Title>
+                            <Paragraph>
+                                {__(
+                                    "Plugin data management.",
+                                    "plugin-starter"
+                                )}
+                            </Paragraph>
+                        </Skeleton>
+                    </Col>
 
-                            <Col xs={24} lg={12} xl={10}>
-                                <Form.Select
-                                    noLabel
-                                    field="delete_data_on"
-                                    optionList={[
-                                        { label: __("None", "plugin-starter"), value: "none" },
-                                        { label: __("Delete", "plugin-starter"), value: "delete" },
-                                        { label: __("Deactivate", "plugin-starter"), value: "deactivate" },
-                                    ]}
-                                />
-                            </Col>
-                        </Row>
-                    </div>
+                    <Col xs={24} lg={12} xl={10}>
+                        <Select
+                            value={formData.delete_data_on}
+                            onChange={(value) => handleFieldChange('delete_data_on', value)}
+                            optionList={[
+                                { label: __("None", "plugin-starter"), value: "none" },
+                                { label: __("Delete", "plugin-starter"), value: "delete" },
+                                { label: __("Deactivate", "plugin-starter"), value: "deactivate" },
+                            ]}
+                        />
+                    </Col>
+                </Row>
+            </div>
 
-                    {/* -------------------------
-                       Reset section
-                    -------------------------- */}
-                    <div className="setting-unit pt-4">
-                        <Row gutter={[24, 24]} align="middle">
-                            <Col xs={24} lg={12} xl={14}>
-                                <Title heading={4}>
-                                    {__("Reset Plugin", "plugin-starter")}
-                                </Title>
-                                <Paragraph>
-                                    {__("Reset Plugin to it's default settings", "plugin-starter")}
-                                </Paragraph>
-                            </Col>
+            {/* -------------------------
+                Reset section
+            -------------------------- */}
+            <div className="setting-unit pt-4">
+                <Row gutter={[24, 24]} align="middle">
+                    <Col xs={24} lg={12} xl={14}>
+                        <Title heading={4}>
+                            {__("Reset Plugin", "plugin-starter")}
+                        </Title>
+                        <Paragraph>
+                            {__("Reset Plugin to it's default settings", "plugin-starter")}
+                        </Paragraph>
+                    </Col>
 
-                            <Col xs={24} lg={12} xl={10}>
+                    <Col xs={24} lg={12} xl={10}>
+                        <Button
+                            type="danger"
+                            icon={<IconRefresh />}
+                            loading={processing}
+                            onClick={handleClick}
+                        >
+                            {processing
+                                ? __("Resetting...", "plugin-starter")
+                                : __("Reset All", "plugin-starter")}
+                        </Button>
+                    </Col>
+                </Row>
+            </div>
+
+            {/* -------------------------
+                Deactivate Plugin URL section
+            -------------------------- */}
+            {/* <div className="setting-unit pt-4">
+                <Row gutter={[24, 24]} align="middle">
+                    <Col xs={24} lg={12} xl={14}>
+                        <Title heading={4}>
+                            {__("Deactivate Plugin URL", "plugin-starter")}
+                        </Title>
+                        <Paragraph>
+                            {deactivationError 
+                                ? deactivationError
+                                : __("Use this secure URL to deactivate the plugin. This link will only work once.", "plugin-starter")
+                            }
+                        </Paragraph>
+                    </Col>
+
+                    <Col xs={24} lg={12} xl={10}>
+                        <Input
+                            readOnly
+                            disabled={deactivationLoading || !!deactivationError}
+                            placeholder={
+                                deactivationLoading 
+                                    ? __("Loading...", "plugin-starter")
+                                    : deactivationError
+                                    ? __("Failed to load URL", "plugin-starter")
+                                    : __("Deactivation URL", "plugin-starter")
+                            }
+                            suffix={
                                 <Button
-                                    type="danger"
-                                    icon={<IconRefresh />}
-                                    loading={processing}
-                                    onClick={handleClick}
-                                >
-                                    {processing
-                                        ? __("Resetting...", "plugin-starter")
-                                        : __("Reset All", "plugin-starter")}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    {/* -------------------------
-                       Deactivate Plugin URL section
-                    -------------------------- */}
-                    {/* <div className="setting-unit pt-4">
-                        <Row gutter={[24, 24]} align="middle">
-                            <Col xs={24} lg={12} xl={14}>
-                                <Title heading={4}>
-                                    {__("Deactivate Plugin URL", "plugin-starter")}
-                                </Title>
-                                <Paragraph>
-                                    {deactivationError 
-                                        ? deactivationError
-                                        : __("Use this secure URL to deactivate the plugin. This link will only work once.", "plugin-starter")
-                                    }
-                                </Paragraph>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={10}>
-                                <Form.Input
-                                    noLabel
-                                    field="deactivation_url"
-                                    readOnly
-                                    disabled={deactivationLoading || !!deactivationError}
-                                    placeholder={
-                                        deactivationLoading 
-                                            ? __("Loading...", "plugin-starter")
-                                            : deactivationError
-                                            ? __("Failed to load URL", "plugin-starter")
-                                            : __("Deactivation URL", "plugin-starter")
-                                    }
-                                    suffix={
-                                        <Button
-                                            theme="borderless"
-                                            icon={<IconCopy />}
-                                            disabled={deactivationLoading || !!deactivationError || !deactivationUrl}
-                                            onClick={() =>
-                                                copyToClipboard(
-                                                    formApi.current?.getValue("deactivation_url")
-                                                )
-                                            }
-                                        />
+                                    theme="borderless"
+                                    icon={<IconCopy />}
+                                    disabled={deactivationLoading || !!deactivationError || !deactivationUrl}
+                                    onClick={() =>
+                                        copyToClipboard(
+                                            formData.deactivation_url
+                                        )
                                     }
                                 />
-                            </Col>
-                        </Row>
-                    </div> */}
+                            }
+                        />
+                    </Col>
+                </Row>
+            </div> */}
 
-                    {/* -------------------------
-                       Save / Reset buttons
-                    -------------------------- */}
-                    <ActionButtons
-                        hasChanges={hasChanges}
-                        section="tools"
-                        handleReset={handleReset}
-                    />
-                </Form>
-            )}
+            {/* -------------------------
+                Save / Reset buttons
+            -------------------------- */}
+            <ActionButtons
+                hasChanges={hasChanges}
+                section="tools"
+                handleReset={handleReset}
+                handleSubmit={onSubmit}
+            />
         </>
     );
 };
