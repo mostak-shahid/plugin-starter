@@ -9,6 +9,7 @@ use WP_Query;
 use WP_REST_Server;
 
 use MosPress\PluginStarter\Helpers\CryptoHelper;
+use MosPress\PluginStarter\Helpers\Utils;
 /**
  * Rest API Router
  *
@@ -711,7 +712,17 @@ class Rest_API
 		}
 		$plugin_starter_options_old = plugin_starter_get_option();
 
-		$plugin_starter_options = map_deep(wp_unslash($request->get_param('plugin_starter_options')), 'wp_kses_post');
+		$plugin_starter_options_raw = wp_unslash($request->get_param('plugin_starter_options'));
+		$plugin_starter_options = map_deep($plugin_starter_options_raw, 'wp_kses_post');
+
+		$header_footer_kses = Utils::get_header_footer_kses();
+
+		if (isset($plugin_starter_options_raw['more']['header_content'])) {
+			$plugin_starter_options['more']['header_content'] = wp_kses($plugin_starter_options_raw['more']['header_content'], $header_footer_kses);
+		}
+		if (isset($plugin_starter_options_raw['more']['footer_content'])) {
+			$plugin_starter_options['more']['footer_content'] = wp_kses($plugin_starter_options_raw['more']['footer_content'], $header_footer_kses);
+		}
 
 		$plugin_starter_options ? update_option('plugin_starter_options', $plugin_starter_options) : '';
 
