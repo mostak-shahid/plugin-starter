@@ -7,7 +7,7 @@ module.exports = {
 
   entry: {
     app:     path.resolve(__dirname, "src/index.js"),
-    profile: path.resolve(__dirname, "src/profile.js"),
+    profile: path.resolve(__dirname, "src/profile/profile.js"),
   },
 
   output: {
