@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {BoxedLayout} from '../layouts';
-import { Card, Input, Button, Toast } from '@douyinfe/semi-ui';
+import { Card, Input, TextArea, Button, Toast } from '@douyinfe/semi-ui';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -54,7 +54,7 @@ const Contact = () => {
                         placeholder="Enter your email"
                     />
                     <div style={{ marginBottom: '16px' }} />
-                    <Input.TextArea 
+                    <TextArea 
                         value={formData.message}
                         onChange={(value) => handleFieldChange('message', value)}
                         label="Message" 

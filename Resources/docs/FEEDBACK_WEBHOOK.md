@@ -51,7 +51,7 @@ You can use any service that accepts POST requests with JSON payload:
 To configure the webhook, add this filter to your theme's `functions.php` file or a custom plugin:
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     return 'YOUR_WEBHOOK_URL_HERE';
 });
 ```
@@ -61,7 +61,7 @@ add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url)
 ### 1. Discord Webhook
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     // Create webhook in Discord Server Settings → Integrations → Webhooks
     return 'https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN';
 });
@@ -72,7 +72,7 @@ add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url)
 ### 2. Slack Webhook
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     // Create incoming webhook at https://api.slack.com/apps
     return 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL';
 });
@@ -81,7 +81,7 @@ add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url)
 ### 3. Formspree
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     // Create form at https://formspree.io/
     return 'https://formspree.io/f/YOUR_FORM_ID';
 });
@@ -90,7 +90,7 @@ add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url)
 ### 4. Custom API Endpoint (using Make.com)
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     // Create webhook in Make.com
     return 'https://hook.us1.make.com/YOUR_WEBHOOK_HASH';
 });
@@ -170,7 +170,7 @@ Mos Product Specifications Tab - Failed to send feedback to webhook: Error messa
 ### Conditional Webhook (send only if specific condition met):
 
 ```php
-add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+add_filter('plugin_starter_feedback_webhook_url', function($url) {
     // Example: Only send webhook for urgent feedback
     $urgent_subjects = ['urgent', 'critical', 'bug'];
     if (in_array(strtolower($_POST['subject'] ?? ''), $urgent_subjects)) {
@@ -205,4 +205,4 @@ add_action('rest_after_insert_feedback', function($request, $response) {
 For issues or questions:
 - WordPress.org support forum
 - Email: mostak.shahid@gmail.com
-- Documentation: https://www.mdmostakshahid.com/mos-product-specifications-tab/
+- Documentation: https://www.mdmostakshahid.com/plugin-starter/

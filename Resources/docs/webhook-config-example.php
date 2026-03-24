@@ -18,30 +18,30 @@ if (!defined('ABSPATH')) {
 
 // Option 1: Discord Webhook (recommended for free, instant notifications)
 // Create webhook at: Server Settings → Integrations → Webhooks
-// add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+// add_filter('plugin_starter_feedback_webhook_url', function($url) {
 //     return 'https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN';
 // });
 
 // Option 2: Slack Webhook
 // Create incoming webhook at: https://api.slack.com/apps
-// add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+// add_filter('plugin_starter_feedback_webhook_url', function($url) {
 //     return 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL';
 // });
 
 // Option 3: Make.com (Integromat) - Most flexible option
 // Create webhook at: https://www.make.com/en
-// add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+// add_filter('plugin_starter_feedback_webhook_url', function($url) {
 //     return 'https://hook.us1.make.com/YOUR_WEBHOOK_HASH';
 // });
 
 // Option 4: Formspree - Simple form handler
 // Create form at: https://formspree.io/
-// add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+// add_filter('plugin_starter_feedback_webhook_url', function($url) {
 //     return 'https://formspree.io/f/YOUR_FORM_ID';
 // });
 
 // Option 5: Custom webhook URL
-// add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+// add_filter('plugin_starter_feedback_webhook_url', function($url) {
 //     return 'YOUR_CUSTOM_WEBHOOK_URL_HERE';
 // });
 
@@ -62,7 +62,7 @@ add_action('rest_after_insert_feedback', function($request, $response) {
             // Send urgent notification
             wp_remote_post('YOUR_URGENT_NOTIFICATION_WEBHOOK_URL', [
                 'body' => json_encode([
-                    'text' => __('🚨 Urgent Feedback Received!', 'mos-product-specifications-tab'),
+                    'text' => __('🚨 Urgent Feedback Received!', 'plugin-starter'),
                     'data' => $data
                 ]),
                 'headers' => ['Content-Type' => 'application/json'],
@@ -123,7 +123,7 @@ add_action('rest_after_insert_feedback', function($request, $response) {
  * Note: You need to set up a Google Form and use a service like Make.com
  * or n8n to forward the webhook data to Google Sheets
  * 
- * add_filter('mos_product_specifications_tab_feedback_webhook_url', function($url) {
+ * add_filter('plugin_starter_feedback_webhook_url', function($url) {
  *     // Use Make.com or similar to bridge to Google Sheets
  *     return 'https://hook.make.com/YOUR_GOOGLE_SHEETS_WEBHOOK';
  * });

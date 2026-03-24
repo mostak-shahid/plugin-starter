@@ -959,7 +959,7 @@ class Rest_API
                                         <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0;">
                                             <?php esc_html__('Best regards,', 'plugin-starter'); ?>   
                                             <br>
-                                            <?php echo esc_html($data['site_name']); ?> Team
+                                            MosPress BD Team
                                         </p>
                                     </td>
                                 </tr>

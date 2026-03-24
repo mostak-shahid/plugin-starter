@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
-import { Card, Input, Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
+import { Card, Input, TextArea, Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { BoxedLayout } from '../layouts';
@@ -38,7 +38,7 @@ const Feedback = () => {
                         message: formData.message
                     },
                     headers: {
-                        'X-WP-Nonce': mos_product_specifications_tab_ajax_obj.api_nonce
+                        'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
                     }
                 });
                 console.log(result);
@@ -119,7 +119,7 @@ const Feedback = () => {
                                 />
                             </div>
                             <div className="mb-3">
-                                <Input.TextArea
+                                <TextArea
                                     label={__("Message", "plugin-starter")}
                                     value={formData.message}
                                     onChange={(value) => handleFieldChange('message', value)}

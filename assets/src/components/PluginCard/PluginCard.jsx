@@ -18,7 +18,7 @@ export default function PluginCard(plugin) {
 
     data-sub_action="install_activate"  
     data-plugin_source="internal" 
-    data-plugin_slug="mos-product-specifications-tab"
+    data-plugin_slug="plugin-starter"
     */
     const [pluginStatus, setPluginStatus] = useState("checking");
     const [errorMessage, setErrorMessage] = useState("");
