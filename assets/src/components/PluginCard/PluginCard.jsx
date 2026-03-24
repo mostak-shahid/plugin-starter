@@ -36,8 +36,7 @@ export default function PluginCard(plugin) {
             <div className="flex justify-between mt-1">
                 <Space align='center'><IconHistogram style={{fontSize: 24}} /><span>{__(`${active_installs} ${active_installs>0?"+":""} active installations`, "plugin-starter")}</span></Space>
                 <Space align='center'><WordPress width='24' height='24'/> {__(`Tested with ${tested}`, "plugin-starter")}</Space>
-            </div>
-            
+            </div>            
         </div>
     )
 }
