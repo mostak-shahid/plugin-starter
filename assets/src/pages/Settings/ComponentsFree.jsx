@@ -126,7 +126,7 @@ const ComponentsFree = () => {
                         <Col xs={24} lg={12} xl={10}>
                             <ColorPickerControl
                                 defaultValue={formData.colorpicker}
-                                handleChange={(value) => handleFieldChange('colorpicker', value)}
+                                onChange={(value) => handleFieldChange('colorpicker', value)}
                                 mode="both"
                                 label={__("Select Color", "plugin-starter")}
                             />
@@ -149,7 +149,7 @@ const ComponentsFree = () => {
                             <FontControl
                                 defaultValues={formData.font}
                                 name="font"
-                                handleChange={handleFieldChange}
+                                onChange={handleFieldChange}
                             />
                         </Col>
                     }
@@ -170,7 +170,7 @@ const ComponentsFree = () => {
                             <MediaUploaderControl
                                 data={formData.media_uploader}
                                 name="media_uploader"
-                                handleChange={handleFieldChange}
+                                onChange={handleFieldChange}
                                 options={{
                                     frame: {
                                         title: __("Select or Upload Image", "plugin-starter"),
