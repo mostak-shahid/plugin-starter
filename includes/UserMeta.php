@@ -64,6 +64,10 @@ class UserMeta {
         <input type="hidden" name="plugin_starter_switch" id="plugin_starter_switch_hidden" value="<?php echo esc_attr(get_user_meta($user->ID, 'plugin_starter_switch', true) ?: '0'); ?>" />
         <input type="hidden" name="plugin_starter_custom_input" id="plugin_starter_custom_input_hidden" value="<?php echo esc_attr(get_user_meta($user->ID, 'plugin_starter_custom_input', true) ?: ''); ?>" />
 
+        <!-- Media hidden inputs -->
+        <input type="hidden" name="plugin_starter_media_id" id="plugin_starter_media_id_hidden" value="<?php echo esc_attr(get_user_meta($user->ID, 'plugin_starter_media_id', true) ?: '0'); ?>" />
+        <input type="hidden" name="plugin_starter_media_url" id="plugin_starter_media_url_hidden" value="<?php echo esc_attr(get_user_meta($user->ID, 'plugin_starter_media_url', true) ?: ''); ?>" />
+
         <table class="form-table">
             <tr>
                 <th>
@@ -121,6 +125,22 @@ class UserMeta {
                 $plugin_starter_custom_input
             );
 
+            // Save Media ID
+            $plugin_starter_media_id = isset($_POST['plugin_starter_media_id']) ? sanitize_text_field(wp_unslash($_POST['plugin_starter_media_id'])) : '0';
+            update_user_meta(
+                $user_id,
+                'plugin_starter_media_id',
+                $plugin_starter_media_id
+            );
+
+            // Save Media URL
+            $plugin_starter_media_url = isset($_POST['plugin_starter_media_url']) ? esc_url_raw(wp_unslash($_POST['plugin_starter_media_url'])) : '';
+            update_user_meta(
+                $user_id,
+                'plugin_starter_media_url',
+                $plugin_starter_media_url
+            );
+
         }
     }
 
@@ -158,6 +178,11 @@ class UserMeta {
         return [
             'plugin_starter_switch' => get_user_meta($user_id, 'plugin_starter_switch', true) ?: '0',
             'plugin_starter_custom_input' => get_user_meta($user_id, 'plugin_starter_custom_input', true) ?: '',
+            'plugin_starter_media' => [
+                'id' => get_user_meta($user_id, 'plugin_starter_media_id', true) ?: 0,
+                'url' => get_user_meta($user_id, 'plugin_starter_media_url', true) ?: '',
+                'thumbnail' => get_user_meta($user_id, 'plugin_starter_media_url', true) ?: '',
+            ],
         ];
     }
 }
