@@ -6,9 +6,10 @@ import {
     Skeleton,
     Button,
     Typography,
-    Toast,
+    Notification,
     Switch,
     Select,
+    Popconfirm,
 } from "@douyinfe/semi-ui";
 import { IconRefresh, IconCopy } from "@douyinfe/semi-icons";
 import { useOutletContext } from "react-router-dom";
@@ -23,7 +24,12 @@ const { Title, Paragraph } = Typography;
 ----------------------------------- */
 const copyToClipboard = (value) => {
     if (!value) {
-        Toast.error("No text to copy");
+        Notification.error({
+            title: __("Error", "plugin-starter"),
+            content: __("No text to copy", "plugin-starter"),
+            duration: 3,
+            position: 'topRight',
+        });
         return;
     }
 
@@ -31,7 +37,12 @@ const copyToClipboard = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(value)
             .then(() => {
-                Toast.success("Copied to clipboard");
+                Notification.success({
+                    title: __("Success", "plugin-starter"),
+                    content: __("Copied to clipboard", "plugin-starter"),
+                    duration: 3,
+                    position: 'topRight',
+                });
             })
             .catch((err) => {
                 console.error("Clipboard API failed:", err);
@@ -49,27 +60,42 @@ const copyToClipboard = (value) => {
 const fallbackCopyToClipboard = (value) => {
     const textArea = document.createElement("textarea");
     textArea.value = value;
-    
+
     // Make it invisible
     textArea.style.position = "fixed";
     textArea.style.top = "-9999px";
     textArea.style.left = "-9999px";
     textArea.style.opacity = "0";
-    
+
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    
+
     try {
         const successful = document.execCommand('copy');
         if (successful) {
-            Toast.success("Copied to clipboard");
+            Notification.success({
+                title: __("Success", "plugin-starter"),
+                content: __("Copied to clipboard", "plugin-starter"),
+                duration: 3,
+                position: 'topRight',
+            });
         } else {
-            Toast.error("Failed to copy");
+            Notification.error({
+                title: __("Error", "plugin-starter"),
+                content: __("Failed to copy", "plugin-starter"),
+                duration: 3,
+                position: 'topRight',
+            });
         }
     } catch (err) {
         console.error("Fallback copy failed:", err);
-        Toast.error("Copy not supported in this browser");
+        Notification.error({
+            title: __("Error", "plugin-starter"),
+            content: __("Copy not supported in this browser", "plugin-starter"),
+            duration: 3,
+            position: 'topRight',
+        });
     } finally {
         document.body.removeChild(textArea);
     }
@@ -179,12 +205,6 @@ const Tools = () => {
        Reset handler
     ----------------------------------- */
     const handleClick = async () => {
-        const confirmation = window.confirm(
-            __("Are you sure you want to proceed?", "plugin-starter")
-        );
-
-        if (!confirmation) return;
-
         setProcessing(true);
 
         try {
@@ -194,17 +214,21 @@ const Tools = () => {
             });
 
             if (result.success) {
-                Toast.success({
+                Notification.success({
+                    title: __("Success", "plugin-starter"),
                     content: __("Settings reset successfully!", "plugin-starter"),
-                    theme: "light",
+                    duration: 3,
+                    position: 'topRight',
                 });
             } else {
                 throw new Error("Reset failed");
             }
         } catch (error) {
-            Toast.error({
+            Notification.error({
+                title: __("Error", "plugin-starter"),
                 content: __("Error resetting settings.", "plugin-starter"),
-                theme: "light",
+                duration: 3,
+                position: 'topRight',
             });
         } finally {
             setProcessing(false);
@@ -337,16 +361,22 @@ const Tools = () => {
                     </Col>
 
                     <Col xs={24} lg={12} xl={10}>
-                        <Button
-                            type="danger"
-                            icon={<IconRefresh />}
-                            loading={processing}
-                            onClick={handleClick}
+                        <Popconfirm
+                            title={__("Are you sure you want to proceed?", "plugin-starter")}
+                            onConfirm={handleClick}
+                            okText={__("Yes", "plugin-starter")}
+                            cancelText={__("No", "plugin-starter")}
                         >
-                            {processing
-                                ? __("Resetting...", "plugin-starter")
-                                : __("Reset All", "plugin-starter")}
-                        </Button>
+                            <Button
+                                type="danger"
+                                icon={<IconRefresh />}
+                                loading={processing}
+                            >
+                                {processing
+                                    ? __("Resetting...", "plugin-starter")
+                                    : __("Reset All", "plugin-starter")}
+                            </Button>
+                        </Popconfirm>
                     </Col>
                 </Row>
             </div>

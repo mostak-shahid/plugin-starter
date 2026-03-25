@@ -3,7 +3,7 @@ import { Row, Col, Skeleton, Typography, Radio } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
-import { SkeletonPlaceholder } from "../../components";
+import { SkeletonPlaceholder, BackgroundControl, BoxShadowControl, ColorPickerControl, FontControl, MediaUploaderControl, MultiColorControl, TextShadowControl, UnitControl } from "../../components";
 
 const { Title, Paragraph } = Typography;
 const ComponentsFree = () => {
@@ -12,20 +12,33 @@ const ComponentsFree = () => {
     const settingsOld = useRef(null);
     
     const [formData, setFormData] = useState({
-        text: '',
-        textarea: '',
-        radio: 'radio-1'
+        background: {},
+        boxshadow: {
+            enabled: false,
+            inset: false,
+        },
+        colorpicker: '',
+        gradient: '',
+        font: {
+            enabled: false,
+        },
+        media_uploader: {},
+        multicolor: {},
+        textshadow: {
+            enabled: false,
+        },
+        unitcontrol: '',
     });
 
     const onSubmit = () => {
-        handleSubmit('basic', formData);
+        handleSubmit('components.free', formData);
     };
 
     const handleFieldChange = (field, value) => {
         setFormData(prev => {
             const newFormData = { ...prev, [field]: value };
-            if (settingsOld.current?.basic) {
-                const isChanged = JSON.stringify(newFormData) !== JSON.stringify(settingsOld.current.basic);
+            if (settingsOld.current?.components?.free) {
+                const isChanged = JSON.stringify(newFormData) !== JSON.stringify(settingsOld.current.components.free);
                 setHasChanges(isChanged);
             }
             return newFormData;
@@ -33,12 +46,25 @@ const ComponentsFree = () => {
     };
 
     useEffect(() => {
-        if (settings && settings.basic) {
+        if (settings && settings.components && settings.components.free) {
             settingsOld.current = { ...settings };
             setFormData({
-                text: settings.basic.text || '',
-                textarea: settings.basic.textarea || '',
-                radio: settings.basic.radio || 'radio-1'
+                background: settings.components.free.background || {},
+                boxshadow: settings.components.free.boxshadow || {
+                    enabled: false,
+                    inset: false,
+                },
+                colorpicker: settings.components.free.colorpicker || '',
+                gradient: settings.components.free.gradient || '',
+                font: settings.components.free.font || {
+                    enabled: false,
+                },
+                media_uploader: settings.components.free.media_uploader || {},
+                multicolor: settings.components.free.multicolor || {},
+                textshadow: settings.components.free.textshadow || {
+                    enabled: false,
+                },
+                unitcontrol: settings.components.free.unitcontrol || '',
             });
             setHasChanges(false);
         }
@@ -50,71 +76,190 @@ const ComponentsFree = () => {
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>
                         <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                            <Title heading={4}>{__("Text Input", "plugin-starter")}</Title>
-                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                            <Title heading={4}>{__("Background Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Control background settings", "plugin-starter")}</Paragraph>
                         </Skeleton>
                     </Col>    
                     {
                         !settingsLoading &&                               
                         <Col xs={24} lg={12} xl={10}>
-                            <input
-                                type="text"
-                                value={formData.text}
-                                onChange={(e) => handleFieldChange('text', e.target.value)}
-                                placeholder={__("Enter text", "plugin-starter")}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
-                            /> 
-                        </Col>
-                    }
-                </Row>
-            </div>
-            <div className="setting-unit py-4">
-                <Row type="flex" gutter={[24, 24]}>
-                    <Col xs={24} lg={12} xl={14}>
-                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                            <Title heading={4}>{__("Text Area", "plugin-starter")}</Title>
-                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
-                        </Skeleton>
-                    </Col>    
-                    {
-                        !settingsLoading &&                               
-                        <Col xs={24} lg={12} xl={10}>
-                            <textarea
-                                value={formData.textarea}
-                                onChange={(e) => handleFieldChange('textarea', e.target.value)}
-                                placeholder={__("Enter textarea content", "plugin-starter")}
-                                rows={4}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
+                            <BackgroundControl
+                                defaultValues={formData.background}
+                                name="background"
+                                handleChange={handleFieldChange}
                             />
                         </Col>
                     }
                 </Row>
             </div>
+
             <div className="setting-unit py-4">
                 <Row type="flex" gutter={[24, 24]}>
                     <Col xs={24} lg={12} xl={14}>
                         <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                            <Title heading={4}>{__("Radio Group", "plugin-starter")}</Title>
-                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                            <Title heading={4}>{__("Box Shadow Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Control box shadow settings", "plugin-starter")}</Paragraph>
                         </Skeleton>
                     </Col>    
                     {
                         !settingsLoading &&                               
                         <Col xs={24} lg={12} xl={10}>
-                            <Radio.Group
-                                value={formData.radio}
-                                onChange={(e) => handleFieldChange('radio', e.target.value)}
-                                type="button"
-                            >
-                                <Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Radio>
-                                <Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Radio>
-                                <Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Radio>
-                            </Radio.Group>
+                            <BoxShadowControl
+                                value={formData.boxshadow}
+                                onChange={(value) => handleFieldChange('boxshadow', value)}
+                            />
                         </Col>
                     }
                 </Row>
             </div>
-            <ActionButtons hasChanges={hasChanges} section='basic' handleReset={handleReset} handleSubmit={onSubmit} />
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Color Picker Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Pick a color or gradient", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <ColorPickerControl
+                                defaultValue={formData.colorpicker}
+                                handleChange={(value) => handleFieldChange('colorpicker', value)}
+                                mode="both"
+                                label={__("Select Color", "plugin-starter")}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Font Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Control font settings", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <FontControl
+                                defaultValues={formData.font}
+                                name="font"
+                                handleChange={handleFieldChange}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Media Uploader Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Upload media files", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <MediaUploaderControl
+                                data={formData.media_uploader}
+                                name="media_uploader"
+                                handleChange={handleFieldChange}
+                                options={{
+                                    frame: {
+                                        title: __("Select or Upload Image", "plugin-starter"),
+                                    },
+                                    library: { type: 'image' },
+                                    buttons: {
+                                        upload: __("Upload Image", "plugin-starter"),
+                                        remove: __("Remove", "plugin-starter"),
+                                        select: __("Use this image", "plugin-starter"),
+                                    },
+                                }}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Multi Color Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Pick multiple colors", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <MultiColorControl
+                                options={["primary", "secondary", "accent"]}
+                                defaultValues={formData.multicolor}
+                                name="multicolor"
+                                handleChange={handleFieldChange}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Text Shadow Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Control text shadow settings", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <TextShadowControl
+                                value={formData.textshadow}
+                                onChange={(value) => handleFieldChange('textshadow', value)}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Unit Control", "plugin-starter")}</Title>
+                            <Paragraph>{__("Control unit values", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <UnitControl
+                                label={__("Width", "plugin-starter")}
+                                value={formData.unitcontrol}
+                                onChange={(value) => handleFieldChange('unitcontrol', value)}
+                                units={[
+                                    { value: 'px', label: 'px' },
+                                    { value: '%', label: '%' },
+                                    { value: 'em', label: 'em' },
+                                    { value: 'rem', label: 'rem' },
+                                ]}
+                                min={0}
+                                step={1}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <ActionButtons hasChanges={hasChanges} section='components.free' handleReset={handleReset} handleSubmit={onSubmit} />
         </>
     );
 };
