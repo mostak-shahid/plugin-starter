@@ -1089,7 +1089,7 @@ class Rest_API
         $response = wp_remote_post($webhook_url, $args);
 
         if (is_wp_error($response)) {
-            error_log('Plugin Starter - Failed to send feedback to webhook: ' . $response->get_error_message());
+            // error_log('Plugin Starter - Failed to send feedback to webhook: ' . $response->get_error_message());
             return false;
         }
 

@@ -369,5 +369,5 @@ function plugin_starter_data_cleanup(){
 	}
 
 	// Log the uninstall (optional)
-	error_log( 'Plugin Starter: Complete uninstall cleanup completed.' );
+	// error_log( 'Plugin Starter: Complete uninstall cleanup completed.' );
 }
