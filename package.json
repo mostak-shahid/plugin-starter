@@ -17,6 +17,7 @@
     "@visactor/vchart-semi-theme": "^1.12.3",
     "@wordpress/api-fetch": "^7.39.0",
     "@wordpress/components": "^32.1.0",
+    "@wordpress/element": "^5.35.0",
     "@wordpress/i18n": "^6.12.0",
     "react": "^18.2.0",
     "react-ace": "^14.0.1",

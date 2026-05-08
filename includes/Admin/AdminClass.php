@@ -140,7 +140,7 @@ class AdminClass
 			wp_enqueue_script(
 				$this->plugin_name . '-react',
 				$asset_path . 'app.js',
-				[],
+				['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'],
 				// filemtime($asset_path . 'app.js'),
 				time(),
 				true

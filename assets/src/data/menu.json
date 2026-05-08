@@ -38,12 +38,6 @@
         "url": "/settings/import-export"
     },
     {
-        "itemKey": "more",
-        "text": "More",
-        "description": "Enable additional features, extensions, and advanced options.",
-        "url": "/settings/more"
-    },
-    {
         "itemKey": "tools",
         "text": "Tools",
         "description": "Access helpful utilities for maintenance, debugging, and optimization.",

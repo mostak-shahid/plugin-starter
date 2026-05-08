@@ -43,6 +43,7 @@ module.exports = {
 			shared: {
 				react: { singleton: true, requiredVersion: false, eager: false },
 				"react-dom": { singleton: true, requiredVersion: false, eager: false },
+				"@wordpress/element": { singleton: true, requiredVersion: false, eager: false },
 			},
 		}),
 	],
