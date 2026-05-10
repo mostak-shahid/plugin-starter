@@ -10,9 +10,10 @@ const units = [
     // { value: 'rem', label: 'rem' },
     // { value: 'vw', label: 'vw' },
 ];
-const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
-const RemoteRegistrationForm = React.lazy(() => import("pluginstarterpro/RegistrationForm"));
-const RemoteNewsSideSheet = React.lazy(() => import("pluginstarterpro/NewsSideSheet"));
+const RemoteLoginForm = React.lazy(() => import("../../../../plugin-starter-pro/src/components/LoginForm"));
+const RemoteRegistrationForm = React.lazy(() => import("../../../../plugin-starter-pro/src/components/RegistrationForm"));
+// const RemoteNewsSideSheet = React.lazy(() => import("pluginstarterpro/NewsSideSheet"));
+const RemoteNewsSideSheet = React.lazy(() => import("../../../../plugin-starter-pro/src/components/NewsSideSheet"));
 const Page = () => {
     const settingLoading = false;
     const settingData = {};
@@ -29,7 +30,8 @@ const Page = () => {
     return (
         <>
             <p>The below item is from pro</p>
-            {plugin_starter_ajax_obj.isPro &&            
+            {plugin_starter_ajax_obj.isPro &&       
+                <>     
                 <div className="setting-unit py-4">
                     <Row type="flex" gutter={[24, 24]}>
                         <Col xs={24} lg={12} xl={14}>
@@ -49,8 +51,9 @@ const Page = () => {
                         }
                     </Row>
                 </div>                            
+                <RemoteNewsSideSheet newsVisible={newsVisible} handleNewsVisible={setNewsVisible} newsCurrentPage={newsCurrentPage} setNewsCurrentPage={setNewsCurrentPage} />
+                </>
             }
-            {/* <RemoteNewsSideSheet newsVisible={newsVisible} handleNewsVisible={setNewsVisible} /> */}
             <p>The avobe item is from pro</p>
 
         </>
