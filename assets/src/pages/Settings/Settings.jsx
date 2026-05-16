@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from 'react';
-import { Layout, Nav, Card, Notification } from '@douyinfe/semi-ui';
+import { Layout, Nav, Card, Toast } from '@douyinfe/semi-ui';
 import {FullWidthLayout} from '../../layouts';
 import { IconSetting, IconListView, IconUser, IconTemplate, IconCloud, IconPlusCircle, IconLikeThumb, IconHelpCircle, IconLikeHeart, IconUserAdd, IconSend, } from '@douyinfe/semi-icons';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -9,7 +9,6 @@ import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
 import {BreadcrumbControl, PageInfo, VerticalMenuControl} from "../../components";
 import { Logo } from '../../lib/Illustrations';
-import { setNestedValue } from '../../lib/Helpers';
 const { Header, Sider, Content } = Layout;
 import Details from '../../data/details.json';
 import './Settings.css';
@@ -41,36 +40,32 @@ const Settings = () => {
 
     const handleSubmit = async (section, values) => {
         try {
-            const newSettings = setNestedValue(settings, section, values);
-
             const result = await apiFetch({
                 path: "/plugin-starter/v1/options",
                 method: 'POST',
-                data: { plugin_starter_options: newSettings }
+                data: { plugin_starter_options: { ...settings, [section]: values } }
             });
             if (result.success) {
                 setSettingsReload(Math.random());
-                Notification.success({
-                    title: __("Success", "plugin-starter"),
+                Toast.success({
                     content: __("Settings saved successfully!!!", "plugin-starter"),
                     duration: 3,
-                    position: 'topRight',
+                    theme: 'light',
+                    right: 15,
                 });
             } else {
-                Notification.error({
-                    title: __("Error", "plugin-starter"),
+                Toast.error({
                     content: __("Error saving settings. Please try again.", "plugin-starter"),
                     duration: 3,
-                    position: 'topRight',
+                    theme: 'light',
                 });
             }
         } catch (error) {
             console.error("Error saving settings:", error);
-            Notification.error({
-                title: __("Error", "plugin-starter"),
+            Toast.error({
                 content: __("Error saving settings. Please try again.", "plugin-starter"),
                 duration: 3,
-                position: 'topRight',
+                theme: 'light',
             });
         } finally {
             setSettingsReload(prev => prev + 1);
@@ -87,27 +82,25 @@ const Settings = () => {
             console.log(result);
             if (result.success) {
                 setSettingsReload(Math.random());
-                Notification.success({
-                    title: __("Success", "plugin-starter"),
+                Toast.success({
                     content: __("Settings reset successfully!", "plugin-starter"),
                     duration: 3,
-                    position: 'topRight',
+                    theme: 'light',
+                    right: 15,
                 });
             } else {
-                Notification.error({
-                    title: __("Error", "plugin-starter"),
+                Toast.error({
                     content: __("Error resetting settings. Please try again.", "plugin-starter"),
                     duration: 3,
-                    position: 'topRight',
+                    theme: 'light',
                 });
             }
         } catch (error) {
             console.error("Error resetting settings:", error);
-            Notification.error({
-                title: __("Error", "plugin-starter"),
+            Toast.error({
                 content: __("Error resetting settings. Please try again.", "plugin-starter"),
                 duration: 3,
-                position: 'topRight',
+                theme: 'light',
             });
         } finally {
             // setSettingsReload(prev => prev + 1);
@@ -118,19 +111,19 @@ const Settings = () => {
     const [proItems, setProItems] = useState([]);
     const [remoteItems, setRemoteItems] = useState([]);
 
-    // Load MF remote menu array (NOT the React component)
-    useEffect(() => {
-        if (plugin_starter_ajax_obj?.isPro) {
-            import("pluginstarterpro/MenuItems")
-                .then((mod) => {
-                    setProItems(mod.default || []);
-                })
-                .catch(() => {
-                    console.warn("Pro menu could not be loaded.");
-                    setProItems([]);
-                });
-        }
-    }, []);
+    // // Load MF remote menu array (NOT the React component)
+    // useEffect(() => {
+    //     if (plugin_starter_ajax_obj?.isPro) {
+    //         import("pluginstarterpro/MenuItems")
+    //             .then((mod) => {
+    //                 setProItems(mod.default || []);
+    //             })
+    //             .catch(() => {
+    //                 console.warn("Pro menu could not be loaded.");
+    //                 setProItems([]);
+    //             });
+    //     }
+    // }, []);
     
     // Optional: load remote injected menu items
     useEffect(() => {
@@ -184,7 +177,7 @@ const Settings = () => {
                         itemKey: "vip",
                         text: __("VIP Priority Support", "plugin-starter"),
                         icon: <IconSend />,
-                        link: "https://wordpress.org/support/plugin/plugin-starter/",
+                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/vip-priority-support/",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security
@@ -194,7 +187,7 @@ const Settings = () => {
                         itemKey: "help",
                         text: __("Help Center", "plugin-starter"),
                         icon: <IconHelpCircle />,
-                        link: "https://mostak-shahid.github.io/plugins/plugin-starter.html",
+                        link: "https://mostak-shahid.github.io/plugin/plugin-starter/docs/",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security
@@ -214,7 +207,7 @@ const Settings = () => {
                         itemKey: "rate",
                         text: __("Rate Us", "plugin-starter"),
                         icon: <IconLikeHeart />,
-                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/",
+                        link: "https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post",
                         linkOptions: {
                             target: '_blank',
                             rel: 'noopener noreferrer', // recommended for security

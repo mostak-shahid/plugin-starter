@@ -14,7 +14,7 @@ const isGradient = (val) =>
 
 export default function ColorPickerControl({
     defaultValue,
-    onChange,
+    handleChange,
     mode = 'both',
     label = '',
     className = '',
@@ -41,12 +41,12 @@ export default function ColorPickerControl({
 
         if (tabName === 'color' && isGradient(value)) {
             setValue(DEFAULT_COLOR);
-            onChange(DEFAULT_COLOR);
+            handleChange(DEFAULT_COLOR);
         }
 
         if (tabName === 'gradient' && !isGradient(value)) {
             setValue(DEFAULT_GRADIENT);
-            onChange(DEFAULT_GRADIENT);
+            handleChange(DEFAULT_GRADIENT);
         }
     };
 
@@ -108,7 +108,7 @@ export default function ColorPickerControl({
                                         value={value}
                                         onChange={(color) => {
                                             setValue(color);
-                                            onChange(color);
+                                            handleChange(color);
                                         }}
                                         enableAlpha
                                         asButtons
@@ -121,7 +121,7 @@ export default function ColorPickerControl({
                                         gradients={GRADIENTS}
                                         onChange={(gradient) => {
                                             setValue(gradient);
-                                            onChange(gradient);
+                                            handleChange(gradient);
                                         }}
                                     />
                                 )}

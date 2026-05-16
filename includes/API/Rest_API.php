@@ -9,7 +9,6 @@ use WP_Query;
 use WP_REST_Server;
 
 use MosPress\PluginStarter\Helpers\CryptoHelper;
-use MosPress\PluginStarter\Helpers\Utils;
 /**
  * Rest API Router
  *
@@ -17,8 +16,6 @@ use MosPress\PluginStarter\Helpers\Utils;
  */
 class Rest_API
 {
-    
-    
     
     private const NAMESPACE = 'plugin-starter/v1';
     private static $instance = null;
@@ -116,7 +113,9 @@ class Rest_API
         // ]);
 
         
-		register_rest_route( self::NAMESPACE, '/options',
+		register_rest_route(
+			self::NAMESPACE,
+			'/options',
 			array(
 				'methods'  => 'GET',
 				'callback' => [$this, 'get_settings'],
@@ -128,7 +127,9 @@ class Rest_API
 		);
 
 		//Add the POST 'plugin-starter/v1/options' endpoint to the Rest API
-		register_rest_route( self::NAMESPACE, '/options',
+		register_rest_route(
+			self::NAMESPACE,
+			'/options',
 			array(
 				'methods'             => 'POST',
 				'callback'            => [$this, 'update_settings'],
@@ -139,7 +140,9 @@ class Rest_API
 			)
 		);
 
-		register_rest_route( self::NAMESPACE,'/options/reset-settings',
+		register_rest_route(
+            self::NAMESPACE,
+            '/options/reset-settings',
             array(
                 'methods' => 'POST',
                 'callback' => [$this, 'reset_settings'],
@@ -149,7 +152,9 @@ class Rest_API
             )
         );
 
-		register_rest_route( self::NAMESPACE,'/options/reset-settings-all',
+		register_rest_route(
+            self::NAMESPACE,
+            '/options/reset-settings-all',
             array(
                 'methods' => 'POST',
                 'callback' => [$this, 'reset_settings_all'],
@@ -159,7 +164,9 @@ class Rest_API
             )
         );
         
-		register_rest_route( self::NAMESPACE,'/options/import-settings', [
+		register_rest_route(
+            self::NAMESPACE,
+            '/options/import-settings', [
                 'methods' => 'POST',
                 'callback' => function ($request) {
                     $data = $request->get_json_params();
@@ -173,7 +180,9 @@ class Rest_API
             ]
         );
 
-		register_rest_route( self::NAMESPACE, '/feedback',
+		register_rest_route(
+            self::NAMESPACE,
+            '/feedback',
             array(
                 'methods' => 'POST',
                 'callback' => [$this, 'rest_feedback'],
@@ -184,7 +193,9 @@ class Rest_API
             )
         );
 
-		register_rest_route( self::NAMESPACE, '/set-settings-theme',
+		register_rest_route(
+			self::NAMESPACE,
+			'/set-settings-theme',
 			array(
 				'methods'  => 'GET',
 				'callback' => [$this, 'rest_set_settings_theme'],
@@ -206,7 +217,9 @@ class Rest_API
                 ],
 			)
 		);
-        register_rest_route( self::NAMESPACE, '/get-settings-theme',
+        register_rest_route(
+			self::NAMESPACE,
+			'/get-settings-theme',
 			array(
 				'methods'  => 'GET',
 				'callback' => [$this, 'rest_get_settings_theme'],
@@ -216,51 +229,25 @@ class Rest_API
                 // },
 			)
 		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/get-option',
-			array(
-				'methods'  => 'GET',
-				'callback' => [$this, 'rest_get_option'],
-				'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-                'args' => [
-                    'option_name' => [
-                        'required' => true,
-                        'type'     => 'string',
-                    ],
-                ],
-			)
-		);
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/set-option',
-			array(
-				'methods'  => 'POST',
-				'callback' => [$this, 'rest_set_option'],
-				'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-			)
-		);
         
-        // register_rest_route( self::NAMESPACE, '/deactivation-link',
-        //     array(
-        //         'methods' => 'GET',
-        //         'callback' => array( $this, 'get_deactivation_link' ),
-        //         'permission_callback' => array( $this, 'check_permission' ),
-        //     )
-        // );
+        register_rest_route(
+            self::NAMESPACE,
+            '/deactivation-link',
+            array(
+                'methods' => 'GET',
+                'callback' => array( $this, 'get_deactivation_link' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+            )
+        );
 
         //Log table REST routes
         /**
          * Register REST API routes
          */
         // Get logs with filters
-        register_rest_route( self::NAMESPACE, '/logs',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs' ),
@@ -279,7 +266,9 @@ class Rest_API
         );
 
         // Search logs
-        register_rest_route( self::NAMESPACE, '/logs/search',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/search',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'search_logs' ),
@@ -302,7 +291,9 @@ class Rest_API
         );
 
         // Insert new log
-        register_rest_route( self::NAMESPACE, '/logs',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs',
             array(
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => array( LogsController::class, 'create_log' ),
@@ -337,7 +328,9 @@ class Rest_API
         );
 
         // Update log by ID
-        register_rest_route( self::NAMESPACE, '/logs/(?P<id>\d+)',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
             array(
                 'methods'             => WP_REST_Server::EDITABLE,
                 'callback'            => array( LogsController::class, 'update_log' ),
@@ -370,7 +363,9 @@ class Rest_API
         );
 
         // Delete log by ID
-        register_rest_route( self::NAMESPACE, '/logs/(?P<id>\d+)',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
             array(
                 'methods'             => WP_REST_Server::DELETABLE,
                 'callback'            => array( LogsController::class, 'delete_log' ),
@@ -385,7 +380,9 @@ class Rest_API
         );
 
         // Delete all logs
-        register_rest_route( self::NAMESPACE, '/logs/delete-all',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/delete-all',
             array(
                 'methods'             => WP_REST_Server::DELETABLE,
                 'callback'            => array( LogsController::class, 'delete_all_logs' ),
@@ -394,7 +391,9 @@ class Rest_API
         );
 
         // Get single log by ID
-        register_rest_route( self::NAMESPACE,'/logs/(?P<id>\d+)',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/(?P<id>\d+)',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_log' ),
@@ -409,7 +408,9 @@ class Rest_API
         );
 
         // Logs Over Time Chart
-        register_rest_route( self::NAMESPACE,'/logs/stats/over-time',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/stats/over-time',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_over_time' ),
@@ -418,7 +419,9 @@ class Rest_API
         );
 
         // Logs by Category Chart
-        register_rest_route( self::NAMESPACE,'/logs/stats/by-category',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/stats/by-category',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_by_category' ),
@@ -427,7 +430,9 @@ class Rest_API
         );
 
         // Logs by User (Top Users) Chart
-        register_rest_route( self::NAMESPACE,'/logs/stats/top-users',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/stats/top-users',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_top_users' ),
@@ -436,7 +441,9 @@ class Rest_API
         );
 
         // Logs by IP Address (Top IPs) Chart
-        register_rest_route( self::NAMESPACE,'/logs/stats/top-ips',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/stats/top-ips',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_top_ips' ),
@@ -445,7 +452,9 @@ class Rest_API
         );
 
         // Hourly Activity Chart
-        register_rest_route( self::NAMESPACE,'/logs/stats/hourly-activity',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/stats/hourly-activity',
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( LogsController::class, 'get_logs_hourly_activity' ),
@@ -454,7 +463,9 @@ class Rest_API
         );
 
         // Bulk Delete Logs
-        register_rest_route( self::NAMESPACE,'/logs/bulk-delete',
+        register_rest_route(
+            self::NAMESPACE,
+            '/logs/bulk-delete',
             array(
                 'methods'             => WP_REST_Server::DELETABLE,
                 'callback'            => array( LogsController::class, 'bulk_delete_logs' ),
@@ -468,92 +479,6 @@ class Rest_API
                 ),
             )
         );
-
-        // Get specifications for a product
-        register_rest_route( self::NAMESPACE,'/product/(?P<product_id>\d+)/specifications',
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_product_specifications' ),
-                'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
-                },
-                'args'                => array(
-                    'product_id' => array(
-                        'required'          => true,
-                        'sanitize_callback' => 'absint',
-                    ),
-                ),
-            )
-        );
-
-        // Save specifications for a product
-        register_rest_route( self::NAMESPACE,'/product/(?P<product_id>\d+)/specifications',
-            array(
-                'methods'             => WP_REST_Server::CREATABLE,
-                'callback'            => array( $this, 'save_product_specifications' ),
-                'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
-                },
-                'args'                => array(
-                    'product_id' => array(
-                        'required'          => true,
-                        'sanitize_callback' => 'absint',
-                    ),
-                ),
-            )
-        );
-    }
-
-    public function get_product_specifications( WP_REST_Request $request ) {
-        $product_id = intval( $request->get_param( 'product_id' ) );
-
-        if ( ! $product_id ) {
-            return new WP_Error(
-                'invalid_product_id',
-                __( 'Invalid product ID', 'plugin-starter' ),
-                array( 'status' => 400 )
-            );
-        }
-
-        $specifications_data = get_post_meta( $product_id, '_mos_specifications_data', true );
-
-        if ( empty( $specifications_data ) ) {
-            $specifications_data = array();
-        }
-
-        return rest_ensure_response( array(
-            'success' => true,
-            'data'    => $specifications_data,
-        ) );
-    }
-
-    public function save_product_specifications( WP_REST_Request $request ) {
-        $product_id = intval( $request->get_param( 'product_id' ) );
-
-        if ( ! $product_id ) {
-            return new WP_Error(
-                'invalid_product_id',
-                __( 'Invalid product ID', 'plugin-starter' ),
-                array( 'status' => 400 )
-            );
-        }
-
-        $data = $request->get_json_params();
-
-        if ( ! isset( $data['specifications'] ) ) {
-            return new WP_Error(
-                'missing_data',
-                __( 'Missing specifications data', 'plugin-starter' ),
-                array( 'status' => 400 )
-            );
-        }
-
-        $updated = update_post_meta( $product_id, '_mos_specifications_data', $data['specifications'] );
-
-        return rest_ensure_response( array(
-            'success' => true,
-            'message' => __( 'Specifications saved successfully', 'plugin-starter' ),
-        ) );
     }
     /**
      * Check permission for API access
@@ -712,17 +637,7 @@ class Rest_API
 		}
 		$plugin_starter_options_old = plugin_starter_get_option();
 
-		$plugin_starter_options_raw = wp_unslash($request->get_param('plugin_starter_options'));
-		$plugin_starter_options = map_deep($plugin_starter_options_raw, 'wp_kses_post');
-
-		$header_footer_kses = Utils::get_header_footer_kses();
-
-		if (isset($plugin_starter_options_raw['more']['header_content'])) {
-			$plugin_starter_options['more']['header_content'] = wp_kses($plugin_starter_options_raw['more']['header_content'], $header_footer_kses);
-		}
-		if (isset($plugin_starter_options_raw['more']['footer_content'])) {
-			$plugin_starter_options['more']['footer_content'] = wp_kses($plugin_starter_options_raw['more']['footer_content'], $header_footer_kses);
-		}
+		$plugin_starter_options = map_deep(wp_unslash($request->get_param('plugin_starter_options')), 'wp_kses_post');
 
 		$plugin_starter_options ? update_option('plugin_starter_options', $plugin_starter_options) : '';
 
@@ -828,9 +743,6 @@ class Rest_API
     {
         $subject = sanitize_text_field(wp_unslash($request->get_param('subject')));
         $message = sanitize_textarea_field(wp_unslash($request->get_param('message')));
-        $user_email = sanitize_email(wp_unslash($request->get_param('email')));
-        $phone = sanitize_text_field(wp_unslash($request->get_param('phone')));
-        $admin_email = 'mostak.shahid@gmail.com';
 
         if (empty($message)) {
             return new WP_Error('empty_message', __('Message cannot be empty.', 'plugin-starter'), array('status' => 400));
@@ -840,260 +752,26 @@ class Rest_API
             return new WP_Error('empty_subject', __('Subject cannot be empty.', 'plugin-starter'), array('status' => 400));
         }
 
-        $site_name = get_bloginfo('name');
-        $site_url = get_home_url();
-        $admin_wp_email = get_option('admin_email');
-        $timestamp = current_time('mysql');
-
-        $email_success = true;
-
+        $email = 'mostak.shahid@gmail.com';
+        // $subject = sprintf(
+        //     /* translators: %s = site URL */
+        //     esc_html__('Error notification for %s', 'plugin-starter'),
+        //     get_home_url()
+        // );
+        $output = '<strong>Subject:</strong> ' . $subject . '<br/><strong>Message:</strong> ' . $message;
         $headers = array(
-            'From: ' . $site_name . ' <' . $admin_wp_email . '>',
+            'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>',
             'Content-Type: text/html; charset=UTF-8'
         );
 
-        $user_email_to_send = !empty($user_email) ? $user_email : $admin_wp_email;
-
-        $thank_you_email_body = self::get_email_template('thank_you', array(
-            'site_name' => $site_name,
-            'site_url' => $site_url,
-            'subject' => $subject,
-            'message' => $message,
-            'email' => $user_email,
-            'phone' => $phone,
-            'timestamp' => $timestamp
-        ));
-
-        $admin_email_body = self::get_email_template('admin_notification', array(
-            'site_name' => $site_name,
-            'site_url' => $site_url,
-            'subject' => $subject,
-            'message' => $message,
-            'user_email' => $user_email,
-            'phone' => $phone,
-            'timestamp' => $timestamp
-        ));
-
-        $thank_you_sent = wp_mail($user_email_to_send, 'Thank You for Your Feedback - ' . $site_name, $thank_you_email_body, $headers);
-        $admin_notification_sent = wp_mail($admin_email, 'New Feedback Received - ' . $site_name, $admin_email_body, $headers);
-
-        if (!$thank_you_sent || !$admin_notification_sent) {
-            $email_success = false;
-        }
-
-        // self::send_to_third_party(array(
-        //     'site_name' => $site_name,
-        //     'site_url' => $site_url,
-        //     'subject' => $subject,
-        //     'message' => $message,
-        //     'user_email' => $user_email,
-        //     'phone' => $phone,
-        //     'timestamp' => $timestamp
-        // ));
-
-        $response = array(
+        wp_mail($email, 'Feedback from Plugin Starter', $output, $headers);
+        $response = [
             'success' => true,
-            'msg' => $email_success ? esc_html__('Feedback submitted successfully.', 'plugin-starter') : esc_html__('Feedback submitted, but there was an issue sending emails.', 'plugin-starter'),
+            'msg' => esc_html__('Email Send successfully.', 'plugin-starter'),
             'subject' => $subject,
-            'message' => $message,
-            'email_sent' => $email_success
-        );
+            'message' => $message
+        ];
         return new WP_REST_Response($response, 200);
-    }
-
-    private static function get_email_template($template_type, $data)
-    {
-        ob_start();
-        if ($template_type === 'thank_you') {
-            ?>
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Thank You</title>
-            </head>
-            <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-                <table cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4; padding: 20px;">
-                    <tr>
-                        <td align="center">
-                            <table cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <tr>
-                                    <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
-                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Thank You!</h1>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 40px 30px;">
-                                        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                                            <?php esc_html__('Dear User,', 'plugin-starter'); ?>                                            
-                                        </p>
-                                        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">                                            
-                                            <?php esc_html__('Thank you for taking the time to provide your feedback. We truly appreciate your input and are committed to improving our services based on your suggestions.', 'plugin-starter'); ?>
-                                        </p>
-                                        <div style="background-color: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
-                                            <h3 style="color: #667eea; margin: 0 0 15px 0; font-size: 18px;">Your Feedback</h3>
-                                            <table style="width: 100%;">
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold; width: 100px;">Subject:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo esc_html($data['subject']); ?></td>
-                                                </tr>
-                                                <?php if (!empty($data['message'])): ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold; vertical-align: top;">Message:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo nl2br(esc_html($data['message'])); ?></td>
-                                                </tr>
-                                                <?php endif; ?>
-                                                <?php if (!empty($data['phone'])): ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Phone:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo esc_html($data['phone']); ?></td>
-                                                </tr>
-                                                <?php endif; ?>
-                                            </table>
-                                        </div>
-                                        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 20px 0;">
-                                            <?php esc_html__('We will review your feedback and get back to you if necessary.', 'plugin-starter'); ?>                                              
-                                            
-                                        </p>
-                                        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0;">
-                                            <?php esc_html__('Best regards,', 'plugin-starter'); ?>   
-                                            <br>
-                                            MosPress BD Team
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
-                                        <p style="color: #999999; font-size: 12px; margin: 0;">
-                                            <?php esc_html__('This email was sent from', 'plugin-starter'); ?> 
-                                             <a href="<?php echo esc_url($data['site_url']); ?>" style="color: #667eea; text-decoration: none;"><?php echo esc_html($data['site_name']); ?></a>
-                                        </p>
-                                        <p style="color: #999999; font-size: 12px; margin: 5px 0 0 0;">
-                                            <?php esc_html__('Submitted on:', 'plugin-starter'); ?> 
-                                             <?php echo esc_html($data['timestamp']); ?>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </body>
-            </html>
-            <?php
-        } elseif ($template_type === 'admin_notification') {
-            ?>
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>New Feedback</title>
-            </head>
-            <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-                <table cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4; padding: 20px;">
-                    <tr>
-                        <td align="center">
-                            <table cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <tr>
-                                    <td style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; text-align: center;">
-                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px;">🎉 New Feedback Received!</h1>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 40px 30px;">
-                                        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                                            You have received new feedback from your website.
-                                        </p>
-                                        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0;">
-                                            <h3 style="color: #856404; margin: 0 0 15px 0; font-size: 18px;">Feedback Details</h3>
-                                            <table style="width: 100%;">
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold; width: 120px;">Website:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo esc_html($data['site_name']); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Site URL:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><a href="<?php echo esc_url($data['site_url']); ?>" style="color: #f5576c; text-decoration: none;"><?php echo esc_url($data['site_url']); ?></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Subject:</td>
-                                                    <td style="padding: 8px 0; color: #333333; font-weight: bold;"><?php echo esc_html($data['subject']); ?></td>
-                                                </tr>
-                                                <?php if (!empty($data['user_email'])): ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">User Email:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><a href="mailto:<?php echo esc_attr($data['user_email']); ?>" style="color: #f5576c; text-decoration: none;"><?php echo esc_html($data['user_email']); ?></a></td>
-                                                </tr>
-                                                <?php endif; ?>
-                                                <?php if (!empty($data['phone'])): ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Phone:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo esc_html($data['phone']); ?></td>
-                                                </tr>
-                                                <?php endif; ?>
-                                                <?php if (!empty($data['message'])): ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold; vertical-align: top;">Message:</td>
-                                                    <td style="padding: 8px 0; color: #333333; background-color: #f8f9fa; padding: 10px; border-radius: 4px;"><?php echo nl2br(esc_html($data['message'])); ?></td>
-                                                </tr>
-                                                <?php endif; ?>
-                                                <tr>
-                                                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Submitted:</td>
-                                                    <td style="padding: 8px 0; color: #333333;"><?php echo esc_html($data['timestamp']); ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <p style="color: #333333; font-size: 14px; line-height: 1.6; margin: 0;">
-                                            <strong>Plugin:</strong> Plugin Starter
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
-                                        <p style="color: #999999; font-size: 12px; margin: 0;">
-                                            This is an automated notification. Please do not reply to this email.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </body>
-            </html>
-            <?php
-        }
-        return ob_get_clean();
-    }
-
-    private static function send_to_third_party($data)
-    {
-        $webhook_url = apply_filters('plugin_starter_feedback_webhook_url', '');
-
-        if (empty($webhook_url)) {
-            return false;
-        }
-
-        $payload = json_encode($data);
-
-        $args = array(
-            'body' => $payload,
-            'headers' => array(
-                'Content-Type' => 'application/json',
-            ),
-            'timeout' => 30
-        );
-
-        $response = wp_remote_post($webhook_url, $args);
-
-        if (is_wp_error($response)) {
-            // error_log('Plugin Starter - Failed to send feedback to webhook: ' . $response->get_error_message());
-            return false;
-        }
-
-        return true;
     }
     public function rest_set_settings_theme(WP_REST_Request $request)
     {
@@ -1117,97 +795,55 @@ class Rest_API
         // return $settings_theme??'light';
         return $settings_theme?$settings_theme:'light';
     }
-    public function rest_get_option(WP_REST_Request $request)
-	{
-		$option_name = sanitize_text_field(wp_unslash($request->get_param('option_name')));
-		$option_value = get_option($option_name);
-
-		if ($option_value === false) {
-			return [];
-		}
-
-		return new WP_REST_Response($option_value, 200);
-	}
-
-	public function rest_set_option(WP_REST_Request $request)
-	{
-		$option_name = sanitize_text_field(wp_unslash($request->get_param('option_name')));
-		$option_value = $request->get_param('option_value');
-
-		if (empty($option_name)) {
-			return new WP_Error(
-				'rest_invalid_param',
-				__('Option name is required.', 'plugin-starter'),
-				array('status' => 400)
-			);
-		}
-
-		$updated = update_option($option_name, $option_value);
-
-		if ($updated === false) {
-			return new WP_Error(
-				'rest_update_failed',
-				__('Failed to update option.', 'plugin-starter'),
-				array('status' => 500)
-			);
-		}
-
-		$response = [
-			'success' => true,
-			'msg' => esc_html__('Option updated successfully.', 'plugin-starter'),
-		];
-
-		return new WP_REST_Response($response, 200);
-	}
     /**
      * Get the deactivation link.
      *
      * @param WP_REST_Request $request The request object.
      * @return WP_REST_Response|WP_Error The response or error.
      */
-    // public function get_deactivation_link( WP_REST_Request $request ) {
-    //     // Get the encrypted key from options
-    //     $encrypted_key = get_option( 'plugin_starter_deactive_key' );
+    public function get_deactivation_link( WP_REST_Request $request ) {
+        // Get the encrypted key from options
+        $encrypted_key = get_option( 'plugin_starter_deactive_key' );
 
-    //     if ( false === $encrypted_key ) {
-    //         return new WP_Error(
-    //             'key_not_found',
-    //             __( 'Deactivation key not found. Please reactivate the plugin.', 'plugin-starter' ),
-    //             array( 'status' => 404 )
-    //         );
-    //     }
+        if ( false === $encrypted_key ) {
+            return new WP_Error(
+                'key_not_found',
+                __( 'Deactivation key not found. Please reactivate the plugin.', 'plugin-starter' ),
+                array( 'status' => 404 )
+            );
+        }
 
-    //     // Decrypt the key
-    //     $decrypted_key = CryptoHelper::decrypt( $encrypted_key );
+        // Decrypt the key
+        $decrypted_key = CryptoHelper::decrypt( $encrypted_key );
 
-    //     if ( false === $decrypted_key ) {
-    //         return new WP_Error(
-    //             'decryption_failed',
-    //             __( 'Failed to decrypt deactivation key. Please contact support.', 'plugin-starter' ),
-    //             array( 'status' => 500 )
-    //         );
-    //     }
+        if ( false === $decrypted_key ) {
+            return new WP_Error(
+                'decryption_failed',
+                __( 'Failed to decrypt deactivation key. Please contact support.', 'plugin-starter' ),
+                array( 'status' => 500 )
+            );
+        }
 
-    //     // Build the deactivation URL
-    //     $deactivation_url = add_query_arg(
-    //         array(
-    //             'action' => 'plugin_starter_deactivate',
-    //             'secret_key' => $decrypted_key,
-    //         ),
-    //         admin_url( 'admin-post.php' )
-    //     );
+        // Build the deactivation URL
+        $deactivation_url = add_query_arg(
+            array(
+                'action' => 'plugin_starter_deactivate',
+                'secret_key' => $decrypted_key,
+            ),
+            admin_url( 'admin-post.php' )
+        );
 
-    //     // Return the response
-    //     return new WP_REST_Response(
-    //         array(
-    //             'success' => true,
-    //             'deactivation_url' => $deactivation_url,
-    //             'message' => __( 'Deactivation link generated successfully.', 'plugin-starter' ),
-    //             'warning' => __( 'This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter' ),
-    //         ),
-    //         200
-    //     );
-    // }
+        // Return the response
+        return new WP_REST_Response(
+            array(
+                'success' => true,
+                'deactivation_url' => $deactivation_url,
+                'message' => __( 'Deactivation link generated successfully.', 'plugin-starter' ),
+                'warning' => __( 'This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter' ),
+            ),
+            200
+        );
+    }
 
 }
 // new Rest_Api();

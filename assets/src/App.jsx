@@ -4,16 +4,14 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
-import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, Card} from '@douyinfe/semi-ui';
+import { Layout, Typography, Banner, Space, Badge, Button, SideSheet, Col, Row, Tag, Modal, } from '@douyinfe/semi-ui';
 import { IconStar, IconSetting, IconHome, IconMember, IconBookStroked, IconHelpCircleStroked, IconBellStroked, IconSun, IconMoon, IconTemplate,IconCustomerSupport, IconFile, } from '@douyinfe/semi-icons';
 import { LocaleProvider } from '@douyinfe/semi-ui';
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
-import { Dashboard, Settings, ImportExport, More, Tools, Logs, LogsCharts, LogsTable, Feedback, FreeVsPro, NotFound, ComponentsFree} from './pages';
+import { Dashboard, About, Contact, Settings, ImportExport, More, Tools, Logs, LogsCharts, LogsTable, Feedback, FreeVsPro, NotFound} from './pages';
 
 import {
-    About, 
-    Contact,
     BasicInputs, 
     ArrayInputs,
     BoxedLeftSidebar,
@@ -35,6 +33,11 @@ const { Title, Text, Paragraph } = Typography;
 
 export default function App() {
     const [darkmode, setDarkmode] = useState(false);
+
+    const [newsVisible, setNewsVisible] = useState(false);
+    const [newsItems, setNewsItems] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [activeNews, setActiveNews] = useState(null);
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -78,6 +81,31 @@ export default function App() {
         } catch (error) {
             console.error("Error fetching settings data:", error);
         }
+    };
+
+    const truncateText = (text, wordLimit = 15) => {
+        const words = text.split(/\s+/);
+        if (words.length <= wordLimit) return text;
+        return words.slice(0, wordLimit).join(' ') + '...';
+    };
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json');
+                const data = await response.json();
+                setNewsItems(data);
+            } catch (error) {
+                console.error("Error fetching news:", error);
+            }
+        };
+        fetchNews();
+    }, []); 
+
+    const handleNewsVisible = (visible) => {
+        setNewsVisible(visible);
+        // if (visible && newsItems.length === 0) {
+        //     fetchNews();
+        // }
     };
 
     const HorizontalMenuItems = [
@@ -128,19 +156,6 @@ export default function App() {
         ),
         // { itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <IconMember />, url: '/semi/free-vs-pro' },
     ];
-
-
-
-    const [newsVisible, setNewsVisible] = useState(false);
-    const [newsCurrentPage, setNewsCurrentPage] = useState(1);
-    const handleNewsVisible = (visible) => {
-        setNewsVisible(visible);
-        if (visible) {
-            setNewsCurrentPage(1);
-        }
-    };
-    const RemoteLoginForm = React.lazy(() => import("pluginstarterpro/LoginForm"));
-    const RemoteNewsSideSheet = React.lazy(() => import("pluginstarterpro/NewsSideSheet"));
     return (
         <LocaleProvider locale={en_US}>
             <div className="plugin-starter-settings-container" style={{backgroundColor: 'var(--semi-color-bg-1)'}}>
@@ -157,8 +172,7 @@ export default function App() {
                             </>
                         }
                     />
-                }   
-                           
+                }                
                 <Header
                     style={{backgroundColor:'var(--semi-color-bg-3)'}}
                     className="plugin-starter-header"
@@ -186,7 +200,7 @@ export default function App() {
                                     <IconCustomerSupport/>
                                 </a>
                                 <a
-                                    href="https://wordpress.org/support/plugin/plugin-starter/reviews/"
+                                    href="https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post"
                                     target="_blank"
                                     rel="noreferrer noopener"
                                     aria-label={ __(
@@ -199,7 +213,7 @@ export default function App() {
 
                                 <Button 
                                     theme='outline' 
-                                    icon={<IconCustomerSupport />} 
+                                    icon={<IconFile />} 
                                     aria-label={__("Documentation", 'plugin-starter')}
                                     onClick={ () =>
                                         window.open(
@@ -215,14 +229,12 @@ export default function App() {
 
                                     onClick={ () =>
                                         window.open(
-                                            'https://wordpress.org/support/plugin/plugin-starter/reviews/',
+                                            'https://wordpress.org/support/plugin/plugin-starter/reviews/?filter=5#new-post',
                                             '_blank'
                                         )
                                     }
                                 />
-                                <Badge 
-                                    // count={newsItems.filter(item => !readNewsIds.includes(item.id)).length || 0}
-                                >
+                                <Badge count={newsItems.length || 0}>
                                     <Button theme='outline' icon={<IconBellStroked />} onClick={() => handleNewsVisible(true)} aria-label="Screenshot" />
                                 </Badge>
                             </Space>
@@ -248,11 +260,9 @@ export default function App() {
                         <Route index element={<Navigate to="basic-inputs" replace />} />
                         <Route path="basic-inputs" element={<BasicInputs />} />
                         <Route path="array-inputs" element={<ArrayInputs />} />
-
-                        <Route path="components" element={<Navigate to="free-components" replace />} />
-                        <Route path="components/free-components" element={<ComponentsFree />} />
-                        <Route path="components/pro-components" element={<Page />} />
-
+                        <Route path="page/page-1" element={<Page />} />
+                        <Route path="page/page-2" element={<Page />} />
+                        
                         {/* Other menu items */}
                         <Route path="import-export" element={<ImportExport />} />
                         <Route path="more" element={<More />} />
@@ -298,8 +308,78 @@ export default function App() {
                         </Col>
                     </Row>
                 </Footer>
-                {/* <RemoteNewsSideSheet newsVisible={newsVisible} handleNewsVisible={setNewsVisible} /> */}
+                {/* --- What's New SideSheet --- */}
+                <SideSheet
+                    placement="right"
+                    visible={newsVisible}
+                    onCancel={() => handleNewsVisible(false)}
+                    title={__("What's New?", "plugin-starter")}
+                    closeOnEsc={true}
+                >
+                    {newsItems.length === 0 ? (
+                        <p>{__("Loading news...", "plugin-starter")}</p>
+                    ) : (
+                        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                            {newsItems.map((item) => (
+                                <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
+                                    <Text strong style={{ fontSize: '16px' }}>{item.title}</Text>
+                                    {item?.tags && item.tags.length > 0 && (
+                                        <div className='mt-2'>
+                                            <Space>
+                                                {item.tags.map((tag, index) => (
+                                                    <Tag key={index} size="small" shape='circle' color='amber'>{tag}</Tag>
+                                                ))}
+                                            </Space>
+                                        </div>
+                                    )}
+                                    <div className='mt-2'>
+                                        <Paragraph type="secondary">
+                                            {truncateText(item.news)}
+                                        </Paragraph>
+                                        <Button
+                                            type="link"
+                                            size="small"
+
+                                            onClick={() => {
+                                                setActiveNews(item);
+                                                setModalVisible(true);
+                                            }}
+                                            // onClick={() => alert(item.news)}
+                                            // style={{ padding: 0, marginLeft: '5px' }}
+                                        >
+                                            {__("Read more", "plugin-starter")}
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </SideSheet>
             </div>
+            
+            <Modal
+                title={activeNews?.title}
+                visible={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                footer={null}
+                style={{ maxWidth: 700 }}
+            >
+                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+                    {activeNews?.tags?.length > 0 && (
+                        <Space style={{ marginBottom: 12 }}>
+                            {activeNews.tags.map((tag, index) => (
+                                <Tag key={index} size="small" shape="circle" color="amber">
+                                    {tag}
+                                </Tag>
+                            ))}
+                        </Space>
+                    )}
+
+                    <Paragraph>
+                        {activeNews?.news}
+                    </Paragraph>
+                </div>
+            </Modal>
         </LocaleProvider>
     );
 }

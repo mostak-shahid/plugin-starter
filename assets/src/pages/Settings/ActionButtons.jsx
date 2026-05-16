@@ -1,7 +1,7 @@
 import React from 'react'
 import { __ } from "@wordpress/i18n";
 import { Button } from '@douyinfe/semi-ui';
-export default function ActionButtons({hasChanges, section, handleReset, handleSubmit}) {
+export default function ActionButtons({hasChanges, section, handleReset}) {
 
     const onReset = () => {
         handleReset(section);
@@ -11,7 +11,7 @@ export default function ActionButtons({hasChanges, section, handleReset, handleS
             <Button 
                 type="primary" 
                 theme='solid'
-                onClick={handleSubmit}
+                htmlType="submit" 
                 disabled={!hasChanges}
             >
                 {__('Save Settings', 'plugin-starter')}

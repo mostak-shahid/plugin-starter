@@ -9,10 +9,6 @@ use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;
 use MosPress\PluginStarter\Hook\Action_Hook;
 use MosPress\PluginStarter\Hook\Filter_Hook;
-use MosPress\PluginStarter\Core\ImportExport;
-use MosPress\PluginStarter\Core\More;
-use MosPress\PluginStarter\Core\Tools;
-use MosPress\PluginStarter\UserMeta;
 
 class Plugin {
 
@@ -60,10 +56,9 @@ class Plugin {
 		Filter_Hook::get_instance();
 		
 		// Instantiate additional core classes
-		new ImportExport();
-		new More();
-		new Tools();
-		new UserMeta();
+		// new ImportExport();
+		// new More();
+		// new Tools();
 	}
 
 

@@ -83,22 +83,15 @@ class AdminClass
 		if ($hook == 'toplevel_page_plugin-starter') {
 			// wp_enqueue_style($this->plugin_name . '-react', PLUGIN_STARTER_URL . 'build/index.css');
 
-			// $asset_path = PLUGIN_STARTER_URL . 'assets/build/';
+			$asset_path = PLUGIN_STARTER_URL . 'build/';
 
-			// wp_enqueue_style(
-			// 	$this->plugin_name . '-react',
-			// 	$asset_path . 'app.css',
-			// 	[],
-			// 	// filemtime($asset_path . 'app.css'),
-			// 	time(),
-			// );
-			// wp_enqueue_style(
-			// 	$this->plugin_name . '-tailwind',
-			// 	$asset_path . 'tailwind.css',
-			// 	[],
-			// 	// filemtime($asset_path . 'app.css'),
-			// 	time(),
-			// );
+			wp_enqueue_style(
+				$this->plugin_name . '-react',
+				$asset_path . 'app.css',
+				[],
+				// filemtime($asset_path . 'app.css'),
+				time(),
+			);
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, PLUGIN_STARTER_URL . 'assets/css/style.css', array(), $this->version, 'all');
@@ -136,17 +129,14 @@ class AdminClass
 			// 	$this->version,
 			// 	true
 			// );
-
-			$asset_path = PLUGIN_STARTER_URL . 'assets/build/';
+			$asset_path = PLUGIN_STARTER_URL . 'build/';
 			wp_enqueue_script(
 				$this->plugin_name . '-react',
 				$asset_path . 'app.js',
-				//['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'],
 				[],
 				// filemtime($asset_path . 'app.js'),
-				// time(),
-				'1.0.0',
-				// true
+				time(),
+				true
 			);
 			
 			// Configure wp-api-fetch with proper settings before React loads
@@ -154,7 +144,7 @@ class AdminClass
 				$this->plugin_name . '-react',
 				sprintf(
 					'window.wpApiSettings = { root: "%s", nonce: "%s" };',
-					esc_url( rest_url() ),
+					esc_url_raw( rest_url() ),
 					wp_create_nonce( 'wp_rest' )
 				),
 				'before'
@@ -171,7 +161,7 @@ class AdminClass
 			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
 			'api_nonce' => esc_attr(wp_create_nonce('wp_rest')),
 			'get_current_user_id' => get_current_user_id(),
-			'root'  => esc_url( rest_url() ),
+			'root'  => esc_url_raw( rest_url() ),
     		'nonce' => wp_create_nonce('wp_rest'),
 			'default_colors' => plugin_starter_get_default_colors(),
 			'default_gradients' => plugin_starter_get_default_gradients(),

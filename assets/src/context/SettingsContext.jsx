@@ -1,6 +1,5 @@
-import { __ } from "@wordpress/i18n";
 import { createContext, useContext, useState } from 'react';
-import { Notification } from '@douyinfe/semi-ui';
+import { Toast } from '@douyinfe/semi-ui';
 import settingsData from '../data/settings.json';
 
 const SettingsContext = createContext();
@@ -25,19 +24,14 @@ export const SettingsProvider = ({ children }) => {
 
     // Save to backend/localStorage
     console.log('Settings saved:', { section, values });
-
+    
     // In a real app, you'd do:
-    // await fetch('/api/settings', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ section, values })
+    // await fetch('/api/settings', { 
+    //   method: 'POST', 
+    //   body: JSON.stringify({ section, values }) 
     // });
-
-    Notification.success({
-        title: __("Success", "plugin-starter"),
-        content: __("Settings saved successfully!", "plugin-starter"),
-        duration: 3,
-        position: 'topRight',
-    });
+    
+    Toast.success('Settings saved successfully!');
   };
 
   const value = {

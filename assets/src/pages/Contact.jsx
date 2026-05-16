@@ -1,31 +1,14 @@
-import { __ } from "@wordpress/i18n";
 import { useState } from 'react';
 import {BoxedLayout} from '../layouts';
-import { Card, Input, TextArea, Button, Notification } from '@douyinfe/semi-ui';
+import { Card, Form, Button, Toast } from '@douyinfe/semi-ui';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: ''
-    });
+    const [formData, setFormData] = useState({});
 
-    const handleSubmit = () => {
+    const handleSubmit = (values) => {
         // In a real app, you'd save to backend
-        console.log('Form submitted:', formData);
-        Notification.success({
-            title: __("Success", "plugin-starter"),
-            content: __("Contact form submitted successfully!", "plugin-starter"),
-            duration: 3,
-            position: 'topRight',
-        });
-    };
-
-    const handleFieldChange = (field, value) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        console.log('Form submitted:', values);
+        Toast.success('Contact form submitted successfully!');
     };
 
     const sidebar = (
@@ -45,31 +28,12 @@ const Contact = () => {
     return (
         <BoxedLayout sidebar={sidebar} sidebarPosition='right'>
             <Card title="Contact Us">
-                <div style={{ maxWidth: '500px' }}>
-                    <Input 
-                        value={formData.name}
-                        onChange={(value) => handleFieldChange('name', value)}
-                        label="Name" 
-                        placeholder="Enter your name" 
-                    />
-                    <div style={{ marginBottom: '16px' }} />
-                    <Input 
-                        value={formData.email}
-                        onChange={(value) => handleFieldChange('email', value)}
-                        label="Email" 
-                        placeholder="Enter your email"
-                    />
-                    <div style={{ marginBottom: '16px' }} />
-                    <TextArea 
-                        value={formData.message}
-                        onChange={(value) => handleFieldChange('message', value)}
-                        label="Message" 
-                        placeholder="Enter your message" 
-                        rows={4}
-                    />
-                    <div style={{ marginBottom: '16px' }} />
-                    <Button type="primary" onClick={handleSubmit}>Submit</Button>
-                </div>
+                <Form onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
+                <Form.Input field="name" label="Name" placeholder="Enter your name" rules={[{ required: true }]} />
+                <Form.Input field="email" label="Email" placeholder="Enter your email" rules={[{ required: true, type: 'email' }]} />
+                <Form.TextArea field="message" label="Message" placeholder="Enter your message" rules={[{ required: true }]} />
+                <Button type="primary" htmlType="submit">Submit</Button>
+                </Form>
             </Card>
         </BoxedLayout>
     );

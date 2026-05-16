@@ -13,7 +13,7 @@ import {
     Popconfirm,
     DatePicker,
     Dropdown,
-    Notification,
+    Toast,
     Row,
     Col,
 } from '@douyinfe/semi-ui';
@@ -59,36 +59,21 @@ export default function LogsTable({ onDataRefresh }) {
                 path: `/plugin-starter/v1/logs/${id}`,
                 method: 'DELETE',
             });
-            Notification.success({
-                title: __("Success", "plugin-starter"),
-                content: __("Log deleted successfully", "plugin-starter"),
-                duration: 3,
-                position: 'topRight',
-            });
+            Toast.success(__('Log deleted successfully', 'plugin-starter'));
             fetchData();
             if (onDataRefresh) {
                 onDataRefresh();
             }
         } catch (error) {
             console.error('Error deleting log:', error);
-            Notification.error({
-                title: __("Error", "plugin-starter"),
-                content: __("Failed to delete log", "plugin-starter"),
-                duration: 3,
-                position: 'topRight',
-            });
+            Toast.error(__('Failed to delete log', 'plugin-starter'));
         }
     };
 
     const handleBulkDelete = async () => {
         console.log('Bulk delete clicked, selected keys:', selectedRowKeys);
         if (selectedRowKeys.length === 0) {
-            Notification.warning({
-                title: __("Warning", "plugin-starter"),
-                content: __("Please select logs to delete", "plugin-starter"),
-                duration: 3,
-                position: 'topRight',
-            });
+            Toast.warning(__('Please select logs to delete', 'plugin-starter'));
             return;
         }
 
@@ -100,12 +85,7 @@ export default function LogsTable({ onDataRefresh }) {
                 method: 'DELETE',
                 data: { ids: selectedRowKeys },
             });
-            Notification.success({
-                title: __("Success", "plugin-starter"),
-                content: `${selectedRowKeys.length} ${__('logs deleted successfully', 'plugin-starter')}`,
-                duration: 3,
-                position: 'topRight',
-            });
+            Toast.success(`${selectedRowKeys.length} ${__('logs deleted successfully', 'plugin-starter')}`);
             setSelectedRowKeys([]);
             fetchData();
             if (onDataRefresh) {
@@ -113,12 +93,7 @@ export default function LogsTable({ onDataRefresh }) {
             }
         } catch (error) {
             console.error('Error bulk deleting logs:', error);
-            Notification.error({
-                title: __("Error", "plugin-starter"),
-                content: __("Failed to delete logs", "plugin-starter"),
-                duration: 3,
-                position: 'topRight',
-            });
+            Toast.error(__('Failed to delete logs', 'plugin-starter'));
         } finally {
             setDeleting(false);
         }

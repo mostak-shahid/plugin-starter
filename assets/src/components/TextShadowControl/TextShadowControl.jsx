@@ -57,7 +57,7 @@ const TextShadowControl = ({ value = {}, onChange, className='' }) => {
                     />
                     <ColorPickerControl
                         defaultValue={shadow.color || "#000000"}
-                        onChange={(color) => update('color', color)}
+                        handleChange={(color) => update('color', color)}
                         mode='color'
                         label={__('Shadow Color', 'plugin-starter')}
                         className="w-full"

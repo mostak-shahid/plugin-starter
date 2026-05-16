@@ -1,8 +1,3 @@
 .plugin-starter-settings-template #wpcontent {
   padding-left: 0;
-}
-.plugin-starter-settings-template input[type=color], .plugin-starter-settings-template input[type=date], .plugin-starter-settings-template input[type=datetime-local], .plugin-starter-settings-template input[type=datetime], .plugin-starter-settings-template input[type=email], .plugin-starter-settings-template input[type=month], .plugin-starter-settings-template input[type=number], .plugin-starter-settings-template input[type=password], .plugin-starter-settings-template input[type=search], .plugin-starter-settings-template input[type=tel], .plugin-starter-settings-template input[type=text], .plugin-starter-settings-template input[type=time], .plugin-starter-settings-template input[type=url], .plugin-starter-settings-template input[type=week], .plugin-starter-settings-template select, .plugin-starter-settings-template textarea {
-  border-radius: unset;
-  border: unset;
-  background-color: unset;
 }/*# sourceMappingURL=index.css.map */

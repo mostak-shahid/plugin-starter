@@ -30,6 +30,10 @@ class Tools
         // }
 
         add_action('wp_ajax_plugin_starter_reset_all_settings', [Ajax_API::class, 'plugin_starter_reset_all_settings']);	
-        
+        		
+        // Handle deactivation via admin-post
+        add_action( 'admin_post_plugin_starter_deactivate', array( Ajax_API::class, 'handle_deactivation' ) );
+        add_action( 'admin_post_nopriv_plugin_starter_deactivate', array( Ajax_API::class, 'handle_deactivation' ) );
+
     }
 }

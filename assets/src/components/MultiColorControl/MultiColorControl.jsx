@@ -2,14 +2,14 @@ import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from 'react';
 import { Row, Col} from '@douyinfe/semi-ui';
 import {ColorPickerControl} from '../../components';
-const MultiColorControl = ({options, defaultValues = {}, name, onChange}) => {
+const MultiColorControl = ({options, defaultValues = {}, name, handleChange}) => {
     // Initialize selected values with defaultValues
     const [values, setValues] = useState(defaultValues);
 
     const updateValue = (option, value) => {
         const updated = { ...values, [option]: value };
         setValues(updated);
-        onChange(name, updated);
+        handleChange(name, updated);
     };
     return (
         <>
@@ -21,10 +21,10 @@ const MultiColorControl = ({options, defaultValues = {}, name, onChange}) => {
                             {
                                 <ColorPickerControl
                                     defaultValue={values[option] || "#000000"}
-                                    onChange={(value) => updateValue(option, value)}
+                                    handleChange={(value) => updateValue(option, value)}
                                     mode='color'
                                     label={`${option.charAt(0).toUpperCase() + option.slice(1)} Color`}
-                                />
+                                /> 
                             }
                         </Col>
                     ))}
