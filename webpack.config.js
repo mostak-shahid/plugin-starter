@@ -59,7 +59,7 @@ module.exports = {
         filename: "[name].css"
     }),
     new SemiPlugin({
-        cssLayer: true
+        cssLayer: false
     }),
 		new ModuleFederationPlugin({
 			name: "pluginstarter",
