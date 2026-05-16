@@ -87,9 +87,9 @@ class AdminClass
 
 			wp_enqueue_style(
 				$this->plugin_name . '-react',
-				$asset_path . 'app.css',
+				$asset_path . 'index.css',
 				[],
-				// filemtime($asset_path . 'app.css'),
+				// filemtime($asset_path . 'index.css'),
 				time(),
 			);
 		}
@@ -132,9 +132,9 @@ class AdminClass
 			$asset_path = PLUGIN_STARTER_URL . 'build/';
 			wp_enqueue_script(
 				$this->plugin_name . '-react',
-				$asset_path . 'app.js',
+				$asset_path . 'index.js',
 				[],
-				// filemtime($asset_path . 'app.js'),
+				// filemtime($asset_path . 'index.js'),
 				time(),
 				true
 			);

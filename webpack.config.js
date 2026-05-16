@@ -1,14 +1,21 @@
-const path = require("path");
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = {
-  entry: path.resolve(__dirname, "assets/src/index.js"),
+const SemiPlugin = require("@douyinfe/semi-webpack-plugin").default;
+const { ModuleFederationPlugin } = require("webpack").container;
 
-  output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "app.js",
-    clean: true,
-  },
+
+module.exports = {
+    ...defaultConfig,
+
+    entry: {
+        index: './assets/src/index.js'
+    },
+
+    output: {
+        filename: '[name].js',
+        path: __dirname + '/build',
+    },
 
   module: {
     rules: [
@@ -48,7 +55,10 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "app.css",
+        filename: "[name].css"
+    }),
+    new SemiPlugin({
+        cssLayer: true
     }),
   ],
 
