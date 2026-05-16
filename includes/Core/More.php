@@ -20,11 +20,15 @@ class More
 	//add_action('woocommerce_init', $plugin_public, 'ultimate_product_badge_for_woocommerce_add_badge', 9);
 	public function add_header_script()
 	{
-		echo wp_kses_post($this->options['more']['header_content']) ?? '';
+		if (isset($this->options['more']['header_content']) && !empty($this->options['more']['header_content'])) {
+			echo wp_kses($this->options['more']['header_content'], \MosPress\PluginStarter\Helpers\Utils::get_header_footer_kses());
+		}
 	}
 	public function add_footer_script()
 	{
-		echo wp_kses_post($this->options['more']['footer_content']) ?? '';
+		if (isset($this->options['more']['footer_content']) && !empty($this->options['more']['footer_content'])) {
+			echo wp_kses($this->options['more']['footer_content'], \MosPress\PluginStarter\Helpers\Utils::get_header_footer_kses());
+		}
 		if (isset($this->options['more']['css']) && !empty($this->options['more']['css'])) {
 			echo '<style id="plugin_starter_style">' . wp_kses_post($this->options['more']['css']) . '</style>';
 		}

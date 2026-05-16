@@ -57,7 +57,7 @@ class Filter_Hook {
             '<a href="' . admin_url("admin.php?page={$this->plugin_slug}") . '">' .
                 esc_html__('Settings', 'plugin-starter') .
             '</a>',
-            '<a href="https://mostak-shahid.github.io/plugin/plugin-starter/docs/" target="_blank">' .
+            '<a href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target="_blank">' .
                 esc_html__('Docs', 'plugin-starter') .
             '</a>',
             '<a href="https://www.facebook.com/mospressbd" target="_blank">' .
@@ -82,7 +82,7 @@ class Filter_Hook {
      * Add body classes on plugin pages
      */
     public function plugin_starter_admin_body_class( $classes ) {
-        error_log("Filter_Hook constructor called");
+        // error_log("Filter_Hook constructor called");
         if (function_exists('plugin_starter_is_plugin_page') && plugin_starter_is_plugin_page()) {
             $classes .= ' ' . sanitize_html_class( $this->plugin_slug . '-settings-template' ) . ' ';
         }
@@ -94,29 +94,47 @@ class Filter_Hook {
      */
     public function modify_plugin_starter_default_options( $opts ) {
         $defaults = [
-            'page' => [
-                'background' => [],
-                'boxshadow' => [
-                    'enabled' => false,
-                    'inset' => false,
+            'components' => [
+                'free' => [
+                    'background' => [],
+                    'boxshadow' => [
+                        'enabled' => false,
+                        'inset' => false,
+                    ],
+                    // 'color' => '#ffffff',
+                    'colorpicker' => '',
+                    // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
+                    'gradient' => '',
+                    'font' => [
+                        'enabled' => false,
+                    ],
+                    'media_uploader' => [],
+                    'multicolor' => [],
+                    'textshadow' => [
+                        'enabled' => false,
+                    ],
+                    'unitcontrol' => '',
                 ],
-                // 'color' => '#ffffff',
-                'color' => '',
-                // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
-                'gradient' => '',
-                'font' => [
-                    'enabled' => false,
+                'pro' => [
+                    'background' => [],
+                    'boxshadow' => [
+                        'enabled' => false,
+                        'inset' => false,
+                    ],
+                    // 'color' => '#ffffff',
+                    'colorpicker' => '',
+                    // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
+                    'gradient' => '',
+                    'font' => [
+                        'enabled' => false,
+                    ],
+                    'media_uploader' => [],
+                    'multicolor' => [],
+                    'textshadow' => [
+                        'enabled' => false,
+                    ],
+                    'unitcontrol' => '',
                 ],
-                'media_uploader' => [],
-                'multicolor' => [],
-                'repeatable_field' => [
-                    ['address' => '123 Main St, Cityville, Country' ],
-                    ['address' => '456 Side St, Townsville, Country' ],
-                ],
-                'textshadow' => [
-                    'enabled' => false,
-                ],
-                'unitcontrol' => '',
             ],
             'basic' => [
                 'text' => '',
