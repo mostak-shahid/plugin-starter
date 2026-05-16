@@ -91,6 +91,7 @@ class AdminClass
 				[],
 				// filemtime($asset_path . 'index.css'),
 				time(),
+				'all'
 			);
 		}
 		// wp_enqueue_style($this->plugin_name . 'jquery-ui', PLUGIN_STARTER_URL . 'assets/css/jquery-ui.css', array(), $this->version, 'all');
