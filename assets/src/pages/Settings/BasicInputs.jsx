@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { Row, Col, Skeleton, Typography, Radio } from '@douyinfe/semi-ui';
+import { Row, Col, Skeleton, Typography, Radio, Input, TextArea } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
@@ -57,12 +57,11 @@ const BasicInputs = () => {
                     {
                         !settingsLoading &&                               
                         <Col xs={24} lg={12} xl={10}>
-                            <input
-                                type="text"
+                            <Input
                                 value={formData.text}
                                 onChange={(e) => handleFieldChange('text', e.target.value)}
                                 placeholder={__("Enter text", "plugin-starter")}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
+                                // style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
                             /> 
                         </Col>
                     }
@@ -79,12 +78,12 @@ const BasicInputs = () => {
                     {
                         !settingsLoading &&                               
                         <Col xs={24} lg={12} xl={10}>
-                            <textarea
+                            <TextArea
                                 value={formData.textarea}
                                 onChange={(e) => handleFieldChange('textarea', e.target.value)}
                                 placeholder={__("Enter textarea content", "plugin-starter")}
                                 rows={4}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
+                                // style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
                             />
                         </Col>
                     }

@@ -20,7 +20,7 @@ if (typeof window.wpApiSettings !== 'undefined') {
 }
 
 // import "@douyinfe/semi-ui/dist/css/semi.min.css";
-import "./styles/style.css";
+// import "./styles/style.scss";
 import "./styles/tailwind.css";
 
 const container = document.getElementById("plugin-starter-settings-react-app");

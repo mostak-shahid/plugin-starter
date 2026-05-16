@@ -30,7 +30,6 @@ import Details from './data/details.json';
 const year = new Date().getFullYear();
 const { Header, Footer } = Layout;
 const { Title, Text, Paragraph } = Typography;
-
 export default function App() {
     const [darkmode, setDarkmode] = useState(false);
 
