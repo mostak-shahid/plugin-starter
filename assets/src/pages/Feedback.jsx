@@ -1,94 +1,78 @@
 import { useEffect, useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
-import { Form, Card } from '@douyinfe/semi-ui';
-import { Button, Col, Row, Typography, Toast, Space } from '@douyinfe/semi-ui';
+import { Card, Input, TextArea, Button, Col, Row, Typography, Notification, Space } from '@douyinfe/semi-ui';
 import { IconSend } from '@douyinfe/semi-icons';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import { BoxedLayout } from '../layouts';
 import { PageInfo } from '../components';
 import menuItems from '../data/menu.json';
 const Feedback = () => {    
-    const [initValues] = useState({
+    const [formData, setFormData] = useState({
         subject: '',
+        email: '',
+        phone: '',
         message: '',
     });
-    const [subject, setSubject] = useState('')
-    const [message, setMessage] = useState('')
-    const [processing, setProcessing] = useState(false); // normal, processing, done
+    const [processing, setProcessing] = useState(false);
+
+    const handleFieldChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     const handleForm = async () => {
-        if (subject && message) {
+        console.log(formData);
+        if (formData.subject && formData.message) {
             setProcessing(true);
             try {
                 const result = await apiFetch({
                     path: "/plugin-starter/v1/feedback",
                     method: "POST",
                     data: {
-                        subject,
-                        message
+                        subject: formData.subject,
+                        email: formData.email,
+                        phone: formData.phone,
+                        message: formData.message
                     },
                     headers: {
                         'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce
                     }
                 });
-                // You might want to handle success here
                 console.log(result);
                 if (result.success) {
-                    setSubject('');
-                    setMessage('');
-                    Toast.success({
-						content: __("Feedback send successfully!", "plugin-starter"),
-						duration: 3,
-                        theme: 'light',
-                        left,
-					});
+                    setFormData({
+                        subject: '',
+                        email: '',
+                        phone: '',
+                        message: '',
+                    });
+                    Notification.success({
+                        title: __("Success", "plugin-starter"),
+                        content: __("Feedback send successfully!", "plugin-starter"),
+                        duration: 3,
+                    });
                 }
 
             } catch (error) {
                 console.error("Mail Sending Error:", error);
-                Toast.error({
+                Notification.error({
+                    title: __("Error", "plugin-starter"),
                     content: __("Please try again!", "plugin-starter"),
                     duration: 3,
-                    theme: 'light',
-                    left,
                 });
             } finally {
                 setProcessing(false);
             }
         } else {
-            alert('Subject or Message can\'t be Empty')
+            Notification.warning({
+                title: __("Warning", "plugin-starter"),
+                content: __("Subject or Message can't be Empty", "plugin-starter"),
+                duration: 3,
+            });
         }
-    };
-    
-    const { Title } = Typography; 
-
-    const onSubmit = (values) => {
-        handleSubmit('array', values);
-    };
-    
-    const {
-        Input,
-        InputNumber,
-        Select,
-        Cascader,
-        DatePicker,
-        TimePicker,
-        TextArea,
-        CheckboxGroup,
-        Checkbox,
-        RadioGroup,
-        Radio,
-        Slider,
-        Rating,
-        Switch,
-        TagInput,
-        Section,
-        TreeSelect,
-    } = Form;
-
-    const handleSubmit = (values) => {
-        console.log(values);
-        Toast.info('Submit Success');
     };
 
     return (
@@ -109,46 +93,53 @@ const Feedback = () => {
                         /> */}
                     </Col> 
                     <Col sx={24} lg={12}>
-                        <Form
-                            initValues={initValues}
-                            // style={{ padding: 10, width: '100%' }}
-                            onValueChange={(v) => console.log(v)}
-                            onSubmit={values => handleSubmit(values)}
-                        >
+                        <div>
                             <div className="mb-3">
                                 <Input                                
-                                    field="subject"
                                     label={__("Subject", "plugin-starter")}
-                                    trigger="blur"
-                                    // className="mt-2"
-                                    rules={[
-                                        { required: true, message: 'required Error' },
-                                        { type: 'string', message: 'type error' },
-                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    ]}
+                                    value={formData.subject}
+                                    onChange={(value) => handleFieldChange('subject', value)}
+                                    placeholder={__("Subject", "plugin-starter")}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <Input                                
+                                    label={__("Email", "plugin-starter")}
+                                    value={formData.email}
+                                    onChange={(value) => handleFieldChange('email', value)}
+                                    placeholder={__("Email", "plugin-starter")}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <Input                                
+                                    label={__("Phone", "plugin-starter")}
+                                    value={formData.phone}
+                                    onChange={(value) => handleFieldChange('phone', value)}
+                                    placeholder={__("Phone", "plugin-starter")}
                                 />
                             </div>
                             <div className="mb-3">
                                 <TextArea
-                                    field="message"
                                     label={__("Message", "plugin-starter")}
-                                    // className="mt-2"
-                                    rules={[
-                                        { required: true, message: 'required Error' },
-                                        { type: 'string', message: 'type error' },
-                                        { validator: (rule, value) => value === 'semi', message: 'not semi' }
-                                    ]}
+                                    value={formData.message}
+                                    onChange={(value) => handleFieldChange('message', value)}
+                                    placeholder={__("Message", "plugin-starter")}
+                                    rows={4}
                                 />
                             </div>
                             <Space>
-                                <Button theme="solid" type="primary" htmlType="submit" className="btn-margin-right">
-                                    {__("Submit", "plugin-starter")}
+                                <Button 
+                                    theme="solid" 
+                                    type="primary" 
+                                    onClick={handleForm}
+                                    loading={processing}
+                                >
+                                    {__("Send", "plugin-starter")}
                                 </Button>
-                                <Button theme='solid' type='danger' htmlType="reset">{__("Reset", "plugin-starter")}</Button>
 
                             </Space>
                             
-                        </Form>
+                        </div>
                         {/* <Button 
                             theme="solid"
                             type="primary"

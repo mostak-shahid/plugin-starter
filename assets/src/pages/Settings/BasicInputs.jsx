@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { Form, Row, Col, Skeleton, Typography} from '@douyinfe/semi-ui';
+import { Row, Col, Skeleton, Typography, Radio } from '@douyinfe/semi-ui';
 import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import ActionButtons from "./ActionButtons";
@@ -10,102 +10,111 @@ const BasicInputs = () => {
     const { settings, settingsLoading, handleSubmit, handleReset } = useOutletContext();
     const [hasChanges, setHasChanges] = useState(false);
     const settingsOld = useRef(null);
+    
+    const [formData, setFormData] = useState({
+        text: '',
+        textarea: '',
+        radio: 'radio-1'
+    });
 
-    const onSubmit = (values) => {
-        handleSubmit('basic', values);
+    const onSubmit = () => {
+        handleSubmit('basic', formData);
     };
 
-    const handleValuesChange = (values) => {
-        if (settingsOld.current && settings.basic) {
-            const isChanged = JSON.stringify(values) !== JSON.stringify(settingsOld.current.basic);
-            setHasChanges(isChanged);
-        }
+    const handleFieldChange = (field, value) => {
+        setFormData(prev => {
+            const newFormData = { ...prev, [field]: value };
+            if (settingsOld.current?.basic) {
+                const isChanged = JSON.stringify(newFormData) !== JSON.stringify(settingsOld.current.basic);
+                setHasChanges(isChanged);
+            }
+            return newFormData;
+        });
     };
 
     useEffect(() => {
         if (settings && settings.basic) {
             settingsOld.current = { ...settings };
+            setFormData({
+                text: settings.basic.text || '',
+                textarea: settings.basic.textarea || '',
+                radio: settings.basic.radio || 'radio-1'
+            });
             setHasChanges(false);
         }
     }, [settings]);
 
     return (
         <>
-            {console.log(settings.basic)}
-            {!settingsLoading && settings?.basic && (
-                <Form
-                    initValues={settings.basic}
-                    onSubmit={onSubmit}
-                    onValueChange={handleValuesChange}
-                    labelPosition="left"
-                    labelWidth="150px"
-                >
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Text Input", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
-                                </Skeleton>
-                            </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24} lg={12} xl={10}>
-                                    <Form.Input
-                                        field="text"
-                                        noLabel
-                                        placeholder={__("Enter text", "plugin-starter")}
-                                        style={{ width: '100%' }}
-                                    /> 
-                                </Col>
-                            }
-                        </Row>
-                    </div>
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Text Area", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
-                                </Skeleton>
-                            </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24} lg={12} xl={10}>
-                                    <Form.TextArea
-                                        field="textarea"
-                                        noLabel
-                                        placeholder={__("Enter textarea content", "plugin-starter")}
-                                        rows={4}
-                                        style={{ width: '100%' }}
-                                    />
-                                </Col>
-                            }
-                        </Row>
-                    </div>
-                    <div className="setting-unit py-4">
-                        <Row type="flex" gutter={[24, 24]}>
-                            <Col xs={24} lg={12} xl={14}>
-                                <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
-                                    <Title heading={4}>{__("Radio Group", "plugin-starter")}</Title>
-                                    <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
-                                </Skeleton>
-                            </Col>    
-                            {
-                                !settingsLoading &&                               
-                                <Col xs={24} lg={12} xl={10}>
-                                    <Form.RadioGroup field="radio" noLabel type="button">
-                                        <Form.Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Form.Radio>
-                                        <Form.Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Form.Radio>
-                                        <Form.Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Form.Radio>
-                                    </Form.RadioGroup>
-                                </Col>
-                            }
-                        </Row>
-                    </div>
-                    <ActionButtons hasChanges={hasChanges} section='basic' handleReset={handleReset} />
-                </Form>
-            )}
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Text Input", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <input
+                                type="text"
+                                value={formData.text}
+                                onChange={(e) => handleFieldChange('text', e.target.value)}
+                                placeholder={__("Enter text", "plugin-starter")}
+                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
+                            /> 
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Text Area", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <textarea
+                                value={formData.textarea}
+                                onChange={(e) => handleFieldChange('textarea', e.target.value)}
+                                placeholder={__("Enter textarea content", "plugin-starter")}
+                                rows={4}
+                                style={{ width: '100%', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row type="flex" gutter={[24, 24]}>
+                    <Col xs={24} lg={12} xl={14}>
+                        <Skeleton placeholder={<SkeletonPlaceholder />} loading={settingsLoading} active>
+                            <Title heading={4}>{__("Radio Group", "plugin-starter")}</Title>
+                            <Paragraph>{__("Lorem", "plugin-starter")}</Paragraph>
+                        </Skeleton>
+                    </Col>    
+                    {
+                        !settingsLoading &&                               
+                        <Col xs={24} lg={12} xl={10}>
+                            <Radio.Group
+                                value={formData.radio}
+                                onChange={(e) => handleFieldChange('radio', e.target.value)}
+                                type="button"
+                            >
+                                <Radio value="radio-1">{__('Radio 1', 'plugin-starter')}</Radio>
+                                <Radio value="radio-2">{__('Radio 2', 'plugin-starter')}</Radio>
+                                <Radio value="radio-3">{__('Radio 3', 'plugin-starter')}</Radio>
+                            </Radio.Group>
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <ActionButtons hasChanges={hasChanges} section='basic' handleReset={handleReset} handleSubmit={onSubmit} />
         </>
     );
 };

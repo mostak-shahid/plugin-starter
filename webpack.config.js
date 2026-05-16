@@ -54,12 +54,24 @@ module.exports = {
   },
 
   plugins: [
+    ...defaultConfig.plugins,
     new MiniCssExtractPlugin({
         filename: "[name].css"
     }),
     new SemiPlugin({
         cssLayer: true
     }),
+		new ModuleFederationPlugin({
+			name: "pluginstarter",
+			remotes: {
+				pluginstarterpro: `pluginstarterpro@/wp-content/plugins/plugin-starter-pro/build/pluginstarterprocomponents.js`,
+			},
+			shared: {
+				react: { singleton: true, requiredVersion: false, eager: false },
+				"react-dom": { singleton: true, requiredVersion: false, eager: false },
+				"@wordpress/element": { singleton: true, requiredVersion: false, eager: false },
+			},
+		}),
   ],
 
   mode: "production",

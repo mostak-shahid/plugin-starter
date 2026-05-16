@@ -135,7 +135,7 @@ export default function Dashboard() {
                             <Paragraph>
                                 {__("Faster and exclusive support service designed for VIP assistance and benefits.", "plugin-starter")}                                    
                             </Paragraph>
-                            <Text link={{ href: 'https://semi.design/', target:"_blank" }}>{__("Support", "plugin-starter")}</Text>
+                            <Text link={{ href: 'https://wordpress.org/support/plugin/plugin-starter/', target:"_blank" }}>{__("Support", "plugin-starter")}</Text>
                         </Card>
 
                         <Card 
@@ -145,7 +145,7 @@ export default function Dashboard() {
                             <Paragraph>
                                 {__("Faster and exclusive support service designed for VIP assistance and benefits.", "plugin-starter")}                                    
                             </Paragraph>
-                            <Text link={{ href: 'https://semi.design/', target:"_blank" }}>{__("Help", "plugin-starter")}</Text>
+                            <Text link={{ href: 'https://mostak-shahid.github.io/plugins/plugin-starter.html', target:"_blank" }}>{__("Help", "plugin-starter")}</Text>
                         </Card>
                         
                         <Card 
@@ -155,7 +155,7 @@ export default function Dashboard() {
                             <Paragraph>
                                 {__("Got a question about the plugin, want to share your awesome project or just say hi? Join our wonderful community!", "plugin-starter")}                                    
                             </Paragraph>
-                            <Text link={{ href: 'https://semi.design/', target:"_blank" }}>
+                            <Text link={{ href: 'https://www.facebook.com/mospressbd', target:"_blank" }}>
                                 {__("Join", "plugin-starter")}
                             </Text>                            
                         </Card>
@@ -165,7 +165,7 @@ export default function Dashboard() {
                             <Paragraph>
                                 {__("We love to hear from you, we would appreciate every single review.", "plugin-starter")}                                    
                             </Paragraph>
-                            <Text link={{ href: 'https://semi.design/', target:"_blank" }}>
+                            <Text link={{ href: 'https://wordpress.org/support/plugin/plugin-starter/reviews/', target:"_blank" }}>
                                 {__("Rate", "plugin-starter")}
                             </Text>                            
                         </Card>
