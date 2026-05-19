@@ -9,7 +9,7 @@
  *
  * @link              https://mostak-shahid.github.io/
  * @since             1.0.0
- * @package           PluginStarter
+ * @package           PluginStarter\
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Starter
@@ -25,6 +25,7 @@
  */
 
 defined('ABSPATH') || exit;
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
@@ -36,9 +37,35 @@ define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
 define('PLUGIN_STARTER_MAIN_FILE', __FILE__);
 
-if ( file_exists( PLUGIN_STARTER_PATH . '/vendor/autoload.php' ) ) {
+/**
+ * The core class that is used to define internationalization, 
+ * caching, and others.
+ */
+if (file_exists(PLUGIN_STARTER_PATH . '/vendor/autoload.php')) {
     require_once PLUGIN_STARTER_PATH . '/vendor/autoload.php';
 }
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in src/Core/Activator.php
+ */
+function plugin_starter_activate()
+{
+	\MosPress\PluginStarter\Core\Activator::activate();
+}
 
-// use MosPress\PluginStarter\Plugin;
-// new Plugin();
+/**
+ * The code that runs during plugin deactivation.
+ * This action is documented in src/Core/Deactivator.php
+ */
+function plugin_starter_deactivate()
+{
+	\MosPress\PluginStarter\Core\Deactivator::deactivate();
+}
+
+register_activation_hook(__FILE__, 'plugin_starter_activate');
+register_deactivation_hook(__FILE__, 'plugin_starter_deactivate');
+
+function run_plugin_starter() {
+    new \MosPress\PluginStarter\Plugin();
+}
+add_action('plugins_loaded', 'run_plugin_starter');

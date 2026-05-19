@@ -50,3 +50,83 @@ if want any permission allow it
 3.1. composer require wp-cli/wp-cli --dev
 3.2. composer require wp-cli/i18n-command --dev
 3.3. composer require wp-coding-standards/wpcs --dev -W
+------------------------------------------------------------------------------------------------------------------
+4.1. npm init 
+4.2. npm install @wordpress/scripts --save-dev
+4.3. Modify package.json
+```
+{
+  "name": "plugin-starter",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^32.2.0"
+  }
+}
+```
+
+
+"scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "makepot": "wp i18n make-pot . languages/plugin-starter.pot --skip-js --exclude=src,vendor,node_modules --merge=languages/js.pot",
+}
+------------------------------------------------------------------------------------------------------------------
+5.1. npm install tailwindcss @tailwindcss/postcss postcss autoprefixer --save-dev
+5.2. Create the postcss.config.js file
+```
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+    'autoprefixer': {},
+  },
+};
+```
+5.3. Create index.css file inside src folder
+```
+@import "tailwindcss";
+
+/* 
+ * CRITICAL: Scope Tailwind's base reset styles to your specific 
+ * settings page container to avoid messing up the native WP admin panel layout.
+ */
+@layer base {
+  #plugin-starter-settings-react-app {
+    @tailwind base;
+  }
+}
+
+```
+5.4. include this file to index.js
+5.5. include build/index.css to settings page
+------------------------------------------------------------------------------------------------------------------
+6.1. Create webpack.config.js, other wise npm start will countinuously generating the build folder content
+```
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+
+module.exports = {
+	...defaultConfig,
+	watchOptions: {
+		...defaultConfig.watchOptions,
+		// Tell Webpack to completely ignore these paths for change tracking
+		ignored: [
+			'**/build/**',
+			'**/node_modules/**',
+			'**/.git/**'
+		],
+		// Optional: Gives a slight delay before triggering a build 
+		// to allow multiple quick file saves to bundle together
+		aggregateTimeout: 300,
+	},
+};
+
+```
+
+
