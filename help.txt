@@ -1,0 +1,52 @@
+1. Start the plugin using the code below in plugins folder
+wp scaffold plugin plugin-starter
+
+1.1. Update the main plugin file
+------------------------------------------------------------------------------------------------------------------
+2.0. You can modify your composer.json file from the command line (CMD) using the composer config command.Run the following commands one by one in your terminal:cmd:: Set basic package information
+composer config name "mospress/plugin-starter"
+composer config description "Plugin boilerplate for WordPress"
+composer config type "wordpress-plugin"
+composer config license "GPLv2"
+composer config minimum-stability "stable"
+
+2.1. php version works better
+php -r '
+$oldFile = "composer.json";
+$oldData = file_exists($oldFile) ? json_decode(file_get_contents($oldFile), true) : [];
+
+$newData = [
+    "name" => "mospress/plugin-starter",
+    "description" => "Plugin boilerplate for WordPress",
+    "type" => "wordpress-plugin",
+    "license" => "GPLv2",
+    "autoload" => [
+        "psr-4" => [
+            "MosPress\\PluginStarter\\" => "includes/"
+        ]
+    ],
+    "authors" => [
+        [
+            "name" => "Md. Mostak Shahid",
+            "email" => "mostak.shahid@gmail.com"
+        ]
+    ],
+    "minimum-stability" => "stable"
+];
+
+// Merges arrays while keeping new data at the top and preserving existing data
+$mergedData = $newData + $oldData;
+
+file_put_contents($oldFile, json_encode($mergedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+'
+------------------------------------------------------------------------------------------------------------------
+OR delete the composer file and start with a new one
+composer init --name="mospress/plugin-starter" --description="Plugin boilerplate for WordPress" --type="wordpress-plugin" --license="GPLv2" --stability="stable" --author="Md. Mostak Shahid <mostak.shahid@gmail.com>" --autoload="psr-4:MosPress\\\\PluginStarter\\\\:includes/" --require-dev="wp-cli/i18n-command:^2" --require-dev="wp-cli/wp-cli:^2.12" --require-dev="dealerdirect/phpcodesniffer-composer-installer:^1.2" --require-dev="wp-coding-standards/wpcs:^3.3" --no-interaction
+
+------------------------------------------------------------------------------------------------------------------
+3.0. composer require dealerdirect/phpcodesniffer-composer-installer --dev
+if want any permission allow it
+
+3.1. composer require wp-cli/wp-cli --dev
+3.2. composer require wp-cli/i18n-command --dev
+3.3. composer require wp-coding-standards/wpcs --dev -W
