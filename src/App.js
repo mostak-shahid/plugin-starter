@@ -1,29 +1,70 @@
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
+import Home from './components/Home';
+import Settings from './components/Settings';
+import Feedback from './components/Feedback';
 
 export default function App() {
-    const [text, setText] = useState('Hello Tailwind');
+    // 1. Initialize state by checking the existing URL hash, defaulting to 'home'
+    const [currentTab, setCurrentTab] = useState(() => {
+        const hash = window.location.hash.replace('#', '');
+        return ['home', 'settings', 'feedback'].includes(hash) ? hash : 'home';
+    });
+
+    // 2. Listen for URL hash changes (handles browser Back/Forward buttons smoothly)
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'settings', 'feedback'].includes(hash)) {
+                setCurrentTab(hash);
+            }
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    // 3. Helper to determine which view component to inject
+    const renderContent = () => {
+        switch (currentTab) {
+            case 'settings': return <Settings />;
+            case 'feedback': return <Feedback />;
+            case 'home':
+            default:
+                return <Home />;
+        }
+    };
 
     return (
-        <>        
-            <div className="p-6 max-w-xl mx-auto bg-white rounded-xl shadow-md my-5">
-                <h1 className="text-2xl font-bold text-gray-900 mb-4">Plugin Settings</h1>
-                <input 
-                    type="text" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    value={text} 
-                    onChange={(e) => setText(e.target.value)} 
-                />
-                <p className="mt-4 text-sm text-gray-600">Status: <span className="font-semibold text-indigo-600">{text}</span></p>
-            </div>
-            <div className='grid grid-cols-3 gap-4'>
-                <div className="p-4 bg-blue-100 rounded-lg text-center">Column 1</div>
-                <div className="p-4 bg-green-100 rounded-lg text-center">Column 2</div>
-                <div className="p-4 bg-yellow-100 rounded-lg text-center">Column 3</div>
-                <div className="col-span-2 p-4 bg-purple-100 rounded-lg text-center">Column 4</div>
-                <div className="p-4 bg-pink-100 rounded-lg text-center">Column 5</div>
-                <div className="p-4 bg-gray-100 rounded-lg text-center">Column 6</div>
-                <div className="col-span-2 p-4 bg-red-100 rounded-lg text-center">Column 7</div>          
-            </div>
-        </>
+        <div className="max-w-4xl mx-auto my-6 p-4">
+            {/* Main Navigation Header */}
+            <header className="border-b border-gray-200 pb-4 mb-6">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">My Custom Dashboard</h1>
+                <nav className="flex space-x-4">
+                    <a 
+                        href="#home" 
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'home' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                    >
+                        Home
+                    </a>
+                    <a 
+                        href="#settings" 
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'settings' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                    >
+                        Settings
+                    </a>
+                    <a 
+                        href="#feedback" 
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'feedback' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                    >
+                        Feedback
+                    </a>
+                </nav>
+            </header>
+
+            {/* Dynamic Dashboard Viewport */}
+            <main>
+                {renderContent()}
+            </main>
+        </div>
     );
 }
