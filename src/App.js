@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { Card, Typography } from '@douyinfe/semi-ui';
+import { Card, Typography, Col, Row } from '@douyinfe/semi-ui';
 import Home from './components/Home';
 import Settings from './components/Settings';
 import Feedback from './components/Feedback';
@@ -36,7 +36,7 @@ export default function App() {
     };
 
     return (
-        <div>
+        <div className="container">
             {/* Main Navigation Header */}
             <header className="border-b border-gray-200 pb-4 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">My Custom Dashboard</h1>
@@ -61,6 +61,19 @@ export default function App() {
                     </a>
                 </nav>
             </header>
+            <div className="grid">
+                <Row gutter={{ xs: 16, sm: 16, md: 16, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={2} sm={4} md={6} lg={8} xl={10}><div className="col-content">Col</div></Col>
+                    <Col xs={20} sm={16} md={12} lg={8} xl={4}><div className="col-content">Col</div></Col>
+                    <Col xs={2} sm={4} md={6} lg={8} xl={10}><div className="col-content">Col</div></Col>
+                </Row>
+                <br/>
+                <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}><div className="col-content">Col</div></Col>
+                    <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}><div className="col-content">Col</div></Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}><div className="col-content">Col</div></Col>
+                </Row>
+            </div>
             <Card 
                 title='Semi Design' 
                 style={{ maxWidth: 360 }}
