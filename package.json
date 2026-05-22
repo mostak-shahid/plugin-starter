@@ -6,10 +6,10 @@
     "start": "wp-scripts start"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.0",
-    "@wordpress/scripts": "^19.2.4",
-    "autoprefixer": "^10.5.0",
-    "postcss": "^8.5.15",
-    "tailwindcss": "^4.3.0"
+    "@wordpress/scripts": "^32.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "react-bootstrap": "^2.10.10"
   }
 }

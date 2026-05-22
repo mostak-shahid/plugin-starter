@@ -35,26 +35,26 @@ export default function App() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto my-6 p-4">
+        <div className="container">
             {/* Main Navigation Header */}
             <header className="border-b border-gray-200 pb-4 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">My Custom Dashboard</h1>
                 <nav className="flex space-x-4">
                     <a 
                         href="#home" 
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'home' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                        className={`link-underline link-underline-opacity-0 p-2 ${currentTab === 'home' ? 'text-bg-primary' : 'text-bg-secondary'}`}
                     >
                         Home
                     </a>
                     <a 
                         href="#settings" 
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'settings' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                        className={`link-underline link-underline-opacity-0 p-2 ${currentTab === 'settings' ? 'text-bg-primary' : 'text-bg-secondary'}`}
                     >
                         Settings
                     </a>
                     <a 
                         href="#feedback" 
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${currentTab === 'feedback' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                        className={`link-underline link-underline-opacity-0 p-2 ${currentTab === 'feedback' ? 'text-bg-primary' : 'text-bg-secondary'}`}
                     >
                         Feedback
                     </a>
