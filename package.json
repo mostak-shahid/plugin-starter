@@ -9,7 +9,6 @@
     "@wordpress/scripts": "^32.2.0"
   },
   "dependencies": {
-    "bootstrap": "^5.3.8",
-    "react-bootstrap": "^2.10.10"
+    "@douyinfe/semi-ui": "^2.99.1"
   }
 }

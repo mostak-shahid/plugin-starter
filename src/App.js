@@ -1,8 +1,9 @@
 import { useState, useEffect } from '@wordpress/element';
+import { Card, Typography } from '@douyinfe/semi-ui';
 import Home from './components/Home';
 import Settings from './components/Settings';
 import Feedback from './components/Feedback';
-
+const { Text } = Typography;
 export default function App() {
     // 1. Initialize state by checking the existing URL hash, defaulting to 'home'
     const [currentTab, setCurrentTab] = useState(() => {
@@ -35,7 +36,7 @@ export default function App() {
     };
 
     return (
-        <div className="container">
+        <div>
             {/* Main Navigation Header */}
             <header className="border-b border-gray-200 pb-4 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">My Custom Dashboard</h1>
@@ -60,6 +61,17 @@ export default function App() {
                     </a>
                 </nav>
             </header>
+            <Card 
+                title='Semi Design' 
+                style={{ maxWidth: 360 }}
+                headerExtraContent={
+                    <Text link>
+                        More
+                    </Text>
+                }
+            >
+                Semi Design is a design system developed and maintained by IES-FE & IES-UED. The design system includes a design language and a set of reusable front-end components, helping designers and developers to more easily create high-quality, consistent user experience, design-compliant Web applications.
+            </Card>
 
             {/* Dynamic Dashboard Viewport */}
             <main>

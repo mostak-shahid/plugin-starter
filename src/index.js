@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'; // Tells Webpack to handle the CSS compilation
 import { render } from '@wordpress/element';
 import App from './App';
