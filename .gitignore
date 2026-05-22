@@ -10,3 +10,4 @@ vendor/
 *.zip
 /build
 package-lock.json
+build/
