@@ -29,8 +29,8 @@ class Action_Hook
         add_action('current_screen', [$this, 'plugin_starter_hide_admin_notices']);
         add_action('admin_head', [$this, 'plugin_starter_option_form_submit']);
 				
-		add_action('admin_enqueue_scripts', [$this, 'plugin_starter_dashboard_scripts']);
-		add_action('admin_enqueue_scripts', [$this, 'plugin_starter_dashboard_scripts']);
+		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
+		add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts']);
         add_action('upgrader_process_complete', [$this, 'plugin_starter_update_completed'], 10, 2);
 		
     }
@@ -102,6 +102,56 @@ class Action_Hook
 			PLUGIN_STARTER_URL . 'build/index.css',
 			array(),
 			$asset_file['version']
+		);
+
+	}
+	public function admin_enqueue_scripts($hook)
+	{
+		wp_enqueue_script('jquery');
+		wp_enqueue_media();
+
+		wp_enqueue_script('plugin-starter-admin-ajax', PLUGIN_STARTER_URL . 'assets/js/admin-ajax.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
+		wp_enqueue_script('plugin-starter-admin-script', PLUGIN_STARTER_URL . 'assets/js/admin.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
+		$ajax_params = [
+			'admin_url' => admin_url(),
+			'home_url' => home_url(),
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'image_url' => PLUGIN_STARTER_URL . 'assets/images/',
+			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
+			'api_nonce' => esc_attr(wp_create_nonce('wp_rest')),
+			'get_current_user_id' => get_current_user_id(),
+			'root'  => esc_url_raw( rest_url() ),
+    		'nonce' => wp_create_nonce('wp_rest'),
+			// 'default_colors' => plugin_starter_get_default_colors(),
+			// 'default_gradients' => plugin_starter_get_default_gradients(),
+			'proURL' => 'https://mostak-shahid.github.io/plugins/plugin-starter-pro.html',
+			// 'isPro' => is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' ) ? true : false,
+			// 'install_plugin_wpnonce' => esc_attr(wp_create_nonce('updates')),
+		];
+		if (is_plugin_active( 'plugin-starter-pro/plugin-starter-pro.php' )) {
+			$plugins = get_plugins();
+			$version = $plugins['plugin-starter-pro/plugin-starter-pro.php']['Version'];
+			$ajax_params['isPro'] = true;
+			$ajax_params['proVersion'] = $version;
+		}
+		wp_localize_script('plugin-starter-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
+
+		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_style('plugin-starter-admin', PLUGIN_STARTER_URL . 'assets/css/admin.css', array(), PLUGIN_STARTER_VERSION, 'all');
+
+	}
+	public function wp_enqueue_scripts($hook)
+	{
+		wp_enqueue_script(
+			'plugin-starter-react-app',
+			PLUGIN_STARTER_URL . 'build/index.js',
+		);
+
+		// NEW: Enqueue Compiled Tailwind CSS
+		wp_enqueue_style(
+			'my-plugin-tailwind',
+			PLUGIN_STARTER_URL . 'build/index.css',
+			array(),
 		);
 
 	}

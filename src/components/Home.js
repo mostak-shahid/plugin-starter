@@ -1,8 +1,17 @@
+import {Card, Button} from 'react-bootstrap';
 export default function Home() {
-    return (
-        <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Welcome Dashboard</h2>
-            <p className="text-gray-600">This is the homepage of your custom React plugin admin layout.</p>
-        </div>
+    return (        
+        <Card>
+            <Card.Body>
+                <Card.Title>Welcome Dashboard</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                <Card.Text>
+                Some quick example text to build on the card title and make up the
+                bulk of the card's content.
+                </Card.Text>
+                <Card.Link href="#">Card Link</Card.Link>
+                <Card.Link href="#">Another Link</Card.Link>
+            </Card.Body>
+        </Card>
     );
 }

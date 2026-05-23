@@ -1,3 +1,11 @@
 .plugin-starter-settings-template #wpcontent {
   padding-left: 0;
+}
+.plugin-starter-settings-template #wpcontent .card {
+  max-width: unset;
+  min-width: unset;
+  margin-top: 0;
+}
+.plugin-starter-settings-template #wpfooter {
+  display: none;
 }/*# sourceMappingURL=admin.css.map */
