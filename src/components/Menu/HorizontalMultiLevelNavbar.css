@@ -1,0 +1,37 @@
+.plugin-starter-navbar .multi-level-dropdown {
+  position: relative;
+}
+.plugin-starter-navbar .dropdown-submenu .dropdown-toggle::after {
+  float: right;
+  margin-top: 10px;
+}
+.plugin-starter-navbar {
+  /* =====================================
+     Desktop
+  ===================================== */
+}
+@media (min-width: 992px) {
+  .plugin-starter-navbar .dropdown-submenu > .dropdown-menu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+  }
+}
+.plugin-starter-navbar {
+  /* =====================================
+     Mobile / Tablet
+  ===================================== */
+}
+@media (max-width: 991px) {
+  .plugin-starter-navbar .dropdown-submenu > .dropdown-menu {
+    position: static !important;
+    transform: none !important;
+    margin-left: 15px;
+    border: none;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .plugin-starter-navbar .dropdown-menu {
+    width: 100%;
+  }
+}/*# sourceMappingURL=HorizontalMultiLevelNavbar.css.map */

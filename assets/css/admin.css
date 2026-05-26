@@ -6,6 +6,13 @@
   min-width: unset;
   margin-top: 0;
 }
+.plugin-starter-settings-template #wpbody-content {
+  padding-bottom: 0;
+}
 .plugin-starter-settings-template #wpfooter {
   display: none;
+}
+.plugin-starter-settings-template ul#adminmenu a.wp-has-current-submenu:after,
+.plugin-starter-settings-template ul#adminmenu > li.current > a.current:after {
+  border-right-color: var(--bs-body-bg);
 }/*# sourceMappingURL=admin.css.map */

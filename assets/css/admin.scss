@@ -7,7 +7,14 @@
             margin-top: 0;
         }
     }
+    #wpbody-content {
+        padding-bottom: 0;
+    }
     #wpfooter {
         display: none;
+    }
+    ul#adminmenu a.wp-has-current-submenu:after, 
+    ul#adminmenu>li.current>a.current:after {
+        border-right-color: var(--bs-body-bg);
     }
 }

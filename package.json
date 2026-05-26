@@ -6,10 +6,11 @@
     "start": "wp-scripts start"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^32.2.0"
+    "@wordpress/scripts": "^19.2.4"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "react-bootstrap": "^2.10.10"
+    "react-bootstrap": "^2.10.10",
+    "react-router-dom": "^7.15.1"
   }
 }
