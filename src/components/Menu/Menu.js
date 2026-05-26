@@ -195,7 +195,7 @@ function HorizontalDropdown({
  * =========================================================
  */
 
-export function HorizontalMultiLevelNavbar({MenuItems}) {
+export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, footerContent = {}}) {
 
     const location = useLocation();
 
@@ -213,8 +213,11 @@ export function HorizontalMultiLevelNavbar({MenuItems}) {
 
                 <div className="container-fluid">
 
-                    <Navbar.Brand href="/">
-                        My App
+                    <Navbar.Brand onClick={() => navigate('/')} className="d-flex align-items-center gap-2 cursor-pointer">
+                        {headerContent.logo}
+                        <span style={{ fontWeight: 600, fontSize: '1.25rem' }}>
+                            {headerContent.text}
+                        </span>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="main-navbar" />
@@ -247,12 +250,12 @@ export function HorizontalMultiLevelNavbar({MenuItems}) {
 
                                         <Nav.Link
                                             key={item.itemKey}
-                                            href={item.url}
+                                            href={pathPrefix + item.url}
                                             className={active ? 'current' : ''}
                                         >
 
-                                            {item.icon && `${item.icon} `}
-                                            {item.text}
+                                            {item.icon && <span>{item.icon}</span> }
+                                            <span>{item.text}</span>
 
                                         </Nav.Link>
 
@@ -279,6 +282,9 @@ export function HorizontalMultiLevelNavbar({MenuItems}) {
                             })}
 
                         </Nav>
+                        <Nav>
+                            {footerContent}
+                        </Nav>
 
                     </Navbar.Collapse>
 
@@ -301,7 +307,10 @@ export function HorizontalMultiLevelNavbar({MenuItems}) {
 function VerticalMenuItem({
     item,
     depth = 0,
-    currentPath
+    currentPath,
+    openMenus,
+    setOpenMenus,
+    parentKey = '',
 }) {
 
     const active = isMenuActive(item, currentPath);
@@ -309,18 +318,97 @@ function VerticalMenuItem({
     const hasActive = hasActiveChild(item, currentPath);
 
     /**
-     * Auto Open Active Parent
+     * Unique Menu Key
      */
 
-    const [open, setOpen] = useState(hasActive);
+    const menuKey = parentKey
+        ? `${parentKey}-${item.itemKey}`
+        : item.itemKey;
+
+    /**
+     * Open State
+     */
+
+    const open = openMenus[depth] === menuKey;
+
+    /**
+     * Auto open active parent/grandparent
+     */
 
     useEffect(() => {
 
         if (hasActive) {
-            setOpen(true);
+
+            setOpenMenus((prev) => ({
+                ...prev,
+                [depth]: menuKey,
+            }));
+
         }
 
     }, [hasActive]);
+
+    /**
+     * Toggle Accordion
+     */
+
+    const handleToggle = () => {
+
+        setOpenMenus((prev) => {
+
+            /**
+             * Close current level if already open
+             */
+
+            if (prev[depth] === menuKey) {
+
+                const updated = { ...prev };
+
+                delete updated[depth];
+
+                /**
+                 * Remove child levels
+                 */
+
+                Object.keys(updated).forEach((key) => {
+
+                    if (Number(key) > depth) {
+                        delete updated[key];
+                    }
+
+                });
+
+                return updated;
+
+            }
+
+            /**
+             * Open current menu
+             * Close sibling menus
+             */
+
+            const updated = {
+                ...prev,
+                [depth]: menuKey,
+            };
+
+            /**
+             * Remove child levels
+             */
+
+            Object.keys(updated).forEach((key) => {
+
+                if (Number(key) > depth) {
+                    delete updated[key];
+                }
+
+            });
+
+            return updated;
+
+        });
+
+    };
 
     /**
      * -----------------------------------------
@@ -343,8 +431,8 @@ function VerticalMenuItem({
                 }}
             >
 
-                {item.icon && `${item.icon} `}
-                {item.text}
+                {item.icon && <span>{item.icon}</span> }
+                <span>{item.text}</span>
 
             </Nav.Link>
 
@@ -363,20 +451,23 @@ function VerticalMenuItem({
         <div
             className={`
                 vertical-menu-wrapper
-                ${hasActive ? 'wp-has-current-submenu wp-menu-open' : ''}
+                ${open || hasActive
+                    ? 'wp-has-current-submenu wp-menu-open'
+                    : ''
+                }
             `}
         >
 
             <div
-                className="vertical-menu-parent"
-                onClick={() => setOpen(!open)}
+                className="vertical-menu-parent nav-link"
+                onClick={handleToggle}
                 style={{
                     paddingLeft: `${depth * 20 + 16}px`,
                 }}
             >
 
                 <span>
-                    {item.icon && `${item.icon} `}
+                    {item.icon && <span>{item.icon}</span> }
                     {item.text}
                 </span>
 
@@ -397,6 +488,9 @@ function VerticalMenuItem({
                             item={child}
                             depth={depth + 1}
                             currentPath={currentPath}
+                            openMenus={openMenus}
+                            setOpenMenus={setOpenMenus}
+                            parentKey={menuKey}
                         />
 
                     ))}
@@ -417,11 +511,17 @@ function VerticalMenuItem({
  * =========================================================
  */
 
-export function VerticalMultiLevelNavbar({MenuItems}) {
+export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footerContent = {} }) {
 
     const location = useLocation();
 
     const currentPath = location.pathname;
+
+    /**
+     * Accordion State
+     */
+
+    const [openMenus, setOpenMenus] = useState({});
 
     return (
 
@@ -430,24 +530,34 @@ export function VerticalMultiLevelNavbar({MenuItems}) {
             style={{ backgroundColor: 'var(--bs-body-bg)' }}
         >
 
-            <Navbar.Brand className="px-3 py-3">
-                My App
+            <Navbar.Brand onClick={() => navigate('/')} className="d-flex align-items-center gap-2 cursor-pointer">
+                {headerContent.logo}
+                <span style={{ fontWeight: 600, fontSize: '1.25rem' }}>
+                    {headerContent.text}
+                </span>
             </Navbar.Brand>
+            <>
+                <Nav className="flex-column w-100">
 
-            <Nav className="flex-column w-100">
+                    {MenuItems.map((item) => (
 
-                {MenuItems.map((item) => (
+                        <VerticalMenuItem
+                            key={item.itemKey}
+                            item={item}
+                            currentPath={currentPath}
+                            openMenus={openMenus}
+                            setOpenMenus={setOpenMenus}
+                        />
 
-                    <VerticalMenuItem
-                        key={item.itemKey}
-                        item={item}
-                        currentPath={currentPath}
-                    />
+                    ))}
 
-                ))}
-
-            </Nav>
-
+                </Nav>
+                {Object.keys(footerContent).length > 0 && (
+                    <Nav>
+                        {footerContent}
+                    </Nav>
+                )}
+             </>
         </Navbar>
 
     );

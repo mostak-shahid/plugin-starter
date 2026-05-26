@@ -37,4 +37,10 @@
   .plugin-starter-navbar.plugin-starter-horizontal-navbar .dropdown-menu {
     width: 100%;
   }
+}
+.plugin-starter-navbar.plugin-starter-vertical-navbar .vertical-menu-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
 }/*# sourceMappingURL=Menu.css.map */

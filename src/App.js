@@ -4,6 +4,11 @@ import apiFetch from "@wordpress/api-fetch";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import {Alert, Button, Container, Row, Col, Badge} from 'react-bootstrap';
 
+// Import the FontAwesomeIcon component
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Import the specific solid home icon
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+
 import { HorizontalMenuControl } from "./components";
 import {useSettingsBodyHeight} from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
@@ -13,7 +18,7 @@ import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from './components/Menu/Menu';
 
 const HorizontalMenuItems = [
-    { itemKey: 'dashboard', text: 'Dashboard', icon: '🏠', url: '/' },
+    { itemKey: 'dashboard', text: 'Dashboard', icon: <FontAwesomeIcon icon={faHome} />, url: '/' },
     { 
         itemKey: 'layouts', 
         text: 'Layouts', 
@@ -147,15 +152,65 @@ export default function App() {
                     )}
                 />
             </header>
-            <HorizontalMultiLevelNavbar MenuItems={HorizontalMenuItems} />
+            <HorizontalMultiLevelNavbar 
+                MenuItems={HorizontalMenuItems} 
+                headerContent={{
+                    logo: <Logo width={36} height={36} />,
+                    text: Details?.name,
+                }}
+                footerContent={(
+                    <div className="d-flex align-items-center gap-2">
+                        <Button 
+                            variant="outline-secondary" 
+                            size="sm"
+                            aria-label="Mode" 
+                            onClick={switchingMode}
+                        >
+                            {darkmode ? '☀️' : '🌙'}
+                        </Button>
+                        <Button 
+                            variant="outline-secondary" 
+                            size="sm"
+                            aria-label={__("Documentation", 'plugin-starter')} 
+                            onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/', '_blank')}
+                        >
+                            📄
+                        </Button>
+                        <Button 
+                            variant="outline-secondary" 
+                            size="sm"
+                            aria-label={__("Help Center", 'plugin-starter')} 
+                            onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/reviews/', '_blank')}
+                        >
+                            ⭐
+                        </Button>
+                        <div className="position-relative">
+                            <Button 
+                                variant="outline-secondary" 
+                                size="sm"
+                                // onClick={() => setNewsVisible(true)} aria-label="News"
+                            >
+                                🔔
+                            </Button>
+                            {/* {newsItems.length > 0 && (
+                                <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                                    {newsItems.length}
+                                </Badge>
+                            )} */}
+                        </div>
+                    </div>
+                )}
+            />
             {/* Dynamic Dashboard Viewport */}
             <main className="plugin-starter-content p-2 p-xl-4" style={{ minHeight: minHeight ? `${minHeight}px` : 'auto' }}>
-                <Container>
+                <Container fluid={true}>
                     <Row className="align-items-center mb-4">
-                        <Col>
-                            <VerticalMultiLevelNavbar MenuItems={HorizontalMenuItems} />
+                        <Col lg={3}>
+                            <VerticalMultiLevelNavbar 
+                                MenuItems={HorizontalMenuItems}
+                            />
                         </Col>
-                        <Col className="text-end">
+                        <Col lg={9} className="text-end">
                             <Button variant="primary" onClick={() => alert('This could link to a quick action or feature!')}>
                                 {__('Quick Action', 'plugin-starter')}
                             </Button>
