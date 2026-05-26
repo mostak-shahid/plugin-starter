@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import './HorizontalMultiLevelNavbar.css';
 
+const currentPath = '/layouts/boxed/right-sidebar';
 /**
  * =========================================
  * Multi Level Dropdown Component

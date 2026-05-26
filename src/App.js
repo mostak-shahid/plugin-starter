@@ -8,8 +8,9 @@ import { HorizontalMenuControl } from "./components";
 import {useSettingsBodyHeight} from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
-import HorizontalMultiLevelNavbar from './components/Menu/HorizontalMultiLevelNavbar';
-import VerticalMultiLevelNavbar from './components/Menu/VerticalMultiLevelNavbar';
+// import HorizontalMultiLevelNavbar from './components/Menu/HorizontalMultiLevelNavbar';
+// import VerticalMultiLevelNavbar from './components/Menu/VerticalMultiLevelNavbar';
+import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from './components/Menu/Menu';
 
 const HorizontalMenuItems = [
     { itemKey: 'dashboard', text: 'Dashboard', icon: '🏠', url: '/' },
