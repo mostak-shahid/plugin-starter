@@ -2,6 +2,10 @@
   --wp-active-color: #3858e9;
 }
 
+.plugin-starter-settings-template #wpadminbar,
+.plugin-starter-settings-template #adminmenuwrap {
+  z-index: 999;
+}
 .plugin-starter-settings-template #wpcontent {
   padding-left: 0;
 }

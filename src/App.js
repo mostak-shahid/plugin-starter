@@ -14,7 +14,7 @@ import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
 
-import { Dashboard } from './pages';
+import { Dashboard, Feedback, FreeVsPro } from './pages';
 import NotFound from './NotFound'
 
 import {
@@ -61,7 +61,6 @@ const HorizontalMenuItems = [
 const year = new Date().getFullYear();
 export default function App() {
     const [darkmode, setDarkmode] = useState(false);
-    const [newsItems, setNewsItems] = useState([12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 81, 82, 83, 84, 85, 86, 87]); // Example news items,
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -98,6 +97,35 @@ export default function App() {
             console.error("Error fetching settings data:", error);
         }
     };
+
+
+    const [ProPluginNews, setProPluginNews] = useState(null);
+    useEffect(() => {
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginNews) {
+            setProPluginNews(() => window.PluginStarterProComponents.PluginNews);
+        }
+        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
+    }, []);
+    const [newsItems, setNewsItems] = useState([]);
+    const [newsVisible, setNewsVisible] = useState(false);
+    if (plugin_starter_ajax_obj?.isPro === '1') {
+        useEffect(() => {
+            const fetchNews = async () => {
+                try {
+                    // Sends data directly to the native WordPress custom REST API endpoint
+                    const response = await apiFetch({
+                        path: '/plugin-starter-pro/v1/news',
+                        method: 'GET'
+                    });
+                    setNewsItems(response);
+                } catch (error) {
+                    console.error("Error fetching news:", error);
+                }
+            };
+            fetchNews();
+        }, []); 
+    }
 
     return (
         <div className="plugin-starter-settings-container">
@@ -144,26 +172,30 @@ export default function App() {
                             >
                                 <FontAwesomeIcon icon={faStar} />
                             </Button>
-                            <div className="position-relative">
-                                <Button 
-                                    variant="outline-secondary" 
-                                    size="sm"
-                                    // onClick={() => setNewsVisible(true)} aria-label="News"
-                                >
-                                    <FontAwesomeIcon icon={faBell} />
-                                </Button>
-                                {newsItems.length > 0 && (
-                                    <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                        {newsItems.length > 99 ? '99+' : newsItems.length}
-                                    </Badge>
-                                )}
-                            </div>
+                            {plugin_starter_ajax_obj?.isPro &&
+                                <div className="position-relative">
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        size="sm"
+                                        onClick={() => setNewsVisible(true)} aria-label="News"
+                                    >
+                                        <FontAwesomeIcon icon={faBell} />
+                                    </Button>
+                                    {newsItems.length > 0 && (
+                                        <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                                            {newsItems.length > 99 ? '99+' : newsItems.length}
+                                        </Badge>
+                                    )}
+                                </div>
+                            }
                         </div>
                     )}
                 />
             </header>
             {/* Dynamic Dashboard Viewport */}
             <main className="plugin-starter-content">
+                {ProPluginNews && <ProPluginNews showOffcanvas={newsVisible} setShowOffcanvas={setNewsVisible} />}
+
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
 
@@ -176,6 +208,8 @@ export default function App() {
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
                     </Route>
+                    <Route path="/feedback" element={<Feedback />} />
+                    <Route path="/free-vs-pro" element={<FreeVsPro />} />
                     {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>

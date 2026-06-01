@@ -8,9 +8,8 @@ import Dashboard from './Dashboard';
 // import Logs from './Settings/Logs/Logs';
 // import LogsCharts from './Settings/Logs/LogsCharts';
 // import LogsTable from './Settings/Logs/LogsTable';
-// import Feedback from './Feedback';
-// import FreeVsPro from './FreeVsPro';
-// import NotFound from './NotFound';
+import Feedback from './Feedback';
+import FreeVsPro from './FreeVsPro';
 //// layouts
 // import About from './About';
 // import Contact from './Contact';
@@ -33,9 +32,8 @@ export {
     // Logs,
     // LogsCharts,
     // LogsTable,
-    // Feedback,
-    // FreeVsPro,
-    // NotFound,
+    Feedback,
+    FreeVsPro,
     // //Delete these
     // About,
     // Contact,
