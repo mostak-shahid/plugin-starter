@@ -8,6 +8,17 @@
   float: right;
   margin-top: 10px;
 }
+.plugin-starter-navbar.plugin-starter-horizontal-navbar .header-icon-menu button {
+  padding: 0 !important;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+.plugin-starter-navbar.plugin-starter-horizontal-navbar .header-icon-menu button svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 .plugin-starter-navbar.plugin-starter-horizontal-navbar {
   /* =====================================
              Desktop
@@ -43,4 +54,16 @@
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+}
+.plugin-starter-navbar .nav-link .nav-icon {
+  display: inline-block;
+  margin-right: 5px;
+}
+.plugin-starter-navbar .nav-link.current, .plugin-starter-navbar .nav-link.active {
+  background-color: var(--wp-active-color);
+  color: #fff;
+}
+.plugin-starter-navbar .wp-has-current-submenu > .dropdown > .nav-link, .plugin-starter-navbar .wp-has-current-submenu > .dropdown-submenu > .nav-link {
+  background-color: var(--wp-active-color);
+  color: #fff;
 }/*# sourceMappingURL=Menu.css.map */

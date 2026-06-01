@@ -9,6 +9,19 @@
             float: right;
             margin-top: 10px;
         }
+        .header-icon-menu{
+            button {
+                padding: 0!important;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    display: inline-block;
+                }
+            }
+        }
 
         /* =====================================
                    Desktop
@@ -66,4 +79,27 @@
             cursor: pointer;
         }
     }
+    .nav-link {
+        .nav-icon {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        &.current,
+        &.active {
+            background-color: var(--wp-active-color);
+            color: #fff;
+        }
+        
+    }
+    .wp-has-current-submenu {
+        & > .dropdown,
+        & > .dropdown-submenu {
+            & > .nav-link {
+                background-color: var(--wp-active-color);
+                color: #fff;
+            }
+        }
+    }
+    
 }

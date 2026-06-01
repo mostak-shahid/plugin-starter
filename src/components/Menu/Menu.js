@@ -141,8 +141,8 @@ function HorizontalDropdown({
 
                 title={
                     <>
-                        {item.icon && `${item.icon} `}
-                        {item.text}
+                        {item.icon && <span className='nav-icon'>{item.icon}</span>}
+                        <span className='nav-text'>{item.text}</span>
                     </>
                 }
 
@@ -207,7 +207,7 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
 
             <Navbar
                 expand="lg"
-                className="plugin-starter-horizontal-navbar" 
+                className="plugin-starter-navbar plugin-starter-horizontal-navbar" 
                 style={{ backgroundColor: 'var(--bs-body-bg)' }}
             >
 
@@ -254,8 +254,8 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
                                             className={active ? 'current' : ''}
                                         >
 
-                                            {item.icon && <span>{item.icon}</span> }
-                                            <span>{item.text}</span>
+                                            {item.icon && <span className='nav-icon'>{item.icon}</span> }
+                                            <span className='nav-text'>{item.text}</span>
 
                                         </Nav.Link>
 
@@ -431,8 +431,8 @@ function VerticalMenuItem({
                 }}
             >
 
-                {item.icon && <span>{item.icon}</span> }
-                <span>{item.text}</span>
+                {item.icon && <span className="nav-icon">{item.icon}</span> }
+                <span className="nav-text">{item.text}</span>
 
             </Nav.Link>
 
@@ -467,8 +467,8 @@ function VerticalMenuItem({
             >
 
                 <span>
-                    {item.icon && <span>{item.icon}</span> }
-                    {item.text}
+                    {item.icon && <span className="nav-icon">{item.icon}</span> }
+                    <span className="nav-text">{item.text}</span>
                 </span>
 
                 <span>

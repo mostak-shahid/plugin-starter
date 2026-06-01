@@ -7,22 +7,32 @@ import {Alert, Button, Container, Row, Col, Badge} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faStar, faGear, faTableColumns,faWebAwesome,faSun,faMoon,faGraduationCap,faComment,faBell } from '@fortawesome/free-solid-svg-icons';
 
-import { HorizontalMenuControl } from "./components";
 import {useSettingsBodyHeight} from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
-// import HorizontalMultiLevelNavbar from './components/Menu/HorizontalMultiLevelNavbar';
-// import VerticalMultiLevelNavbar from './components/Menu/VerticalMultiLevelNavbar';
-import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from './components/Menu/Menu';
+import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
+
+import { Dashboard } from './pages';
+
+import {
+    // BasicInputs, 
+    // ArrayInputs,
+    BoxedLeftSidebar,
+    BoxedNoSidebar,
+    BoxedRightSidebar,
+    FullWidthLeftSidebar,
+    FullWidthNoSidebar,
+    FullWidthRightSidebar,
+} from './pages';
 
 const HorizontalMenuItems = [
     { itemKey: 'dashboard', text: 'Dashboard', icon: <FontAwesomeIcon icon={faHome} />, url: '/' },
     { 
         itemKey: 'layouts', 
         text: 'Layouts', 
-        icon: '📐',
+        icon: <FontAwesomeIcon icon={faTableColumns} />,
         url: '/layouts',
         items: [
             { itemKey: 'about', text: 'About', url: '/about' },
@@ -43,13 +53,12 @@ const HorizontalMenuItems = [
             },
         ] 
     },
-    { itemKey: 'settings', text: 'Settings', icon: '⚙️', url: '/settings' },
-    { itemKey: 'feedback', text: 'Feedback', icon: '⭐', url: '/feedback' },
-    ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: '👤', url: '/free-vs-pro' }] : []),
+    { itemKey: 'settings', text: 'Settings', icon: <FontAwesomeIcon icon={faGear} />, url: '/settings' },
+    { itemKey: 'feedback', text: 'Feedback', icon: <FontAwesomeIcon icon={faComment} />, url: '/feedback' },
+    ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FontAwesomeIcon icon={faWebAwesome} />, url: '/free-vs-pro' }] : []),
 ];
 const year = new Date().getFullYear();
 export default function App() {
-    const minHeight = useSettingsBodyHeight();
     const [darkmode, setDarkmode] = useState(false);
     useEffect(() => {
         const fetchSettingTheme = async () => {
@@ -100,23 +109,22 @@ export default function App() {
                 </div>
             }
             {/* Main Navigation Header */}
-            <header className="plugin-starter-header border-bottom">
-               <HorizontalMenuControl
-                    items={HorizontalMenuItems}
-                    breakpoint="960"
+            <header className="plugin-starter-header border-bottom">               
+                <HorizontalMultiLevelNavbar 
+                    MenuItems={HorizontalMenuItems} 
                     headerContent={{
                         logo: <Logo width={36} height={36} />,
                         text: Details?.name,
                     }}
                     footerContent={(
-                        <div className="d-flex align-items-center gap-2">
+                        <div className="header-icon-menu d-flex align-items-center gap-2">
                             <Button 
                                 variant="outline-secondary" 
                                 size="sm"
                                 aria-label="Mode" 
                                 onClick={switchingMode}
                             >
-                                {darkmode ? '☀️' : '🌙'}
+                                {darkmode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
                             </Button>
                             <Button 
                                 variant="outline-secondary" 
@@ -124,7 +132,7 @@ export default function App() {
                                 aria-label={__("Documentation", 'plugin-starter')} 
                                 onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/', '_blank')}
                             >
-                                📄
+                                <FontAwesomeIcon icon={faGraduationCap} />
                             </Button>
                             <Button 
                                 variant="outline-secondary" 
@@ -132,7 +140,7 @@ export default function App() {
                                 aria-label={__("Help Center", 'plugin-starter')} 
                                 onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/reviews/', '_blank')}
                             >
-                                ⭐
+                                <FontAwesomeIcon icon={faStar} />
                             </Button>
                             <div className="position-relative">
                                 <Button 
@@ -140,7 +148,7 @@ export default function App() {
                                     size="sm"
                                     // onClick={() => setNewsVisible(true)} aria-label="News"
                                 >
-                                    🔔
+                                    <FontAwesomeIcon icon={faBell} />
                                 </Button>
                                 {/* {newsItems.length > 0 && (
                                     <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
@@ -152,82 +160,22 @@ export default function App() {
                     )}
                 />
             </header>
-            <HorizontalMultiLevelNavbar 
-                MenuItems={HorizontalMenuItems} 
-                headerContent={{
-                    logo: <Logo width={36} height={36} />,
-                    text: Details?.name,
-                }}
-                footerContent={(
-                    <div className="d-flex align-items-center gap-2">
-                        <Button 
-                            variant="outline-secondary" 
-                            size="sm"
-                            aria-label="Mode" 
-                            onClick={switchingMode}
-                        >
-                            {darkmode ? '☀️' : '🌙'}
-                        </Button>
-                        <Button 
-                            variant="outline-secondary" 
-                            size="sm"
-                            aria-label={__("Documentation", 'plugin-starter')} 
-                            onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/', '_blank')}
-                        >
-                            📄
-                        </Button>
-                        <Button 
-                            variant="outline-secondary" 
-                            size="sm"
-                            aria-label={__("Help Center", 'plugin-starter')} 
-                            onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/reviews/', '_blank')}
-                        >
-                            ⭐
-                        </Button>
-                        <div className="position-relative">
-                            <Button 
-                                variant="outline-secondary" 
-                                size="sm"
-                                // onClick={() => setNewsVisible(true)} aria-label="News"
-                            >
-                                🔔
-                            </Button>
-                            {/* {newsItems.length > 0 && (
-                                <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                    {newsItems.length}
-                                </Badge>
-                            )} */}
-                        </div>
-                    </div>
-                )}
-            />
             {/* Dynamic Dashboard Viewport */}
-            <main className="plugin-starter-content p-2 p-xl-4" style={{ minHeight: minHeight ? `${minHeight}px` : 'auto' }}>
-                <Container fluid={true}>
-                    <Row className="align-items-center mb-4">
-                        <Col lg={3}>
-                            <VerticalMultiLevelNavbar 
-                                MenuItems={HorizontalMenuItems}
-                            />
-                        </Col>
-                        <Col lg={9} className="text-end">
-                            <Button variant="primary" onClick={() => alert('This could link to a quick action or feature!')}>
-                                {__('Quick Action', 'plugin-starter')}
-                            </Button>
-                        </Col>
-                    </Row>
-                </Container>
-                <section>
-                    <h1>{__("Welcome to the Plugin Starter Dashboard!", 'plugin-starter')}</h1>
-                    <p>{__("Use the menu above to navigate through different settings and features.", 'plugin-starter')}</p>
-                    {minHeight && <div style={{ marginTop: 20, fontStyle: 'italic' }}>Current content area height: {minHeight}px</div>}
-                </section>
-                {/* <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/feedback" element={<Feedback />} />
+            <main className="plugin-starter-content">
+                <Routes>
+                    <Route path="/" element={<Dashboard />} />
+
+                    <Route path="/layouts">
+                        <Route index element={<Navigate to="boxed/nosidebar" replace />} />
+                        <Route path="boxed/nosidebar" element={<BoxedNoSidebar />} />
+                        <Route path="boxed/left-sidebar" element={<BoxedLeftSidebar />} />
+                        <Route path="boxed/right-sidebar" element={<BoxedRightSidebar />} />
+                        <Route path="full/nosidebar" element={<FullWidthNoSidebar />} />
+                        <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
+                        <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
+                    </Route>
                     <Route path="*" element={<Navigate replace to="/" />} />
-                </Routes> */}
+                </Routes>
             </main>
 
 

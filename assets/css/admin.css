@@ -1,3 +1,7 @@
+:root {
+  --wp-active-color: #3858e9;
+}
+
 .plugin-starter-settings-template #wpcontent {
   padding-left: 0;
 }
