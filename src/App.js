@@ -15,6 +15,7 @@ import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
 
 import { Dashboard } from './pages';
+import NotFound from './NotFound'
 
 import {
     // BasicInputs, 
@@ -60,6 +61,7 @@ const HorizontalMenuItems = [
 const year = new Date().getFullYear();
 export default function App() {
     const [darkmode, setDarkmode] = useState(false);
+    const [newsItems, setNewsItems] = useState([12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 81, 82, 83, 84, 85, 86, 87]); // Example news items,
     useEffect(() => {
         const fetchSettingTheme = async () => {
             try {
@@ -104,7 +106,7 @@ export default function App() {
                     <Alert variant='info' className='rounded-0 mb-0'>
                         {__('You\'re currently using the Free plan. ', 'plugin-starter')}
                         {__('Some settings and features are only available in ', 'plugin-starter')}
-                        <a href={plugin_starter_ajax_obj?.proURL} target="_blank" rel="noopener noreferrer">{__('the Pro version.', 'plugin-starter')}</a>
+                        <a className="link-underline link-underline-opacity-0"  href={plugin_starter_ajax_obj?.proURL} target="_blank" rel="noopener noreferrer">{__('the Pro version.', 'plugin-starter')}</a>
                     </Alert>
                 </div>
             }
@@ -117,7 +119,7 @@ export default function App() {
                         text: Details?.name,
                     }}
                     footerContent={(
-                        <div className="header-icon-menu d-flex align-items-center gap-2">
+                        <div className="header-icon-menu d-flex align-items-center gap-2 pe-2">
                             <Button 
                                 variant="outline-secondary" 
                                 size="sm"
@@ -150,11 +152,11 @@ export default function App() {
                                 >
                                     <FontAwesomeIcon icon={faBell} />
                                 </Button>
-                                {/* {newsItems.length > 0 && (
+                                {newsItems.length > 0 && (
                                     <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                        {newsItems.length}
+                                        {newsItems.length > 99 ? '99+' : newsItems.length}
                                     </Badge>
-                                )} */}
+                                )}
                             </div>
                         </div>
                     )}
@@ -174,7 +176,8 @@ export default function App() {
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
                     </Route>
-                    <Route path="*" element={<Navigate replace to="/" />} />
+                    {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </main>
 

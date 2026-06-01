@@ -9,6 +9,7 @@
   max-width: unset;
   min-width: unset;
   margin-top: 0;
+  padding: unset;
 }
 .plugin-starter-settings-template #wpbody-content {
   padding-bottom: 0;

@@ -55,6 +55,24 @@
   justify-content: space-between;
   cursor: pointer;
 }
+.plugin-starter-navbar a:focus {
+  box-shadow: none;
+  border-radius: 0;
+}
+.plugin-starter-navbar .dropdown-menu[data-bs-popper] {
+  margin-top: 0;
+  margin-left: 0;
+  padding: 0;
+}
+.plugin-starter-navbar .dropdown-menu .dropdown-item,
+.plugin-starter-navbar .dropdown-menu .dropdown-toggle {
+  padding: 0.5rem;
+}
+.plugin-starter-navbar .current,
+.plugin-starter-navbar .active {
+  background-color: var(--wp-active-color);
+  color: #fff;
+}
 .plugin-starter-navbar .nav-link .nav-icon {
   display: inline-block;
   margin-right: 5px;

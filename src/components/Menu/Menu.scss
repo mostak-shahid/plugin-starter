@@ -79,6 +79,28 @@
             cursor: pointer;
         }
     }
+    a:focus {
+        box-shadow: none;
+        border-radius: 0;
+    }
+    .dropdown-menu {
+        &[data-bs-popper] {
+            margin-top: 0;
+            margin-left: 0;
+            padding: 0;
+        }
+        .dropdown-item,
+        .dropdown-toggle {
+            padding: 0.5rem;
+        }
+    }
+
+
+    .current,
+    .active {
+        background-color: var(--wp-active-color);
+        color: #fff;
+    }
     .nav-link {
         .nav-icon {
             display: inline-block;
