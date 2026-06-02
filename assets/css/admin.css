@@ -25,42 +25,12 @@
 .plugin-starter-settings-template ul#adminmenu > li.current > a.current:after {
   border-right-color: var(--bs-body-bg);
 }
-.plugin-starter-settings-template input[type=color].form-control,
-.plugin-starter-settings-template input[type=date].form-control,
-.plugin-starter-settings-template input[type=datetime-local].form-control,
-.plugin-starter-settings-template input[type=datetime].form-control,
-.plugin-starter-settings-template input[type=email].form-control,
-.plugin-starter-settings-template input[type=month].form-control,
-.plugin-starter-settings-template input[type=number].form-control,
-.plugin-starter-settings-template input[type=password].form-control,
-.plugin-starter-settings-template input[type=search].form-control,
-.plugin-starter-settings-template input[type=tel].form-control,
-.plugin-starter-settings-template input[type=text].form-control,
-.plugin-starter-settings-template input[type=time].form-control,
-.plugin-starter-settings-template input[type=url].form-control,
-.plugin-starter-settings-template input[type=week].form-control,
-.plugin-starter-settings-template select.form-control,
-.plugin-starter-settings-template textarea.form-control {
+.plugin-starter-settings-template .form-control {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   background-color: transparent;
 }
-.plugin-starter-settings-template input[type=color].form-control:focus,
-.plugin-starter-settings-template input[type=date].form-control:focus,
-.plugin-starter-settings-template input[type=datetime-local].form-control:focus,
-.plugin-starter-settings-template input[type=datetime].form-control:focus,
-.plugin-starter-settings-template input[type=email].form-control:focus,
-.plugin-starter-settings-template input[type=month].form-control:focus,
-.plugin-starter-settings-template input[type=number].form-control:focus,
-.plugin-starter-settings-template input[type=password].form-control:focus,
-.plugin-starter-settings-template input[type=search].form-control:focus,
-.plugin-starter-settings-template input[type=tel].form-control:focus,
-.plugin-starter-settings-template input[type=text].form-control:focus,
-.plugin-starter-settings-template input[type=time].form-control:focus,
-.plugin-starter-settings-template input[type=url].form-control:focus,
-.plugin-starter-settings-template input[type=week].form-control:focus,
-.plugin-starter-settings-template select.form-control:focus,
-.plugin-starter-settings-template textarea.form-control:focus {
+.plugin-starter-settings-template .form-control:focus {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);
   border-color: #86b7fe;

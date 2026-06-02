@@ -25,33 +25,17 @@
     ul#adminmenu>li.current>a.current:after {
         border-right-color: var(--bs-body-bg);
     }
-    input[type=color],
-    input[type=date],
-    input[type=datetime-local],
-    input[type=datetime],
-    input[type=email],
-    input[type=month],
-    input[type=number],
-    input[type=password],
-    input[type=search],
-    input[type=tel],
-    input[type=text],
-    input[type=time],
-    input[type=url],
-    input[type=week],
-    select,
-    textarea {
-        &.form-control {
-            border: var(--bs-border-width) solid var(--bs-border-color);
-            border-radius: var(--bs-border-radius);
-            background-color: transparent;
-            &:focus {
-                color: var(--bs-body-color);
-                background-color: var(--bs-body-bg);
-                border-color: #86b7fe;
-                outline: 0;
-                box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-            }
+    .form-control {
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+        background-color: transparent;
+        &:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
         }
     }
+    
 }

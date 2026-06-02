@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from '@wordpress/element';
-import {Card, Button, Container, Row, Col, Form, FloatingLabel, InputGroup} from 'react-bootstrap';
+import {Card, Button, Container, Row, Col, Form, FloatingLabel, Spinner, ToastContainer, Toast} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
@@ -16,13 +16,19 @@ const Feedback = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget;
+        
+        event.preventDefault();
+        event.stopPropagation();
+
         if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+            setValidated(true);
+            return;
         }
+        
         setValidated(true);
-        console.log('Form submitted with data:', formData);
+        handleForm();
     };
+
 
 
     const [formData, setFormData] = useState({
@@ -41,15 +47,21 @@ const Feedback = () => {
         }));
     };
 
+
+    const [showToast, setShowToast] = useState(false);
+    const [dataToast, setDataToast] = useState({title: '', content: '', type: 'success'});
+    const toggleShowToast = () => setShowToast(!showToast);
+
     const handleForm = async () => {
         console.log(formData);
-        if (formData.subject && formData.message) {
+        if (formData.email && formData.email.trim() !== '' && formData.message && formData.message.trim() !== '' && formData.name && formData.name.trim() !== '') {
             setProcessing(true);
             try {
                 const result = await apiFetch({
                     path: "/plugin-starter/v1/feedback",
                     method: "POST",
                     data: {
+                        name: formData.name,
                         subject: formData.subject,
                         email: formData.email,
                         phone: formData.phone,
@@ -61,35 +73,40 @@ const Feedback = () => {
                 });
                 console.log(result);
                 if (result.success) {
+                    setValidated(false);
                     setFormData({
+                        name: '',
                         subject: '',
                         email: '',
                         phone: '',
                         message: '',
                     });
-                    Notification.success({
+                    setDataToast({
                         title: __("Success", "plugin-starter"),
-                        content: __("Feedback send successfully!", "plugin-starter"),
-                        duration: 3,
+                        content: __("Feedback sent successfully!", "plugin-starter"),
+                        type: 'success'
                     });
+                    setShowToast(true);
                 }
 
             } catch (error) {
                 console.error("Mail Sending Error:", error);
-                Notification.error({
+                setDataToast({
                     title: __("Error", "plugin-starter"),
                     content: __("Please try again!", "plugin-starter"),
-                    duration: 3,
+                    type: 'danger'
                 });
+                setShowToast(true);
             } finally {
                 setProcessing(false);
             }
         } else {
-            Notification.warning({
+            setDataToast({
                 title: __("Warning", "plugin-starter"),
-                content: __("Subject or Message can't be Empty", "plugin-starter"),
-                duration: 3,
+                content: __("Email and message are required", "plugin-starter"),
+                type: 'warning'
             });
+            setShowToast(true);
         }
     };
     return (        
@@ -165,6 +182,7 @@ const Feedback = () => {
                                         className="mb-3"
                                     >
                                         <Form.Control
+                                            required
                                             as="textarea"
                                             rows={15}
                                             placeholder={__('Message', 'plugin-starter')}
@@ -172,8 +190,22 @@ const Feedback = () => {
                                             onChange={(e) => handleFieldChange('message', e.target.value)}
                                         />
                                     </FloatingLabel>
-                                    <Button type="submit">
-                                        <FontAwesomeIcon icon={faPaperPlane} /> {__('Send', 'plugin-starter')}
+                                    <Button type="submit" disabled={processing}>
+                                        {processing ? (
+                                            <>
+                                                <Spinner
+                                                    as="span"
+                                                    animation="border"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                /> {__('Sending...', 'plugin-starter')}
+                                            </>
+                                        ) : (
+                                            <>
+                                                 <FontAwesomeIcon icon={faPaperPlane} /> {__('Send', 'plugin-starter')}
+                                            </>
+                                        )}
                                     </Button>
                                 </Col>
                             </Row>
@@ -182,6 +214,26 @@ const Feedback = () => {
                     </Card.Body>
                 </Card>
             </Container> 
+
+            <ToastContainer
+                className="p-3"
+                position='top-end'
+                style={{ zIndex: 1 }}
+            >
+                <Toast 
+                    bg={dataToast.type}
+                    show={showToast} 
+                    onClose={toggleShowToast}
+                    delay={3000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">{dataToast.title}</strong>
+                        {/* <small>11 mins ago</small> */}
+                    </Toast.Header>
+                    <Toast.Body className="text-white">{dataToast.content}</Toast.Body>
+                </Toast>
+            </ToastContainer>
         </Layout>
     );
 };

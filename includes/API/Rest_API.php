@@ -739,24 +739,26 @@ class Rest_API
 	
     public static function rest_feedback($request)
     {
+        $name = sanitize_text_field(wp_unslash($request->get_param('name')));
+        $email = sanitize_email(wp_unslash($request->get_param('email')));
+        $phone = sanitize_text_field(wp_unslash($request->get_param('phone')));
         $subject = sanitize_text_field(wp_unslash($request->get_param('subject')));
         $message = sanitize_textarea_field(wp_unslash($request->get_param('message')));
+
+        if (empty($email)) {
+            return new WP_Error('empty_email', __('Email cannot be empty.', 'plugin-starter'), array('status' => 400));
+        }
 
         if (empty($message)) {
             return new WP_Error('empty_message', __('Message cannot be empty.', 'plugin-starter'), array('status' => 400));
         }
 
-        if (empty($subject)) {
-            return new WP_Error('empty_subject', __('Subject cannot be empty.', 'plugin-starter'), array('status' => 400));
-        }
-
         $email = 'mostak.shahid@gmail.com';
-        // $subject = sprintf(
-        //     /* translators: %s = site URL */
-        //     esc_html__('Error notification for %s', 'plugin-starter'),
-        //     get_home_url()
-        // );
-        $output = '<strong>Subject:</strong> ' . $subject . '<br/><strong>Message:</strong> ' . $message;
+        $output = '<strong>Name:</strong> ' . $name;
+        $output .= '<br/><strong>Email:</strong> ' . $email;
+        $output .= '<br/><strong>Phone:</strong> ' . $phone;
+        $output .= '<br/><strong>Subject:</strong> ' . $subject;
+        $output .= '<br/><strong>Message:</strong> ' . $message;
         $headers = array(
             'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>',
             'Content-Type: text/html; charset=UTF-8'
