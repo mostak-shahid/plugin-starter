@@ -1,3 +1,4 @@
+import { useState, useEffect } from '@wordpress/element';
 import {Card, Button} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +7,8 @@ import { faHome, faTableColumns, faGear, faComment, faWebAwesome } from '@fortaw
 
 import { Layout } from '../../layouts';
 import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
+import menuItems from '../../data/menu.json';
+import { getMenu } from '../../data/menu.js';
 const MenuItems = [
     { itemKey: 'dashboard', text: 'Dashboard', icon: <FontAwesomeIcon icon={faHome} />, url: '/' },
     { 
@@ -37,10 +40,62 @@ const MenuItems = [
     ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FontAwesomeIcon icon={faWebAwesome} />, url: '/free-vs-pro' }] : []),
 ];
 const BoxedLeftSidebar = () => {
+
+    const [proItems, setProItems] = useState([]);
+    const [remoteItems, setRemoteItems] = useState([]);
+    useEffect(() => {
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.menuItems) {
+            setProItems(() => window.PluginStarterProComponents.menuItems);
+        }
+        // console.log('Feedback component mounted. ProContactForm available:', !!window.PluginStarterProComponents?.ContactForm);
+    }, []);
+
+    // // Load MF remote menu array (NOT the React component)
+    // useEffect(() => {
+    //     if (plugin_starter_ajax_obj?.isPro) {
+    //         import("pluginstarterpro/MenuItems")
+    //             .then((mod) => {
+    //                 setProItems(mod.default || []);
+    //             })
+    //             .catch(() => {
+    //                 console.warn("Pro menu could not be loaded.");
+    //                 setProItems([]);
+    //             });
+    //     }
+    // }, []);
+    
+    // Optional: load remote injected menu items
+    useEffect(() => {
+        if (plugin_starter_ajax_obj?.extraMenuItems) {
+            setRemoteItems(plugin_starter_ajax_obj.extraMenuItems);
+        }
+    }, []);
+
+    // Icon mapping
+    const iconMap = {
+        'page': <FontAwesomeIcon icon={faHome} />,
+        'layouts': <FontAwesomeIcon icon={faTableColumns} />,
+        'basic-inputs': <FontAwesomeIcon icon={faGear} />,
+        'array-inputs': <FontAwesomeIcon icon={faWebAwesome} />,
+        'import-export': <FontAwesomeIcon icon={faWebAwesome} />,
+        'more': <FontAwesomeIcon icon={faWebAwesome} />,
+        'tools': <FontAwesomeIcon icon={faHome} />,
+        'feedback': <FontAwesomeIcon icon={faComment} />,
+    };
+
+    // Get menu data from menu.js
+    const menuData = getMenu({menuItems:menuItems, proItems: proItems, remoteItems:remoteItems});
+    
+    // Add icons to menu items
+    const menuItemsWithIcons = menuData.map(item => ({
+        ...item,
+        icon: iconMap[item.itemKey] || <FontAwesomeIcon icon={faGear} />
+    }));
     const sidebar = (
         <>
             <VerticalMultiLevelNavbar
-                MenuItems={MenuItems}
+                MenuItems={menuItemsWithIcons}
             />
         </>
     );
