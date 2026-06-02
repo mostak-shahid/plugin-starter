@@ -1,4 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
+import { Outlet, useLocation } from 'react-router-dom';
 import {Card, Button} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,8 +10,8 @@ import { Layout } from '../../layouts';
 import {VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
 import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
-const BoxedLeftSidebar = () => {
-
+const Settings = () => {
+    const location = useLocation();
     const [proItems, setProItems] = useState([]);
     const [remoteItems, setRemoteItems] = useState([]);
     useEffect(() => {
@@ -56,7 +57,7 @@ const BoxedLeftSidebar = () => {
         </>
     );
     return (
-        <Layout sidebarPosition="left" sidebar={sidebar}>     
+        <Layout sidebarPosition="left" sidebar={sidebar} className="border-start border-end">     
             <Card>
                 <Card.Header>Featured</Card.Header>
                 <Card.Body>
@@ -64,6 +65,9 @@ const BoxedLeftSidebar = () => {
                     <Card.Text>
                     With supporting text below as a natural lead-in to additional content.
                     </Card.Text>
+                    <Outlet 
+                        // context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} 
+                    />
                     <Button variant="primary">Go somewhere</Button>
                 </Card.Body>
             </Card>
@@ -71,4 +75,4 @@ const BoxedLeftSidebar = () => {
     );
 };
 
-export default BoxedLeftSidebar;
+export default Settings;

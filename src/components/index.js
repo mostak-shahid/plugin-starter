@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { Illustration404 } from '../lib/Illustrations';
-
 import HorizontalMenuControl from './HorizontalMenuControl/HorizontalMenuControl';
+import PageInfo from './PageInfo/PageInfo';
 
 const NotFound = () => (
     <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -13,4 +13,5 @@ const NotFound = () => (
 export {
     HorizontalMenuControl,
     NotFound,
+    PageInfo
 };

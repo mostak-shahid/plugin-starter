@@ -14,12 +14,13 @@ import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
 
-import { Dashboard, Feedback, FreeVsPro } from './pages';
+import { Dashboard, Settings, Feedback, FreeVsPro } from './pages';
 import NotFound from './NotFound'
 
 import {
-    // BasicInputs, 
-    // ArrayInputs,
+    BasicInputs, 
+    ArrayInputs,
+    ComplexInputs,
     BoxedLeftSidebar,
     BoxedNoSidebar,
     BoxedRightSidebar,
@@ -207,7 +208,26 @@ export default function App() {
                         <Route path="full/nosidebar" element={<FullWidthNoSidebar />} />
                         <Route path="full/left-sidebar" element={<FullWidthLeftSidebar />} />
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
+                    </Route>           
+                    {/* <Route path="/settings" element={<Settings />} /> */}
+                    <Route path="/settings" element={<Settings />}>
+                        <Route index element={<Navigate to="basic-inputs" replace />} />
+
+  
+                        <Route  path="layouts/boxed" element={<Navigate to="layouts/boxed/nosidebar" replace />} />
+                        <Route path="layouts/boxed/nosidebar" element={<BasicInputs />} />
+                        <Route path="layouts/boxed/left-sidebar" element={<ArrayInputs />} />
+                        <Route path="layouts/boxed/right-sidebar" element={<ComplexInputs />} />
+                        <Route path="layouts/full/nosidebar" element={<BasicInputs />} />
+                        <Route path="layouts/full/left-sidebar" element={<ArrayInputs />} />
+                        <Route path="layouts/full/right-sidebar" element={<ComplexInputs />} />
+
+                        
+                        <Route path="basic-inputs" element={<BasicInputs />} />
+                        <Route path="array-inputs" element={<ArrayInputs />} />
+                        <Route path="complex-inputs" element={<ComplexInputs />} />
                     </Route>
+
                     <Route path="/feedback" element={<Feedback />} />
                     <Route path="/free-vs-pro" element={<FreeVsPro />} />
                     {/* <Route path="*" element={<Navigate replace to="/" />} /> */}

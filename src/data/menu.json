@@ -1,47 +1,55 @@
 [
-    {
-        "itemKey": "page",
-        "text": "Page",
-        "description": "Page settings",
-        "url": "/settings/page",
+    { 
+        "itemKey": "layouts", 
+        "text": "Layouts", 
+        "url": "/settings/layouts",
         "items": [
+            { "itemKey": "about", "text": "About", "url": "/about" },
+            { "itemKey": "contact", "text": "Contact", "url": "/contact" },
+            { "itemKey": "layouts-boxed", "text": "Boxed Layouts", "url": "/settings/layouts/boxed",
+                "items": [
+                    { "itemKey": "layouts-boxed-nosidebar", "text": "No Sidebar", "url": "/settings/layouts/boxed/nosidebar" },
+                    { "itemKey": "layouts-boxed-left-sidebar", "text": "Left Sidebar", "url": "/settings/layouts/boxed/left-sidebar" },
+                    { "itemKey": "layouts-boxed-right-sidebar", "text": "Right Sidebar", "url": "/settings/layouts/boxed/right-sidebar" }
+                ] 
+            },
+            { "itemKey": "layouts-full", "text": "Full Layouts", "url": "/settings/layouts/full",
+                "items": [
+                    { "itemKey": "layouts-full-nosidebar", "text": "No Sidebar", "url": "/settings/layouts/full/nosidebar" },
+                    { "itemKey": "layouts-full-left-sidebar", "text": "Left Sidebar", "url": "/settings/layouts/full/left-sidebar" },
+                    { "itemKey": "layouts-full-right-sidebar", "text": "Right Sidebar", "url": "/settings/layouts/full/right-sidebar" }
+                ] 
+            }
+        ] 
+    },
+    
+    { "itemKey": "inputs", "text": "Inputs", "url": "/settings/inputs/",
+        "items": [            
             {
-                "itemKey": "page-1",
-                "text": "Page 1",
-                "description": "Page 1 settings",
-                "url": "/settings/page/page-1"
+                "itemKey": "basic-inputs",
+                "text": "Basic Inputs",
+                "description": "Basic input settings",
+                "url": "/settings/inputs/basic-inputs"
             },
             {
-                "itemKey": "page-2",
-                "text": "Page 2",
-                "description": "Page 2 settings",
-                "url": "/settings/page/page-2"
+                "itemKey": "array-inputs",
+                "text": "Array Inputs",
+                "description": "Array input settings",
+                "url": "/settings/inputs/array-inputs"
+            },
+            {
+                "itemKey": "complex-inputs",
+                "text": "Complex Inputs",
+                "description": "Complex input settings",
+                "url": "/settings/inputs/complex-inputs"
             }
-        ]
-    },
-    {
-        "itemKey": "basic-inputs",
-        "text": "Basic Inputs",
-        "description": "Basic input settings",
-        "url": "/settings/basic-inputs"
-    },
-    {
-        "itemKey": "array-inputs",
-        "text": "Array Inputs",
-        "description": "Array input settings",
-        "url": "/settings/array-inputs"
+        ] 
     },
     {
         "itemKey": "import-export",
         "text": "Import & Export",
         "description": "Easily import or export plugin settings for backup, migration, or reuse.",
         "url": "/settings/import-export"
-    },
-    {
-        "itemKey": "more",
-        "text": "More",
-        "description": "Enable additional features, extensions, and advanced options.",
-        "url": "/settings/more"
     },
     {
         "itemKey": "tools",
