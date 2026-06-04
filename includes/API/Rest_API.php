@@ -33,12 +33,21 @@ class Rest_API
         return self::$instance;
     }
     public function __construct()
-    {
-        
+    {        
         add_action('rest_api_init', [$this, 'rest_api_init']);
     }
     public function rest_api_init()
-    {        
+    {
+        // self::register_settings_theme_endpoints();
+        $this->register_settings_theme_endpoints();
+        $this->register_feedback_endpoints();
+
+
+
+		
+
+
+    
         register_rest_route(self::NAMESPACE, '/plugins', [
             'methods' => 'GET',
             'callback' => function () {
@@ -180,54 +189,6 @@ class Rest_API
                 },
             ]
         );
-
-		register_rest_route(
-            self::NAMESPACE,
-            '/feedback',
-            array(
-                'methods' => 'POST',
-                'callback' => [$this, 'rest_feedback'],
-				// 'permission_callback' => '__return_true'
-                'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-            )
-        );
-
-		register_rest_route(
-			self::NAMESPACE,
-			'/set-settings-theme',
-			array(
-				'methods'  => 'GET',
-				'callback' => [$this, 'rest_set_settings_theme'],
-				'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-                'args' => [
-                    'id' => [
-                        'required' => true,
-                        'type'     => 'string',
-                        'items'    => [ 'type' => 'integer' ],
-                    ],
-                    'settings_theme' => [
-                        'required' => true,
-                        'type'     => 'string',
-                        'enum'     => [ 'light', 'dark' ],
-                    ],
-                ],
-			)
-		);
-        register_rest_route(
-			self::NAMESPACE,
-			'/get-settings-theme',
-			array(
-				'methods'  => 'GET',
-				'callback' => [$this, 'rest_get_settings_theme'],
-				'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-			)
-		);
         
         register_rest_route(
             self::NAMESPACE,
@@ -479,6 +440,128 @@ class Rest_API
             )
         );
     }
+
+    /**
+     * Register settings theme endpoints
+     */
+    private function register_settings_theme_endpoints()
+    {
+        register_rest_route(
+			self::NAMESPACE,
+			'/get-settings-theme',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'rest_get_settings_theme'],
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+			)
+		);
+        
+		register_rest_route(
+			self::NAMESPACE,
+			'/set-settings-theme',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'rest_set_settings_theme'],
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+                'args' => [
+                    'id' => [
+                        'required' => true,
+                        'type'     => 'string',
+                        'items'    => [ 'type' => 'integer' ],
+                    ],
+                    'settings_theme' => [
+                        'required' => true,
+                        'type'     => 'string',
+                        'enum'     => [ 'light', 'dark' ],
+                    ],
+                ],
+			)
+		);  
+    }
+    // callback for settings theme endpoints
+    public function rest_set_settings_theme(WP_REST_Request $request)
+    {
+        $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
+        // $user_id = get_current_user_id();
+        $settings_theme = sanitize_text_field(wp_unslash($request->get_param('settings_theme')));
+        // get_user_meta($user_id, 'plugin_starter_settings_theme', $settings_theme);
+        update_user_meta( $user_id, 'plugin_starter_settings_theme', $settings_theme );
+                
+        $response = [
+            'success' => true,
+            'msg' => esc_html__('Theme set successfully.', 'plugin-starter'),
+        ];
+
+        return new WP_REST_Response($response, 200);
+    }
+    public function rest_get_settings_theme(WP_REST_Request $request)
+    {
+        $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
+        $settings_theme = get_user_meta($user_id, 'plugin_starter_settings_theme', true);
+        // return $settings_theme??'light';
+        return $settings_theme?$settings_theme:'light';
+    }
+
+
+    /**
+     * Register feedback endpoints
+     */
+    private function register_feedback_endpoints(){
+        register_rest_route(
+            self::NAMESPACE,
+            '/feedback',
+            array(
+                'methods' => 'POST',
+                'callback' => [$this, 'rest_feedback'],
+				// 'permission_callback' => '__return_true'
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+    }
+    // callback for settings theme endpoints	
+    public static function rest_feedback($request)
+    {
+        $name = sanitize_text_field(wp_unslash($request->get_param('name')));
+        $email = sanitize_email(wp_unslash($request->get_param('email')));
+        $phone = sanitize_text_field(wp_unslash($request->get_param('phone')));
+        $subject = sanitize_text_field(wp_unslash($request->get_param('subject')));
+        $message = sanitize_textarea_field(wp_unslash($request->get_param('message')));
+
+        if (empty($email)) {
+            return new WP_Error('empty_email', __('Email cannot be empty.', 'plugin-starter'), array('status' => 400));
+        }
+
+        if (empty($message)) {
+            return new WP_Error('empty_message', __('Message cannot be empty.', 'plugin-starter'), array('status' => 400));
+        }
+
+        $email = 'mostak.shahid@gmail.com';
+        $output = '<strong>Name:</strong> ' . $name;
+        $output .= '<br/><strong>Email:</strong> ' . $email;
+        $output .= '<br/><strong>Phone:</strong> ' . $phone;
+        $output .= '<br/><strong>Subject:</strong> ' . $subject;
+        $output .= '<br/><strong>Message:</strong> ' . $message;
+        $headers = array(
+            'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>',
+            'Content-Type: text/html; charset=UTF-8'
+        );
+
+        wp_mail($email, 'Feedback from Plugin Starter', $output, $headers);
+        $response = [
+            'success' => true,
+            'msg' => esc_html__('Email Send successfully.', 'plugin-starter'),
+            'subject' => $subject,
+            'message' => $message
+        ];
+        return new WP_REST_Response($response, 200);
+    }
+
     /**
      * Check permission for API access
      *
@@ -737,65 +820,6 @@ class Rest_API
 		// return $response;
 		return new WP_REST_Response($response, 200);
 	}
-	
-    public static function rest_feedback($request)
-    {
-        $name = sanitize_text_field(wp_unslash($request->get_param('name')));
-        $email = sanitize_email(wp_unslash($request->get_param('email')));
-        $phone = sanitize_text_field(wp_unslash($request->get_param('phone')));
-        $subject = sanitize_text_field(wp_unslash($request->get_param('subject')));
-        $message = sanitize_textarea_field(wp_unslash($request->get_param('message')));
-
-        if (empty($email)) {
-            return new WP_Error('empty_email', __('Email cannot be empty.', 'plugin-starter'), array('status' => 400));
-        }
-
-        if (empty($message)) {
-            return new WP_Error('empty_message', __('Message cannot be empty.', 'plugin-starter'), array('status' => 400));
-        }
-
-        $email = 'mostak.shahid@gmail.com';
-        $output = '<strong>Name:</strong> ' . $name;
-        $output .= '<br/><strong>Email:</strong> ' . $email;
-        $output .= '<br/><strong>Phone:</strong> ' . $phone;
-        $output .= '<br/><strong>Subject:</strong> ' . $subject;
-        $output .= '<br/><strong>Message:</strong> ' . $message;
-        $headers = array(
-            'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>',
-            'Content-Type: text/html; charset=UTF-8'
-        );
-
-        wp_mail($email, 'Feedback from Plugin Starter', $output, $headers);
-        $response = [
-            'success' => true,
-            'msg' => esc_html__('Email Send successfully.', 'plugin-starter'),
-            'subject' => $subject,
-            'message' => $message
-        ];
-        return new WP_REST_Response($response, 200);
-    }
-    public function rest_set_settings_theme(WP_REST_Request $request)
-    {
-        $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
-        // $user_id = get_current_user_id();
-        $settings_theme = sanitize_text_field(wp_unslash($request->get_param('settings_theme')));
-        // get_user_meta($user_id, 'plugin_starter_settings_theme', $settings_theme);
-        update_user_meta( $user_id, 'plugin_starter_settings_theme', $settings_theme );
-                
-        $response = [
-            'success' => true,
-            'msg' => esc_html__('Theme set successfully.', 'plugin-starter'),
-        ];
-
-        return new WP_REST_Response($response, 200);
-    }
-    public function rest_get_settings_theme(WP_REST_Request $request)
-    {
-        $user_id = sanitize_text_field(wp_unslash($request->get_param('id')));
-        $settings_theme = get_user_meta($user_id, 'plugin_starter_settings_theme', true);
-        // return $settings_theme??'light';
-        return $settings_theme?$settings_theme:'light';
-    }
     /**
      * Get the deactivation link.
      *
