@@ -68,8 +68,7 @@
 .plugin-starter-navbar .dropdown-menu .dropdown-toggle {
   padding: 0.5rem;
 }
-.plugin-starter-navbar .current,
-.plugin-starter-navbar .active {
+.plugin-starter-navbar .current {
   background-color: var(--wp-active-color);
   color: #fff;
 }
@@ -77,7 +76,7 @@
   display: inline-block;
   margin-right: 5px;
 }
-.plugin-starter-navbar .nav-link.current, .plugin-starter-navbar .nav-link.active {
+.plugin-starter-navbar .nav-link.current {
   background-color: var(--wp-active-color);
   color: #fff;
 }

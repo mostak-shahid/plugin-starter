@@ -1,28 +1,4 @@
-[
-    { 
-        "itemKey": "layouts", 
-        "text": "Layouts", 
-        "url": "/settings/layouts",
-        "items": [
-            { "itemKey": "about", "text": "About", "url": "/about" },
-            { "itemKey": "contact", "text": "Contact", "url": "/contact" },
-            { "itemKey": "layouts-boxed", "text": "Boxed Layouts", "url": "/settings/layouts/boxed",
-                "items": [
-                    { "itemKey": "layouts-boxed-nosidebar", "text": "No Sidebar", "url": "/settings/layouts/boxed/nosidebar" },
-                    { "itemKey": "layouts-boxed-left-sidebar", "text": "Left Sidebar", "url": "/settings/layouts/boxed/left-sidebar" },
-                    { "itemKey": "layouts-boxed-right-sidebar", "text": "Right Sidebar", "url": "/settings/layouts/boxed/right-sidebar" }
-                ] 
-            },
-            { "itemKey": "layouts-full", "text": "Full Layouts", "url": "/settings/layouts/full",
-                "items": [
-                    { "itemKey": "layouts-full-nosidebar", "text": "No Sidebar", "url": "/settings/layouts/full/nosidebar" },
-                    { "itemKey": "layouts-full-left-sidebar", "text": "Left Sidebar", "url": "/settings/layouts/full/left-sidebar" },
-                    { "itemKey": "layouts-full-right-sidebar", "text": "Right Sidebar", "url": "/settings/layouts/full/right-sidebar" }
-                ] 
-            }
-        ] 
-    },
-    
+[    
     { "itemKey": "inputs", "text": "Inputs", "url": "/settings/inputs/",
         "items": [            
             {
@@ -45,37 +21,42 @@
             }
         ] 
     },
-    {
-        "itemKey": "import-export",
-        "text": "Import & Export",
-        "description": "Easily import or export plugin settings for backup, migration, or reuse.",
-        "url": "/settings/import-export"
-    },
-    {
-        "itemKey": "tools",
-        "text": "Tools",
-        "description": "Access helpful utilities for maintenance, debugging, and optimization.",
-        "url": "/settings/tools"
-    },
-    {
-        "itemKey": "logs",
-        "text": "Logs",
-        "description": "Review and manage plugin activity logs.",
-        "url": "/settings/logs",
-        "items": [
+    
+    { "itemKey": "utilities", "text": "Utilities", "url": "/settings/utilities/",
+        "items": [  
             {
-                "itemKey": "table",
-                "text": "Table",
-                "description": "Browse detailed logs in a searchable table view.",
-                "url": "/settings/logs/table"
+                "itemKey": "import-export",
+                "text": "Import & Export",
+                "description": "Easily import or export plugin settings for backup, migration, or reuse.",
+                "url": "/settings/utilities/import-export"
             },
             {
-                "itemKey": "analytics",
-                "text": "Analytics",
-                "description": "Analyze log data with charts and usage insights.",
-                "url": "/settings/logs/analytics"
+                "itemKey": "tools",
+                "text": "Tools",
+                "description": "Access helpful utilities for maintenance, debugging, and optimization.",
+                "url": "/settings/utilities/tools"
+            },
+            {
+                "itemKey": "logs",
+                "text": "Logs",
+                "description": "Review and manage plugin activity logs.",
+                "url": "/settings/utilities/logs",
+                "items": [
+                    {
+                        "itemKey": "table",
+                        "text": "Table",
+                        "description": "Browse detailed logs in a searchable table view.",
+                        "url": "/settings/utilities/logs/table"
+                    },
+                    {
+                        "itemKey": "analytics",
+                        "text": "Analytics",
+                        "description": "Analyze log data with charts and usage insights.",
+                        "url": "/settings/utilities/logs/analytics"
+                    }
+                ]
             }
-        ]
+        ] 
     },
     {
         "itemKey": "feedback",

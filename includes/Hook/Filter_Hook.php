@@ -94,48 +94,6 @@ class Filter_Hook {
      */
     public function modify_plugin_starter_default_options( $opts ) {
         $defaults = [
-            'components' => [
-                'free' => [
-                    'background' => [],
-                    'boxshadow' => [
-                        'enabled' => false,
-                        'inset' => false,
-                    ],
-                    // 'color' => '#ffffff',
-                    'colorpicker' => '',
-                    // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
-                    'gradient' => '',
-                    'font' => [
-                        'enabled' => false,
-                    ],
-                    'media_uploader' => [],
-                    'multicolor' => [],
-                    'textshadow' => [
-                        'enabled' => false,
-                    ],
-                    'unitcontrol' => '',
-                ],
-                'pro' => [
-                    'background' => [],
-                    'boxshadow' => [
-                        'enabled' => false,
-                        'inset' => false,
-                    ],
-                    // 'color' => '#ffffff',
-                    'colorpicker' => '',
-                    // 'gradient' => 'linear-gradient(135deg, #ff8c00 0%, #fcff41 100%)',
-                    'gradient' => '',
-                    'font' => [
-                        'enabled' => false,
-                    ],
-                    'media_uploader' => [],
-                    'multicolor' => [],
-                    'textshadow' => [
-                        'enabled' => false,
-                    ],
-                    'unitcontrol' => '',
-                ],
-            ],
             'basic' => [
                 'text' => '',
                 'textarea' => '',
@@ -148,10 +106,13 @@ class Filter_Hook {
                 'date' => '',
                 'time' => '',
                 'datetime' => '',
-
             ],
             'array' => [
                 'checkbox' => ['checkbox-1', 'checkbox-3']
+            ],
+            'complex' => [
+                'nested_text' => '',
+                'nested_array' => ['option-1', 'option-3'],
             ],
             'more' => [
                 'enable_scripts' => false,

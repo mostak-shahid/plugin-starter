@@ -2,6 +2,7 @@
 namespace MosPress\PluginStarter\API;
 if ( ! defined( 'ABSPATH' ) ) exit;
 use MosPress\PluginStarter\API\LogsController;
+use MosPress\PluginStarter\Helpers\Utils;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -621,7 +622,7 @@ class Rest_API
 				array('status' => 403)
 			);
 		}
-		$plugin_starter_options = plugin_starter_get_option();
+		$plugin_starter_options = Utils::plugin_starter_get_option();
 		return new WP_REST_Response($plugin_starter_options, 200);
 	}
 	public function update_settings(WP_REST_Request $request) //WP_REST_Request $request
@@ -633,7 +634,7 @@ class Rest_API
 				array('status' => 403)
 			);
 		}
-		$plugin_starter_options_old = plugin_starter_get_option();
+		$plugin_starter_options_old = Utils::plugin_starter_get_option();
 
 		$plugin_starter_options = map_deep(wp_unslash($request->get_param('plugin_starter_options')), 'wp_kses_post');
 
@@ -691,9 +692,9 @@ class Rest_API
             );
         }
         $name = sanitize_text_field(wp_unslash($request->get_param('name')));
-        $plugin_starter_options_old = plugin_starter_get_option();
-        $plugin_starter_options = plugin_starter_get_option();
-        $plugin_starter_default_options = plugin_starter_get_default_options();
+        $plugin_starter_options_old = Utils::plugin_starter_get_option();
+        $plugin_starter_options = Utils::plugin_starter_get_option();
+        $plugin_starter_default_options = Utils::plugin_starter_get_default_options();
 
         $success = $this->reset_option_by_path($plugin_starter_options, $plugin_starter_default_options, $name);
 
@@ -722,7 +723,7 @@ class Rest_API
                 array('status' => 403)
             );
         }
-        $plugin_starter_default_options = plugin_starter_get_default_options();
+        $plugin_starter_default_options = Utils::plugin_starter_get_default_options();
 
         update_option('plugin_starter_options', $plugin_starter_default_options);
         // $this->log_settings_reset($name, $plugin_starter_options_old[$name] ?? null, $plugin_starter_options[$name] ?? null);

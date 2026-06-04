@@ -211,21 +211,12 @@ export default function App() {
                     </Route>           
                     {/* <Route path="/settings" element={<Settings />} /> */}
                     <Route path="/settings" element={<Settings />}>
-                        <Route index element={<Navigate to="basic-inputs" replace />} />
-
-  
-                        <Route  path="layouts/boxed" element={<Navigate to="layouts/boxed/nosidebar" replace />} />
-                        <Route path="layouts/boxed/nosidebar" element={<BasicInputs />} />
-                        <Route path="layouts/boxed/left-sidebar" element={<ArrayInputs />} />
-                        <Route path="layouts/boxed/right-sidebar" element={<ComplexInputs />} />
-                        <Route path="layouts/full/nosidebar" element={<BasicInputs />} />
-                        <Route path="layouts/full/left-sidebar" element={<ArrayInputs />} />
-                        <Route path="layouts/full/right-sidebar" element={<ComplexInputs />} />
-
+                        <Route index element={<Navigate to="inputs/basic-inputs" replace />} />
+                        <Route path="inputs" element={<Navigate to="basic-inputs" replace />} />
                         
-                        <Route path="basic-inputs" element={<BasicInputs />} />
-                        <Route path="array-inputs" element={<ArrayInputs />} />
-                        <Route path="complex-inputs" element={<ComplexInputs />} />
+                        <Route path="inputs/basic-inputs" element={<BasicInputs />} />
+                        <Route path="inputs/array-inputs" element={<ArrayInputs />} />
+                        <Route path="inputs/complex-inputs" element={<ComplexInputs />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />

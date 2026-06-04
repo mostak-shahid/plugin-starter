@@ -3,6 +3,7 @@ import { Illustration404 } from '../lib/Illustrations';
 import HorizontalMenuControl from './HorizontalMenuControl/HorizontalMenuControl';
 import PageInfo from './PageInfo/PageInfo';
 
+
 const NotFound = () => (
     <div style={{ textAlign: 'center', padding: '40px' }}>
         <Illustration404 style={{ width: 250, height: 250, display: 'inline-block' }} />

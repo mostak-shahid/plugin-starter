@@ -195,7 +195,7 @@ function HorizontalDropdown({
  * =========================================================
  */
 
-export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, footerContent = {}}) {
+export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, footerContent = {}, className = ''}) {
 
     const location = useLocation();
 
@@ -207,7 +207,7 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
 
             <Navbar
                 expand="lg"
-                className="plugin-starter-navbar plugin-starter-horizontal-navbar" 
+                className={`plugin-starter-navbar plugin-starter-horizontal-navbar ${className}`}
                 style={{ backgroundColor: 'var(--bs-body-bg)' }}
             >
 
@@ -282,9 +282,9 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
                             })}
 
                         </Nav>
-                        <Nav>
+                        <div className="horizontal-navbar-footer">
                             {footerContent}
-                        </Nav>
+                        </div>
 
                     </Navbar.Collapse>
 
@@ -511,7 +511,7 @@ function VerticalMenuItem({
  * =========================================================
  */
 
-export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footerContent = {} }) {
+export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footerContent = {}, className = '' }) {
 
     const location = useLocation();
 
@@ -526,7 +526,7 @@ export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footer
     return (
 
         <Navbar
-            className="plugin-starter-navbar plugin-starter-vertical-navbar flex-column align-items-start vertical-navbar"
+            className={`plugin-starter-navbar plugin-starter-vertical-navbar flex-column align-items-start vertical-navbar h-100 ${className}`}
             style={{ backgroundColor: 'var(--bs-body-bg)' }}
         >
 
@@ -537,7 +537,7 @@ export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footer
                 </span>
             </Navbar.Brand>
             <>
-                <Nav className="flex-column w-100">
+                <Nav className="flex-column w-100 mb-auto">
 
                     {MenuItems.map((item) => (
 
@@ -553,9 +553,9 @@ export function VerticalMultiLevelNavbar({ MenuItems, headerContent = {}, footer
 
                 </Nav>
                 {Object.keys(footerContent).length > 0 && (
-                    <Nav>
+                    <div className="vertical-navbar-footer w-100">
                         {footerContent}
-                    </Nav>
+                    </div>
                 )}
              </>
         </Navbar>

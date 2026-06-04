@@ -96,8 +96,7 @@
     }
 
 
-    .current,
-    .active {
+    .current {
         background-color: var(--wp-active-color);
         color: #fff;
     }
@@ -107,8 +106,7 @@
             margin-right: 5px;
         }
 
-        &.current,
-        &.active {
+        &.current {
             background-color: var(--wp-active-color);
             color: #fff;
         }
