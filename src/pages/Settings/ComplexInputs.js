@@ -1,16 +1,66 @@
 import { __ } from "@wordpress/i18n";
 import { useOutletContext } from 'react-router-dom';
-import { useRef, useState, useEffect } from '@wordpress/element';
+import {Row, Col, Form } from 'react-bootstrap';
+import MultiSelect from "../../components/MultiSelect/MultiSelect";
+import MediaUploader from "../../components/MediaUploader/MediaUploader";
+
+const OPTIONS = [
+    {'value':'option-1', 'label':'Option 1'}, 
+    {'value':'option-2', 'label':'Option 2'},
+    {'value':'option-3', 'label':'Option 3'},
+    {'value':'option-4', 'label':'Option 4'},
+    {'value':'option-5', 'label':'Option 5'},
+    {'value':'option-6', 'label':'Option 6'},
+    {'value':'option-7', 'label':'Option 7'},
+    {'value':'option-8', 'label':'Option 8'},
+];
 const ComplexInputs = () => {
+   const { settings, settingsLoading, handleChange } = useOutletContext();
     return (
         <>
-            <h2 className="h2">Complex Inputs</h2>
-            <p>
-                This page demonstrates the use of complex input components such as text fields, checkboxes, and radio buttons. These inputs are essential for collecting user data and preferences in a structured manner.
-            </p>
-            <p>
-                The complex inputs are designed to be user-friendly and accessible, ensuring that users can easily interact with them. They are commonly used in forms, settings pages, and anywhere else where user input is required.
-            </p>            
+            {console.log('settings', settings)}
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>                        
+                            <h4 className="h4">{__("Multi Select", "plugin-starter")}</h4>
+                            <p>{__("Lorem", "plugin-starter")}</p>                        
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={6}>                            
+                            <MultiSelect
+                                name="complex_inputs.multiselect"
+                                options={OPTIONS}
+                                defaultValues={settings?.complex_inputs?.multiselect?.map(p => p.value) || []}
+                                onChange={(optioned) => {
+                                    // Filter the local OPTIONS array based on selected values
+                                    const optionedProducts = OPTIONS.filter(opt => optioned.includes(opt.value));
+                                    handleChange('complex_inputs.multiselect', optionedProducts);
+                                }}
+                                placeholder="Select multiselect"
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>     
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>                        
+                            <h4 className="h4">{__("Multi Select", "plugin-starter")}</h4>
+                            <p>{__("Lorem", "plugin-starter")}</p>                        
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={6}>                            
+                            <MediaUploader
+                                name="complex_inputs.media"
+                                data={settings?.complex_inputs?.media}
+                                onChange={(name, value) => handleChange(name, value)}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>              
         </>
     );
 };

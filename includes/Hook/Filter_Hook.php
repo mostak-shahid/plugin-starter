@@ -94,37 +94,36 @@ class Filter_Hook {
      */
     public function modify_plugin_starter_default_options( $opts ) {
         $defaults = [
-            'basic' => [
-                'text' => '',
-                'textarea' => '',
-                'radio' => 'radio-1',
-                'select' => 'select-2',
-                'number' => 10,
-                'color' => '#ff0000',
-                'checkbox' => true,
-                'switch' => true,
-                'date' => '',
-                'time' => '',
-                'datetime' => '',
+            'inputs' => [
+                'basic_inputs' => [
+                    'text' => '',
+                    'textarea' => '',
+                    'radio' => 'radio-1',
+                    'select' => 'select-2',
+                    'number' => 10,
+                    'range' => 100,
+                    'color' => '#ff0000',
+                    'checkbox' => false,
+                    'switch' => true,
+                    'date' => '',
+                    'time' => '',
+                    'datetime' => '',
+                ],
+                'array_inputs' => [
+                    'checkbox' => ['checkbox-1', 'checkbox-3']
+                ],
+                'complex_inputs' => [
+                    'multiselect' => [],
+                    'media' => [],
+                ],
+
             ],
-            'array' => [
-                'checkbox' => ['checkbox-1', 'checkbox-3']
-            ],
-            'complex' => [
-                'nested_text' => '',
-                'nested_array' => ['option-1', 'option-3'],
-            ],
-            'more' => [
-                'enable_scripts' => false,
-                'css' => '/* CSS Code Here */',
-                'js' => '// JavaScript Code Here',
-                'header_content' => '<!-- Content inside HEAD tag -->',
-                'footer_content' => '<!-- Content inside BODY tag -->',
-            ],
-            'tools' => [
-                'hide_plugin' => false, // delete, uninstall, none
-                'self_defense' => false, // delete, uninstall, none
-                'delete_data_on' => 'none', // delete, uninstall, none
+            'utilities' => [
+                'tools' => [
+                    'hide_plugin' => false, // delete, uninstall, none
+                    'self_defense' => false, // delete, uninstall, none
+                    'delete_data_on' => 'none', // delete, uninstall, none
+                ],
             ]
         ];
         return wp_parse_args( $opts, $defaults );

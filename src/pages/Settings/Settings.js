@@ -6,7 +6,7 @@ import {Card, Button, Nav, ToastContainer, Toast} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
-import { faGear, faHeadphones, faCircleQuestion, faCircleUser, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faGear, faHeadphones, faCircleQuestion, faCircleUser, faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { Layout } from '../../layouts';
 import {VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
@@ -24,6 +24,10 @@ const Settings = () => {
 
     const [proItems, setProItems] = useState([]);
     const [remoteItems, setRemoteItems] = useState([]);
+
+
+    const [saving, setSaving] = useState(false);
+    const [reseating, setReseating] = useState(false);
 
     const [showToast, setShowToast] = useState(false);
     const [dataToast, setDataToast] = useState({title: '', content: '', type: 'success'});
@@ -47,7 +51,7 @@ const Settings = () => {
     // Icon mapping
     const iconMap = {
         // 'page': <FontAwesomeIcon icon={faHome} />,
-        // 'layouts': <FontAwesomeIcon icon={faTableColumns} />,
+        'inputs': <FontAwesomeIcon icon={faHome} />,
         // 'basic-inputs': <FontAwesomeIcon icon={faGear} />,
         // 'array-inputs': <FontAwesomeIcon icon={faWebAwesome} />,
         // 'import-export': <FontAwesomeIcon icon={faWebAwesome} />,
@@ -128,12 +132,15 @@ const Settings = () => {
         });
     };
 
-    const handleSubmit = async (section, values) => {
+    // const handleSubmit = async (section, values) => {
+    const handleSubmit = async () => {
         try {
+            setSaving(true);
             const result = await apiFetch({
                 path: "/plugin-starter/v1/options",
                 method: 'POST',
-                data: { plugin_starter_options: { ...settings, [section]: values } }
+                // data: { plugin_starter_options: { ...settings, [section]: values } }
+                data: { plugin_starter_options: settings }
             });
             if (result.success) {
                 setSettingsReload(Math.random());
@@ -162,11 +169,13 @@ const Settings = () => {
             setShowToast(true);
         } finally {
             setSettingsReload(prev => prev + 1);
+            setSaving(false);
         }
     };
 
     const handleReset = async (section) => {
         try {
+            setReseating(true);
             const result = await apiFetch({
                 path: "/plugin-starter/v1/options/reset-settings",
                 method: 'POST',
@@ -198,24 +207,44 @@ const Settings = () => {
             setShowToast(true);
         } finally {
             setSettingsReload(prev => prev + 1);
+            setReseating(false)
         }
     };
 
     return (
         <Layout sidebarPosition="left" sidebar={sidebar} fluid={true}> 
             {/* {console.log('Current settings:', settings)} */}
-            <div className='p-3' style={{width: '100%', maxWidth: 696}}>
+            <div className='p-3 border'>
                 <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-4 border rounded-0 p-2' />
                 <Outlet 
-                    context={{ settings, setSettings, handleChange, handleSubmit, handleReset, setSettingsReload }} 
+                    context={{ settings, settingsLoading, handleChange }} 
                 />
+                <div className="d-flex align-items-center gap-2">            
+                    <Button 
+                        variant="primary"
+                        onClick={handleSubmit}
+                        disabled={saving}
+                    >
+                        {saving?__('Saving', 'plugin-starter'):__('Save', 'plugin-starter')}
+                    </Button>
+                    <Button 
+                        variant="danger"
+                        disabled={reseating}
+                        onClick={()=>handleReset(location.pathname.split('/').filter(Boolean).slice(1).join('.'))}
+                    >
+                        {reseating?__('Reseting', 'plugin-starter'):__('Reset', 'plugin-starter')}
+                        {/* {path.split('/').filter(Boolean).slice(1).join('.')} */}
+                        {/* {result = path.replace(/^\/[^\/]+\//, '').replace(/\//g, '.');} */}
+                        {/* {console.log(location.pathname.split('/').filter(Boolean).slice(1).join('.'))} */}
+                    </Button>
+                </div>
             </div>
 
 
             <ToastContainer
-                className="p-3"
-                position='top-end'
-                style={{ zIndex: 1 }}
+                className="position-fixed"
+                // position='top-end'
+                style={{ zIndex: 9999, top: 32, right: 0, }}
             >
                 <Toast 
                     bg={dataToast.type}

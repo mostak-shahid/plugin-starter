@@ -211,12 +211,12 @@ export default function App() {
                     </Route>           
                     {/* <Route path="/settings" element={<Settings />} /> */}
                     <Route path="/settings" element={<Settings />}>
-                        <Route index element={<Navigate to="inputs/basic-inputs" replace />} />
-                        <Route path="inputs" element={<Navigate to="basic-inputs" replace />} />
+                        <Route index element={<Navigate to="inputs/basic_inputs" replace />} />
+                        <Route path="inputs" element={<Navigate to="basic_inputs" replace />} />
                         
-                        <Route path="inputs/basic-inputs" element={<BasicInputs />} />
-                        <Route path="inputs/array-inputs" element={<ArrayInputs />} />
-                        <Route path="inputs/complex-inputs" element={<ComplexInputs />} />
+                        <Route path="inputs/basic_inputs" element={<BasicInputs />} />
+                        <Route path="inputs/array_inputs" element={<ArrayInputs />} />
+                        <Route path="inputs/complex_inputs" element={<ComplexInputs />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />

@@ -25,11 +25,17 @@
 .plugin-starter-settings-template ul#adminmenu > li.current > a.current:after {
   border-right-color: var(--bs-body-bg);
 }
+.plugin-starter-settings-template .form-select,
 .plugin-starter-settings-template .form-control {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   background-color: transparent;
 }
+.plugin-starter-settings-template .form-select:hover,
+.plugin-starter-settings-template .form-control:hover {
+  border-color: var(--bs-border-color);
+}
+.plugin-starter-settings-template .form-select:focus,
 .plugin-starter-settings-template .form-control:focus {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);
@@ -41,6 +47,22 @@
   margin: 0;
   margin-top: 4px;
   margin-left: -1.5em;
+}
+.plugin-starter-settings-template .form-switch .form-check-input {
+  background-color: #ffffff;
+  background-image: var(--bs-form-switch-bg);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  background-repeat: no-repeat;
+  outline: none;
+  box-shadow: none;
+  margin-left: -2.5em;
+}
+.plugin-starter-settings-template .form-switch .form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+.plugin-starter-settings-template .form-switch .form-check-input:checked::before {
+  display: none;
 }
 .plugin-starter-settings-template .breadcrumb {
   margin: 0;

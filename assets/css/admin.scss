@@ -30,6 +30,9 @@
         border: var(--bs-border-width) solid var(--bs-border-color);
         border-radius: var(--bs-border-radius);
         background-color: transparent;
+        &:hover {
+            border-color: var(--bs-border-color);
+        }
         &:focus {
             color: var(--bs-body-color);
             background-color: var(--bs-body-bg);
@@ -43,6 +46,24 @@
             margin: 0;
             margin-top: 4px;
             margin-left: -1.5em;
+        }
+    }
+    .form-switch {
+        .form-check-input {
+            background-color: #ffffff;
+            background-image: var(--bs-form-switch-bg);
+            border: var(--bs-border-width) solid var(--bs-border-color);
+            background-repeat: no-repeat;
+            outline: none;
+            box-shadow: none;
+            margin-left: -2.5em;
+            &:checked {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                &::before {
+                    display: none;
+                }
+            }
         }
     }
     .breadcrumb {

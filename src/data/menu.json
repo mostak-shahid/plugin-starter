@@ -2,22 +2,22 @@
     { "itemKey": "inputs", "text": "Inputs", "url": "/settings/inputs/",
         "items": [            
             {
-                "itemKey": "basic-inputs",
+                "itemKey": "basic_inputs",
                 "text": "Basic Inputs",
                 "description": "Basic input settings",
-                "url": "/settings/inputs/basic-inputs"
+                "url": "/settings/inputs/basic_inputs"
             },
             {
-                "itemKey": "array-inputs",
+                "itemKey": "array_inputs",
                 "text": "Array Inputs",
                 "description": "Array input settings",
-                "url": "/settings/inputs/array-inputs"
+                "url": "/settings/inputs/array_inputs"
             },
             {
-                "itemKey": "complex-inputs",
+                "itemKey": "complex_inputs",
                 "text": "Complex Inputs",
                 "description": "Complex input settings",
-                "url": "/settings/inputs/complex-inputs"
+                "url": "/settings/inputs/complex_inputs"
             }
         ] 
     },
