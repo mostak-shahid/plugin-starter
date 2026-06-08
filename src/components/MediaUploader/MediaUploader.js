@@ -55,8 +55,9 @@ export default function MediaUploader({
             var image = frame.state().get("selection").first().toJSON();
             var thumbnail = (image.sizes.thumbnail.url)?image.sizes.thumbnail.url:image.url;
             // console.log(image);
-            setMedia({id:image.id, url:image.url});
-            onChange(name, {id:image.id, url:image.url});
+            setMedia(image);
+            // setMedia({id:image.id, url:image.url});
+            onChange(image);
         });	
 
         // Finally, open the modal on click
@@ -64,8 +65,8 @@ export default function MediaUploader({
     }
     const removeImage  = (event) => {
         event.preventDefault();
-        setMedia({id:0, url:''});
-        onChange(name, {id:0, url:''});
+        setMedia({});
+        onChange({});
     }
     return (
         <>

@@ -34,8 +34,8 @@ const ComplexInputs = () => {
                                 defaultValues={settings?.complex_inputs?.multiselect?.map(p => p.value) || []}
                                 onChange={(optioned) => {
                                     // Filter the local OPTIONS array based on selected values
-                                    const optionedProducts = OPTIONS.filter(opt => optioned.includes(opt.value));
-                                    handleChange('complex_inputs.multiselect', optionedProducts);
+                                    const optionedItems = OPTIONS.filter(opt => optioned.includes(opt.value));
+                                    handleChange('complex_inputs.multiselect', optionedItems);
                                 }}
                                 placeholder="Select multiselect"
                             />
@@ -46,7 +46,7 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                            <h4 className="h4">{__("Multi Select", "plugin-starter")}</h4>
+                            <h4 className="h4">{__("MediaUploader", "plugin-starter")}</h4>
                             <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {
@@ -55,7 +55,10 @@ const ComplexInputs = () => {
                             <MediaUploader
                                 name="complex_inputs.media"
                                 data={settings?.complex_inputs?.media}
-                                onChange={(name, value) => handleChange(name, value)}
+                                onChange={(value) => {
+                                    console.log(value);
+                                    handleChange('complex_inputs.media', value);
+                                }}
                             />
                         </Col>
                     }
