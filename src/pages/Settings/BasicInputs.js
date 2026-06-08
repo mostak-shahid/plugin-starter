@@ -3,10 +3,11 @@ import { useOutletContext } from 'react-router-dom';
 import { useRef, useState, useEffect } from '@wordpress/element';
 import {Row, Col, Form, FloatingLabel, InputGroup } from 'react-bootstrap';
 const BasicInputs = () => {
-    const { settings, settingsLoading } = useOutletContext();
+   const { settings, settingsLoading, handleChange, handleSubmit, handleReset } = useOutletContext();
+
     return (
         <>
-
+            {console.log('settings', settings)}
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
@@ -18,7 +19,17 @@ const BasicInputs = () => {
                     {
                         !settingsLoading &&
                         <Col lg={6}>
-                            field
+                            <Form.Group>
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control 
+                                    type="text"                                     
+                                    value={settings?.basic?.text || ''}
+                                    onChange={(value) => handleChange(settings, 'basic.text', value)}
+                                />
+                                <Form.Text className="text-muted">
+                                We'll never share your email with anyone else.
+                                </Form.Text>
+                            </Form.Group>
                         </Col>
                     }
                 </Row>

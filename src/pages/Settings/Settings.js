@@ -2,22 +2,24 @@ import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { Outlet, useLocation } from 'react-router-dom';
-import {Card, Button, ToastContainer, Toast} from 'react-bootstrap';
+import {Card, Button, Nav, ToastContainer, Toast} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
-import { faHome, faTableColumns, faGear, faComment, faWebAwesome } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faHeadphones, faCircleQuestion, faCircleUser, faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { Layout } from '../../layouts';
 import {VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
 import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
+import {setNestedValue} from '../../lib/Helpers.js';
 import BreadcrumbControl from '../../components/BreadcrumbControl/BreadcrumbControl';
 const Settings = () => {
 
     const [settings, setSettings] = useState({});
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
+
     const location = useLocation();
 
     const [proItems, setProItems] = useState([]);
@@ -44,14 +46,14 @@ const Settings = () => {
 
     // Icon mapping
     const iconMap = {
-        'page': <FontAwesomeIcon icon={faHome} />,
-        'layouts': <FontAwesomeIcon icon={faTableColumns} />,
-        'basic-inputs': <FontAwesomeIcon icon={faGear} />,
-        'array-inputs': <FontAwesomeIcon icon={faWebAwesome} />,
-        'import-export': <FontAwesomeIcon icon={faWebAwesome} />,
-        'more': <FontAwesomeIcon icon={faWebAwesome} />,
-        'tools': <FontAwesomeIcon icon={faHome} />,
-        'feedback': <FontAwesomeIcon icon={faComment} />,
+        // 'page': <FontAwesomeIcon icon={faHome} />,
+        // 'layouts': <FontAwesomeIcon icon={faTableColumns} />,
+        // 'basic-inputs': <FontAwesomeIcon icon={faGear} />,
+        // 'array-inputs': <FontAwesomeIcon icon={faWebAwesome} />,
+        // 'import-export': <FontAwesomeIcon icon={faWebAwesome} />,
+        // 'more': <FontAwesomeIcon icon={faWebAwesome} />,
+        // 'tools': <FontAwesomeIcon icon={faHome} />,
+        // 'feedback': <FontAwesomeIcon icon={faComment} />,
     };
 
     // Get menu data from menu.js
@@ -66,6 +68,26 @@ const Settings = () => {
         <>
             <VerticalMultiLevelNavbar
                 MenuItems={menuItemsWithIcons}
+                footerContent={(
+                    <Nav className="flex-column">
+                        <Nav.Link href="https://wordpress.org/support/plugin/plugin-starter/" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
+                            <FontAwesomeIcon icon={faHeadphones} />
+                            {__("VIP Priority Support", "plugin-starter")} 
+                        </Nav.Link>
+                        <Nav.Link href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
+                            <FontAwesomeIcon icon={faCircleQuestion} />
+                            {__("Help Center", "plugin-starter")}
+                        </Nav.Link>
+                        <Nav.Link href="https://www.facebook.com/mospressbd" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
+                            <FontAwesomeIcon icon={faCircleUser} />
+                            {__("Community", "plugin-starter")}
+                        </Nav.Link>
+                        <Nav.Link href="https://wordpress.org/support/plugin/plugin-starter/reviews/" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
+                            <FontAwesomeIcon icon={faStar} />
+                            {__("Rate Us", "plugin-starter")}
+                        </Nav.Link>
+                    </Nav>
+                )}
             />
         </>
     );
@@ -97,6 +119,14 @@ const Settings = () => {
         fetchSettings();
     }, [settingsReload]);
 
+
+    const handleChange = (fieldPath, value) => {
+        // console.log("Field changed:", fieldPath, "New value:", value);
+        setSettings(prev => {
+            const updatedOptions = setNestedValue(prev, fieldPath, value);
+            return { ...updatedOptions }; // Ensure React detects the update
+        });
+    };
 
     const handleSubmit = async (section, values) => {
         try {
@@ -172,12 +202,14 @@ const Settings = () => {
     };
 
     return (
-        <Layout sidebarPosition="left" sidebar={sidebar}> 
+        <Layout sidebarPosition="left" sidebar={sidebar} fluid={true}> 
             {/* {console.log('Current settings:', settings)} */}
-            <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-4 border rounded-0 p-2' />
-            <Outlet 
-                context={{ settings, settingsLoading, handleSubmit, handleReset, setSettingsReload }} 
-            />
+            <div className='p-3' style={{width: '100%', maxWidth: 696}}>
+                <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-4 border rounded-0 p-2' />
+                <Outlet 
+                    context={{ settings, setSettings, handleChange, handleSubmit, handleReset, setSettingsReload }} 
+                />
+            </div>
 
 
             <ToastContainer

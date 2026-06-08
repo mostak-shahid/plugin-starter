@@ -44,9 +44,9 @@ const BreadcrumbControl = ({ menu=[], url='', className='', style = {} }) => {
 
     return (
         <div className={className} style={style}>
-            {console.log('Generated menu:', menu)}
-            {console.log('Generated url:', url)}
-            {console.log('Generated breadcrumbs:', breadcrumbItems)}
+            {/* {console.log('Generated menu:', menu)} */}
+            {/* {console.log('Generated url:', url)} */}
+            {/* {console.log('Generated breadcrumbs:', breadcrumbItems)} */}
             <Breadcrumb>
                 {breadcrumbItems.map((item, index) => (
                     <Breadcrumb.Item 

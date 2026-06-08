@@ -23,15 +23,15 @@ class Action_Hook
     public function __construct()
 	{
         $this->plugin_name = 'plugin-starter';
-        add_action('admin_init', [$this, 'plugin_starter_do_activation_redirect']);
-        add_action('admin_menu', [$this, 'plugin_starter_admin_menu']);
-		add_action('admin_enqueue_scripts', [$this, 'plugin_starter_dashboard_scripts']);
-        add_action('current_screen', [$this, 'plugin_starter_hide_admin_notices']);
-        add_action('admin_head', [$this, 'plugin_starter_option_form_submit']);
+        add_action('admin_init', [$this, 'do_activation_redirect']);
+        add_action('admin_menu', [$this, 'admin_menu']);
+		add_action('admin_enqueue_scripts', [$this, 'dashboard_scripts']);
+        add_action('current_screen', [$this, 'hide_admin_notices']);
+        add_action('admin_head', [$this, 'option_form_submit']);
 				
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts']);
-        add_action('upgrader_process_complete', [$this, 'plugin_starter_update_completed'], 10, 2);
+        add_action('upgrader_process_complete', [$this, 'update_completed'], 10, 2);
 		
     }
 
@@ -40,7 +40,7 @@ class Action_Hook
 	 *
 	 * @since    1.0.0
 	 */
-	public function plugin_starter_do_activation_redirect()
+	public function do_activation_redirect()
 	{
 		if (get_option('plugin_starter_do_activation_redirect')) {
 			delete_option('plugin_starter_do_activation_redirect');
@@ -54,7 +54,7 @@ class Action_Hook
 	 *
 	 * @since    1.0.0
 	 */
-	public function plugin_starter_admin_menu()
+	public function admin_menu()
 	{
 		add_menu_page(
 			esc_html(PLUGIN_STARTER_NAME),
@@ -79,7 +79,7 @@ class Action_Hook
 		// include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display.php');
 		echo '<div id="plugin-starter-settings-react-app" class="build-with-tailwind"></div>';
 	}
-	public function plugin_starter_dashboard_scripts($hook)
+	public function dashboard_scripts($hook)
 	{
 		if ($hook !== 'toplevel_page_plugin-starter') {
 			return;
@@ -169,7 +169,7 @@ class Action_Hook
 	 *
 	 * @since    1.0.0
 	 */
-	public function plugin_starter_hide_admin_notices()
+	public function hide_admin_notices()
 	{
 		// $current_screen = get_current_screen();
 		// var_dump($current_screen->id);
@@ -178,7 +178,7 @@ class Action_Hook
 			remove_all_actions('admin_notices');
 		}
 	}
-	public function plugin_starter_option_form_submit()
+	public function option_form_submit()
 	{
 		// $plugin_starter_options = array_replace_recursive(plugin_starter_get_option(), get_option('plugin_starter_options', []));
 		if (isset($_POST['plugin_starter_options_form_field']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['plugin_starter_options_form_field'])), 'plugin_starter_options_form_action')) {
@@ -193,7 +193,7 @@ class Action_Hook
 		}
 		// update_option('plugin_starter_options', $plugin_starter_options);
 	}
-	public function plugin_starter_update_completed($upgrader_object, $options)
+	public function update_completed($upgrader_object, $options)
 	{
 
 		// If an update has taken place and the updated type is plugins and the plugins element exists
