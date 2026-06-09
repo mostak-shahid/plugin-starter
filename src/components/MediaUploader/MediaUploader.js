@@ -2,13 +2,14 @@ import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 // import removeMedia from '../../assets/images/removeMedia.svg';
 // import uploadMedia from '../../assets/images/uploadMedia.svg';
+import {Button} from 'react-bootstrap';
 
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
 import { faCloudArrowUp, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
-import './MediaUploader.css';
+// import './MediaUploader.css';
 export default function MediaUploader({ 
     data, 
     name, 
@@ -32,9 +33,9 @@ export default function MediaUploader({
 
         // Create a new media frame
         frame = wp.media({
-            title: options?.frame?.title || __("Select or Upload Image", "store-addons-for-woocommerce"),
+            title: options?.frame?.title || __("Select or Upload Image", "plugin-starter"),
             button: {
-                text: options?.buttons?.select || __("Use this image", "store-addons-for-woocommerce"),
+                text: options?.buttons?.select || __("Use this image", "plugin-starter"),
             },
             multiple: false, // Set to true to allow multiple files to be selected
             library: options?.library || {type: 'image'},
@@ -52,12 +53,12 @@ export default function MediaUploader({
 			*/
 		});
         frame.on("select", function(){
-            var image = frame.state().get("selection").first().toJSON();
-            var thumbnail = (image.sizes.thumbnail.url)?image.sizes.thumbnail.url:image.url;
-            // console.log(image);
-            setMedia(image);
-            // setMedia({id:image.id, url:image.url});
-            onChange(image);
+            var media = frame.state().get("selection").first().toJSON();
+            var thumbnail = (media.sizes.thumbnail.url)?media.sizes.thumbnail.url:media.url;
+            // console.log(media);
+            setMedia(media);
+            // setMedia({id:media.id, url:media.url});
+            onChange(media);
         });	
 
         // Finally, open the modal on click
@@ -70,47 +71,44 @@ export default function MediaUploader({
     }
     return (
         <>
-            <div className="store-addons-for-woocommerce-media-uploader-unit">
-                <div className="media-uploader">
+            <div className="plugin-starter-media-uploader-unit">
+                <div className="media-uploader p-2 bg-white border rounded-2" style={{maxWidth:300}}>
                     { media?.url && media?.id ?                     
-                        <div className="file-name mb-medium background-primary with-close-button">
-                            <img className="uploaded-image" src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} />
-                            {/* <img className="store-addons-for-woocommerce-remove-image" onClick={removeImage} src={removeMedia} alt="" /> */}
-                            <FontAwesomeIcon className="store-addons-for-woocommerce-remove-image" icon={faCircleXmark} onClick={removeImage} />
+                        <div className="file-name with-close-button position-relative">
+                            <img className="uploaded-image w-100 img-fluid" src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} />
+                            {/* <img className="plugin-starter-remove-image" onClick={removeImage} src={removeMedia} alt="" /> */}
+                            <FontAwesomeIcon className="plugin-starter-remove-image position-absolute text-danger" icon={faCircleXmark} onClick={removeImage} style={{top:'-24', right: '-24', cursor: 'pointer', fontSize: 24}} />
                         </div> : 
-                        <div className="file-name mb-medium background-primary d-flex align-items-center justify-content-center" onClick={runUploader}>
-                            <div className="no-media-wrap">
+                        <div className="file-name d-flex align-items-center justify-content-center py-4" onClick={runUploader}>
+                            <div className="no-media-wrap text-center">
                                 <div className="img-wrap">
                                     {/* <img className="uploaded-image" src={uploadMedia} /> */}
                                     <FontAwesomeIcon className="uploaded-image" icon={faCloudArrowUp} />
                                 </div>  
                                 <div className="text-wrap">
-                                    <span className="title">{__("Upload Image", "store-addons-for-woocommerce")}</span>
-                                    <span className="sub-title">{__("Use the upload button", "store-addons-for-woocommerce")} <br/> {__("and select media  ", "store-addons-for-woocommerce")}</span>
+                                    <span className="title">{__("Upload Media", "plugin-starter")}</span>
+                                    <span className="sub-title">{__("Use the upload button", "plugin-starter")} <br/> {__("and select media  ", "plugin-starter")}</span>
                                 </div> 
 
                             </div>
                         </div>
                     }
-                    <div className="file-detail">
-                        <div className="button-wrapper">
-                            <button type="button" className="button button-primary" onClick={runUploader}>
-                                {options?.buttons?.upload || __("Upload Image", "store-addons-for-woocommerce")}
-                            </button>                        
-                            <button type="button" className="button button-secondary" onClick={removeImage}>
-                                {options?.buttons?.remove || __("Remove", "store-addons-for-woocommerce")}
-                            </button>                        
-                        </div>
-                        <div className="file-link">
-                            <label>
-                                
-                                <input type="text" value={media?.url? media.url:''} readOnly />
-                                <input type="hidden" value={media?.id? media.id:''} readOnly/>
-                                {
-                                    options?.message?.info && 
-                                    <div className="input-help mt-small"  dangerouslySetInnerHTML={{__html: options.message.info}} />
-                                }
-                            </label>
+                    <div className="file-detail mt-2">
+                        <div className="button-wrapper d-flex gap-2">
+                            <Button
+                                variant="primary"
+                                className='w-100'
+                                onClick={runUploader}
+                            >
+                                {options?.buttons?.upload || __("Upload Media", "plugin-starter")}
+                            </Button>   
+                            <Button
+                                variant="danger"
+                                className='w-100'
+                                onClick={removeImage}
+                            >
+                                {options?.buttons?.remove || __("Remove", "plugin-starter")}
+                            </Button>                            
                         </div>
                     </div>                    
                 </div>
@@ -126,13 +124,13 @@ export default function MediaUploader({
     onChange={onChange}
     options = {{
         frame:{
-            title: __("Select or Upload Image", "store-addons-for-woocommerce"),
+            title: __("Select or Upload Image", "plugin-starter"),
         },
         library: {type: 'image'},
         buttons: {
-            upload: __("Upload Image", "store-addons-for-woocommerce"),
-            remove: __("Remove", "store-addons-for-woocommerce"),
-            select: __("Use this image", "store-addons-for-woocommerce")                                            
+            upload: __("Upload Image", "plugin-starter"),
+            remove: __("Remove", "plugin-starter"),
+            select: __("Use this image", "plugin-starter")                                            
         }
     }}
 />
