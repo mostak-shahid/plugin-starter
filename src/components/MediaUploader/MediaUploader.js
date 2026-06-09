@@ -9,9 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
 import { faCloudArrowUp, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
-// import './MediaUploader.css';
+import './MediaUploader.css';
 export default function MediaUploader({ 
-    data, 
+    defaultValues, 
     name, 
     onChange = () => {}, 
     options={} 
@@ -19,8 +19,8 @@ export default function MediaUploader({
     const [media, setMedia] = useState({});
 
     useEffect(()=> {
-        setMedia(data)
-    },[data])
+        setMedia(defaultValues)
+    },[defaultValues])
     const runUploader = (event) => {
         let frame
         event.preventDefault()
@@ -83,7 +83,7 @@ export default function MediaUploader({
                             <div className="no-media-wrap text-center">
                                 <div className="img-wrap">
                                     {/* <img className="uploaded-image" src={uploadMedia} /> */}
-                                    <FontAwesomeIcon className="uploaded-image" icon={faCloudArrowUp} />
+                                    <FontAwesomeIcon className="uploaded-image" icon={faCloudArrowUp} style={{fontSize: 50}} />
                                 </div>  
                                 <div className="text-wrap">
                                     <span className="title">{__("Upload Media", "plugin-starter")}</span>
@@ -119,7 +119,7 @@ export default function MediaUploader({
 /*
 // Uses
 <MediaUploader 
-    data={settingData?.elements?.advanced?.media_uploader} 
+    defaultValues={settingData?.elements?.advanced?.media_uploader} 
     name='elements.advanced.media_uploader' 
     onChange={onChange}
     options = {{
