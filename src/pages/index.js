@@ -3,7 +3,7 @@ import Settings from './Settings/Settings';
 import BasicInputs from './Settings/BasicInputs';
 import ArrayInputs from './Settings/ArrayInputs';
 import ComplexInputs from './Settings/ComplexInputs';
-// import ImportExport from './Settings/ImportExport';
+import ImportExport from './Settings/ImportExport';
 // import More from './Settings/More';
 // import Tools from './Settings/Tools';
 // import Logs from './Settings/Logs/Logs';
@@ -28,7 +28,7 @@ export {
     BasicInputs,
     ArrayInputs,
     ComplexInputs,
-    // ImportExport,
+    ImportExport,
     // More,
     // Tools,
     // Logs,

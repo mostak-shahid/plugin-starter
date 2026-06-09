@@ -14,7 +14,7 @@ import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
 
-import { Dashboard, Settings, Feedback, FreeVsPro } from './pages';
+import { Dashboard, Settings, ImportExport, Feedback, FreeVsPro } from './pages';
 import NotFound from './NotFound'
 
 import {
@@ -217,6 +217,9 @@ export default function App() {
                         <Route path="inputs/basic_inputs" element={<BasicInputs />} />
                         <Route path="inputs/array_inputs" element={<ArrayInputs />} />
                         <Route path="inputs/complex_inputs" element={<ComplexInputs />} />
+
+                        <Route path="utilities" element={<Navigate to="import_export" replace />} />
+                        <Route path="utilities/import_export" element={<ImportExport />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />

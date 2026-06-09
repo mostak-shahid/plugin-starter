@@ -36,7 +36,7 @@
   display: block;
 }
 .accordion-container .accordion-item .accordion-header .left-part .eleble.checked {
-  background-color: var(--store-addons-for-woocommerce-color);
+  background-color: var(--plugin-starter-color);
   display: flex;
   justify-content: center;
   align-items: center;

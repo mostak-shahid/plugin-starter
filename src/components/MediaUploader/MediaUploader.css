@@ -1,1 +1,19 @@
-/*# sourceMappingURL=MediaUploader.css.map */
+.plugin-starter-media-uploader-unit .media-uploader {
+  width: 100%;
+  max-width: 300px;
+}
+.plugin-starter-media-uploader-unit .media-uploader .file-name {
+  cursor: pointer;
+}
+.plugin-starter-media-uploader-unit .media-uploader .file-name .remove-image-icon {
+  font-size: 24px;
+  top: -24px;
+  right: -24px;
+  cursor: pointer;
+}
+.plugin-starter-media-uploader-unit .media-uploader .file-name .uploaded-image-icon {
+  font-size: 50px;
+}
+.plugin-starter-media-uploader-unit .media-uploader .file-name.file-name-without-image {
+  border-style: dashed !important;
+}/*# sourceMappingURL=MediaUploader.css.map */

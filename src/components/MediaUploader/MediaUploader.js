@@ -72,18 +72,24 @@ export default function MediaUploader({
     return (
         <>
             <div className="plugin-starter-media-uploader-unit">
-                <div className="media-uploader p-2 bg-white border rounded-2" style={{maxWidth:300}}>
+                <div className="media-uploader p-2 bg-white border rounded-2">
                     { media?.url && media?.id ?                     
                         <div className="file-name with-close-button position-relative">
-                            <img className="uploaded-image w-100 img-fluid" src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} />
-                            {/* <img className="plugin-starter-remove-image" onClick={removeImage} src={removeMedia} alt="" /> */}
-                            <FontAwesomeIcon className="plugin-starter-remove-image position-absolute text-danger" icon={faCircleXmark} onClick={removeImage} style={{top:'-24', right: '-24', cursor: 'pointer', fontSize: 24}} />
+                            <img 
+                                className="uploaded-image w-100 img-fluid" 
+                                src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} 
+                            />
+                            <FontAwesomeIcon 
+                                className="remove-image-icon position-absolute text-danger" 
+                                icon={faCircleXmark} 
+                                onClick={removeImage} 
+                            />
                         </div> : 
-                        <div className="file-name d-flex align-items-center justify-content-center py-4" onClick={runUploader}>
+                        <div className="file-name file-name-without-image d-flex align-items-center justify-content-center py-4 border rounded-2" onClick={runUploader}>
                             <div className="no-media-wrap text-center">
                                 <div className="img-wrap">
                                     {/* <img className="uploaded-image" src={uploadMedia} /> */}
-                                    <FontAwesomeIcon className="uploaded-image" icon={faCloudArrowUp} style={{fontSize: 50}} />
+                                    <FontAwesomeIcon className="uploaded-image-icon" icon={faCloudArrowUp} />
                                 </div>  
                                 <div className="text-wrap">
                                     <span className="title">{__("Upload Media", "plugin-starter")}</span>

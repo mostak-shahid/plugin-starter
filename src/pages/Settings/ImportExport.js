@@ -101,75 +101,7 @@ const ImportExport = () => {
         }
     };
     return (
-        <>
-            <div className="setting-unit py-4">
-                <Row type="flex" gutter={[24, 24 ]}>
-                    <Col xs={24} lg={12} xl={14}>
-                        <Title heading={4}>{__("Export Settings", "plugin-starter")}</Title>
-                        <Paragraph>{__("Export your current settings", "plugin-starter")}</Paragraph>
-                    </Col>                                 
-                    <Col xs={24} lg={12} xl={10}>
-                        <Button     
-                            type="primary" 
-                            icon={<IconDownload />}                  
-                            onClick={handleExport}
-                        >
-                            {__( "Export Settings", "plugin-starter" )}
-                        </Button>
-                    </Col>
-                </Row>
-            </div>
-            
-            <div className="setting-unit pt-4">
-                <Row type="flex" gutter={[24, 24]}>
-                    <Col xs={24} lg={12} xl={14}>
-                            <Title heading={4}>{__("Import Settings", "plugin-starter")}</Title>
-                            <Paragraph>{__("Description", "plugin-starter")}</Paragraph>
-                    </Col>                                 
-                    <Col xs={24} lg={12} xl={10}>
-                        <Space vertical spacing='tight' align='start'>
-                            <Upload
-                                accept="application/json,.json"
-                                action=""
-                                fileList={fileList}
-                                onChange={handleFileChange}
-                                onRemove={handleRemove}
-                                beforeUpload={() => false}
-                                maxSize={5120}
-                                limit={1}
-                            >
-                                <Button icon={<IconUpload />}>
-                                    {__("Select JSON File", "plugin-starter")}
-                                </Button>
-                            </Upload>
-                            {importData &&
-                                <Button
-                                    icon={ !processingImport ? <IconTickCircle /> : null}
-                                    onClick={handleImport}
-                                    disabled={processingImport}
-                                    loading={processingImport}
-                                    type="primary"
-                                >
-                                    {processingImport
-                                        ? __("Processing...", "plugin-starter")
-                                        : __("Import Settings", "plugin-starter")
-                                    }
-                                </Button>
-                            }
-                        </Space>
-                        <div>
-
-                            {/* Hidden textarea with the JSON content */}
-                            <textarea
-                                style={{ display: 'none' }}
-                                value={importData}
-                                readOnly
-                            ></textarea>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-        </>
+        <></>
     );
 };
 

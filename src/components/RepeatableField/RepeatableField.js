@@ -75,7 +75,7 @@ const RepeatableField = ({
         <DndProvider backend={HTML5Backend}>
             <div className="repeatable-field-container">
                 <button onClick={addSection} className="add-btn text-purple-40">
-                    {options?.addButton || __("Add New Field", "store-addons-for-woocommerce")}
+                    {options?.addButton || __("Add New Field", "plugin-starter")}
                 </button>
                 {sections.map((section, index) => (
                     <DraggableAccordionItem

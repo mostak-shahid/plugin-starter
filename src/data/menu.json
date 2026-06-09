@@ -25,10 +25,10 @@
     { "itemKey": "utilities", "text": "Utilities", "url": "/settings/utilities/",
         "items": [  
             {
-                "itemKey": "import-export",
+                "itemKey": "import_export",
                 "text": "Import & Export",
                 "description": "Easily import or export plugin settings for backup, migration, or reuse.",
-                "url": "/settings/utilities/import-export"
+                "url": "/settings/utilities/import_export"
             },
             {
                 "itemKey": "tools",

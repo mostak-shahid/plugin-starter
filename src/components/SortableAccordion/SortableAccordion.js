@@ -76,10 +76,10 @@ const SortableAccordion = ({
     }, [sections])
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={HTML5Backend} context={window}>
             {/* {console.log('component-load:','SortableAccordion is rendered')} */}
             <div className="accordion-container">
-                <button onClick={addSection} className="add-btn text-purple-40">{options?.addButton || __("Add New Field", "store-addons-for-woocommerce")}</button>
+                <button onClick={addSection} className="add-btn text-purple-40">{options?.addButton || __("Add New Field", "plugin-starter")}</button>
                 {sections.map((section, index) => (
                     <DraggableAccordionItem
                         key={section.id}
@@ -129,14 +129,10 @@ const DraggableAccordionItem = ({ index, section, fields, moveSection, updateFie
                             onClick={() => updateField(section.id, 'enabler', !section.values['enabler'])}
                         ></span>
                     }
-                    <span className="open-handle">
-                        {/* <img src={accordionArrow} alt="" /> */}
-                        <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
-                    </span>
-                    <span>{section.values['title'] || (options?.titlePrefix || __("Section", "store-addons-for-woocommerce")) + ' ' + (index + 1)} </span>
+                    <span>{section.values['title'] || (options?.titlePrefix || __("Section", "plugin-starter")) + ' ' + (index + 1)} </span>
                 </div>
                 <div className="right-part">
-                    <span onClick={() => removeSection(section.id)} className="remove-btn">
+                    <span onClick={(e) => { e.stopPropagation(); removeSection(section.id); }} className="remove-btn">
                         {/* <img src={accordionDelete} alt="" /> */}
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </span>
