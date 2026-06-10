@@ -30,6 +30,7 @@
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   background-color: transparent;
+  max-width: 100%;
 }
 .plugin-starter-settings-template .form-select:hover,
 .plugin-starter-settings-template .form-control:hover {

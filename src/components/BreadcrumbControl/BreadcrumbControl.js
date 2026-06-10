@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { useMemo } from "react";
+import { useMemo } from '@wordpress/element';
 import { Card, Breadcrumb } from 'react-bootstrap';
 const pathPrefix = 'admin.php?page=plugin-starter#'; // Adjust this if your app is served from a different base path
 const generateBreadcrumbs = (pathname, menuData) => {

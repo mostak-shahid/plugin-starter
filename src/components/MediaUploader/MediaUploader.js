@@ -85,7 +85,10 @@ export default function MediaUploader({
                                 onClick={removeImage} 
                             />
                         </div> : 
-                        <div className="file-name file-name-without-image d-flex align-items-center justify-content-center py-4 border rounded-2" onClick={runUploader}>
+                        <div 
+                            className="file-name file-name-without-image d-flex align-items-center justify-content-center py-4 border rounded-2" 
+                            onClick={runUploader}
+                        >
                             <div className="no-media-wrap text-center">
                                 <div className="img-wrap">
                                     {/* <img className="uploaded-image" src={uploadMedia} /> */}
@@ -106,7 +109,7 @@ export default function MediaUploader({
                                 className='w-100'
                                 onClick={runUploader}
                             >
-                                {options?.buttons?.upload || __("Upload Media", "plugin-starter")}
+                                {options?.buttons?.upload || __("Upload", "plugin-starter")}
                             </Button>   
                             <Button
                                 variant="danger"

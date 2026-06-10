@@ -1,15 +1,14 @@
 import { __ } from "@wordpress/i18n";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-// import accordionDelete from "../../assets/images/accordion-delete.svg";
-// import accordionMove from "../../assets/images/accordion-move.svg";
+import {Form, Button} from 'react-bootstrap';
 
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
 import { faArrowsUpDownLeftRight, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import "./RepeatableField.css";
+// import "./RepeatableField.css";
 const ITEM_TYPE = "REPEATABLE_ITEM";
 
 const RepeatableField = ({ 
@@ -74,9 +73,13 @@ const RepeatableField = ({
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="repeatable-field-container">
-                <button onClick={addSection} className="add-btn text-purple-40">
+                <span 
+                    onClick={addSection} 
+                    className="d-inline-block text-decoration-underline mb-4"
+                    role="button"
+                >
                     {options?.addButton || __("Add New Field", "plugin-starter")}
-                </button>
+                </span>
                 {sections.map((section, index) => (
                     <DraggableAccordionItem
                         key={section.id}
@@ -139,10 +142,12 @@ const DraggableAccordionItem = ({ index, section, moveSection, updateField, remo
     };
 
     return (
-        <div ref={drop} className="accordion-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
-            <div ref={drag} className="accordion-header" onClick={() => setExpanded(!expanded)}>
-                <div className="left-part">
-                    <input
+        <div ref={drop} className="accordion-item mb-1" style={{ opacity: isDragging ? 0.5 : 1 }}>
+            <div ref={drag} className="accordion-header d-flex align-items-center gap-2" onClick={() => setExpanded(!expanded)}>
+                <div className="left-part" style={{flex: 1}}>
+                    <Form.Control 
+                        name={name}
+                        placeholder={options?.placeholder}
                         type="text"
                         value={getDisplayValue()}
                         onChange={(e) => updateField(section.id, '', e.target.value)}
@@ -154,11 +159,9 @@ const DraggableAccordionItem = ({ index, section, moveSection, updateField, remo
                         onClick={handleDeleteClick}
                         className="remove-btn"
                     >
-                        {/* <img src={accordionDelete} alt="Delete" /> */}
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </span>
                     <span className="drag-handle">
-                        {/* <img src={accordionMove} alt="Move" /> */}
                         <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
                     </span>
                 </div>

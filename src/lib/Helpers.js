@@ -34,7 +34,16 @@ const convertToPathArray = (path) => {
     }
     return parts;
 }
-
+export function convertToSlug(title) {
+    return title
+        .toLowerCase()
+        .trim()
+        .normalize('NFD')                 // Decompose Unicode characters into base letters and accent marks
+        .replace(/[\u0300-\u036f]/g, '')  // Strip out all decomposed accent marks
+        .replace(/[^a-z0-9\s-]/g, '')     // Clean up remaining punctuation
+        .replace(/[\s-]+/g, '-')          // Coalesce spacing / hyphens
+        .replace(/^-+|-+$/g, '');         // Trim dangling hyphens
+}
 // Function to ajax post data
 export const formDataPost = async (action, data = {})=> {
     try {

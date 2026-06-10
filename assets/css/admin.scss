@@ -30,6 +30,7 @@
         border: var(--bs-border-width) solid var(--bs-border-color);
         border-radius: var(--bs-border-radius);
         background-color: transparent;
+        max-width: 100%;
         &:hover {
             border-color: var(--bs-border-color);
         }

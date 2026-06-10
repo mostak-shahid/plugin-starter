@@ -1,16 +1,15 @@
 import { __ } from "@wordpress/i18n";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from '@wordpress/element';
+import {Form, Button} from 'react-bootstrap';
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-// import accordionArrow from "../../assets/images/accordion-arrow.svg";
-// import accordionDelete from "../../assets/images/accordion-delete.svg";
-// import accordionMove from "../../assets/images/accordion-move.svg";
 
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
 import { faArrowsUpDownLeftRight, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import "./SortableAccordion.scss";
+import {convertToSlug} from '../../lib/Helpers';
+// import "./SortableAccordion.scss";
 const ITEM_TYPE = "ACCORDION_ITEM";
 
 const SortableAccordion = ({ 
@@ -79,7 +78,13 @@ const SortableAccordion = ({
         <DndProvider backend={HTML5Backend} context={window}>
             {/* {console.log('component-load:','SortableAccordion is rendered')} */}
             <div className="accordion-container">
-                <button onClick={addSection} className="add-btn text-purple-40">{options?.addButton || __("Add New Field", "plugin-starter")}</button>
+                <span 
+                    onClick={addSection} 
+                    className="d-inline-block text-decoration-underline mb-4"
+                    role="button"
+                >
+                    {options?.addButton || __("Add New Field", "plugin-starter")}
+                </span>
                 {sections.map((section, index) => (
                     <DraggableAccordionItem
                         key={section.id}
@@ -119,31 +124,27 @@ const DraggableAccordionItem = ({ index, section, fields, moveSection, updateFie
     });
 
     return (
-        <div ref={drop} className="accordion-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
-            <div ref={drag} className="accordion-header" onClick={() => setExpanded(!expanded)}>
-                <div className="left-part">
-                    {
-                        options?.enabler &&
-                        <span
-                            className={`eleble ${section.values['enabler'] ? "checked" : "un-checked"}`}
-                            onClick={() => updateField(section.id, 'enabler', !section.values['enabler'])}
-                        ></span>
-                    }
+        <div ref={drop} className="accordion-item border rounded-2 mb-1" style={{ opacity: isDragging ? 0.5 : 1 }}>
+            <div 
+                ref={drag} 
+                className="accordion-header p-2 d-flex align-items-center justify-content-between" 
+                role="button"
+                onClick={() => setExpanded(!expanded)}
+            >
+                <div className="left-part fst-italic fw-semibold">
                     <span>{section.values['title'] || (options?.titlePrefix || __("Section", "plugin-starter")) + ' ' + (index + 1)} </span>
                 </div>
                 <div className="right-part">
                     <span onClick={(e) => { e.stopPropagation(); removeSection(section.id); }} className="remove-btn">
-                        {/* <img src={accordionDelete} alt="" /> */}
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </span>
                     <span className="drag-handle">
-                        {/* <img src={accordionMove} alt="" /> */}
                         <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
                     </span>
                 </div>
             </div>
             {expanded && (
-                <div className="accordion-content">
+                <div className="accordion-content border-top p-2">
                     {
                         options?.enabler &&
                         <div className="d-none">
@@ -155,16 +156,16 @@ const DraggableAccordionItem = ({ index, section, fields, moveSection, updateFie
                         </div>
                     }
                     {fields.map((field, index) => (
-                        <div className="unit-accordion" key={field.name}>
+                        <Form.Group className="unit-accordion mb-2" key={field.name} controlId={field.name}>
                             {
-                                field.label && <label className="field-label" htmlFor={field.name}>{field.label}</label>
+                                field.label && <Form.Label className="fw-semibold">{field.label}</Form.Label>
                             }
                             <DynamicField
                                 field={field}
                                 value={section.values[field.name] || ""}
                                 onChange={(value) => updateField(section.id, field.name, value)}
                             />
-                        </div>
+                        </Form.Group>
                     ))}
                 </div>
             )}
@@ -177,7 +178,7 @@ const DynamicField = ({ field, value, onChange }) => {
     switch (field.type) {
         case "input":
             return (
-                <input
+                <Form.Control 
                     type="text"
                     name={field.name}
                     placeholder={field.placeholder}
@@ -188,7 +189,9 @@ const DynamicField = ({ field, value, onChange }) => {
             );
         case "textarea":
             return (
-                <textarea
+                <Form.Control 
+                    as="textarea" 
+                    rows={3} 
                     name={field.name}
                     placeholder={field.placeholder}
                     className={field.className}
@@ -198,53 +201,57 @@ const DynamicField = ({ field, value, onChange }) => {
             );
         case "checkbox":
             return (
-                <label>
-                    <input
+                <div>
+                    <Form.Check
+                        inline
+                        label={field.placeholder}
                         type="checkbox"
                         name={field.name}
                         className={field.className}
                         checked={value}
                         onChange={(e) => onChange(e.target.checked)}
+                        id={convertToSlug(`${field.name}`)}
                     />
-                    {field.placeholder}
-                </label>
+                </div>
             );
         case "radio":
             return (
                 <div className={`checkbox-group-field ${field.className}`}>
-                    {field.options.map((option) => (
-                        <label key={option.key}>
-                            <input
-                                type="radio"
-                                name={field.name}
-                                value={option.key}
-                                checked={value === option.key}
-                                onChange={() => onChange(option.key)}
-                            />
-                            {option.value}
-                        </label>
+                    {field.options.map((option, index) => (
+                        <Form.Check
+                            inline
+                            label={option.value}
+                            type="radio"
+                            name={field.name}
+                            value={option.key}
+                            checked={value === option.key}
+                            onChange={() => onChange(option.key)}
+                            id={convertToSlug(`${field.name}-${option.key}`)}
+                        />
                     ))}
                 </div>
             );
         case "select":
             return (
-                <select
+                <Form.Select 
+                    aria-label={field.label}
                     name={field.name}
                     className={field.className}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                 >
-                    <option value="">Select</option>
+                    <option value="">{__('Select', 'plugin-starter')}</option>
                     {field.options.map((option) => (
                         <option key={option.key} value={option.key}>
                             {option.value}
                         </option>
                     ))}
-                </select>
+                </Form.Select>
             );
         case "multi-select":
             return (
-                <select
+                <Form.Select 
+                    aria-label={field.label}
                     name={field.name}
                     className={field.className}
                     multiple
@@ -256,28 +263,30 @@ const DynamicField = ({ field, value, onChange }) => {
                             {option.value}
                         </option>
                     ))}
-                </select>
+                </Form.Select>
             );
         case "checkbox-group":
             return (
                 <div className={`checkbox-group-field ${field.className}`}>
-                    {field.options.map((option) => (
-                        <label key={option.key}>
-                            <input
-                                type="checkbox"
-                                name={field.name}
-                                value={option.key}
-                                checked={value.includes(option.key)}
-                                onChange={(e) =>
-                                    onChange(
-                                        e.target.checked
-                                            ? [...value, option.key]
-                                            : value.filter((v) => v !== option.key)
-                                    )
-                                }
-                            />
-                            {option.value}
-                        </label>
+                    {field.options.map((option, index) => (
+                        <Form.Check
+                            inline
+                            label={option.value}
+
+                            type="checkbox"
+                            name={field.name}
+                            value={option.key}
+                            checked={value.includes(option.key)}
+                            onChange={(e) =>
+                                onChange(
+                                    e.target.checked
+                                        ? [...value, option.key]
+                                        : value.filter((v) => v !== option.key)
+                                )
+                            }
+
+                            id={convertToSlug(`${field.name}-${option.key}-${index}`)}
+                        />
                     ))}
                 </div>
             );
