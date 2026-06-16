@@ -41,6 +41,7 @@ class Rest_API
         $this->register_settings_theme_endpoints();
         $this->register_feedback_endpoints();
         $this->register_options_endpoints();
+        $this->register_logs_endpoints();
     }
 
     /**
@@ -153,6 +154,47 @@ class Rest_API
                 },
             ]
         );
+		register_rest_route(self::NAMESPACE, '/options-details',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'get_settings_details'],
+				'permission_callback' => '__return_true', // Allow public access
+				// 'permission_callback' => function () {
+                //     return current_user_can('manage_options');
+                // },
+                'args' => [
+                    'per_page' => ['sanitize_callback' => 'absint', 'default' => 5],
+                    'search' => ['sanitize_callback' => 'sanitize_text_field'],
+                ],
+			)
+		);
+    }
+
+    /**
+     * Register logs endpoints
+     */
+    private function register_logs_endpoints() {        
+        // Get logs with filters
+        register_rest_route( self::NAMESPACE, '/logs',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs' ),
+                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+                'args' => [
+                    'page' => ['sanitize_callback' => 'absint', 'default' => 1],
+                    'per_page' => ['sanitize_callback' => 'absint', 'default' => 5],
+                    'search' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'filter' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'sort_field' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'sort_order' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'date_from' => ['sanitize_callback' => 'sanitize_text_field'],
+                    'date_to' => ['sanitize_callback' => 'sanitize_text_field'],
+                ],
+            )
+        );
     }
 
     // callback for settings theme endpoints
@@ -229,6 +271,18 @@ class Rest_API
 		}
 		$plugin_starter_options = Utils::plugin_starter_get_option();
 		return new WP_REST_Response($plugin_starter_options, 200);
+	}
+	public function get_settings_details(WP_REST_Request $request)
+	{
+		// if (!current_user_can('manage_options')) {
+		// 	return new WP_Error(
+		// 		'rest_update_error',
+		// 		'Sorry, you are not allowed to update the DAEXT UI Test options.',
+		// 		array('status' => 403)
+		// 	);
+		// }
+		$plugin_starter_options_details = Utils::plugin_starter_get_option_details();
+		return new WP_REST_Response($plugin_starter_options_details, 200);
 	}
 	public function update_settings(WP_REST_Request $request) //WP_REST_Request $request
 	{
@@ -344,4 +398,3 @@ class Rest_API
 	}
 
 }
-// new Rest_Api();

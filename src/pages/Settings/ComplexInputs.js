@@ -24,7 +24,7 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                            <h4 className="h4">{__("Multi Select", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Multi Select", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {
@@ -48,7 +48,7 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                            <h4 className="h4">{__("MediaUploader", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("MediaUploader", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {
@@ -69,7 +69,7 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                            <h4 className="h4">{__("RepeatableField", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("RepeatableField", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {
@@ -90,7 +90,7 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                            <h4 className="h4">{__("SortableAccordion", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("SortableAccordion", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {

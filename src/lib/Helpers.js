@@ -1,5 +1,5 @@
 import apiFetch from "@wordpress/api-fetch";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from '@wordpress/element';
 import { useLocation } from 'react-router-dom';
 // Helper function to set nested values dynamically
 export const setNestedValue = (obj, path, value) => {
@@ -18,7 +18,7 @@ export const setNestedValue = (obj, path, value) => {
     }
 
     current[keys[keys.length - 1]] = value;
-    
+
     // console.log("Updated Options:", newObj);
     return newObj; // Return full new object
 };
@@ -45,7 +45,7 @@ export function convertToSlug(title) {
         .replace(/^-+|-+$/g, '');         // Trim dangling hyphens
 }
 // Function to ajax post data
-export const formDataPost = async (action, data = {})=> {
+export const formDataPost = async (action, data = {}) => {
     try {
         const formData = new FormData();
         // Append the action
@@ -68,7 +68,7 @@ export const formDataPost = async (action, data = {})=> {
             }
         });
         if (response.success) {
-            return response; 
+            return response;
         } else {
             throw new Error(response.data?.error_message || 'Reset failed');
         }
@@ -84,12 +84,12 @@ export const urlToArr = () => {
     useEffect(() => {
         // Get the path from the location
         let path = location.pathname;
-        
+
         // If using HashRouter, the path is in location.hash (remove the leading #)
         if (location.hash) {
             path = location.hash.substring(1);
         }
-        
+
         // Remove leading slash if present
         if (path.startsWith('/')) {
             path = path.substring(1);
@@ -99,10 +99,10 @@ export const urlToArr = () => {
 
         // Convert slashes to dots
         // const dotPath = path.replace(/\//g, '.');
-        
+
         // Handle empty path (home page)
         // const formattedPath = dotPath || 'home';
-        
+
         // setActivePath(formattedPath);
     }, [location]);
     return activePathArr;
@@ -146,6 +146,18 @@ export function useSettingsBodyHeight() {
     }, []);
 
     return height;
+}
+// Custom Hook to listen to window resizing
+export function useWindowWidth() {
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return width;
 }
 
 export function capitalizeWords(string) {

@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useState, useEffect } from '@wordpress/element';
-import {Card, Button, Container, Row, Col, Form, FloatingLabel, Spinner, ToastContainer, Toast} from 'react-bootstrap';
+import {Card, Button, Container, Row, Col, Form, FloatingLabel, Spinner} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
@@ -11,6 +11,7 @@ import { Layout } from '../layouts';
 import {PageInfo} from '../components';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import menuItems from '../data/menu.json';
+import ToastControl from "../components/ToastControl/ToastControl";
 const Feedback = () => {
     const [validated, setValidated] = useState(false);
 
@@ -213,27 +214,12 @@ const Feedback = () => {
                         </Form> 
                     </Card.Body>
                 </Card>
-            </Container> 
-
-            <ToastContainer
-                className="p-3"
-                position='top-end'
-                style={{ zIndex: 1 }}
-            >
-                <Toast 
-                    bg={dataToast.type}
-                    show={showToast} 
-                    onClose={toggleShowToast}
-                    delay={3000}
-                    autohide
-                >
-                    <Toast.Header>
-                        <strong className="me-auto">{dataToast.title}</strong>
-                        {/* <small>11 mins ago</small> */}
-                    </Toast.Header>
-                    <Toast.Body className="text-white">{dataToast.content}</Toast.Body>
-                </Toast>
-            </ToastContainer>
+            </Container>             
+            <ToastControl
+                show={showToast}
+                onClose={toggleShowToast}
+                data={dataToast}
+            />
         </Layout>
     );
 };

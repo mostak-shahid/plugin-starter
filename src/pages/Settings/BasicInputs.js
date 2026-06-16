@@ -10,7 +10,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Text Input", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Text Input", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -36,7 +36,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Textarea", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Textarea", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -59,7 +59,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Radio", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Radio", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -87,7 +87,7 @@ const BasicInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>                        
-                        <h4 className="h4">{__("Select", "plugin-starter")}</h4>
+                        <h6 className="h6">{__("Select", "plugin-starter")}</h6>
                         <p>{__("Lorem", "plugin-starter")}</p>                        
                     </Col>
                     {
@@ -102,19 +102,19 @@ const BasicInputs = () => {
                                     <option value="">Open this select menu</option>
                                     {
                                         [
-                                            {'value':'select-1', 'level':'Select 1'}, 
-                                            {'value':'select-2', 'level':'Select 2'},
-                                            {'value':'select-3', 'level':'Select 3'},
-                                            {'value':'select-4', 'level':'Select 4'},
-                                            {'value':'select-5', 'level':'Select 5'},
-                                            {'value':'select-6', 'level':'Select 6'},
-                                            {'value':'select-7', 'level':'Select 7'},
-                                            {'value':'select-8', 'level':'Select 8'},
-                                        ].map(({value, level}) => (
+                                            {'value':'select-1', 'label':'Select 1'}, 
+                                            {'value':'select-2', 'label':'Select 2'},
+                                            {'value':'select-3', 'label':'Select 3'},
+                                            {'value':'select-4', 'label':'Select 4'},
+                                            {'value':'select-5', 'label':'Select 5'},
+                                            {'value':'select-6', 'label':'Select 6'},
+                                            {'value':'select-7', 'label':'Select 7'},
+                                            {'value':'select-8', 'label':'Select 8'},
+                                        ].map(({value, label}) => (
                                         <option 
                                             value={value}
                                         >
-                                            {level}
+                                            {label}
                                         </option>
                                     ))}
                                 </Form.Select>
@@ -127,7 +127,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Input Group + Number", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Input Group + Number", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -155,7 +155,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Range", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Range", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -176,7 +176,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Color", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Color", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -199,7 +199,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Checkbox", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Checkbox", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -224,7 +224,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Switch", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Switch", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -249,7 +249,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Date", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Date", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -271,7 +271,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Time", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Time", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>
@@ -293,7 +293,7 @@ const BasicInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Datetime", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Datetime", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>

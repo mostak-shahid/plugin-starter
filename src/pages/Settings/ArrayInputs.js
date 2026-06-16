@@ -10,7 +10,7 @@ const ArrayInputs = () => {
                 <Row>
                     <Col lg={6}>
                         
-                            <h4 className="h4">{__("Radio", "plugin-starter")}</h4>
+                            <h6 className="h6">{__("Radio", "plugin-starter")}</h6>
                             <p>{__("Lorem", "plugin-starter")}</p>
                         
                     </Col>

@@ -14,7 +14,7 @@ import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import {HorizontalMultiLevelNavbar} from './components/Menu/Menu';
 
-import { Dashboard, Settings, ImportExport, Feedback, FreeVsPro } from './pages';
+import { Dashboard, Settings, ImportExport, Feedback, FreeVsPro, Tools, LogsTable } from './pages';
 import NotFound from './NotFound'
 
 import {
@@ -220,6 +220,9 @@ export default function App() {
 
                         <Route path="utilities" element={<Navigate to="import_export" replace />} />
                         <Route path="utilities/import_export" element={<ImportExport />} />
+                        <Route path="utilities/tools" element={<Tools />} />
+                        <Route path="utilities/logs" element={<Navigate to="table" replace />} />
+                        <Route path="utilities/logs/table" element={<LogsTable />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />

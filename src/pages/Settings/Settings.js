@@ -2,7 +2,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { Outlet, useLocation } from 'react-router-dom';
-import {Card, Button, Nav, ToastContainer, Toast} from 'react-bootstrap';
+import {Card, Button, Nav} from 'react-bootstrap';
 // Import the FontAwesomeIcon component
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import the specific solid home icon
@@ -14,6 +14,8 @@ import menuItems from '../../data/menu.json';
 import { getMenu } from '../../data/menu.js';
 import {setNestedValue} from '../../lib/Helpers.js';
 import BreadcrumbControl from '../../components/BreadcrumbControl/BreadcrumbControl';
+import ToastControl from '../../components/ToastControl/ToastControl.js';
+import { PageInfo } from '../../components/index.js';
 const Settings = () => {
 
     const [settings, setSettings] = useState({});
@@ -213,53 +215,49 @@ const Settings = () => {
 
     return (
         <Layout sidebarPosition="left" sidebar={sidebar} fluid={true}> 
+            {/* {console.log(settingsReload)} */}
             {/* {console.log('Current settings:', settings)} */}
-            <div className='p-3 border'>
-                <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-4 border rounded-0 p-2' />
-                <Outlet 
-                    context={{ settings, settingsLoading, handleChange }} 
-                />
-                <div className="d-flex align-items-center gap-2">            
-                    <Button 
-                        variant="primary"
-                        onClick={handleSubmit}
-                        disabled={saving}
-                    >
-                        {saving?__('Saving', 'plugin-starter'):__('Save', 'plugin-starter')}
-                    </Button>
-                    <Button 
-                        variant="danger"
-                        disabled={reseating}
-                        onClick={()=>handleReset(location.pathname.split('/').filter(Boolean).slice(1).join('.'))}
-                    >
-                        {reseating?__('Reseting', 'plugin-starter'):__('Reset', 'plugin-starter')}
-                        {/* {path.split('/').filter(Boolean).slice(1).join('.')} */}
-                        {/* {result = path.replace(/^\/[^\/]+\//, '').replace(/\//g, '.');} */}
-                        {/* {console.log(location.pathname.split('/').filter(Boolean).slice(1).join('.'))} */}
-                    </Button>
-                </div>
+            <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-3 border rounded-0 py-2 px-3' />
+            <div className='mb-3 border rounded-0 p-3'>
+                <PageInfo menu={menuData} url={location.pathname} />
             </div>
-
-
-            <ToastContainer
-                className="position-fixed"
-                // position='top-end'
-                style={{ zIndex: 9999, top: 32, right: 0, }}
-            >
-                <Toast 
-                    bg={dataToast.type}
-                    show={showToast} 
-                    onClose={toggleShowToast}
-                    delay={3000}
-                    autohide
-                >
-                    <Toast.Header>
-                        <strong className="me-auto">{dataToast.title}</strong>
-                        {/* <small>11 mins ago</small> */}
-                    </Toast.Header>
-                    <Toast.Body className="text-white">{dataToast.content}</Toast.Body>
-                </Toast>
-            </ToastContainer>
+            <div className='px-3 border'>
+                <Outlet 
+                    context={{ settings, settingsLoading, handleChange, setSettingsReload }} 
+                />
+                {console.log(location.pathname)}
+                {
+                    (
+                        location.pathname !== '/settings/utilities/import_export'
+                        && location.pathname !== '/settings/utilities/logs/table'
+                    ) 
+                        &&
+                        <div className="d-flex align-items-center gap-2 mb-3">            
+                            <Button 
+                                variant="primary"
+                                onClick={handleSubmit}
+                                disabled={saving}
+                            >
+                                {saving?__('Saving', 'plugin-starter'):__('Save', 'plugin-starter')}
+                            </Button>
+                            <Button 
+                                variant="danger"
+                                disabled={reseating}
+                                onClick={()=>handleReset(location.pathname.split('/').filter(Boolean).slice(1).join('.'))}
+                            >
+                                {reseating?__('Reseting', 'plugin-starter'):__('Reset', 'plugin-starter')}
+                                {/* {path.split('/').filter(Boolean).slice(1).join('.')} */}
+                                {/* {result = path.replace(/^\/[^\/]+\//, '').replace(/\//g, '.');} */}
+                                {/* {console.log(location.pathname.split('/').filter(Boolean).slice(1).join('.'))} */}
+                            </Button>
+                        </div>
+                }
+            </div>
+            <ToastControl 
+                show={showToast}
+                onClose={toggleShowToast}
+                data={dataToast}
+            />
         </Layout>
     );
 };

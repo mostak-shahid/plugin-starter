@@ -75,7 +75,7 @@ const RepeatableField = ({
             <div className="repeatable-field-container">
                 <span 
                     onClick={addSection} 
-                    className="d-inline-block text-decoration-underline mb-4"
+                    className="d-inline-block text-decoration-underline mb-3"
                     role="button"
                 >
                     {options?.addButton || __("Add New Field", "plugin-starter")}

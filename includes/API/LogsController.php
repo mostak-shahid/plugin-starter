@@ -104,12 +104,13 @@ class LogsController
         $page     = max( 1, (int) $request->get_param( 'page' ) );
         $per_page = max( 1, (int) $request->get_param( 'per_page' ) );
         $search   = trim( (string) $request->get_param( 'search' ) );
-        $date_from = $request->get_param( 'date_from' );
-        $date_to   = $request->get_param( 'date_to' );
         $filter    = $request->get_param( 'filter' );
 
+        $date_from = $request->get_param( 'date_from' );
+        $date_to   = $request->get_param( 'date_to' );
+
         $orderby = $request->get_param( 'sort_field' );
-        $order   = strtoupper( $request->get_param( 'sort_order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+        $order   = strtoupper( $request->get_param( 'sort_order' ) ) == 'ASC' ? 'ASC' : 'DESC';
 
         // Allowed order by columns
         $allowed_orderby = array( 'ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at' );

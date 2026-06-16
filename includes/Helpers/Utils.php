@@ -40,6 +40,13 @@ class Utils {
 		$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
 		return $plugin_starter_default_options;
 	}
+
+	public static function plugin_starter_get_default_options_details()
+	{
+		$plugin_starter_default_options_details = [];
+		$plugin_starter_default_options_details = apply_filters('plugin_starter_default_options_details_modify', $plugin_starter_default_options_details);
+		return $plugin_starter_default_options_details;
+	}
 	public static function plugin_starter_get_default_colors()
 	{
 		$plugin_starter_default_colors = [];
@@ -68,6 +75,10 @@ class Utils {
 		$plugin_starter_options_database = get_option('plugin_starter_options', []);
 		$plugin_starter_options = array_replace_recursive(self::plugin_starter_get_default_options(), $plugin_starter_options_database);
 		return $plugin_starter_options;
+	}
+	public static function plugin_starter_get_option_details()
+	{
+		return self::plugin_starter_get_default_options_details();
 	}
 
 	public static function plugin_starter_hide_plugin_from_list($plugins) {

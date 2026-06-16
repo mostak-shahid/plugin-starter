@@ -36,6 +36,7 @@ class Filter_Hook {
         add_filter('admin_body_class', [ $this, 'plugin_starter_admin_body_class' ]);
 
         add_filter('plugin_starter_default_options_modify', [ $this, 'modify_plugin_starter_default_options' ]);
+        add_filter('plugin_starter_default_options_details_modify', [ $this, 'modify_plugin_starter_default_options_details' ]);
         add_filter('plugin_starter_default_colors_modify', [ $this, 'modify_plugin_starter_default_colors' ]);
         add_filter('plugin_starter_default_gradients_modify', [ $this, 'modify_plugin_starter_default_gradients' ]);
         add_filter('plugin_starter_default_tables_modify', [ $this, 'modify_plugin_starter_default_tables' ]);
@@ -123,8 +124,108 @@ class Filter_Hook {
             'utilities' => [
                 'tools' => [
                     'hide_plugin' => false, // delete, uninstall, none
-                    'self_defense' => false, // delete, uninstall, none
-                    'delete_data_on' => 'none', // delete, uninstall, none
+                    // 'self_defense' => false, // delete, uninstall, none
+                    // 'delete_data_on' => 'none', // delete, uninstall, none
+                ],
+            ]
+        ];
+        return wp_parse_args( $opts, $defaults );
+    }
+    /**
+     * Default options details filter (still dynamic)
+     */
+    public function modify_plugin_starter_default_options_details( $opts ) {
+        $defaults = [
+            'inputs' => [
+                'basic_inputs' => [
+                    'text' => [
+                        'title' => esc_html__('Text Input', 'plugin-starter'),
+                        'intro' => esc_html__('This is a intro for Text Input', 'plugin-starter'),
+                        'hints' => esc_html__('This is a hints for Text Input', 'plugin-starter'),
+                        'before' => esc_html__('This is a before text for Text Input', 'plugin-starter'),
+                        'after' => esc_html__('This is a after text for Text Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'textarea' => [
+                        'title' => esc_html__('Textarea Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'radio' => [
+                        'title' => esc_html__('Radio Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'select' => [
+                        'title' => esc_html__('Select Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'number' => [
+                        'title' => esc_html__('Number Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'range' => [
+                        'title' => esc_html__('Range Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'color' => [
+                        'title' => esc_html__('Color Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'checkbox' => [
+                        'title' => esc_html__('Checkbox Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'switch' => [
+                        'title' => esc_html__('Switch Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'date' => [
+                        'title' => esc_html__('Date Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'time' => [
+                        'title' => esc_html__('Time Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                    'datetime' => [
+                        'title' => esc_html__('Datetime Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/basic_inputs',
+                    ],
+                ],
+                'array_inputs' => [
+                    'checkbox' => [
+                        'title' => esc_html__('Checkbox Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/array_inputs',
+                    ],
+                ],
+                'complex_inputs' => [
+                    'multiselect' => [
+                        'title' => esc_html__('Multiselect Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/complex_inputs',
+                    ],
+                    'media' => [
+                        'title' => esc_html__('Media Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/complex_inputs',
+                    ],
+                    'repeater' => [
+                        'title' => esc_html__('Repeater Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/complex_inputs',
+                    ],
+                    'sortableaccordion' => [
+                        'title' => esc_html__('Sortable Accordion Input', 'plugin-starter'),
+                        'url' => '#/settings/inputs/complex_inputs',
+                    ],
+                ],
+
+            ],
+            'utilities' => [
+                'tools' => [
+                    'hide_plugin' => [
+                        'title' => esc_html__('Hide Plugin', 'plugin-starter'),
+                        'intro' => esc_html__('Hide this plugin from plugin list.', 'plugin-starter'),
+                        'url' => '#/settings/utilities/tools',
+                    ],
+                    // 'self_defense' => false, // delete, uninstall, none
+                    // 'delete_data_on' => 'none', // delete, uninstall, none
                 ],
             ]
         ];

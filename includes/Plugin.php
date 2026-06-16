@@ -8,6 +8,7 @@ use MosPress\PluginStarter\API\Ajax_API;
 use MosPress\PluginStarter\API\Rest_API;
 use MosPress\PluginStarter\Hook\Action_Hook;
 use MosPress\PluginStarter\Hook\Filter_Hook;
+use MosPress\PluginStarter\Core\Tools;
 use MosPress\PluginStarter\Helpers\Utils;
 
 class Plugin {
@@ -23,6 +24,7 @@ class Plugin {
 		
 		// Instantiate additional core classes
 		new Utils();
+		new Tools();
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
