@@ -272,18 +272,50 @@ class Rest_API
 		$plugin_starter_options = Utils::plugin_starter_get_option();
 		return new WP_REST_Response($plugin_starter_options, 200);
 	}
-	public function get_settings_details(WP_REST_Request $request)
-	{
-		// if (!current_user_can('manage_options')) {
-		// 	return new WP_Error(
-		// 		'rest_update_error',
-		// 		'Sorry, you are not allowed to update the DAEXT UI Test options.',
-		// 		array('status' => 403)
-		// 	);
-		// }
-		$plugin_starter_options_details = Utils::plugin_starter_get_option_details();
-		return new WP_REST_Response($plugin_starter_options_details, 200);
-	}
+    public function get_settings_details(WP_REST_Request $request)
+    {
+        $plugin_starter_options_details = Utils::plugin_starter_get_option_details();
+        // $output = $this->flatten_options_details($plugin_starter_options_details);
+
+        $search   = $request->get_param('search');
+        $per_page = $request->get_param('per_page');
+
+        if ( ! empty( $search ) ) {
+            // 1. Flatten the option details
+            $flat_details = $this->flatten_options_details($plugin_starter_options_details);
+
+            // // 2. Filter items case-insensitively by title
+            // $filtered_details = [];
+            // foreach ($flat_details as $item) {
+            //     if (isset($item['title']) && stripos($item['title'], $search) !== false) {
+            //         $filtered_details[] = $item;
+            //     }
+            // }
+
+            // 2. Filter items case-insensitively by specified keys
+            $filtered_details = [];
+            $search_keys = ['title', 'intro', 'hints', 'before', 'after', 'url'];
+
+            foreach ($flat_details as $item) {
+                $matched = false;
+                foreach ($search_keys as $key) {
+                    if (isset($item[$key]) && stripos($item[$key], $search) !== false) {
+                        $matched = true;
+                        break;
+                    }
+                }
+                if ($matched) {
+                    $filtered_details[] = $item;
+                }
+            }
+
+            // 3. Paginate/Slice the results
+            $limit = ! empty($per_page) ? intval($per_page) : 5;
+            $plugin_starter_options_details = array_slice($filtered_details, 0, $limit);
+        }
+
+        return new WP_REST_Response($plugin_starter_options_details, 200);
+    }
 	public function update_settings(WP_REST_Request $request) //WP_REST_Request $request
 	{
 		if (!current_user_can('manage_options')) {
@@ -396,5 +428,29 @@ class Rest_API
 		// return $response;
 		return new WP_REST_Response($response, 200);
 	}
+
+    /**
+     * Recursively flattens nested option details into a single list of items.
+     *
+     * @param array $options_details Nested option details array.
+     * @return array Flattened list of options.
+     */
+    private function flatten_options_details($options_details)
+    {
+        $flat = [];
+        if (!is_array($options_details)) {
+            return $flat;
+        }
+        foreach ($options_details as $key => $value) {
+            if (is_array($value)) {
+                if (isset($value['title'])) {
+                    $flat[] = $value;
+                } else {
+                    $flat = array_merge($flat, $this->flatten_options_details($value));
+                }
+            }
+        }
+        return $flat;
+    }
 
 }

@@ -74,4 +74,65 @@
 }
 .plugin-starter-settings-template .breadcrumb li.breadcrumb-item a {
   text-decoration: none;
+}
+.plugin-starter-settings-template {
+  /**
+  * Help Tip
+  */
+}
+.plugin-starter-settings-template .mp-help-tip {
+  color: #666;
+  display: inline-block;
+  font-size: 1.1em;
+  font-style: normal;
+  height: 16px;
+  line-height: 16px;
+  position: relative;
+  vertical-align: middle;
+  width: 16px;
+}
+.plugin-starter-settings-template .mp-help-tip::after {
+  font-family: dashicons;
+  content: "\f223";
+  cursor: help;
+}
+
+.loading-skeleton {
+  background: linear-gradient(45deg, #e0e0e0 25%, #f8f8f8 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+.loading-skeleton.h1, .loading-skeleton.h2, .loading-skeleton.h3, .loading-skeleton.h4, .loading-skeleton.h5, .loading-skeleton.h6 {
+  margin-bottom: 10px;
+}
+.loading-skeleton.h1 {
+  height: 40px;
+}
+.loading-skeleton.h2 {
+  height: 33px;
+}
+.loading-skeleton.h3 {
+  height: 26px;
+}
+.loading-skeleton.h4 {
+  height: 19px;
+}
+.loading-skeleton.h5 {
+  height: 15px;
+}
+.loading-skeleton.h6 {
+  height: 13px;
+}
+.loading-skeleton.p {
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }/*# sourceMappingURL=admin.css.map */

@@ -1,36 +1,65 @@
 import { __ } from "@wordpress/i18n";
 import { useOutletContext } from 'react-router-dom';
-import {Row, Col, Form, FloatingLabel, InputGroup } from 'react-bootstrap';
+import {Row, Col, Form, FloatingLabel, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 const BasicInputs = () => {
-   const { settings, settingsLoading, handleChange } = useOutletContext();
+   const { settings, settingsDetails, settingsLoading, handleChange } = useOutletContext();
 
     return (
         <>
             <div className="setting-unit py-4">
-                <Row>
-                    <Col lg={6}>
-                        
-                            <h6 className="h6">{__("Text Input", "plugin-starter")}</h6>
-                            <p>{__("Lorem", "plugin-starter")}</p>
-                        
-                    </Col>
-                    {
-                        !settingsLoading &&
+                    <Row>
+                        <Col lg={6}>                        
+                            {
+                                settingsLoading 
+                                ? 
+                                <>
+                                    <div className="loading-skeleton h4" style={{width: '60%'}}></div>
+                                    <div className="loading-skeleton p" style={{width: '70%'}}></div>
+                                </>
+                                : 
+                                <>
+                                    {settingsDetails?.inputs?.basic_inputs?.text?.title && 
+                                        <h6 className="h6">
+                                            {settingsDetails?.inputs?.basic_inputs?.text?.title}
+                                            {settingsDetails?.inputs?.basic_inputs?.text?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.inputs.basic_inputs.text.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle}/>
+                                                </OverlayTrigger>                                            
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.inputs?.basic_inputs?.text?.intro && 
+                                        <p>{settingsDetails?.inputs?.basic_inputs?.text?.intro}</p> 
+                                    }
+                                </>
+                            }               
+                        </Col>
+
                         <Col lg={6}>
+                        {
+                            !settingsLoading &&
+
                             <Form.Group>
-                                <Form.Label>Email address</Form.Label>
+                                {settingsDetails?.inputs?.basic_inputs?.text?.before &&  
+                                    <Form.Label htmlFor="inputs-basic-inputs-text">{settingsDetails.inputs.basic_inputs.text.before}</Form.Label>
+                                }
                                 <Form.Control 
+                                    id="inputs-basic-inputs-text"
                                     type="text"                                     
                                     value={settings?.inputs?.basic_inputs?.text || ''}
                                     onChange={(e) => handleChange('inputs.basic_inputs.text', e.target.value)}
                                 />
-                                <Form.Text className="text-muted">
-                                We'll never share your email with anyone else.
-                                </Form.Text>
+                                {settingsDetails?.inputs?.basic_inputs?.text?.after &&                                
+                                    <Form.Text className="text-muted">{settingsDetails.inputs.basic_inputs.text.after}</Form.Text>
+                                }
                             </Form.Group>
+                        }
                         </Col>
-                    }
-                </Row>
+
+                    </Row>
+                
             </div>
             <div className="setting-unit py-4">
                 <Row>

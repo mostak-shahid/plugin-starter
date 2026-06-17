@@ -12,6 +12,7 @@ import {PageInfo} from '../components';
 import {OnlineSurvey, OnlineSurveyDark} from '../lib/Illustrations';
 import menuItems from '../data/menu.json';
 import ToastControl from "../components/ToastControl/ToastControl";
+import BreadcrumbControl from "../components/BreadcrumbControl/BreadcrumbControl";
 const Feedback = () => {
     const [validated, setValidated] = useState(false);
 
@@ -111,12 +112,15 @@ const Feedback = () => {
         }
     };
     return (        
-        <Layout sidebarPosition="none" fluid={true}>  
-            <Container> 
+        <Layout sidebarPosition="none">  
+                <BreadcrumbControl menu={menuItems} url="/feedback"  className='mb-3 border rounded-0 py-2 px-3' />
+                <div className='mb-3 border rounded-0 p-3'>
+                    <PageInfo menu={menuItems} url="/feedback"  />
+                </div>
                 <Card>
-                    <Card.Header>
+                    {/* <Card.Header>
                         <PageInfo menu={menuItems} url="/feedback"  /> 
-                    </Card.Header>
+                    </Card.Header> */}
                     <Card.Body>                              
                         <Form noValidate validated={validated} onSubmit={handleSubmit}>
                             <Row className="align-items-center">
@@ -213,8 +217,7 @@ const Feedback = () => {
                             
                         </Form> 
                     </Card.Body>
-                </Card>
-            </Container>             
+                </Card>            
             <ToastControl
                 show={showToast}
                 onClose={toggleShowToast}

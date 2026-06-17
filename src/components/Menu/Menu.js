@@ -195,7 +195,7 @@ function HorizontalDropdown({
  * =========================================================
  */
 
-export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, footerContent = {}, className = ''}) {
+export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, footerContent = {}, toggleContent = {}, className = ''}) {
 
     const location = useLocation();
 
@@ -215,13 +215,14 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
 
                     <Navbar.Brand onClick={() => navigate('/')} className="d-flex align-items-center gap-2 cursor-pointer">
                         {headerContent.logo}
-                        <span style={{ fontWeight: 600, fontSize: '1.25rem' }}>
+                        <span className='d-none d-lg-inline fw-semibold'>
                             {headerContent.text}
                         </span>
                     </Navbar.Brand>
-
-                    <Navbar.Toggle aria-controls="main-navbar" />
-
+                    <div className='d-flex d-lg-none gap-1'>
+                        {toggleContent}
+                        <Navbar.Toggle aria-controls="main-navbar" />
+                    </div>
                     <Navbar.Collapse id="main-navbar">
 
                         <Nav className="me-auto">
@@ -282,7 +283,7 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
                             })}
 
                         </Nav>
-                        <div className="horizontal-navbar-footer">
+                        <div className="horizontal-navbar-footer mt-2 mt-lg-0">
                             {footerContent}
                         </div>
 

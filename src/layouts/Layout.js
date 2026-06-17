@@ -10,7 +10,7 @@ const Layout = ({ children, sidebar, sidebarPosition='none', fluid=false, classN
             >
                 {sidebarPosition === 'left' &&
                     <div 
-                        className="boxed-layout-sidebar boxed-layout-sidebar-left border-end" 
+                        className="sidebar-left border-end" 
                         // style={{ width: 250, height: '100%' }}
                         style={{width: '100%', maxWidth: 250 }}
                     >
@@ -22,7 +22,7 @@ const Layout = ({ children, sidebar, sidebarPosition='none', fluid=false, classN
                 </div>
                 {sidebarPosition === 'right' &&
                     <div 
-                        className="boxed-layout-sidebar boxed-layout-sidebar-right border-start" 
+                        className="sidebar-right border-start" 
                         // style={{ width: 250, height: '100%' }}
                         style={{width: '100%', maxWidth: 250 }}
                     >

@@ -16,9 +16,11 @@ import {setNestedValue} from '../../lib/Helpers.js';
 import BreadcrumbControl from '../../components/BreadcrumbControl/BreadcrumbControl';
 import ToastControl from '../../components/ToastControl/ToastControl.js';
 import { PageInfo } from '../../components/index.js';
+import './Settings.css'
 const Settings = () => {
 
     const [settings, setSettings] = useState({});
+    const [settingsDetails, setSettingsDetails] = useState({});
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsReload, setSettingsReload] = useState(0);
 
@@ -103,12 +105,18 @@ const Settings = () => {
         const fetchSettings = async () => {
             setSettingsLoading(true);
             try {
-                const data = await apiFetch({
-                    path: "/plugin-starter/v1/options",
-                    method: 'GET'
-                });
-                if (data) {
+                // Both requests start at the exact same time
+                const [data, dataDetails] = await Promise.all([
+                    apiFetch({ path: '/plugin-starter/v1/options' }),
+                    apiFetch({ path: '/plugin-starter/v1/options-details' })
+                ]);
+
+                // Access the parsed JSON results instantly
+                // console.log('data:', data);
+                // console.log('dataDetails:', dataDetails);
+                if (data && dataDetails) {
                     setSettings(data);
+                    setSettingsDetails(dataDetails);
                 }
             } catch (error) {
                 console.error("Error fetching settings:", error);
@@ -214,7 +222,7 @@ const Settings = () => {
     };
 
     return (
-        <Layout sidebarPosition="left" sidebar={sidebar} fluid={true}> 
+        <Layout sidebarPosition="left" sidebar={sidebar} fluid={true} className='settings-page-layout'> 
             {/* {console.log(settingsReload)} */}
             {/* {console.log('Current settings:', settings)} */}
             <BreadcrumbControl menu={menuData} url={location.pathname} className='mb-3 border rounded-0 py-2 px-3' />
@@ -223,9 +231,9 @@ const Settings = () => {
             </div>
             <div className='px-3 border'>
                 <Outlet 
-                    context={{ settings, settingsLoading, handleChange, setSettingsReload }} 
+                    context={{ settings, settingsDetails, settingsLoading, handleChange, setSettingsReload }} 
                 />
-                {console.log(location.pathname)}
+                {/* {console.log(location.pathname)} */}
                 {
                     (
                         location.pathname !== '/settings/utilities/import_export'
