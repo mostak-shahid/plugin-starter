@@ -1,3 +1,7 @@
 .plugin-starter-settings-template #wpcontent {
   padding-left: 0;
+}
+
+.toplevel_page_plugin-starter .wp-menu-image img {
+  display: inline-block;
 }/*# sourceMappingURL=admin.css.map */

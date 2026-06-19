@@ -3,6 +3,8 @@ phpcs.xml
 phpunit.xml
 Thumbs.db
 wp-cli.local.yml
+package-lock.json
+composer.lock
 node_modules/
 vendor/
 build/
