@@ -195,6 +195,23 @@ class Rest_API
                 ],
             )
         );
+
+        // Delete log by ID
+        register_rest_route( self::NAMESPACE, '/logs/(?P<id>\d+)',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( LogsController::class, 'delete_log' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+                'args'                => array(
+                    'id' => array(
+                        'required'          => true,
+                        'sanitize_callback' => 'absint',
+                    ),
+                ),
+            )
+        );
     }
 
     // callback for settings theme endpoints

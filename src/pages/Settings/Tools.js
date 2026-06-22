@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { useState, useEffect } from '@wordpress/element';
 import { useOutletContext } from 'react-router-dom';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button} from 'react-bootstrap';
 import { Popover } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch'; // Added missing apiFetch import
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,10 +14,10 @@ const Tools = () => {
     const [processing, setProcessing] = useState(false);
 
     // Popover visibility state
-    const [isVisible, setIsVisible] = useState(false);
+    const [popoverVisible, setPopoverVisible] = useState(false);
     const toggleVisible = () => {
         if (!processing) {
-            setIsVisible((state) => !state);
+            setPopoverVisible((state) => !state);
         }
     };
 
@@ -28,7 +28,7 @@ const Tools = () => {
 
     // Executed when user confirms 'Yes' inside the popover
     const handleConfirmReset = async () => {
-        setIsVisible(false); // Close the popover immediately on decision
+        setPopoverVisible(false); // Close the popover immediately on decision
         setProcessing(true);
 
         try {
@@ -176,9 +176,9 @@ const Tools = () => {
                         </Button>
 
                             {/* WordPress Component Popover */}
-                            {isVisible && (
+                            {popoverVisible && (
                                 <Popover
-                                    onFocusOutside={() => setIsVisible(false)}
+                                    onFocusOutside={() => setPopoverVisible(false)}
                                     // variant="unstyled"
                                     className="mt-2"
                                     // style={{ paddingLeft: 'calc(var(--bs-gutter-x) * .5)' }}
@@ -191,7 +191,7 @@ const Tools = () => {
                                             <Button
                                                 size="sm"
                                                 variant="light"
-                                                onClick={() => setIsVisible(false)}
+                                                onClick={() => setPopoverVisible(false)}
                                             >
                                                 {__("No", "plugin-starter")}
                                             </Button>

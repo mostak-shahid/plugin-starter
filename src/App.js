@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Alert, Button, Container, Row, Col, Badge, Modal, Form, FloatingLabel } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faStar, faGear, faTableColumns, faWebAwesome, faSun, faMoon, faComment, faBell, faMagnifyingGlass, faClose, faHeadphones, faQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faStar, faGear, faTableColumns, faWebAwesome, faSun, faMoon, faComment, faBell, faMagnifyingGlass, faClose, faHeadphones, faQuestion, faUser, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { useSettingsBodyHeight } from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
@@ -105,6 +105,7 @@ export default function App() {
 
     const [showModal, setShowModal] = useState(false);
     const [search, setSearch] = useState('');
+    const [searching, setSearching] = useState(false);
     const [searchResult, setSearchResult] = useState([]);
     const modalClose = () => {
         setShowModal(false);
@@ -113,7 +114,20 @@ export default function App() {
     }
     const modalShow = () => setShowModal(true);
     useEffect(() => {
-        const doSearch = async () => {
+
+        // 1. Don't search if the input is empty
+        if (!search.trim()) {
+            setSearchResult([]);
+            return;
+        }
+
+        // 2. Create an AbortController to cancel this request if input changes again
+        const controller = new AbortController();
+        const { signal } = controller;
+
+        // 3. Set up the debounce timer
+        const delayDebounceFn = setTimeout(async () => {
+            setSearching(true);
             try {
                 const params = new URLSearchParams({
                     search: search,
@@ -122,14 +136,39 @@ export default function App() {
                     path: `/plugin-starter/v1/options-details?${params.toString()}`,
                     method: 'GET'
                 });
-                if (result) {
-                    setSearchResult(result)
+                setSearchResult(result)
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                console.error('Search error:', error);
                 }
-            } catch (err) {
-                console.error('API error:', err);
+            } finally {
+                setSearching(false);
             }
+        }, 300); // 300ms wait time
+
+        // 4. Cleanup function: runs when searchTerm changes or component unmounts
+        return () => {
+            clearTimeout(delayDebounceFn);
+            controller.abort();
         };
-        if (search.length > 3) doSearch();
+
+        // const doSearch = async () => {
+        //     try {
+        //         const params = new URLSearchParams({
+        //             search: search,
+        //         });
+        //         const result = await apiFetch({
+        //             path: `/plugin-starter/v1/options-details?${params.toString()}`,
+        //             method: 'GET'
+        //         });
+        //         if (result) {
+        //             setSearchResult(result)
+        //         }
+        //     } catch (err) {
+        //         console.error('API error:', err);
+        //     }
+        // };
+        // if (search.length > 3) doSearch();
     }, [search]);
 
     const [proItems, setProItems] = useState([]);
@@ -390,6 +429,9 @@ export default function App() {
                     >
                         <Form.Control type="search" placeholder={__('Search Settings', 'plugin-starter')} value={search} onChange={(e) => setSearch(e.target.value)} />
                     </FloatingLabel>
+                    {
+                        searching && <div className="text-center border rounded-2 mt-2 p-3"><FontAwesomeIcon icon={faSpinner} className='fa-spin-pulse'/></div>
+                    }
                     {searchResult.length ? 
                         <div className='search-results border rounded-2 mt-2'>
                             {searchResult.map((item, index) => (

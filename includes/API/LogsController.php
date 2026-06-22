@@ -40,7 +40,7 @@ class LogsController
 				'user_id' => $user_id,
 				'ip' => $ip,
 				'user_agent' => $user_agent,
-				'title' => 'Settings Reset',
+				'title' => "Reset section: $section",
                 'category' => __('Settings Reset', 'plugin-starter'),
 				'description' => "Reset section: $section",
 				// 'data' => json_encode($changes),
@@ -51,21 +51,55 @@ class LogsController
 		);
 	}
 
-	public static function log_settings_change($old_data, $new_data)
+	// public static function log_settings_change($old_data, $new_data)
+	// {
+	// 	global $wpdb;
+	// 	$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+
+	// 	$changes = [];
+	// 	foreach ($new_data as $key => $value) {
+	// 		if (!isset($old_data[$key]) || $old_data[$key] !== $value) {
+	// 			$changes[$key] = [
+	// 				'old' => isset($old_data[$key]) ? $old_data[$key] : null,
+	// 				'new' => $value
+	// 			];
+	// 		}
+	// 	}
+
+	// 	if (empty($changes)) {
+	// 		return;
+	// 	}
+
+	// 	$user_id = get_current_user_id();
+	// 	$ip = Utils::get_client_ip();
+	// 	$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
+
+	// 	$wpdb->insert(
+	// 		$logs_table_name,
+	// 		[
+	// 			'user_id' => $user_id,
+	// 			'ip' => $ip,
+	// 			'user_agent' => $user_agent,
+	// 			'title' => count($changes) . ' setting(s) changed',
+    //             'category' => __('Settings Change', 'plugin-starter'),
+	// 			'description' => count($changes) . ' setting(s) changed',
+	// 			// 'data' => json_encode($changes),
+	// 			'created_at' => current_time('mysql'),
+	// 			'updated_at' => current_time('mysql')
+	// 		],
+	// 		['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+	// 	);
+	// }
+
+    public static function log_settings_change($old_data, $new_data)
 	{
 		global $wpdb;
 		$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-		$changes = [];
-		foreach ($new_data as $key => $value) {
-			if (!isset($old_data[$key]) || $old_data[$key] !== $value) {
-				$changes[$key] = [
-					'old' => isset($old_data[$key]) ? $old_data[$key] : null,
-					'new' => $value
-				];
-			}
-		}
-
+		// Retrieve setting details (title, url)
+		$details = Utils::plugin_starter_get_option_details();
+		$changes = self::get_changes_recursive($old_data, $new_data, $details);
+        // error_log(print_r($changes), true);
 		if (empty($changes)) {
 			return;
 		}
@@ -77,17 +111,17 @@ class LogsController
 		$wpdb->insert(
 			$logs_table_name,
 			[
-				'user_id' => $user_id,
-				'ip' => $ip,
-				'user_agent' => $user_agent,
-				'title' => 'Settings Updated',
-                'category' => __('Settings Change', 'plugin-starter'),
-				'description' => count($changes) . ' setting(s) changed',
-				// 'data' => json_encode($changes),
-				'created_at' => current_time('mysql'),
-				'updated_at' => current_time('mysql')
+				'user_id'     => $user_id,
+				'ip'          => $ip,
+				'user_agent'  => $user_agent,
+				'title'       => count($changes) . ' setting(s) changed',
+				'category'    => __('Settings Change', 'plugin-starter'),
+				// 'description' => count($changes) . ' setting(s) changed',
+				'description' => json_encode($changes), // Save structured changes JSON
+				'created_at'  => current_time('mysql'),
+				'updated_at'  => current_time('mysql')
 			],
-			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+			['%d', '%s', '%s', '%s', '%s', '%s', '%s']
 		);
 	}
 
@@ -787,4 +821,54 @@ class LogsController
             200
         );
     }
+
+	/**
+	 * Helper to check if an array is associative.
+	 */
+	private static function is_associative_array($array)
+	{
+		if (!is_array($array)) {
+			return false;
+		}
+		if (empty($array)) {
+			return false;
+		}
+		return array_keys($array) !== range(0, count($array) - 1);
+	}
+
+	/**
+	 * Recursively compares old and new data arrays against the options details.
+	 */
+	private static function get_changes_recursive($old, $new, $details)
+	{
+		$changes = [];
+
+		foreach ($new as $key => $value) {
+			$old_val = isset($old[$key]) ? $old[$key] : null;
+
+			// Check if details has a title key at this level (meaning we reached the leaf setting details)
+			$has_details_title = isset($details[$key]['title']);
+
+			if (is_array($value) && !$has_details_title && self::is_associative_array($value)) {
+				$sub_details = isset($details[$key]) ? $details[$key] : [];
+				$sub_changes = self::get_changes_recursive($old_val, $value, $sub_details);
+				$changes = array_merge($changes, $sub_changes);
+			} else {
+				if ($old_val !== $value) {
+					$title = isset($details[$key]['title']) ? $details[$key]['title'] : ucwords(str_replace('_', ' ', $key));
+					$url = isset($details[$key]['url']) ? $details[$key]['url'] : '';
+
+					$changes[] = [
+						'title'   => $title,
+						'url'     => $url,
+						'old'     => $old_val,
+						'changed' => $value
+					];
+				}
+			}
+		}
+
+		return $changes;
+	}
+
 }
