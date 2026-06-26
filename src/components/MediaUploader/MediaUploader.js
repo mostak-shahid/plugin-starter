@@ -12,10 +12,12 @@ import { faCloudArrowUp, faCircleXmark } from '@fortawesome/free-solid-svg-icons
 import './MediaUploader.css';
 export default function MediaUploader({ 
     defaultValues, 
-    name, 
+    name='', 
     onChange = () => {}, 
     options={} 
-}) {    
+}) {   
+    // Generate a random fallback name if none is provided
+    const [MediaUploaderName] = useState(() => name || `mu-${Math.random().toString(36).substr(2, 9)}`); 
     const [media, setMedia] = useState({});
 
     useEffect(()=> {
@@ -121,6 +123,9 @@ export default function MediaUploader({
                         </div>
                     </div>                    
                 </div>
+                <input type="hidden" value={media?.id??''} name={MediaUploaderName + '[id]'} />
+                <input type="hidden" value={media?.url??''} name={MediaUploaderName + '[url]'} />
+                {/* {console.log(media)} */}
             </div>
         </>        
     )

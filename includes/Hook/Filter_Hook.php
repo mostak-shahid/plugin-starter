@@ -118,6 +118,21 @@ class Filter_Hook {
                     'media' => [],
                     'repeater' => [],
                     'sortableaccordion' => [],
+                    'imageselector' => '10',
+                    'colorpicker' => '#ffffff',
+                    'background' => [
+                        'color' => '#ffffff',
+                        'image' => [
+                            'id' => '9',
+                            'url' => 'http://localhost:10003/wp-content/uploads/2026/04/people-surfing-coasts-varkala-near-trivandrum-scaled.jpg',
+                        ],
+                        'position' => "left center",
+                        'size' => "cover",
+                        'repeat' => "no-repeat",
+                        'origin' => "border-box",
+                        'clip' => "content-box",
+                        'attachment' => "scroll"
+                    ],
                 ],
 
             ],

@@ -18,6 +18,8 @@ const RepeatableField = ({
     onChange = () => {}, 
 }) => {
     const sectionsFirstRender = useRef(true);
+    // Generate a random fallback name if none is provided
+    const [RepeatableFieldName] = useState(() => name || `rf-${Math.random().toString(36).substr(2, 9)}`);
 
     const [sections, setSections] = useState(
         defaultValues.length > 0
@@ -83,6 +85,7 @@ const RepeatableField = ({
                 {sections.map((section, index) => (
                     <DraggableAccordionItem
                         key={section.id}
+                        name={RepeatableFieldName}
                         index={index}
                         section={section}
                         moveSection={moveSection}
@@ -96,7 +99,7 @@ const RepeatableField = ({
     );
 };
 
-const DraggableAccordionItem = ({ index, section, moveSection, updateField, removeSection, options }) => {
+const DraggableAccordionItem = ({ name, index, section, moveSection, updateField, removeSection, options }) => {
     const [expanded, setExpanded] = useState(false);
 
     const [{ isDragging }, drag] = useDrag({
@@ -146,7 +149,7 @@ const DraggableAccordionItem = ({ index, section, moveSection, updateField, remo
             <div ref={drag} className="accordion-header d-flex align-items-center gap-2" onClick={() => setExpanded(!expanded)}>
                 <div className="left-part" style={{flex: 1}}>
                     <Form.Control 
-                        name={name}
+                        name={name + '[]'}
                         placeholder={options?.placeholder}
                         type="text"
                         value={getDisplayValue()}
