@@ -1,4 +1,5 @@
 <?php
+
 namespace MosPress\PluginStarter\API;
 
 use MosPress\PluginStarter\Helpers\Utils;
@@ -7,6 +8,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Query;
 use WP_REST_Server;
+
 class LogsController
 {
 
@@ -17,113 +19,43 @@ class LogsController
         $this->logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
     }
 
-	public static function log_settings_reset($section, $old_data, $new_data)
-	{
-		global $wpdb;
-		$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
+    public static function log_settings_change($old_data, $new_data, $category = 'change')
+    {
+        global $wpdb;
+        $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-		$user_id = get_current_user_id();
-		$ip = Utils::get_client_ip();
-		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
-
-		$changes = [
-			$section => [
-				'old' => $old_data,
-				'new' => $new_data,
-				'action' => 'reset'
-			]
-		];
-
-		$wpdb->insert(
-			$logs_table_name,
-			[
-				'user_id' => $user_id,
-				'ip' => $ip,
-				'user_agent' => $user_agent,
-				'title' => "Reset section: $section",
-                'category' => __('Settings Reset', 'plugin-starter'),
-				'description' => "Reset section: $section",
-				// 'data' => json_encode($changes),
-				'created_at' => current_time('mysql'),
-				'updated_at' => current_time('mysql')
-			],
-			['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
-		);
-	}
-
-	// public static function log_settings_change($old_data, $new_data)
-	// {
-	// 	global $wpdb;
-	// 	$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
-
-	// 	$changes = [];
-	// 	foreach ($new_data as $key => $value) {
-	// 		if (!isset($old_data[$key]) || $old_data[$key] !== $value) {
-	// 			$changes[$key] = [
-	// 				'old' => isset($old_data[$key]) ? $old_data[$key] : null,
-	// 				'new' => $value
-	// 			];
-	// 		}
-	// 	}
-
-	// 	if (empty($changes)) {
-	// 		return;
-	// 	}
-
-	// 	$user_id = get_current_user_id();
-	// 	$ip = Utils::get_client_ip();
-	// 	$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
-
-	// 	$wpdb->insert(
-	// 		$logs_table_name,
-	// 		[
-	// 			'user_id' => $user_id,
-	// 			'ip' => $ip,
-	// 			'user_agent' => $user_agent,
-	// 			'title' => count($changes) . ' setting(s) changed',
-    //             'category' => __('Settings Change', 'plugin-starter'),
-	// 			'description' => count($changes) . ' setting(s) changed',
-	// 			// 'data' => json_encode($changes),
-	// 			'created_at' => current_time('mysql'),
-	// 			'updated_at' => current_time('mysql')
-	// 		],
-	// 		['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
-	// 	);
-	// }
-
-    public static function log_settings_change($old_data, $new_data)
-	{
-		global $wpdb;
-		$logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
-
-		// Retrieve setting details (title, url)
-		$details = Utils::plugin_starter_get_option_details();
-		$changes = self::get_changes_recursive($old_data, $new_data, $details);
+        // Retrieve setting details (title, url)
+        $details = Utils::plugin_starter_get_option_details();
+        $changes = self::get_changes_recursive($old_data, $new_data, $details);
         // error_log(print_r($changes), true);
-		if (empty($changes)) {
-			return;
-		}
+        if (empty($changes)) {
+            return;
+        }
 
-		$user_id = get_current_user_id();
-		$ip = Utils::get_client_ip();
-		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) : '';
+        $user_id = get_current_user_id();
+        $ip = Utils::get_client_ip();
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '';
 
-		$wpdb->insert(
-			$logs_table_name,
-			[
-				'user_id'     => $user_id,
-				'ip'          => $ip,
-				'user_agent'  => $user_agent,
-				'title'       => count($changes) . ' setting(s) changed',
-				'category'    => __('Settings Change', 'plugin-starter'),
-				// 'description' => count($changes) . ' setting(s) changed',
-				'description' => json_encode($changes), // Save structured changes JSON
-				'created_at'  => current_time('mysql'),
-				'updated_at'  => current_time('mysql')
-			],
-			['%d', '%s', '%s', '%s', '%s', '%s', '%s']
-		);
-	}
+        $wpdb->insert(
+            $logs_table_name,
+            [
+                'user_id'     => $user_id,
+                'ip'          => $ip,
+                'user_agent'  => $user_agent,
+                'title'       => count($changes) . ' setting(s) changed',
+                'category'    => match ($category) {
+                    'reset'     => __('Reset Change', 'plugin-starter'),
+                    'reset-all' => __('Reset All', 'plugin-starter'),
+                    default     => __('Settings Change', 'plugin-starter'),
+                },
+                // 'description' => count($changes) . ' setting(s) changed',
+                'description' => json_encode($changes), // Save structured changes JSON
+                'created_at'  => current_time('mysql'),
+                'updated_at'  => current_time('mysql')
+            ],
+            ['%d', '%s', '%s', '%s', '%s', '%s', '%s']
+        );
+    }
 
     /**
      * Get logs with filtering
@@ -131,71 +63,72 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function get_logs( $request ) {
+    public static function get_logs($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $page     = max( 1, (int) $request->get_param( 'page' ) );
-        $per_page = max( 1, (int) $request->get_param( 'per_page' ) );
-        $search   = trim( (string) $request->get_param( 'search' ) );
-        $filter    = $request->get_param( 'filter' );
+        $page     = max(1, (int) $request->get_param('page'));
+        $per_page = max(1, (int) $request->get_param('per_page'));
+        $search   = trim((string) $request->get_param('search'));
+        $filter    = $request->get_param('filter');
 
-        $date_from = $request->get_param( 'date_from' );
-        $date_to   = $request->get_param( 'date_to' );
+        $date_from = $request->get_param('date_from');
+        $date_to   = $request->get_param('date_to');
 
-        $orderby = $request->get_param( 'sort_field' );
-        $order   = strtoupper( $request->get_param( 'sort_order' ) ) == 'ASC' ? 'ASC' : 'DESC';
+        $orderby = $request->get_param('sort_field');
+        $order   = strtoupper($request->get_param('sort_order')) == 'ASC' ? 'ASC' : 'DESC';
 
         // Allowed order by columns
-        $allowed_orderby = array( 'ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at' );
-        if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
+        $allowed_orderby = array('ID', 'user_id', 'ip', 'title', 'created_at', 'updated_at');
+        if (! in_array($orderby, $allowed_orderby, true)) {
             $orderby = 'ID';
         }
 
-        $offset = ( $page - 1 ) * $per_page;
+        $offset = ($page - 1) * $per_page;
 
         $join            = '';
-        $where_clauses   = array( '1=1' );
+        $where_clauses   = array('1=1');
         $search_clauses  = array();
 
         /**
          * Search logic
          */
-        if ( $search !== '' ) {
+        if ($search !== '') {
             $join = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
 
-            $like = '%' . $wpdb->esc_like( $search ) . '%';
+            $like = '%' . $wpdb->esc_like($search) . '%';
 
-            $search_clauses[] = $wpdb->prepare( 'u.display_name LIKE %s', $like );
-            $search_clauses[] = $wpdb->prepare( 'l.ip LIKE %s', $like );
-            $search_clauses[] = $wpdb->prepare( 'l.title LIKE %s', $like );
+            $search_clauses[] = $wpdb->prepare('u.display_name LIKE %s', $like);
+            $search_clauses[] = $wpdb->prepare('l.ip LIKE %s', $like);
+            $search_clauses[] = $wpdb->prepare('l.title LIKE %s', $like);
 
             // Date search only if valid YYYY-MM-DD
-            if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $search ) ) {
-                $search_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $search );
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $search)) {
+                $search_clauses[] = $wpdb->prepare('DATE(l.created_at) = %s', $search);
             }
         }
 
-        if ( ! empty( $search_clauses ) ) {
-            $where_clauses[] = '(' . implode( ' OR ', $search_clauses ) . ')';
+        if (! empty($search_clauses)) {
+            $where_clauses[] = '(' . implode(' OR ', $search_clauses) . ')';
         }
 
         /**
          * Time-based filter (today, week, month)
          */
-        if ( ! empty( $filter ) && $filter !== 'any' ) {
-            $current_date = gmdate( 'Y-m-d' );
-            switch ( $filter ) {
+        if (! empty($filter) && $filter !== 'any') {
+            $current_date = gmdate('Y-m-d');
+            switch ($filter) {
                 case 'today':
-                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) = %s', $current_date );
+                    $where_clauses[] = $wpdb->prepare('DATE(l.created_at) = %s', $current_date);
                     break;
                 case 'week':
-                    $week_start = gmdate( 'Y-m-d', strtotime( 'this week monday' ) );
-                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $week_start );
+                    $week_start = gmdate('Y-m-d', strtotime('this week monday'));
+                    $where_clauses[] = $wpdb->prepare('DATE(l.created_at) >= %s', $week_start);
                     break;
                 case 'month':
-                    $month_start = gmdate( 'Y-m-01' );
-                    $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', $month_start );
+                    $month_start = gmdate('Y-m-01');
+                    $where_clauses[] = $wpdb->prepare('DATE(l.created_at) >= %s', $month_start);
                     break;
             }
         }
@@ -203,12 +136,12 @@ class LogsController
         /**
          * Date range filter
          */
-        if ( ! empty( $date_from ) ) {
-            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) >= %s', sanitize_text_field( $date_from ) );
+        if (! empty($date_from)) {
+            $where_clauses[] = $wpdb->prepare('DATE(l.created_at) >= %s', sanitize_text_field($date_from));
         }
 
-        if ( ! empty( $date_to ) ) {
-            $where_clauses[] = $wpdb->prepare( 'DATE(l.created_at) <= %s', sanitize_text_field( $date_to ) );
+        if (! empty($date_to)) {
+            $where_clauses[] = $wpdb->prepare('DATE(l.created_at) <= %s', sanitize_text_field($date_to));
         }
 
         /**
@@ -217,45 +150,45 @@ class LogsController
         $prepared_where = '1=1';
         $where_params = array();
 
-        if ( $search !== '' ) {
+        if ($search !== '') {
             $join = "LEFT JOIN {$wpdb->users} u ON l.user_id = u.ID";
-            $like = '%' . $wpdb->esc_like( $search ) . '%';
+            $like = '%' . $wpdb->esc_like($search) . '%';
             $prepared_where .= " AND (u.display_name LIKE %s OR l.ip LIKE %s OR l.title LIKE %s";
             $where_params[] = $like;
             $where_params[] = $like;
             $where_params[] = $like;
 
-            if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $search ) ) {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $search)) {
                 $prepared_where .= " OR DATE(l.created_at) = %s";
                 $where_params[] = $search;
             }
             $prepared_where .= ')';
         }
 
-        if ( ! empty( $filter ) && $filter !== 'any' ) {
-            $current_date = gmdate( 'Y-m-d' );
-            if ( $filter === 'today' ) {
+        if (! empty($filter) && $filter !== 'any') {
+            $current_date = gmdate('Y-m-d');
+            if ($filter === 'today') {
                 $prepared_where .= " AND DATE(l.created_at) = %s";
                 $where_params[] = $current_date;
-            } elseif ( $filter === 'week' ) {
-                $week_start = gmdate( 'Y-m-d', strtotime( 'this week monday' ) );
+            } elseif ($filter === 'week') {
+                $week_start = gmdate('Y-m-d', strtotime('this week monday'));
                 $prepared_where .= " AND DATE(l.created_at) >= %s";
                 $where_params[] = $week_start;
-            } elseif ( $filter === 'month' ) {
-                $month_start = gmdate( 'Y-m-01' );
+            } elseif ($filter === 'month') {
+                $month_start = gmdate('Y-m-01');
                 $prepared_where .= " AND DATE(l.created_at) >= %s";
                 $where_params[] = $month_start;
             }
         }
 
-        if ( ! empty( $date_from ) ) {
+        if (! empty($date_from)) {
             $prepared_where .= " AND DATE(l.created_at) >= %s";
-            $where_params[] = sanitize_text_field( $date_from );
+            $where_params[] = sanitize_text_field($date_from);
         }
 
-        if ( ! empty( $date_to ) ) {
+        if (! empty($date_to)) {
             $prepared_where .= " AND DATE(l.created_at) <= %s";
-            $where_params[] = sanitize_text_field( $date_to );
+            $where_params[] = sanitize_text_field($date_to);
         }
 
         /**
@@ -269,7 +202,7 @@ class LogsController
             ...$where_params
         );
 
-        $total = (int) $wpdb->get_var( $count_query );
+        $total = (int) $wpdb->get_var($count_query);
 
         /**
          * Data query - add per_page and offset to params
@@ -288,7 +221,7 @@ class LogsController
             ...$data_query_params
         );
 
-        $results = $wpdb->get_results( $data_query, ARRAY_A );
+        $results = $wpdb->get_results($data_query, ARRAY_A);
 
         return new WP_REST_Response(
             array(
@@ -297,7 +230,7 @@ class LogsController
                 'total'        => $total,
                 'page'         => $page,
                 'per_page'     => $per_page,
-                'total_pages'  => (int) ceil( $total / $per_page ),
+                'total_pages'  => (int) ceil($total / $per_page),
             ),
             200
         );
@@ -310,16 +243,17 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function search_logs( $request ) {
+    public static function search_logs($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $search   = sanitize_text_field( $request->get_param( 'q' ) );
-        $page     = max( 1, absint( $request->get_param( 'page' ) ) );
-        $per_page = max( 1, absint( $request->get_param( 'per_page' ) ) );
-        $offset   = ( $page - 1 ) * $per_page;
+        $search   = sanitize_text_field($request->get_param('q'));
+        $page     = max(1, absint($request->get_param('page')));
+        $per_page = max(1, absint($request->get_param('per_page')));
+        $offset   = ($page - 1) * $per_page;
 
-        $search_like = '%' . $wpdb->esc_like( $search ) . '%';
+        $search_like = '%' . $wpdb->esc_like($search) . '%';
 
         // Get total count
         $count_query = $wpdb->prepare(
@@ -337,7 +271,7 @@ class LogsController
             $search_like
         );
 
-        $total = $wpdb->get_var( $count_query );
+        $total = $wpdb->get_var($count_query);
 
         // Get results
         $query = $wpdb->prepare(
@@ -360,7 +294,7 @@ class LogsController
             $offset
         );
 
-        $results = $wpdb->get_results( $query, ARRAY_A );
+        $results = $wpdb->get_results($query, ARRAY_A);
 
         return new WP_REST_Response(
             array(
@@ -369,7 +303,7 @@ class LogsController
                 'total'   => (int) $total,
                 'page'    => $page,
                 'per_page' => $per_page,
-                'total_pages' => ceil( $total / $per_page ),
+                'total_pages' => ceil($total / $per_page),
                 'search_term' => $search,
             ),
             200
@@ -382,11 +316,12 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function get_log( $request ) {
+    public static function get_log($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = absint( $request->get_param( 'id' ) );
+        $id = absint($request->get_param('id'));
 
         $query = $wpdb->prepare(
             "SELECT l.*, u.display_name as user_name, u.user_login, u.user_email
@@ -396,13 +331,13 @@ class LogsController
             $id
         );
 
-        $result = $wpdb->get_row( $query, ARRAY_A );
+        $result = $wpdb->get_row($query, ARRAY_A);
 
-        if ( ! $result ) {
+        if (! $result) {
             return new WP_Error(
                 'log_not_found',
                 'Log entry not found',
-                array( 'status' => 404 )
+                array('status' => 404)
             );
         }
 
@@ -421,17 +356,18 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function create_log( $request ) {
+    public static function create_log($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
         $data = array(
-            'user_id'     => absint( $request->get_param( 'user_id' ) ),
-            'ip'          => sanitize_text_field( $request->get_param( 'ip' ) ),
-            'user_agent'  => sanitize_text_field( $request->get_param( 'user_agent' ) ),
-            'title'       => sanitize_text_field( $request->get_param( 'title' ) ),
-            'description' => sanitize_textarea_field( $request->get_param( 'description' ) ),
-            'data'        => sanitize_textarea_field( $request->get_param( 'data' ) ),
+            'user_id'     => absint($request->get_param('user_id')),
+            'ip'          => sanitize_text_field($request->get_param('ip')),
+            'user_agent'  => sanitize_text_field($request->get_param('user_agent')),
+            'title'       => sanitize_text_field($request->get_param('title')),
+            'description' => sanitize_textarea_field($request->get_param('description')),
+            'data'        => sanitize_textarea_field($request->get_param('data')),
         );
 
         $format = array(
@@ -443,13 +379,13 @@ class LogsController
             '%s', // data
         );
 
-        $result = $wpdb->insert( $logs_table_name, $data, $format );
+        $result = $wpdb->insert($logs_table_name, $data, $format);
 
-        if ( ! $result ) {
+        if (! $result) {
             return new WP_Error(
                 'insert_failed',
                 'Failed to insert log entry: ' . $wpdb->last_error,
-                array( 'status' => 500 )
+                array('status' => 500)
             );
         }
 
@@ -484,22 +420,23 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function update_log( $request ) {
+    public static function update_log($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = absint( $request->get_param( 'id' ) );
+        $id = absint($request->get_param('id'));
 
         // Check if log exists
         $exists = $wpdb->get_var(
-            $wpdb->prepare( "SELECT ID FROM {$logs_table_name} WHERE ID = %d", $id )
+            $wpdb->prepare("SELECT ID FROM {$logs_table_name} WHERE ID = %d", $id)
         );
 
-        if ( ! $exists ) {
+        if (! $exists) {
             return new WP_Error(
                 'log_not_found',
                 'Log entry not found',
-                array( 'status' => 404 )
+                array('status' => 404)
             );
         }
 
@@ -516,42 +453,42 @@ class LogsController
             'data'        => '%s',
         );
 
-        foreach ( $fields as $field => $field_format ) {
-            $value = $request->get_param( $field );
-            if ( null !== $value ) {
-                if ( $field === 'user_id' ) {
-                    $value = absint( $value );
-                } elseif ( $field === 'ip' || $field === 'user_agent' || $field === 'title' ) {
-                    $value = sanitize_text_field( $value );
-                } elseif ( $field === 'description' || $field === 'data' ) {
-                    $value = sanitize_textarea_field( $value );
+        foreach ($fields as $field => $field_format) {
+            $value = $request->get_param($field);
+            if (null !== $value) {
+                if ($field === 'user_id') {
+                    $value = absint($value);
+                } elseif ($field === 'ip' || $field === 'user_agent' || $field === 'title') {
+                    $value = sanitize_text_field($value);
+                } elseif ($field === 'description' || $field === 'data') {
+                    $value = sanitize_textarea_field($value);
                 }
-                $data[ $field ]   = $value;
+                $data[$field]   = $value;
                 $format[]         = $field_format;
             }
         }
 
-        if ( empty( $data ) ) {
+        if (empty($data)) {
             return new WP_Error(
                 'no_data',
                 'No data provided for update',
-                array( 'status' => 400 )
+                array('status' => 400)
             );
         }
 
         $result = $wpdb->update(
             $logs_table_name,
             $data,
-            array( 'ID' => $id ),
+            array('ID' => $id),
             $format,
-            array( '%d' )
+            array('%d')
         );
 
-        if ( false === $result ) {
+        if (false === $result) {
             return new WP_Error(
                 'update_failed',
                 'Failed to update log entry: ' . $wpdb->last_error,
-                array( 'status' => 500 )
+                array('status' => 500)
             );
         }
 
@@ -583,37 +520,38 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function delete_log( $request ) {
+    public static function delete_log($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $id = absint( $request->get_param( 'id' ) );
+        $id = absint($request->get_param('id'));
 
         // Get the record before deleting
         $log = $wpdb->get_row(
-            $wpdb->prepare( "SELECT * FROM {$logs_table_name} WHERE ID = %d", $id ),
+            $wpdb->prepare("SELECT * FROM {$logs_table_name} WHERE ID = %d", $id),
             ARRAY_A
         );
 
-        if ( ! $log ) {
+        if (! $log) {
             return new WP_Error(
                 'log_not_found',
                 'Log entry not found',
-                array( 'status' => 404 )
+                array('status' => 404)
             );
         }
 
         $result = $wpdb->delete(
             $logs_table_name,
-            array( 'ID' => $id ),
-            array( '%d' )
+            array('ID' => $id),
+            array('%d')
         );
 
-        if ( ! $result ) {
+        if (! $result) {
             return new WP_Error(
                 'delete_failed',
                 'Failed to delete log entry: ' . $wpdb->last_error,
-                array( 'status' => 500 )
+                array('status' => 500)
             );
         }
 
@@ -633,14 +571,15 @@ class LogsController
      * @param WP_REST_Request $request Request object.
      * @return WP_REST_Response|WP_Error
      */
-    public static function delete_all_logs( $request ) {
+    public static function delete_all_logs($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
         // Get count before deletion
-        $count = $wpdb->get_var( "SELECT COUNT(*) FROM {$logs_table_name}" );
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$logs_table_name}");
 
-        if ( $count == 0 ) {
+        if ($count == 0) {
             return new WP_REST_Response(
                 array(
                     'success' => true,
@@ -651,27 +590,28 @@ class LogsController
             );
         }
 
-        $result = $wpdb->query( "TRUNCATE TABLE {$logs_table_name}" );
+        $result = $wpdb->query("TRUNCATE TABLE {$logs_table_name}");
 
-        if ( false === $result ) {
+        if (false === $result) {
             return new WP_Error(
                 'delete_failed',
                 'Failed to delete all logs: ' . $wpdb->last_error,
-                array( 'status' => 500 )
+                array('status' => 500)
             );
         }
 
         return new WP_REST_Response(
             array(
                 'success' => true,
-                'message' => sprintf( 'Successfully deleted %d log entries', $count ),
+                'message' => sprintf('Successfully deleted %d log entries', $count),
                 'count'   => (int) $count,
             ),
             200
         );
     }
 
-    public static function get_logs_over_time( $request ) {
+    public static function get_logs_over_time($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
@@ -693,7 +633,8 @@ class LogsController
         );
     }
 
-    public static function get_logs_by_category( $request ) {
+    public static function get_logs_by_category($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
@@ -714,7 +655,8 @@ class LogsController
         );
     }
 
-    public static function get_logs_top_users( $request ) {
+    public static function get_logs_top_users($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
@@ -737,7 +679,8 @@ class LogsController
         );
     }
 
-    public static function get_logs_top_ips( $request ) {
+    public static function get_logs_top_ips($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
@@ -759,7 +702,8 @@ class LogsController
         );
     }
 
-    public static function get_logs_hourly_activity( $request ) {
+    public static function get_logs_hourly_activity($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
@@ -780,22 +724,23 @@ class LogsController
         );
     }
 
-    public static function bulk_delete_logs( $request ) {
+    public static function bulk_delete_logs($request)
+    {
         global $wpdb;
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
-        $ids = $request->get_param( 'ids' );
+        $ids = $request->get_param('ids');
 
-        if ( empty( $ids ) || ! is_array( $ids ) ) {
+        if (empty($ids) || ! is_array($ids)) {
             return new WP_Error(
                 'invalid_ids',
                 'Invalid or empty IDs provided',
-                array( 'status' => 400 )
+                array('status' => 400)
             );
         }
 
-        $ids = array_map( 'absint', $ids );
-        $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+        $ids = array_map('absint', $ids);
+        $placeholders = implode(',', array_fill(0, count($ids), '%d'));
 
         $result = $wpdb->query(
             $wpdb->prepare(
@@ -804,71 +749,69 @@ class LogsController
             )
         );
 
-        if ( false === $result ) {
+        if (false === $result) {
             return new WP_Error(
                 'delete_failed',
                 'Failed to delete logs: ' . $wpdb->last_error,
-                array( 'status' => 500 )
+                array('status' => 500)
             );
         }
 
         return new WP_REST_Response(
             array(
                 'success' => true,
-                'message' => sprintf( 'Successfully deleted %d log entries', count( $ids ) ),
-                'deleted_count' => count( $ids ),
+                'message' => sprintf('Successfully deleted %d log entries', count($ids)),
+                'deleted_count' => count($ids),
             ),
             200
         );
     }
 
-	/**
-	 * Helper to check if an array is associative.
-	 */
-	private static function is_associative_array($array)
-	{
-		if (!is_array($array)) {
-			return false;
-		}
-		if (empty($array)) {
-			return false;
-		}
-		return array_keys($array) !== range(0, count($array) - 1);
-	}
+    /**
+     * Helper to check if an array is associative.
+     */
+    private static function is_associative_array($array)
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+        if (empty($array)) {
+            return false;
+        }
+        return array_keys($array) !== range(0, count($array) - 1);
+    }
 
-	/**
-	 * Recursively compares old and new data arrays against the options details.
-	 */
-	private static function get_changes_recursive($old, $new, $details)
-	{
-		$changes = [];
+    /**
+     * Recursively compares old and new data arrays against the options details.
+     */
+    private static function get_changes_recursive($old, $new, $details)
+    {
+        $changes = [];
+        if (!is_array($new)) $new = [];
+        foreach ($new as $key => $value) {
+            $old_val = isset($old[$key]) ? $old[$key] : null;
 
-		foreach ($new as $key => $value) {
-			$old_val = isset($old[$key]) ? $old[$key] : null;
+            // Check if details has a title key at this level (meaning we reached the leaf setting details)
+            $has_details_title = isset($details[$key]['title']);
 
-			// Check if details has a title key at this level (meaning we reached the leaf setting details)
-			$has_details_title = isset($details[$key]['title']);
+            if (is_array($value) && !$has_details_title && self::is_associative_array($value)) {
+                $sub_details = isset($details[$key]) ? $details[$key] : [];
+                $sub_changes = self::get_changes_recursive($old_val, $value, $sub_details);
+                $changes = array_merge($changes, $sub_changes);
+            } else {
+                if ($old_val !== $value) {
+                    $title = isset($details[$key]['title']) ? $details[$key]['title'] : ucwords(str_replace('_', ' ', $key));
+                    $url = isset($details[$key]['url']) ? $details[$key]['url'] : '';
 
-			if (is_array($value) && !$has_details_title && self::is_associative_array($value)) {
-				$sub_details = isset($details[$key]) ? $details[$key] : [];
-				$sub_changes = self::get_changes_recursive($old_val, $value, $sub_details);
-				$changes = array_merge($changes, $sub_changes);
-			} else {
-				if ($old_val !== $value) {
-					$title = isset($details[$key]['title']) ? $details[$key]['title'] : ucwords(str_replace('_', ' ', $key));
-					$url = isset($details[$key]['url']) ? $details[$key]['url'] : '';
-
-					$changes[] = [
-						'title'   => $title,
-						'url'     => $url,
-						'old'     => $old_val,
-						'changed' => $value
-					];
-				}
-			}
-		}
-
-		return $changes;
-	}
-
+                    $changes[] = [
+                        'title'   => $title,
+                        'url'     => $url,
+                        'old'     => $old_val,
+                        'changed' => $value
+                    ];
+                }
+            }
+        }
+        return $changes;
+    }
 }

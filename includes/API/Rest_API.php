@@ -354,23 +354,7 @@ class Rest_API
 			'success' => true,
 			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter')
 		];
-
-		// return $response;
 		return new WP_REST_Response($response, 200);
-
-		/*
-
-		return new WP_REST_Response([
-			'success' => true,
-			'message' => 'Plugin installed successfully.'
-		], 200);
-
-
-		return new WP_REST_Response([
-			'success' => false,
-			'message' => 'Installed plugin could not be identified'
-		], 404);
-		*/
 	}
     private function reset_option_by_path(&$options, $defaults, $path)
 	{
@@ -405,10 +389,10 @@ class Rest_API
         $plugin_starter_default_options = Utils::plugin_starter_get_default_options();
 
         $success = $this->reset_option_by_path($plugin_starter_options, $plugin_starter_default_options, $name);
-
+        
         if ($success) {
             update_option('plugin_starter_options', $plugin_starter_options);
-            LogsController::log_settings_reset($name, $plugin_starter_options_old[$name] ?? null, $plugin_starter_options[$name] ?? null);
+            LogsController::log_settings_change($plugin_starter_options_old, $plugin_starter_default_options, 'reset');
             wp_send_json_success(['message' => __('Settings reset successfully.', 'plugin-starter')]);
         } else {
             wp_send_json_error(['error_message' => __('Invalid settings path.', 'plugin-starter')]);
@@ -431,10 +415,11 @@ class Rest_API
                 array('status' => 403)
             );
         }
+        $plugin_starter_options_old = Utils::plugin_starter_get_option();
         $plugin_starter_default_options = Utils::plugin_starter_get_default_options();
 
         update_option('plugin_starter_options', $plugin_starter_default_options);
-        // $this->log_settings_reset($name, $plugin_starter_options_old[$name] ?? null, $plugin_starter_options[$name] ?? null);
+        LogsController::log_settings_change($plugin_starter_options_old, $plugin_starter_default_options, 'reset-all');
         wp_send_json_success(['message' => __('Settings reset successfully.', 'plugin-starter')]);
 
 		$response = [

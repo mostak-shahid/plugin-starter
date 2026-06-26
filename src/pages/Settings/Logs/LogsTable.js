@@ -51,8 +51,8 @@ const ExpandedComponent = ({ data }) => (
 }
 */
 const formatValue = (val) => {
-    if (val === null || val === undefined || val === '') {
-        return <span>[disabled/empty]</span>;
+    if (val === null || val === undefined || val === '' || val == 0) {
+        return '';
     }
     if (Array.isArray(val)) {
         return val.join(', ');

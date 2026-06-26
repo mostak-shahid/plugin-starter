@@ -101,11 +101,11 @@ class Filter_Hook {
                     'textarea' => '',
                     'radio' => 'radio-1',
                     'select' => 'select-2',
-                    'number' => 10,
-                    'range' => 100,
+                    'number' => '10',
+                    'range' => '100',
                     'color' => '#ff0000',
-                    'checkbox' => false,
-                    'switch' => true,
+                    'checkbox' => 0,
+                    'switch' => 1,
                     'date' => '',
                     'time' => '',
                     'datetime' => '',
@@ -138,7 +138,7 @@ class Filter_Hook {
             ],
             'utilities' => [
                 'tools' => [
-                    'hide_plugin' => false, // delete, uninstall, none
+                    'hide_plugin' => 0, // delete, uninstall, none
                     // 'self_defense' => false, // delete, uninstall, none
                     // 'delete_data_on' => 'none', // delete, uninstall, none
                 ],
