@@ -50,6 +50,18 @@ const ExpandedComponent = ({ data }) => (
     "user_email": "mostak.shahid@gmail.com"
 }
 */
+const formatValue = (val) => {
+    if (val === null || val === undefined || val === '') {
+        return <span>[disabled/empty]</span>;
+    }
+    if (Array.isArray(val)) {
+        return val.join(', ');
+    }
+    if (typeof val === 'boolean') {
+        return val ? 'true' : 'false';
+    }
+    return val;
+};
 const LogsTable = () => {
     const { settings, settingsLoading, handleChange } = useOutletContext();
     // Add this inside your component
@@ -139,7 +151,7 @@ const LogsTable = () => {
 
     const deleteRow = async (id) => {
         setDeletinging(true);
-        try{
+        try {
             const params = new URLSearchParams({
                 ID: id,
             });
@@ -158,7 +170,7 @@ const LogsTable = () => {
 
     const deleteRows = async () => {
         setDeletinging(true);
-        try{
+        try {
             const params = new URLSearchParams({
                 IDs: selectedRowKeys,
                 action: bulkAction,
@@ -253,7 +265,7 @@ const LogsTable = () => {
                 </Button>
                 {isVisible && (
                     <Popover anchor={anchorRef.current} onClose={() => setIsVisible(false)}>
-                        <div className="p-2" style={{minWidth: 150}}>
+                        <div className="p-2" style={{ minWidth: 150 }}>
                             <p className="mb-2">{__('Do you like to delete this row?', 'plugin-starter')}</p>
                             <div className="d-flex gap-2">
                                 <Button size="sm" variant="danger" onClick={() => { onDelete(id); setIsVisible(false); }}>
@@ -269,7 +281,7 @@ const LogsTable = () => {
             </>
         );
     };
-    
+
     return (
         <>
             <div className="d-flex gap-2 mt-3">
@@ -396,10 +408,10 @@ const LogsTable = () => {
                                         <td>{change.title}</td>
                                         <td><a href={pathPrefix + change.url}><code>{change.url}</code></a></td>
                                         <td>
-                                            {change.old || <span>[disabled/empty]</span>}
+                                            {formatValue(change.old)}                                            
                                         </td>
                                         <td>
-                                            {change.changed || <span>[disabled/empty]</span>}
+                                            {formatValue(change.changed)}
                                         </td>
                                     </tr>
                                 ))}
