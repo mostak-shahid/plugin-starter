@@ -212,6 +212,33 @@ class Rest_API
                 ),
             )
         );
+
+        // Bulk Delete Logs
+        register_rest_route( self::NAMESPACE, '/logs/bulk-delete',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( LogsController::class, 'bulk_delete_logs' ),
+                'permission_callback' => array( $this, 'check_permission' ),
+                'args'                => array(
+                    'ids' => array(
+                        'required'          => true,
+                        'type'     => 'array',
+                        'items'    => array( 'type' => 'integer' ),
+                    ),
+                ),
+            )
+        );
+
+        // Delete all logs
+        register_rest_route( self::NAMESPACE, '/logs/',
+            array(
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => array( LogsController::class, 'delete_all_logs' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
     }
 
     // callback for settings theme endpoints

@@ -11,13 +11,20 @@ import ToastControl from "../../components/ToastControl/ToastControl";
 const Tools = () => {
     // Added fallback destructuring for setSettingsReload to prevent reference errors
     const { settings, settingsLoading, handleChange, setSettingsReload } = useOutletContext();
-    const [processing, setProcessing] = useState(false);
+    const [processingLog, setProcessingLog] = useState(false);
+    const [processingReset, setProcessingReset] = useState(false);
 
     // Popover visibility state
-    const [popoverVisible, setPopoverVisible] = useState(false);
-    const toggleVisible = () => {
-        if (!processing) {
-            setPopoverVisible((state) => !state);
+    const [logPopoverVisible, setLogPopoverVisible] = useState(false);
+    const toggleLogPopoverVisible = () => {
+        if (!processingLog) {
+            setLogPopoverVisible((state) => !state);
+        }
+    };
+    const [resetPopoverVisible, setResetPopoverVisible] = useState(false);
+    const toggleResetPopoverVisible = () => {
+        if (!processingReset) {
+            setResetPopoverVisible((state) => !state);
         }
     };
 
@@ -27,9 +34,43 @@ const Tools = () => {
     const toggleShowToast = () => setShowToast(!showToast);
 
     // Executed when user confirms 'Yes' inside the popover
+    const handleConfirmLog = async () => {
+        setLogPopoverVisible(false); // Close the popover immediately on decision
+        setProcessingLog(true);
+
+        try {
+            const result = await apiFetch({
+                path: "/plugin-starter/v1/logs",
+                method: "DELETE",
+            });
+
+            if (result.success) {
+                setSettingsReload?.(Math.random());
+                setDataToast({
+                    title: __("Success", "plugin-starter"),
+                    content: __("Delete all logs successfully!", "plugin-starter"),
+                    type: 'success'
+                });
+                setShowToast(true);
+            } else {
+                throw new Error("Log failed");
+            }
+        } catch (error) {
+            setDataToast({
+                title: __("Error", "plugin-starter"),
+                content: __("Error deleting logs.", "plugin-starter"),
+                type: 'danger'
+            });
+            setShowToast(true);
+        } finally {
+            setProcessingLog(false);
+        }
+    };
+
+    // Executed when user confirms 'Yes' inside the popover
     const handleConfirmReset = async () => {
-        setPopoverVisible(false); // Close the popover immediately on decision
-        setProcessing(true);
+        setResetPopoverVisible(false); // Close the popover immediately on decision
+        setProcessingReset(true);
 
         try {
             const result = await apiFetch({
@@ -56,7 +97,7 @@ const Tools = () => {
             });
             setShowToast(true);
         } finally {
-            setProcessing(false);
+            setProcessingReset(false);
             setSettingsReload?.(Math.random());
         }
     };
@@ -151,6 +192,71 @@ const Tools = () => {
                 <Row className="alugn-items-start">
                     <Col lg={6}>
                         <h6 className="h6">
+                            {__("Delete Logs", "plugin-starter")}
+                        </h6>
+                        <p>
+                            {__("Delete all Logs", "plugin-starter")}
+                        </p>
+                    </Col>
+
+                    <Col lg={6} style={{ position: 'relative' }}>
+                        <div className="popover-container">
+                        <Button
+                            variant="outline-danger"
+                            onClick={toggleLogPopoverVisible}
+                            disabled={processingLog}
+                        >
+                            {processingLog
+                                ? <FontAwesomeIcon icon={faSync} className='fa-spin' />
+                                : <FontAwesomeIcon icon={faTrash} />
+                            }
+                            <span className='ms-2'>
+                                {processingLog ? __("Deleting...", "plugin-starter") : __("Delete All", "plugin-starter")}
+                            </span>
+
+                        </Button>
+
+                            {/* WordPress Component Popover */}
+                            {logPopoverVisible && (
+                                <Popover
+                                    onFocusOutside={() => setLogPopoverVisible(false)}
+                                    // variant="unstyled"
+                                    className="mt-2"
+                                    // style={{ paddingLeft: 'calc(var(--bs-gutter-x) * .5)' }}
+                                >
+                                    <div className="p-3" style={{width: '250px'}}>
+                                        <p className="mb-3 text-dark">
+                                            {__("Are you sure you want to delete all logs? This action cannot be undone.", "plugin-starter")}
+                                        </p>
+                                        <div className="d-flex justify-content-end gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="light"
+                                                onClick={() => setLogPopoverVisible(false)}
+                                            >
+                                                {__("No", "plugin-starter")}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="danger"
+                                                onClick={handleConfirmLog}
+                                            >
+                                                {__("Yes", "plugin-starter")}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </Popover>
+                            )}
+
+                        </div>
+                    </Col>
+                </Row>
+            </div>   
+
+            <div className="setting-unit py-4">
+                <Row className="alugn-items-start">
+                    <Col lg={6}>
+                        <h6 className="h6">
                             {__("Reset Plugin", "plugin-starter")}
                         </h6>
                         <p>
@@ -162,23 +268,23 @@ const Tools = () => {
                         <div className="popover-container">
                         <Button
                             variant="outline-danger"
-                            onClick={toggleVisible}
-                            disabled={processing}
+                            onClick={toggleResetPopoverVisible}
+                            disabled={processingReset}
                         >
-                            {processing
+                            {processingReset
                                 ? <FontAwesomeIcon icon={faSync} className='fa-spin' />
                                 : <FontAwesomeIcon icon={faTrash} />
                             }
                             <span className='ms-2'>
-                                {processing ? __("Resetting...", "plugin-starter") : __("Reset All", "plugin-starter")}
+                                {processingReset ? __("Resetting...", "plugin-starter") : __("Reset All", "plugin-starter")}
                             </span>
 
                         </Button>
 
                             {/* WordPress Component Popover */}
-                            {popoverVisible && (
+                            {resetPopoverVisible && (
                                 <Popover
-                                    onFocusOutside={() => setPopoverVisible(false)}
+                                    onFocusOutside={() => setResetPopoverVisible(false)}
                                     // variant="unstyled"
                                     className="mt-2"
                                     // style={{ paddingLeft: 'calc(var(--bs-gutter-x) * .5)' }}
@@ -191,7 +297,7 @@ const Tools = () => {
                                             <Button
                                                 size="sm"
                                                 variant="light"
-                                                onClick={() => setPopoverVisible(false)}
+                                                onClick={() => setResetPopoverVisible(false)}
                                             >
                                                 {__("No", "plugin-starter")}
                                             </Button>
@@ -210,7 +316,7 @@ const Tools = () => {
                         </div>
                     </Col>
                 </Row>
-            </div>                    
+            </div>                   
             <ToastControl
                 show={showToast}
                 onClose={toggleShowToast}
