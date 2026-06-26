@@ -218,7 +218,9 @@ class Rest_API
             array(
                 'methods'             => WP_REST_Server::DELETABLE,
                 'callback'            => array( LogsController::class, 'bulk_delete_logs' ),
-                'permission_callback' => array( $this, 'check_permission' ),
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
                 'args'                => array(
                     'ids' => array(
                         'required'          => true,

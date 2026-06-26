@@ -14,7 +14,7 @@ class Tools
 	public function __construct()
 	{
 		$this->options = Utils::plugin_starter_get_option();
-        error_log($this->options['utilities']['tools']['hide_plugin']);
+        // error_log($this->options['utilities']['tools']['hide_plugin']);
         if (isset($this->options['utilities']['tools']['hide_plugin']) && $this->options['utilities']['tools']['hide_plugin'] == 1) {
             // Hide plugin from plugins list
             add_filter('all_plugins', [Utils::class,'plugin_starter_hide_plugin_from_list']);

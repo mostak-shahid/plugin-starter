@@ -20,7 +20,7 @@ const timeFilterOptions = [
 ];
 const bulkActions = [
     { label: __('Bulk Action', 'plugin-starter'), value: 'any' },
-    { label: __('Delete', 'plugin-starter'), value: 'Delete' },
+    { label: __('Delete', 'plugin-starter'), value: 'delete' },
 ];
 
 
@@ -89,7 +89,9 @@ const LogsTable = () => {
     const [sortField, setSortField] = useState('created_at');
     const [sortOrder, setSortOrder] = useState('DESC');
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedRowIDs, setSelectedRowIDs] = useState([]);
     const [bulkAction, setBulkAction] = useState('any');
+    const [reloadTable, setReloadTable] = useState(0);
 
     const [deleting, setDeletinging] = useState(false);
 
@@ -134,6 +136,20 @@ const LogsTable = () => {
             setLoading(false);
         }
     };
+
+
+    useEffect(() => {
+        fetchData();
+    }, [
+        page,
+        pageSize,
+        search,
+        filter,
+        dateRange,
+        sortField,
+        sortOrder,
+        reloadTable,
+    ]);
     const handleDelete = async (id) => {
         setDeletinging(true);
         try {
@@ -141,13 +157,16 @@ const LogsTable = () => {
                 path: `/plugin-starter/v1/logs/${id}`,
                 method: 'DELETE',
             });
-            console.log(response);
-            setDataToast({
-                title: __("Success", "plugin-starter"),
-                content: __("Log deleted successfully", "plugin-starter"),
-                type: 'success'
-            });
-            setShowToast(true);
+            // console.log(response);
+            if (response.success) {
+                setDataToast({
+                    title: __("Success", "plugin-starter"),
+                    content: __("Log deleted successfully", "plugin-starter"),
+                    type: 'success'
+                });
+                setShowToast(true);
+                setReloadTable(Math.random());
+            }
         } catch (error) {
             console.error('Error deleting log:', error);
             setDataToast({
@@ -161,42 +180,93 @@ const LogsTable = () => {
         }
     };
 
-    const handleBulkAction = () => {
-        console.log('selectedRowKeys: ', selectedRowKeys, 'bulkAction: ', bulkAction);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [dataDeleteModal, setDataDeleteModal] = useState([]);
+
+    const modalDeleteClose = () => {
+        setBulkAction('any');
+        setSelectedRowKeys([]);
+        setShowDeleteModal(false);
+    }
+    const modalDeleteShow = (data) => {
+        setDataDeleteModal(data);
+        setShowDeleteModal(true);
     }
 
-    const deleteRows = async () => {
-        setDeletinging(true);
-        try {
-            const params = new URLSearchParams({
-                IDs: selectedRowKeys,
-                action: bulkAction,
+    const handleBulkAction = () => {
+        console.log('selectedRowIDs: ', selectedRowIDs, 'bulkAction: ', bulkAction);
+        if (selectedRowKeys.length) {
+            if (bulkAction == 'delete') {
+                setShowDeleteModal(true);
+            } else {
+                setDataToast({
+                    title: __("Error", "plugin-starter"),
+                    content: __("Please select an action.", "plugin-starter"),
+                    type: 'danger'
+                });
+                setShowToast(true);
+            }
+        } else {
+            setDataToast({
+                title: __("Error", "plugin-starter"),
+                content: __("Please select rows.", "plugin-starter"),
+                type: 'danger'
             });
-            const queryString = params.toString();
-            const response = await apiFetch({
-                path: `/plugin-starter/v1/logs/delete?${queryString}`,
-                method: 'post',
-            });
-
-        } catch (error) {
-            console.error('Error fetching logs:', error);
-        } finally {
-            setDeletinging(false);
+            setShowToast(true);
         }
     }
 
+    const deleteRows = async () => {
+        // console.log(selectedRowKeys);
+        if (selectedRowKeys.length) {
+            const ids = selectedRowKeys.map(row => row.ID);
+            console.log(ids);
+            setDeletinging(true);
+            try {
+                const params = new URLSearchParams({
+                    ids: ids,
+                    // action: bulkAction,
+                });
+                const queryString = params.toString();
+                const response = await apiFetch({
+                    path: `/plugin-starter/v1/logs/bulk-delete?${queryString}`,
+                    method: 'DELETE',
+                });
+                if (response.success) {
+                    setDataToast({
+                        title: __("Success", "plugin-starter"),
+                        content: __("Logs deleted successfully", "plugin-starter"),
+                        type: 'success'
+                    });
+                    setShowDeleteModal(false);
+                    setShowToast(true);
+                    setReloadTable(Math.random());
+                }
 
-    useEffect(() => {
-        fetchData();
-    }, [
-        page,
-        pageSize,
-        search,
-        filter,
-        dateRange,
-        sortField,
-        sortOrder,
-    ]);
+            } catch (error) {
+                console.error('Error deleting logs:', error);
+                setDataToast({
+                    title: __("Error", "plugin-starter"),
+                    content: __("Error deleting logs.", "plugin-starter"),
+                    type: 'danger'
+                });
+            setShowToast(true);
+            } finally {
+                setDeletinging(false);
+            }
+        } else {
+            setDataToast({
+                title: __("Error", "plugin-starter"),
+                content: __("Please select rows.", "plugin-starter"),
+                type: 'danger'
+            });
+            setShowToast(true);
+        }
+
+
+
+    }
 
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -206,15 +276,6 @@ const LogsTable = () => {
     const modalDetailsShow = (data) => {
         setDataDetailsModal(data);
         setShowDetailsModal(true);
-    }
-
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [dataDeleteModal, setDataDeleteModal] = useState([]);
-
-    const modalDeleteClose = () => setShowDeleteModal(false);
-    const modalDeleteShow = (data) => {
-        setDataDeleteModal(data);
-        setShowDeleteModal(true);
     }
 
     const columns = [
@@ -341,18 +402,23 @@ const LogsTable = () => {
                 </Col>
             </Row>
             <div ref={containerRef} className="table-wrapper responsive-table-wrapper border mt-3">
-                {console.log(selectedRowKeys)}
                 <DataTable
-                    keyField="id"
+                    keyField="ID"
                     columns={columns}
                     data={data}
                     selectableRows
                     selectedRows={selectedRowKeys}
-                    onSelectedRowsChange={({ selectedRowKeys }) => setSelectedRowKeys(selectedRowKeys)}
+                    // onSelectedRowsChange={({ selectedRows }) => setSelectedRowKeys(selectedRows)}
+                    onSelectedRowsChange={({ selectedRows }) => {
+                        const rows = selectedRows;
+                        const keys = selectedRows.map(row => row.ID);
+                        setSelectedRowKeys(rows);
+                        setSelectedRowIDs(keys);
+                    }}
                     pagination
                     highlightOnHover
                     // dense
-                    
+
                     paginationServer
                     paginationTotalRows={total}
                     onChangePage={(page) => setPage(page)}
@@ -406,7 +472,7 @@ const LogsTable = () => {
                                         <td>{change.title}</td>
                                         <td><a href={pathPrefix + change.url}><code>{change.url}</code></a></td>
                                         <td>
-                                            {formatValue(change.old)}                                            
+                                            {formatValue(change.old)}
                                         </td>
                                         <td>
                                             {formatValue(change.changed)}
@@ -422,20 +488,21 @@ const LogsTable = () => {
                     <Button variant="secondary" onClick={modalDetailsClose}>{__('Close', 'plugin-starter')}</Button>
                 </Modal.Footer>
             </Modal>
-            <Modal size="lg" show={showDeleteModal} onHide={modalDeleteClose}>
-                {/* {console.log(dataDeleteModal)} */}
-                <Modal.Header closeButton>
-                    <Modal.Title>{__('Confirm Delete', 'plugin-starter')}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>                    
-                    <span className="text-danger">{__('Are you sure you want to delete these rows? This action cannot be undone.', 'plugin-starter')}</span>
+            <Modal size="sm" centered show={showDeleteModal} onHide={modalDeleteClose}>
+                <Modal.Body>
+                    <p className="mb-2">{__('Are you sure you want to delete these rows? This action cannot be undone.', 'plugin-starter')}</p>
+                    <div className="d-flex gap-2">
+                        <Button size="sm" variant="danger" onClick={deleteRows}>
+                            {__('Yes', 'plugin-starter')}
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={modalDeleteClose}>
+                            {__('No', 'plugin-starter')}
+                        </Button>
+                    </div>
+
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={modalDeleteClose}>{__('No', 'plugin-starter')}</Button>
-                    <Button variant="danger" onClick={modalDeleteClose}>{__('Yes', 'plugin-starter')}</Button>
-                </Modal.Footer>
             </Modal>
-                        
+
             <ToastControl
                 show={showToast}
                 onClose={toggleShowToast}

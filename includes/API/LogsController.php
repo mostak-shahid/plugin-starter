@@ -333,7 +333,6 @@ class LogsController
         $logs_table_name = $wpdb->prefix . 'plugin_starter_logs';
 
         $ids = $request->get_param('ids');
-
         if (empty($ids) || ! is_array($ids)) {
             return new WP_Error(
                 'invalid_ids',
