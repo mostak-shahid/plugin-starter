@@ -96,13 +96,13 @@ class Action_Hook
 			true
 		);
 
-		// NEW: Enqueue Compiled Tailwind CSS
-		wp_enqueue_style(
-			'my-plugin-tailwind',
-			PLUGIN_STARTER_URL . 'build/index.css',
-			array(),
-			$asset_file['version']
-		);
+		// // NEW: Enqueue Compiled Tailwind CSS
+		// wp_enqueue_style(
+		// 	'plugin-starter-tailwind',
+		// 	PLUGIN_STARTER_URL . 'build/index.css',
+		// 	array(),
+		// 	$asset_file['version']
+		// );
 
 	}
 	public function admin_enqueue_scripts($hook)

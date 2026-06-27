@@ -135,4 +135,10 @@
   100% {
     background-position: 200% 0;
   }
+}
+.toplevel_page_plugin-starter .wp-menu-image {
+  text-align: center;
+}
+.toplevel_page_plugin-starter .wp-menu-image img {
+  display: inline-block;
 }/*# sourceMappingURL=admin.css.map */

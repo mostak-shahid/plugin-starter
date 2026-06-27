@@ -238,6 +238,7 @@ const Settings = () => {
                     (
                         location.pathname !== '/settings/utilities/import_export'
                         && location.pathname !== '/settings/utilities/logs/table'
+                        && location.pathname !== '/settings/utilities/logs/analytics'
                     ) 
                         &&
                         <div className="d-flex align-items-center gap-2 mb-3">            

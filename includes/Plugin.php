@@ -10,7 +10,7 @@ use MosPress\PluginStarter\Hook\Action_Hook;
 use MosPress\PluginStarter\Hook\Filter_Hook;
 use MosPress\PluginStarter\Core\Tools;
 use MosPress\PluginStarter\Helpers\Utils;
-
+use MosPress\PluginStarter\Profile\Profile;
 class Plugin {
 	public function __construct() {
 
@@ -21,6 +21,7 @@ class Plugin {
 		Rest_API::get_instance();
 		Action_Hook::get_instance();
 		Filter_Hook::get_instance();
+		Profile::get_instance();
 		
 		// Instantiate additional core classes
 		new Utils();

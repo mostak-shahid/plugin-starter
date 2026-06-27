@@ -174,3 +174,11 @@
         background-position: 200% 0;
     }
 }
+.toplevel_page_plugin-starter {
+    .wp-menu-image {
+        text-align: center;
+        img {
+            display: inline-block;
+        }
+    }
+}

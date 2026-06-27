@@ -29,6 +29,7 @@ import {
     FullWidthNoSidebar,
     FullWidthRightSidebar,
 } from './pages';
+import LogsCharts from './pages/Settings/Logs/LogsCharts.jsx';
 const year = new Date().getFullYear();
 
 const pathPrefix = 'admin.php?page=plugin-starter#'; // Adjust this if your app is served from a different base path
@@ -250,6 +251,7 @@ export default function App() {
                     footerContent={(
                         <div className="header-icon-menu d-flex align-items-center gap-2 pe-2">
                             <Button
+                                className='d-none d-lg-inline-block'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label={__("Seach", 'plugin-starter')}
@@ -258,6 +260,7 @@ export default function App() {
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </Button>
                             <Button
+                                className='d-none d-lg-inline-block'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label="Mode"
@@ -266,6 +269,7 @@ export default function App() {
                                 {darkmode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
                             </Button>
                             <Button
+                                className='d-inline-block d-lg-none'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label={__("VIP Priority Support", 'plugin-starter')}
@@ -274,6 +278,7 @@ export default function App() {
                                 <FontAwesomeIcon icon={faHeadphones} />
                             </Button>
                             <Button
+                                className='d-inline-block d-lg-none'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label={__("Help Center", 'plugin-starter')}
@@ -282,6 +287,7 @@ export default function App() {
                                 <FontAwesomeIcon icon={faQuestion} />
                             </Button>
                             <Button
+                                className='d-inline-block d-lg-none'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label={__("Community", 'plugin-starter')}
@@ -291,6 +297,7 @@ export default function App() {
                             </Button>
 
                             <Button
+                                className='d-inline-block d-lg-none'
                                 variant="outline-secondary"
                                 size="sm"
                                 aria-label={__("Help Center", 'plugin-starter')}
@@ -301,6 +308,7 @@ export default function App() {
                             {plugin_starter_ajax_obj?.isPro &&
                                 <div className="position-relative">
                                     <Button
+                                        className='d-none d-lg-inline-block'
                                         variant="outline-secondary"
                                         size="sm"
                                         onClick={() => setNewsVisible(true)} aria-label="News"
@@ -384,6 +392,7 @@ export default function App() {
                         <Route path="utilities/tools" element={<Tools />} />
                         <Route path="utilities/logs" element={<Navigate to="table" replace />} />
                         <Route path="utilities/logs/table" element={<LogsTable />} />
+                        <Route path="utilities/logs/analytics" element={<LogsCharts />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />
@@ -403,7 +412,7 @@ export default function App() {
                             <span>{__(` All Rights Reserved.`, 'plugin-starter')}</span>
                         </Col>
                         <Col xs={12} lg={6} className="text-center text-lg-end">
-                            <div className="d-flex align-items-center justify-content-lg-end gap-2 flex-wrap">
+                            <div className="d-flex align-items-center justify-content-center justify-content-lg-end gap-2 flex-wrap">
                                 {plugin_starter_ajax_obj?.isPro === '1' ? (
                                     <>
                                         <Badge bg="warning" text="dark">{__('Pro', "plugin-starter")}</Badge>

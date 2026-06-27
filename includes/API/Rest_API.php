@@ -241,6 +241,61 @@ class Rest_API
                 },
             )
         );
+
+        // Logs Over Time Chart
+        register_rest_route( self::NAMESPACE,'/logs/stats/over-time',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs_over_time' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+
+        // Logs by Category Chart
+        register_rest_route( self::NAMESPACE,'/logs/stats/by-category',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs_by_category' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+
+        // Logs by User (Top Users) Chart
+        register_rest_route( self::NAMESPACE,'/logs/stats/top-users',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs_top_users' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+
+        // Logs by IP Address (Top IPs) Chart
+        register_rest_route( self::NAMESPACE,'/logs/stats/top-ips',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs_top_ips' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
+
+        // Hourly Activity Chart
+        register_rest_route( self::NAMESPACE,'/logs/stats/hourly-activity',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( LogsController::class, 'get_logs_hourly_activity' ),                
+                'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
+            )
+        );
     }
 
     // callback for settings theme endpoints
