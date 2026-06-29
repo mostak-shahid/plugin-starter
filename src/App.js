@@ -76,13 +76,23 @@ export default function App() {
 
 
     const [ProPluginNews, setProPluginNews] = useState(null);
+    const [ProMore, setProMore] = useState(null);
+
     useEffect(() => {
         // Check if the Pro version has loaded its global component hook
         if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginNews) {
             setProPluginNews(() => window.PluginStarterProComponents.PluginNews);
         }
         // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
+
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.More) {
+            setProMore(() => window.PluginStarterProComponents.More);
+        }
+        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
     }, []);
+
+
     const [newsItems, setNewsItems] = useState([]);
     const [newsVisible, setNewsVisible] = useState(false);
     if (plugin_starter_ajax_obj?.isPro === '1') {
@@ -393,6 +403,8 @@ export default function App() {
                         <Route path="utilities/logs" element={<Navigate to="table" replace />} />
                         <Route path="utilities/logs/table" element={<LogsTable />} />
                         <Route path="utilities/logs/analytics" element={<LogsCharts />} />
+
+                        <Route path="more" element={<ProMore />} />
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />

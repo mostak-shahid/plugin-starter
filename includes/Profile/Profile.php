@@ -72,10 +72,10 @@ class Profile
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback' => [$this, 'get_user_meta'],
-				'permission_callback' => '__return_true',
-				// 'permission_callback' => function () {
-                //     return current_user_can('manage_options');
-                // },
+				// 'permission_callback' => '__return_true',
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
                 'args' => [
                     //['sanitize_callback' => 'absint', 'default' => 1],
                     // 'id' => [
@@ -92,13 +92,13 @@ class Profile
 		); 
     }
     public function get_user_meta($request){
-		// if (!current_user_can('manage_options')) {
-		// 	return new WP_Error(
-		// 		'rest_update_error',
-		// 		'Sorry, you are not allowed to update the DAEXT UI Test options.',
-		// 		array('status' => 403)
-		// 	);
-		// }
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_update_error',
+				'Sorry, you are not allowed to update the DAEXT UI Test options.',
+				array('status' => 403)
+			);
+		}
         $user_id = trim((string) $request->get_param('id'));
         $user = get_user_by( 'id', $user_id );
         if ($user) {

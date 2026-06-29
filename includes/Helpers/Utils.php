@@ -34,6 +34,40 @@ class Utils {
 		}
 	}
 
+
+	public static function get_header_footer_kses() {
+		return array(
+			'script' => array(
+				'type' => true,
+				'src' => true,
+				'async' => true,
+				'defer' => true,
+				'crossorigin' => true,
+				'integrity' => true,
+				'nonce' => true,
+			),
+			'style' => array(
+				'type' => true,
+				'media' => true,
+			),
+			'link' => array(
+				'rel' => true,
+				'href' => true,
+				'type' => true,
+				'media' => true,
+				'crossorigin' => true,
+				'integrity' => true,
+			),
+			'meta' => array(
+				'name' => true,
+				'content' => true,
+				'charset' => true,
+				'http-equiv' => true,
+				'property' => true,
+			),
+		);
+	}
+
 	public static function plugin_starter_get_default_options()
 	{
 		$plugin_starter_default_options = [];

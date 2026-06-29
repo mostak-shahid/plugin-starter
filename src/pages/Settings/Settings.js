@@ -144,10 +144,11 @@ const Settings = () => {
 
     // const handleSubmit = async (section, values) => {
     const handleSubmit = async () => {
+        const saveRoot = plugin_starter_ajax_obj?.isPro?'plugin-starter-pro':'plugin-starter';
         try {
             setSaving(true);
             const result = await apiFetch({
-                path: "/plugin-starter/v1/options",
+                path: `/${saveRoot}/v1/options`,
                 method: 'POST',
                 // data: { plugin_starter_options: { ...settings, [section]: values } }
                 data: { plugin_starter_options: settings }

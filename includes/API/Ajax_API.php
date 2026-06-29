@@ -1,7 +1,7 @@
 <?php
 namespace MosPress\PluginStarter\API;
 if ( ! defined( 'ABSPATH' ) ) exit;
-
+use MosPress\PluginStarter\Helpers\Utils;
 class Ajax_API
 {
     private static $instance = null;
@@ -23,8 +23,8 @@ class Ajax_API
 		// wp_send_json_success($_POST['_admin_nonce']);
 		if (isset($_POST['_admin_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_admin_nonce'])), 'plugin_starter_admin_nonce')) {
 			$name = isset($_POST['name'])?sanitize_text_field(wp_unslash($_POST['name'])):'';
-			$plugin_starter_options = plugin_starter_get_option();
-			$plugin_starter_default_options = plugin_starter_get_default_options();
+			$plugin_starter_options = Utils::plugin_starter_get_option();
+			$plugin_starter_default_options = Utils::plugin_starter_get_default_options();
 
 			// wp_send_json_success(['name' => $name]);
 

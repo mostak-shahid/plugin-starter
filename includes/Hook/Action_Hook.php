@@ -77,7 +77,7 @@ class Action_Hook
 			return;
 		}
 		// include_once(PLUGIN_STARTER_PATH . 'admin/partials/' . $this->plugin_name . '-admin-display.php');
-		echo '<div id="plugin-starter-settings-react-app" class="build-with-tailwind"></div>';
+		echo '<div id="plugin-starter-settings-react-app" class="build-with-bootstrap"></div>';
 	}
 	public function dashboard_scripts($hook)
 	{
