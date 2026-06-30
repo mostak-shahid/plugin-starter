@@ -11,7 +11,7 @@ import { useSettingsBodyHeight } from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import { HorizontalMultiLevelNavbar } from './components/Menu/Menu';
-import {useWindowWidth} from './lib/Helpers'
+import {useWindowWidth, setNestedValue} from './lib/Helpers'
 import menuItems from './data/menu.json';
 import { getMenu } from './data/menu.js';
 
@@ -30,12 +30,14 @@ import {
     FullWidthRightSidebar,
 } from './pages';
 import LogsCharts from './pages/Settings/Logs/LogsCharts.jsx';
+import { ToastControl } from './components/index.js';
 const year = new Date().getFullYear();
 
 const pathPrefix = 'admin.php?page=plugin-starter#'; // Adjust this if your app is served from a different base path
 export default function App() {
     const width = useWindowWidth();
     const hasHiddenMenues = width <= 991; 
+
     const [darkmode, setDarkmode] = useState(false);
     useEffect(() => {
         const fetchSettingTheme = async () => {
@@ -77,6 +79,8 @@ export default function App() {
 
     const [ProPluginNews, setProPluginNews] = useState(null);
     const [ProMore, setProMore] = useState(null);
+    const [ProPropsPassing, setProPropsPassing] = useState(null);
+    const [ProBridge, setProBridge] = useState(null);
 
     useEffect(() => {
         // Check if the Pro version has loaded its global component hook
@@ -89,7 +93,19 @@ export default function App() {
         if (window.PluginStarterProComponents && window.PluginStarterProComponents.More) {
             setProMore(() => window.PluginStarterProComponents.More);
         }
-        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
+        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.More);
+
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.PropsPassing) {
+            setProPropsPassing(() => window.PluginStarterProComponents.PropsPassing);
+        }
+        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PropsPassing);
+
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.Bridge) {
+            setProBridge(() => window.PluginStarterProComponents.Bridge);
+        }
+        // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.Bridge);
     }, []);
 
 
@@ -238,6 +254,60 @@ export default function App() {
         { itemKey: 'feedback', text: 'Feedback', icon: <FontAwesomeIcon icon={faComment} />, url: '/feedback' },
         ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FontAwesomeIcon icon={faWebAwesome} />, url: '/free-vs-pro' }] : []),
     ];
+
+
+
+
+    const [showToast, setShowToast] = useState(false);
+    const [dataToast, setDataToast] = useState({ title: '', content: '', type: 'success' });
+    const toggleShowToast = () => setShowToast(!showToast);
+
+    const [settings, setSettings] = useState({});
+    const [settingsDetails, setSettingsDetails] = useState({});
+    const [settingsLoading, setSettingsLoading] = useState(false);
+    const [settingsReload, setSettingsReload] = useState(0);    
+    
+    useEffect(() => {
+        const fetchSettings = async () => {
+            setSettingsLoading(true);
+            try {
+                // Both requests start at the exact same time
+                const [data, dataDetails] = await Promise.all([
+                    apiFetch({ path: '/plugin-starter/v1/options' }),
+                    apiFetch({ path: '/plugin-starter/v1/options-details' })
+                ]);
+
+                // Access the parsed JSON results instantly
+                // console.log('data:', data);
+                // console.log('dataDetails:', dataDetails);
+                if (data && dataDetails) {
+                    setSettings(data);
+                    setSettingsDetails(dataDetails);
+                }
+            } catch (error) {
+                console.error("Error fetching settings:", error);
+                setDataToast({
+                    title: __("Error", "plugin-starter"),
+                    content: __("Error fetching settings", "plugin-starter"),
+                    type: 'danger'
+                });
+                setShowToast(true);
+            } finally {
+                setSettingsLoading(false);
+            }
+        };
+        fetchSettings();
+    }, [settingsReload]);    
+    
+    const handleChange = (fieldPath, value) => {
+        // console.log("Field changed:", fieldPath, "New value:", value);
+        setSettings(prev => {
+            const updatedOptions = setNestedValue(prev, fieldPath, value);
+            return { ...updatedOptions }; // Ensure React detects the update
+        });
+    };
+
+    //settings, settingsDetails, settingsLoading, handleChange, setSettingsReload
 
     return (
         <div className="plugin-starter-settings-container">
@@ -389,13 +459,15 @@ export default function App() {
                         <Route path="full/right-sidebar" element={<FullWidthRightSidebar />} />
                     </Route>
                     {/* <Route path="/settings" element={<Settings />} /> */}
-                    <Route path="/settings" element={<Settings />}>
+                    <Route path="/settings" element={<Settings settings={settings} settingsDetails={settingsDetails} settingsLoading={settingsLoading} handleChange={handleChange} settingsReload={settingsReload} setSettingsReload={setSettingsReload} />}>
                         <Route index element={<Navigate to="inputs/basic_inputs" replace />} />
                         <Route path="inputs" element={<Navigate to="basic_inputs" replace />} />
 
                         <Route path="inputs/basic_inputs" element={<BasicInputs />} />
                         <Route path="inputs/array_inputs" element={<ArrayInputs />} />
                         <Route path="inputs/complex_inputs" element={<ComplexInputs />} />
+                        {ProPropsPassing && <Route path="inputs/props_passing" element={<ProPropsPassing settings={settings} settingsDetails={settingsDetails} settingsLoading={settingsLoading} handleChange={handleChange} settingsReload={settingsReload} setSettingsReload={setSettingsReload}  />} />}
+                        {ProBridge && <Route path="inputs/bridge" element={<ProBridge/>} />}
 
                         <Route path="utilities" element={<Navigate to="import_export" replace />} />
                         <Route path="utilities/import_export" element={<ImportExport />} />
@@ -404,7 +476,7 @@ export default function App() {
                         <Route path="utilities/logs/table" element={<LogsTable />} />
                         <Route path="utilities/logs/analytics" element={<LogsCharts />} />
 
-                        <Route path="more" element={<ProMore />} />
+                        {ProMore && <Route path="more" element={<ProMore />} />}
                     </Route>
 
                     <Route path="/feedback" element={<Feedback />} />
@@ -470,6 +542,12 @@ export default function App() {
                     : ''}
                 </Modal.Body>
             </Modal>
+
+            <ToastControl
+                show={showToast}
+                onClose={toggleShowToast}
+                data={dataToast}
+            />
         </div>
     );
 }
