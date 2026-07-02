@@ -1,3 +1,4 @@
+import { __ } from "@wordpress/i18n";
 import { useEffect, useRef, useState } from '@wordpress/element';
 import './MultiSelect.css';
 const MultiSelect = ({
@@ -6,36 +7,42 @@ const MultiSelect = ({
     name = "",
     placeholder = "Select options...",
     onChange = () => {},
-    onSearch = () => {}
+    onSearch = () => {},
+    max = 0,
 }) => {
 
     // Generate a random fallback name if none is provided
     const [MultiSelectName] = useState(() => name || `multi-selector-${Math.random().toString(36).substr(2, 9)}`);
 
     const [isOpen, setIsOpen] = useState(false);
+    const [selectedValues, setSelectedValues] = useState(defaultValues);
     const [searchTerm, setSearchTerm] = useState('');
     const dropdownRef = useRef(null);
 
     // Get selected option objects for display
     const selectedOptions = options.filter(option =>
-        defaultValues.includes(option.value)
+        selectedValues.includes(option.value)
     );
 
     // Filter options based on search term
     const filteredOptions = options.filter(option =>
         option.label.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
+    
     // Handle selecting/deselecting an option
     const handleOptionClick = (optionValue) => {
         let newSelectedValues;
 
-        if (defaultValues.includes(optionValue)) {
+        if (selectedValues.includes(optionValue)) {
             // Remove the value if already selected
-            newSelectedValues = defaultValues.filter(value => value !== optionValue);
+            newSelectedValues = selectedValues.filter(value => value !== optionValue);
         } else {
             // Add the value if not already selected
-            newSelectedValues = [...defaultValues, optionValue];
+            if (max > 0 && selectedValues.length >= max) {
+                // If max limit is reached, do not add more values
+                return;
+            }
+            newSelectedValues = [...selectedValues, optionValue];
         }
 
         setSelectedValues(newSelectedValues);
@@ -45,7 +52,7 @@ const MultiSelect = ({
     // Handle removing a selected option
     const handleRemoveOption = (optionValue, e) => {
         e.stopPropagation();
-        const newSelectedValues = defaultValues.filter(value => value !== optionValue);
+        const newSelectedValues = selectedValues.filter(value => value !== optionValue);
         setSelectedValues(newSelectedValues);
         onChange(newSelectedValues);
     };
