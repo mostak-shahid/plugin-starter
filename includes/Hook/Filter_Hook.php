@@ -154,79 +154,79 @@ class Filter_Hook {
             'inputs' => [
                 'basic_inputs' => [
                     'text' => [
-                        'title' => esc_html__('Text Input', 'plugin-starter'),
-                        'intro' => esc_html__('This is a intro for Text Input', 'plugin-starter'),
-                        'hint' => esc_html__('This is a hints for Text Input', 'plugin-starter'),
-                        'before' => esc_html__('This is a before text for Text Input', 'plugin-starter'),
-                        'after' => esc_html__('This is a after text for Text Input', 'plugin-starter'),
+                        'title' => __('Text Input', 'plugin-starter'),
+                        'intro' => __('This is a intro for Text Input', 'plugin-starter'),
+                        'hint' => __('This is a hints for Text Input', 'plugin-starter'),
+                        'before' => __('This is a before text for Text Input', 'plugin-starter'),
+                        'after' => __('This is a after text for Text Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'textarea' => [
-                        'title' => esc_html__('Textarea Input', 'plugin-starter'),
+                        'title' => __('Textarea Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'radio' => [
-                        'title' => esc_html__('Radio Input', 'plugin-starter'),
+                        'title' => __('Radio Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'select' => [
-                        'title' => esc_html__('Select Input', 'plugin-starter'),
+                        'title' => __('Select Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'number' => [
-                        'title' => esc_html__('Number Input', 'plugin-starter'),
+                        'title' => __('Number Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'range' => [
-                        'title' => esc_html__('Range Input', 'plugin-starter'),
+                        'title' => __('Range Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'color' => [
-                        'title' => esc_html__('Color Input', 'plugin-starter'),
+                        'title' => __('Color Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'checkbox' => [
-                        'title' => esc_html__('Checkbox Input', 'plugin-starter'),
+                        'title' => __('Checkbox Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'switch' => [
-                        'title' => esc_html__('Switch Input', 'plugin-starter'),
+                        'title' => __('Switch Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'date' => [
-                        'title' => esc_html__('Date Input', 'plugin-starter'),
+                        'title' => __('Date Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'time' => [
-                        'title' => esc_html__('Time Input', 'plugin-starter'),
+                        'title' => __('Time Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                     'datetime' => [
-                        'title' => esc_html__('Datetime Input', 'plugin-starter'),
+                        'title' => __('Datetime Input', 'plugin-starter'),
                         'url' => '/settings/inputs/basic_inputs',
                     ],
                 ],
                 'array_inputs' => [
                     'checkbox' => [
-                        'title' => esc_html__('Checkbox Input', 'plugin-starter'),
+                        'title' => __('Checkbox Input', 'plugin-starter'),
                         'url' => '/settings/inputs/array_inputs',
                     ],
                 ],
                 'complex_inputs' => [
                     'multiselect' => [
-                        'title' => esc_html__('Multiselect Input', 'plugin-starter'),
+                        'title' => __('Multiselect Input', 'plugin-starter'),
                         'url' => '/settings/inputs/complex_inputs',
                     ],
                     'media' => [
-                        'title' => esc_html__('Media Input', 'plugin-starter'),
+                        'title' => __('Media Input', 'plugin-starter'),
                         'url' => '/settings/inputs/complex_inputs',
                     ],
                     'repeater' => [
-                        'title' => esc_html__('Repeater Input', 'plugin-starter'),
+                        'title' => __('Repeater Input', 'plugin-starter'),
                         'url' => '/settings/inputs/complex_inputs',
                     ],
                     'sortableaccordion' => [
-                        'title' => esc_html__('Sortable Accordion Input', 'plugin-starter'),
+                        'title' => __('Sortable Accordion Input', 'plugin-starter'),
                         'url' => '/settings/inputs/complex_inputs',
                     ],
                 ],
@@ -235,8 +235,8 @@ class Filter_Hook {
             'utilities' => [
                 'tools' => [
                     'hide_plugin' => [
-                        'title' => esc_html__('Hide Plugin', 'plugin-starter'),
-                        'intro' => esc_html__('Hide this plugin from plugin list.', 'plugin-starter'),
+                        'title' => __('Hide Plugin', 'plugin-starter'),
+                        'intro' => __('Hide this plugin from plugin list.', 'plugin-starter'),
                         'url' => '/settings/utilities/tools',
                     ],
                     // 'self_defense' => false, // delete, uninstall, none
@@ -244,8 +244,8 @@ class Filter_Hook {
                 ],
             ],
             'feedback' => [
-                'title' => esc_html__('Feedback', 'plugin-starter'),
-                'intro' => esc_html__('Share feedback, report issues, or suggest improvements.', 'plugin-starter'),
+                'title' => __('Feedback', 'plugin-starter'),
+                'intro' => __('Share feedback, report issues, or suggest improvements.', 'plugin-starter'),
                 'url' => '/feedback',
 
             ]
