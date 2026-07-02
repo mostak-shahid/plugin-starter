@@ -8,6 +8,7 @@ export default function ImageSelector({
     selectedValue = '',
     onChange = () => {}, 
     grid = '4',
+    ratio = '4x3',
 }) {
     // Generate a random fallback name if none is provided
     const [radioName] = useState(() => name || `img-selector-${Math.random().toString(36).substr(2, 9)}`);
@@ -40,7 +41,7 @@ export default function ImageSelector({
                     <Col lg={grid} key={image.id || idx}>   
                         <div className="image-unit mb-4">
                             <ToggleButton
-                                id={`image-${idx}`}
+                                id={`image-${imageSelectorName}-${idx}`}
                                 type="radio"
                                 variant={selectedValue == image.id ? 'outline-success' : 'outline-secondary'}
                                 name={radioName}
@@ -49,7 +50,7 @@ export default function ImageSelector({
                                 onChange={(e) => onChange(e.currentTarget.value)}
                                 className={`rounded-0 p-0 border-3 w-100 ${selectedValue == image.id ? 'active-image' : ''}`}
                             >
-                                <div className="image-preview ratio ratio-4x3">
+                                <div className={`image-preview ratio ratio-${ratio}`}>
                                     <Image className='object-fit-cover' src={image.src} fluid />
                                 </div>                                
                                 {
