@@ -7,6 +7,7 @@ export default function ImageSelector({
     defaultImages = [], 
     selectedValue = '',
     onChange = () => {}, 
+    grid = '4',
 }) {
     // Generate a random fallback name if none is provided
     const [radioName] = useState(() => name || `img-selector-${Math.random().toString(36).substr(2, 9)}`);
@@ -36,7 +37,7 @@ export default function ImageSelector({
         <div className='image-selector'>
             <Row>
                 {defaultImages.map((image, idx) => (
-                    <Col lg="4" key={image.id || idx}>   
+                    <Col lg={grid} key={image.id || idx}>   
                         <div className="image-unit mb-4">
                             <ToggleButton
                                 id={`image-${idx}`}
