@@ -51,8 +51,12 @@ export default function ImageSelector({
                             >
                                 <div className="image-preview ratio ratio-4x3">
                                     <Image className='object-fit-cover' src={image.src} fluid />
-                                </div>
-                                <div className="image-title p-2">{image.title}</div>                    
+                                </div>                                
+                                {
+                                    image?.title && (
+                                        <div className="image-title p-2">{image.title}</div>
+                                    )
+                                }                   
                             </ToggleButton>
                         </div>    
                     </Col>
