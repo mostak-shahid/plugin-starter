@@ -142,17 +142,17 @@ class Action_Hook
 	}
 	public function wp_enqueue_scripts($hook)
 	{
-		wp_enqueue_script(
-			'plugin-starter-react-app',
-			PLUGIN_STARTER_URL . 'build/index.js',
-		);
+		// wp_enqueue_script(
+		// 	'plugin-starter-react-app',
+		// 	PLUGIN_STARTER_URL . 'build/index.js',
+		// );
 
 		// NEW: Enqueue Compiled Tailwind CSS
-		wp_enqueue_style(
-			'my-plugin-tailwind',
-			PLUGIN_STARTER_URL . 'build/index.css',
-			array(),
-		);
+		// wp_enqueue_style(
+		// 	'my-plugin-tailwind',
+		// 	PLUGIN_STARTER_URL . 'build/index.css',
+		// 	array(),
+		// );
 
 	}
 	public function plugin_starter_dashboard_react_page_html()
