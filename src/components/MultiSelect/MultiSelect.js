@@ -19,14 +19,22 @@ const MultiSelect = ({
     const [searchTerm, setSearchTerm] = useState('');
     const dropdownRef = useRef(null);
 
+    // Sync selectedValues when defaultValues prop changes
+    useEffect(() => {
+        setSelectedValues(defaultValues);
+    }, [defaultValues]);
+
     // Get selected option objects for display
     const selectedOptions = options.filter(option =>
         selectedValues.includes(option.value)
     );
 
     // Filter options based on search term
+    // const filteredOptions = options.filter(option =>
+    //     option.label.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
     const filteredOptions = options.filter(option =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase())
+        option?.label?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
     );
     
     // Handle selecting/deselecting an option
@@ -80,9 +88,9 @@ const MultiSelect = ({
     return (
         <div className="multi-select-container" ref={dropdownRef}>
 
-            {/* {console.log('MultiSelect options:', options)}
-            {console.log('MultiSelect defaultValues:', defaultValues)}
-            {console.log('MultiSelect selectedOptions:', selectedOptions)} */}
+            {/* {console.log('MultiSelect options:', options)} */}
+            {/* {console.log('MultiSelect defaultValues:', defaultValues)} */}
+            {/* {console.log('MultiSelect selectedOptions:', selectedOptions)} */}
             <div
                 className={`multi-select-input ${isOpen ? 'open' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
