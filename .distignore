@@ -9,6 +9,7 @@
 .gitignore
 .github
 .gitlab-ci.yml
+.gitattributes
 .travis.yml
 .DS_Store
 .*~
@@ -16,6 +17,7 @@ Thumbs.db
 behat.yml
 bitbucket-pipelines.yml
 bin
+.circleci
 .circleci/config.yml
 composer.json
 composer.lock
@@ -38,6 +40,9 @@ yarn.lock
 tests
 vendor
 node_modules
+Resources
 *.sql
 *.tar.gz
 *.zip
+*.css.map
+*.scss
