@@ -158,10 +158,10 @@ class Rest_API
 			array(
 				'methods'  => 'GET',
 				'callback' => [$this, 'get_settings_details'],
-				'permission_callback' => '__return_true', // Allow public access
-				// 'permission_callback' => function () {
-                //     return current_user_can('manage_options');
-                // },
+				// 'permission_callback' => '__return_true', // Allow public access
+				'permission_callback' => function () {
+                    return current_user_can('manage_options');
+                },
                 'args' => [
                     'per_page' => ['sanitize_callback' => 'absint', 'default' => 5],
                     'search' => ['sanitize_callback' => 'sanitize_text_field'],
