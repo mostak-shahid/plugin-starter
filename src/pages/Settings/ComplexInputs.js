@@ -56,7 +56,7 @@ const ComplexInputs = () => {
                 method: 'GET'
             });
             setPosts(result);
-            // // Merge with existing products to keep selected ones
+            // // Merge with existing posts to keep selected ones
             // setProducts(prevProducts => {
             //     const newProducts = [...prevProducts];
             //     result.forEach(newProduct => {
@@ -112,16 +112,19 @@ const ComplexInputs = () => {
                     {
                         !settingsLoading &&
                         <Col lg={6}>
+                            {console.log(settings?.inputs?.complex_inputs?.multiselectposts)}
                             <MultiSelect
-                                name="inputs.complex_inputs.multiselect"
-                                options={OPTIONS}
-                                defaultValues={settings?.inputs?.complex_inputs?.multiselect?.map(p => p.value) || []}
-                                onChange={(optioned) => {
-                                    // Filter the local OPTIONS array based on selected values
-                                    const optionedItems = OPTIONS.filter(opt => optioned.includes(opt.value));
-                                    handleChange('inputs.complex_inputs.multiselect', optionedItems);
+                                name="inputs.complex_inputs.multiselectposts"
+                                options={posts.map(post => ({ value: post.id, label: post.title.rendered }))}
+                                defaultValues={settings?.inputs?.complex_inputs?.multiselectposts?.map(p => p.value || p.id) || []}
+                                onSearch={(term) => {
+                                    setSearchTerm(term);
                                 }}
-                                placeholder="Select multiselect"
+                                onChange={(selected) => {
+                                    const selectedPosts = posts.filter(post => selected.includes(post.id)).map(p => ({ value: p.id, label: p.name }));
+                                    handleChange('inputs.complex_inputs.multiselectposts', selectedPosts);
+                                }}
+                                placeholder="Select post"
                             />
                         </Col>
                     }
@@ -130,23 +133,25 @@ const ComplexInputs = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h6 className="h6">{__("Posts", "plugin-starter")}</h6>
+                        <h6 className="h6">{__("Post", "plugin-starter")}</h6>
                         <p>{__("Lorem", "plugin-starter")}</p>
                     </Col>
                     {
                         !settingsLoading &&
                         <Col lg={6}>
                             <MultiSelect
-                                name="inputs.complex_inputs.multiselect"
-                                options={OPTIONS}
-                                defaultValues={settings?.inputs?.complex_inputs?.multiselect?.map(p => p.value) || []}
-                                onChange={(optioned) => {
-                                    // Filter the local OPTIONS array based on selected values
-                                    const optionedItems = OPTIONS.filter(opt => optioned.includes(opt.value));
-                                    handleChange('inputs.complex_inputs.multiselect', optionedItems);
+                                name="inputs.complex_inputs.multiselectpost"
+                                options={posts.map(post => ({ value: post.id, label: post.title.rendered }))}
+                                defaultValues={settings?.inputs?.complex_inputs?.multiselectpost?.map(p => p.value || p.id) || []}
+                                onSearch={(term) => {
+                                    setSearchTerm(term);
                                 }}
-                                placeholder="Select multiselect"
-                                maxHeight: ,
+                                onChange={(selected) => {
+                                    const selectedPosts = posts.filter(post => selected.includes(post.id)).map(p => ({ value: p.id, label: p.name }));
+                                    handleChange('inputs.complex_inputs.multiselectpost', selectedPosts);
+                                }}
+                                placeholder="Select post"
+                                max={1}
                             />
                         </Col>
                     }

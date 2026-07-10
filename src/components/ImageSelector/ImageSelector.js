@@ -11,7 +11,7 @@ export default function ImageSelector({
     ratio = '4x3',
 }) {
     // Generate a random fallback name if none is provided
-    const [radioName] = useState(() => name || `img-selector-${Math.random().toString(36).substr(2, 9)}`);
+    const [imageSelectorName] = useState(() => name || `img-selector-${Math.random().toString(36).substr(2, 9)}`);
 
     // Handle empty selectedValue by picking the first image ID
     useEffect(() => {
@@ -44,7 +44,7 @@ export default function ImageSelector({
                                 id={`image-${imageSelectorName}-${idx}`}
                                 type="radio"
                                 variant={selectedValue == image.id ? 'outline-success' : 'outline-secondary'}
-                                name={radioName}
+                                name={imageSelectorName}
                                 value={image.id}
                                 checked={selectedValue == image.id}
                                 onChange={(e) => onChange(e.currentTarget.value)}
