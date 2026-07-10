@@ -12,7 +12,7 @@
     "postinstall": "composer install"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^19.2.4",
+    "@wordpress/scripts": "^32.6.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
     "sass": "^1.84.0",

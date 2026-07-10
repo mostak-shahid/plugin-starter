@@ -1,4 +1,7 @@
+import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
+import apiFetch from "@wordpress/api-fetch";
+
 import { useOutletContext } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import MultiSelect from "../../components/MultiSelect/MultiSelect";
@@ -36,6 +39,42 @@ const defaultImages = [
 ];
 const ComplexInputs = () => {
     const { settings, settingsLoading, handleChange } = useOutletContext();
+    const [loading, setLoading] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+
+    const fetchProducts = async () => {
+        setPosts([]);
+        try {
+            const params = new URLSearchParams({
+                search: searchTerm,
+                limit: 10
+            });
+            const result = await apiFetch({
+                path: `/wp/v2/posts?${params.toString()}`,
+                method: 'GET'
+            });
+            setPosts(result);
+            // // Merge with existing products to keep selected ones
+            // setProducts(prevProducts => {
+            //     const newProducts = [...prevProducts];
+            //     result.forEach(newProduct => {
+            //         if (!newProducts.find(p => p.id === newProduct.id)) {
+            //             newProducts.push(newProduct);
+            //         }
+            //     });
+            //     return newProducts;
+            // });
+
+        } catch (err) {
+            console.error('API error:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, [searchTerm]);
 
     return (
         <>
@@ -59,6 +98,55 @@ const ComplexInputs = () => {
                                     handleChange('inputs.complex_inputs.multiselect', optionedItems);
                                 }}
                                 placeholder="Select multiselect"
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        <h6 className="h6">{__("Posts", "plugin-starter")}</h6>
+                        <p>{__("Lorem", "plugin-starter")}</p>
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={6}>
+                            <MultiSelect
+                                name="inputs.complex_inputs.multiselect"
+                                options={OPTIONS}
+                                defaultValues={settings?.inputs?.complex_inputs?.multiselect?.map(p => p.value) || []}
+                                onChange={(optioned) => {
+                                    // Filter the local OPTIONS array based on selected values
+                                    const optionedItems = OPTIONS.filter(opt => optioned.includes(opt.value));
+                                    handleChange('inputs.complex_inputs.multiselect', optionedItems);
+                                }}
+                                placeholder="Select multiselect"
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        <h6 className="h6">{__("Posts", "plugin-starter")}</h6>
+                        <p>{__("Lorem", "plugin-starter")}</p>
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={6}>
+                            <MultiSelect
+                                name="inputs.complex_inputs.multiselect"
+                                options={OPTIONS}
+                                defaultValues={settings?.inputs?.complex_inputs?.multiselect?.map(p => p.value) || []}
+                                onChange={(optioned) => {
+                                    // Filter the local OPTIONS array based on selected values
+                                    const optionedItems = OPTIONS.filter(opt => optioned.includes(opt.value));
+                                    handleChange('inputs.complex_inputs.multiselect', optionedItems);
+                                }}
+                                placeholder="Select multiselect"
+                                maxHeight: ,
                             />
                         </Col>
                     }

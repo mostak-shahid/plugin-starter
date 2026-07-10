@@ -115,6 +115,8 @@ class Filter_Hook {
                 ],
                 'complex_inputs' => [
                     'multiselect' => [],
+                    'multiselectposts' => [],
+                    'multiselectpost' => [],
                     'media' => [],
                     'repeater' => [],
                     'sortableaccordion' => [],

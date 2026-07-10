@@ -41,6 +41,8 @@ tests
 vendor
 node_modules
 Resources
+includes/CLI
+src
 *.sql
 *.tar.gz
 *.zip
