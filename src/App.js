@@ -37,7 +37,6 @@ const year = new Date().getFullYear();
 const pathPrefix = 'admin.php?page=plugin-starter#'; // Adjust this if your app is served from a different base path
 export default function App() {
     const location = useLocation();
-
     const currentPath = location.pathname;
 
     const width = useWindowWidth();
