@@ -18,7 +18,7 @@ import ToastControl from '../../components/ToastControl/ToastControl.js';
 import { PageInfo } from '../../components/index.js';
 import './Settings.css'
 const Settings = ({settings, settingsDetails, settingsLoading, handleChange, settingsReload, setSettingsReload}) => {
-    {console.log(settings)}
+    // {console.log(settings)}
     // {console.log(settingsReload)}
 
     // const [settings, setSettings] = useState({});

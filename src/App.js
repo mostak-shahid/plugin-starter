@@ -2,6 +2,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Alert, Button, Container, Row, Col, Badge, Modal, Form, FloatingLabel } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,6 +36,10 @@ const year = new Date().getFullYear();
 
 const pathPrefix = 'admin.php?page=plugin-starter#'; // Adjust this if your app is served from a different base path
 export default function App() {
+    const location = useLocation();
+
+    const currentPath = location.pathname;
+
     const width = useWindowWidth();
     const hasHiddenMenues = width <= 991; 
 
@@ -246,7 +251,12 @@ export default function App() {
                 },
             ]
         },
-        { itemKey: 'settings', text: 'Settings', icon: <FontAwesomeIcon icon={faGear} />, url: '/settings',
+        { 
+            itemKey: 'settings', 
+            text: 'Settings', 
+            icon: <FontAwesomeIcon icon={faGear} />, 
+            url: '/settings',
+            className: `${currentPath.startsWith('/settings/') ? 'current' : ''}`.trim(),
             // items: hasHiddenMenues?settingsMenuData:[] // <-- Bind the dynamic Settings menu items here!
             ...(hasHiddenMenues ? { items: settingsMenuData } : {}) // <-- Submenu only below 991px
             // ...(hasHiddenMenues && [{items: settingsMenuData}] )

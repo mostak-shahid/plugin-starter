@@ -93,7 +93,7 @@ function HorizontalDropdown({
 
             <NavDropdown.Item
                 href={pathPrefix + item.url}
-                className={active ? 'current' : ''}
+                className={`${item?.className || ''} ${active ? 'current' : ''}`.trim()}
             >
 
                 {item.icon && `${item.icon} `}
@@ -165,6 +165,7 @@ function HorizontalDropdown({
                 }
 
                 className={`
+                    ${item?.className}
                     ${depth > 0 ? 'dropdown-submenu' : ''}
                     ${active ? 'current' : ''}
                 `}
@@ -252,7 +253,8 @@ export function HorizontalMultiLevelNavbar({MenuItems, headerContent = {}, foote
                                         <Nav.Link
                                             key={item.itemKey}
                                             href={pathPrefix + item.url}
-                                            className={active ? 'current' : ''}
+                                            // className={active ? 'current' : ''}
+                                            className={`${item?.className || ''} ${active ? 'current' : ''}`.trim()}
                                         >
 
                                             {item.icon && <span className='nav-icon'>{item.icon}</span> }
@@ -423,8 +425,9 @@ function VerticalMenuItem({
 
             <Nav.Link
                 href={pathPrefix + item.url}
-                className={`
+                className={`                    
                     vertical-menu-link
+                    ${item?.className}
                     ${active ? 'current' : ''}
                 `}
                 style={{

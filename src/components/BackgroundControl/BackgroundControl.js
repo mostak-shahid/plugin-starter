@@ -36,7 +36,7 @@ const BackgroundControl = ({
         : ["color", "image", "position", "size", "repeat", "origin", "clip", "attachment"];
     return (
         <>
-            {console.log('defaultValues: ', defaultValues)}
+            {/* {console.log('defaultValues: ', defaultValues)} */}
             <div className={`background-wrapper ${className}`}>
                 <Row>
                     {options.map((option) => (
@@ -44,7 +44,7 @@ const BackgroundControl = ({
                             {/* color → color picker */}
                             {option === "color" && (
                                 <div className='d-flex justify-content-between align-items-center'>
-                                    {console.log('option: ', defaultValues[option])}
+                                    {/* {console.log('option: ', defaultValues[option])} */}
                                     <ColorPickerControl
                                         defaultValue={defaultValues[option]}
                                         onChange={(value) => handleUpdate(option, value)} // <-- Updated

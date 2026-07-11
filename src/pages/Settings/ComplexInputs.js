@@ -112,7 +112,6 @@ const ComplexInputs = () => {
                     {
                         !settingsLoading &&
                         <Col lg={6}>
-                            {console.log(settings?.inputs?.complex_inputs?.multiselectposts)}
                             <MultiSelect
                                 name="inputs.complex_inputs.multiselectposts"
                                 options={posts.map(post => ({ value: post.id, label: post.title.rendered }))}

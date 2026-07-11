@@ -68,19 +68,20 @@
 .plugin-starter-navbar .dropdown-menu .dropdown-toggle {
   padding: 0.5rem;
 }
-.plugin-starter-navbar .current {
+.plugin-starter-navbar .current,
+.plugin-starter-navbar .active {
   background-color: var(--wp-active-color);
-  color: #fff;
+  color: #fff !important;
 }
 .plugin-starter-navbar .nav-link .nav-icon {
   display: inline-block;
   margin-right: 5px;
 }
-.plugin-starter-navbar .nav-link.current {
+.plugin-starter-navbar .nav-link.current .plugin-starter-navbar .nav-link.active {
   background-color: var(--wp-active-color);
-  color: #fff;
+  color: #fff !important;
 }
 .plugin-starter-navbar .wp-has-current-submenu > .dropdown > .nav-link, .plugin-starter-navbar .wp-has-current-submenu > .dropdown-submenu > .nav-link {
   background-color: var(--wp-active-color);
-  color: #fff;
+  color: #fff !important;
 }/*# sourceMappingURL=Menu.css.map */
