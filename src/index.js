@@ -1,5 +1,5 @@
 import {HashRouter} from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './bootstrap-wrapper.scss';
 import './index.css'; // Tells Webpack to handle the CSS compilation
 import { render } from '@wordpress/element';
 import App from './App';

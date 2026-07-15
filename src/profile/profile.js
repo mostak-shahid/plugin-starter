@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../bootstrap-wrapper.scss';
 import { render } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import ProfileApp from './ProfileApp';
