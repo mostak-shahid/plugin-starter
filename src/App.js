@@ -12,7 +12,7 @@ import { useSettingsBodyHeight } from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
 import Details from './data/details.json';
 import { HorizontalMultiLevelNavbar } from './components/Menu/Menu';
-import {useWindowWidth, setNestedValue} from './lib/Helpers'
+import { useWindowWidth, setNestedValue } from './lib/Helpers'
 import menuItems from './data/menu.json';
 import { getMenu } from './data/menu.js';
 
@@ -40,7 +40,7 @@ export default function App() {
     const currentPath = location.pathname;
 
     const width = useWindowWidth();
-    const hasHiddenMenues = width <= 991; 
+    const hasHiddenMenues = width <= 991;
 
     const [darkmode, setDarkmode] = useState(false);
     useEffect(() => {
@@ -63,6 +63,25 @@ export default function App() {
         fetchSettingTheme();
     }, []);
 
+    const [plugins, setPlugins] = useState([]);
+    if (plugin_starter_ajax_obj?.isPro === '1') {
+        useEffect(() => {
+            const fetchPlugins = async () => {
+                try {
+                    const results = await apiFetch({
+                        path: `/plugin-starter-pro/v1/plugins`,
+                        method: 'GET'
+                    });
+                    console.log(results);
+                    setPlugins(results.plugins)
+                } catch (err) {
+                    console.error('API error:', err);
+                }
+            };
+            fetchPlugins();
+        }, []);
+    }
+
     const switchingMode = async () => {
         const switchMode = !darkmode;
         setDarkmode(switchMode);
@@ -82,6 +101,7 @@ export default function App() {
 
 
     const [ProPluginNews, setProPluginNews] = useState(null);
+    const [ProPluginCard, setProPluginCard] = useState(null);
     const [ProMore, setProMore] = useState(null);
     const [ProPropsPassing, setProPropsPassing] = useState(null);
     const [ProBridge, setProBridge] = useState(null);
@@ -90,6 +110,10 @@ export default function App() {
         // Check if the Pro version has loaded its global component hook
         if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginNews) {
             setProPluginNews(() => window.PluginStarterProComponents.PluginNews);
+        }
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginCard) {
+            setProPluginCard(() => window.PluginStarterProComponents.PluginCard);
         }
         // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
 
@@ -113,7 +137,7 @@ export default function App() {
     }, []);
 
 
-    const [newsItems, setNewsItems] = useState([]);
+    const [newsCount, setNewsCount] = useState([]);
     const [newsVisible, setNewsVisible] = useState(false);
     if (plugin_starter_ajax_obj?.isPro === '1') {
         useEffect(() => {
@@ -124,7 +148,7 @@ export default function App() {
                         path: '/plugin-starter-pro/v1/news',
                         method: 'GET'
                     });
-                    setNewsItems(response);
+                    setNewsCount(response.count);
                 } catch (error) {
                     console.error("Error fetching news:", error);
                 }
@@ -170,7 +194,7 @@ export default function App() {
                 setSearchResult(result)
             } catch (error) {
                 if (error.name !== 'AbortError') {
-                console.error('Search error:', error);
+                    console.error('Search error:', error);
                 }
             } finally {
                 setSearching(false);
@@ -211,7 +235,7 @@ export default function App() {
             setProItems(() => window.PluginStarterProComponents.menuItems);
         }
     }, []);
-    
+
     // Optional: load remote injected menu items
     useEffect(() => {
         if (plugin_starter_ajax_obj?.extraMenuItems) {
@@ -250,10 +274,10 @@ export default function App() {
                 },
             ]
         },
-        { 
-            itemKey: 'settings', 
-            text: 'Settings', 
-            icon: <FontAwesomeIcon icon={faGear} />, 
+        {
+            itemKey: 'settings',
+            text: 'Settings',
+            icon: <FontAwesomeIcon icon={faGear} />,
             url: '/settings',
             className: `${currentPath.startsWith('/settings/') ? 'current' : ''}`.trim(),
             // items: hasHiddenMenues?settingsMenuData:[] // <-- Bind the dynamic Settings menu items here!
@@ -274,8 +298,8 @@ export default function App() {
     const [settings, setSettings] = useState({});
     const [settingsDetails, setSettingsDetails] = useState({});
     const [settingsLoading, setSettingsLoading] = useState(false);
-    const [settingsReload, setSettingsReload] = useState(0);    
-    
+    const [settingsReload, setSettingsReload] = useState(0);
+
     useEffect(() => {
         const fetchSettings = async () => {
             setSettingsLoading(true);
@@ -306,8 +330,8 @@ export default function App() {
             }
         };
         fetchSettings();
-    }, [settingsReload]);    
-    
+    }, [settingsReload]);
+
     const handleChange = (fieldPath, value) => {
         // console.log("Field changed:", fieldPath, "New value:", value);
         setSettings(prev => {
@@ -404,9 +428,9 @@ export default function App() {
                                     >
                                         <FontAwesomeIcon icon={faBell} />
                                     </Button>
-                                    {newsItems.length > 0 && (
+                                    {newsCount > 0 && (
                                         <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                            {newsItems.length > 99 ? '99+' : newsItems.length}
+                                            {newsCount > 99 ? '99+' : newsCount}
                                         </Badge>
                                     )}
                                 </div>
@@ -440,9 +464,9 @@ export default function App() {
                                     >
                                         <FontAwesomeIcon icon={faBell} />
                                     </Button>
-                                    {newsItems.length > 0 && (
+                                    {newsCount > 0 && (
                                         <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                            {newsItems.length > 99 ? '99+' : newsItems.length}
+                                            {newsCount > 99 ? '99+' : newsCount}
                                         </Badge>
                                     )}
                                 </div>
@@ -475,8 +499,8 @@ export default function App() {
                         <Route path="inputs/basic_inputs" element={<BasicInputs />} />
                         <Route path="inputs/array_inputs" element={<ArrayInputs />} />
                         <Route path="inputs/complex_inputs" element={<ComplexInputs />} />
-                        {ProPropsPassing && <Route path="inputs/props_passing" element={<ProPropsPassing settings={settings} settingsDetails={settingsDetails} settingsLoading={settingsLoading} handleChange={handleChange} settingsReload={settingsReload} setSettingsReload={setSettingsReload}  />} />}
-                        {ProBridge && <Route path="inputs/bridge" element={<ProBridge/>} />}
+                        {ProPropsPassing && <Route path="inputs/props_passing" element={<ProPropsPassing settings={settings} settingsDetails={settingsDetails} settingsLoading={settingsLoading} handleChange={handleChange} settingsReload={settingsReload} setSettingsReload={setSettingsReload} />} />}
+                        {ProBridge && <Route path="inputs/bridge" element={<ProBridge />} />}
 
                         <Route path="utilities" element={<Navigate to="import_export" replace />} />
                         <Route path="utilities/import_export" element={<ImportExport />} />
@@ -493,8 +517,31 @@ export default function App() {
                     {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>
-            </main>
+                <div className='container'>
+                    <div className='row'>
+                        {ProPluginCard && plugins.map((plugin) => (
+                            <div className='col-6 mb-3' key={plugin.slug}>
+                                <ProPluginCard
+                                    image={plugin.icons['2x']}
+                                    name={plugin.name}
+                                    short_description={plugin.short_description}
+                                    author={plugin.author}
+                                    plugin_source='internal'
+                                    plugin_slug={plugin.slug}
+                                    plugin_file={`${plugin.slug}/${plugin.slug}.php`}
+                                    download_url={plugin.download_link}
+                                    version={plugin.version}
+                                    rating={plugin.rating}
+                                    num_ratings={plugin.num_ratings}
+                                    active_installs={plugin.active_installs}
+                                    tested={plugin.tested}
+                                />
+                            </div>
+                        ))}
 
+                    </div>
+                </div>
+            </main>
 
             <footer className="plugin-starter-footer border-top" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <Container fluid={true}>
@@ -527,18 +574,18 @@ export default function App() {
                     <FloatingLabel
                         controlId="settings-search"
                         label={__('Search Settings', 'plugin-starter')}
-                        // className="mb-3"
+                    // className="mb-3"
                     >
                         <Form.Control type="search" placeholder={__('Search Settings', 'plugin-starter')} value={search} onChange={(e) => setSearch(e.target.value)} />
                     </FloatingLabel>
                     {
-                        searching && <div className="text-center border rounded-2 mt-2 p-3"><FontAwesomeIcon icon={faSpinner} className='fa-spin-pulse'/></div>
+                        searching && <div className="text-center border rounded-2 mt-2 p-3"><FontAwesomeIcon icon={faSpinner} className='fa-spin-pulse' /></div>
                     }
-                    {searchResult.length ? 
+                    {searchResult.length ?
                         <div className='search-results border rounded-2 mt-2'>
                             {searchResult.map((item, index) => (
-                                <a 
-                                    key={index} 
+                                <a
+                                    key={index}
                                     href={pathPrefix + item.url}
                                     className='btn d-block p-2 border-bottom text-start rounded-0'
                                     onClick={modalClose}
@@ -548,7 +595,7 @@ export default function App() {
                                 </a>
                             ))}
                         </div>
-                    : ''}
+                        : ''}
                 </Modal.Body>
             </Modal>
 
