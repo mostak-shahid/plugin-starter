@@ -63,25 +63,6 @@ export default function App() {
         fetchSettingTheme();
     }, []);
 
-    const [plugins, setPlugins] = useState([]);
-    if (plugin_starter_ajax_obj?.isPro === '1') {
-        useEffect(() => {
-            const fetchPlugins = async () => {
-                try {
-                    const results = await apiFetch({
-                        path: `/plugin-starter-pro/v1/plugins`,
-                        method: 'GET'
-                    });
-                    console.log(results);
-                    setPlugins(results.plugins)
-                } catch (err) {
-                    console.error('API error:', err);
-                }
-            };
-            fetchPlugins();
-        }, []);
-    }
-
     const switchingMode = async () => {
         const switchMode = !darkmode;
         setDarkmode(switchMode);
@@ -101,7 +82,6 @@ export default function App() {
 
 
     const [ProPluginNews, setProPluginNews] = useState(null);
-    const [ProPluginCard, setProPluginCard] = useState(null);
     const [ProMore, setProMore] = useState(null);
     const [ProPropsPassing, setProPropsPassing] = useState(null);
     const [ProBridge, setProBridge] = useState(null);
@@ -110,10 +90,6 @@ export default function App() {
         // Check if the Pro version has loaded its global component hook
         if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginNews) {
             setProPluginNews(() => window.PluginStarterProComponents.PluginNews);
-        }
-        // Check if the Pro version has loaded its global component hook
-        if (window.PluginStarterProComponents && window.PluginStarterProComponents.PluginCard) {
-            setProPluginCard(() => window.PluginStarterProComponents.PluginCard);
         }
         // console.log('Feedback component mounted. ProPluginNews available:', !!window.PluginStarterProComponents?.PluginNews);
 
@@ -517,30 +493,6 @@ export default function App() {
                     {/* <Route path="*" element={<Navigate replace to="/" />} /> */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>
-                <div className='container'>
-                    <div className='row'>
-                        {ProPluginCard && plugins.map((plugin) => (
-                            <div className='col-6 mb-3' key={plugin.slug}>
-                                <ProPluginCard
-                                    image={plugin.icons['2x']}
-                                    name={plugin.name}
-                                    short_description={plugin.short_description}
-                                    author={plugin.author}
-                                    plugin_source='internal'
-                                    plugin_slug={plugin.slug}
-                                    plugin_file={`${plugin.slug}/${plugin.slug}.php`}
-                                    download_url={plugin.download_link}
-                                    version={plugin.version}
-                                    rating={plugin.rating}
-                                    num_ratings={plugin.num_ratings}
-                                    active_installs={plugin.active_installs}
-                                    tested={plugin.tested}
-                                />
-                            </div>
-                        ))}
-
-                    </div>
-                </div>
             </main>
 
             <footer className="plugin-starter-footer border-top" style={{ backgroundColor: 'var(--bs-body-bg)' }}>

@@ -1,10 +1,11 @@
 import {Card, Button} from 'react-bootstrap';
-import { Layout } from '../layouts';
-import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from '../components/Menu/Menu';
+import { Layout } from '../../layouts';
+import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
+import ProPlugins from './ProPlugins';
 const Dashboard = () => {
     return (        
         <Layout sidebarPosition="none" fluid={true}>     
-            <Card>
+            <Card className='mb-3'>
                 <Card.Header>Featured</Card.Header>
                 <Card.Body>
                     <Card.Title>Special title treatment</Card.Title>
@@ -13,6 +14,9 @@ const Dashboard = () => {
                     </Card.Text>
                     <Button variant="primary">Go somewhere</Button>
                 </Card.Body>
+            </Card>
+            <Card>
+                <ProPlugins/>
             </Card>
         </Layout>
     );

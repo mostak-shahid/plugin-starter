@@ -1,4 +1,4 @@
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 import Settings from './Settings/Settings';
 import BasicInputs from './Settings/BasicInputs';
 import ArrayInputs from './Settings/ArrayInputs';
