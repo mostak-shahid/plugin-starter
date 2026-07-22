@@ -14,10 +14,8 @@ const Dashboard = () => {
                     </Card.Text>
                     <Button variant="primary">Go somewhere</Button>
                 </Card.Body>
-            </Card>
-            <Card>
-                <ProPlugins/>
-            </Card>
+            </Card>                
+            <ProPlugins/>
         </Layout>
     );
 };
