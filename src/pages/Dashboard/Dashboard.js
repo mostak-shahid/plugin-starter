@@ -5,7 +5,7 @@ import ProPlugins from './ProPlugins';
 const Dashboard = () => {
     return (        
         <Layout sidebarPosition="none" fluid={true}>     
-            <Card className='mb-3'>
+            <Card className='mb-3 rounded-0'>
                 <Card.Header>Featured</Card.Header>
                 <Card.Body>
                     <Card.Title>Special title treatment</Card.Title>
