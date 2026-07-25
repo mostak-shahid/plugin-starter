@@ -4,10 +4,6 @@
   "description": "Plugin boilerplate for WordPress",
   "author": "Md. Mostak Shahid",
   "license": "GPL-2.0-or-later",
-  "private": true,
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
@@ -16,8 +12,7 @@
     "lint:js": "wp-scripts lint-js",
     "plugin-zip": "wp-scripts plugin-zip",
     "packages-update": "wp-scripts packages-update",
-    "makepot": "wp i18n make-pot . languages/plugin-starter.pot --skip-js --exclude=src,vendor,node_modules --merge=languages/js.pot",
-    "postinstall": "composer install"
+    "makepot": "wp i18n make-pot . languages/plugin-starter.pot --skip-js --exclude=src,vendor,node_modules --merge=languages/js.pot"
   },
   "devDependencies": {
     "@wordpress/scripts": "^33.0.0",
@@ -35,6 +30,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-icons": "^5.7.0",
-    "react-router-dom": "^7.15.1"
+    "react-router-dom": "^7.15.1",
+    "uncontrollable": "^9.0.0"
   }
 }
