@@ -4,8 +4,9 @@ import apiFetch from '@wordpress/api-fetch'; // Added missing apiFetch import
 import { useOutletContext } from 'react-router-dom';
 import { Row, Col, Form, Button, Badge, Modal, Table, OverlayTrigger } from 'react-bootstrap';
 import { Popover } from '@wordpress/components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import { FaEye, FaTrash } from "react-icons/fa";
+
 import DataTable from 'react-data-table-component';
 import { useWindowWidth } from '../../../lib/Helpers';
 import './ResponsiveTable.css'; // Import the CSS file containing media queries
@@ -298,7 +299,7 @@ const LogsTable = () => {
             name: 'Action',
             cell: (row) => (
                 <div className="d-flex gap-1 position-relative">
-                    <Button variant="info" size="sm" onClick={() => modalDetailsShow(row)}><FontAwesomeIcon icon={faEye} /></Button>
+                    <Button variant="info" size="sm" onClick={() => modalDetailsShow(row)}><FaEye /></Button>
                     <DeleteButton id={row.ID} onDelete={handleDelete} />
                 </div>
             ),
@@ -323,7 +324,7 @@ const LogsTable = () => {
         return (
             <>
                 <Button ref={anchorRef} variant="danger" size="sm" onClick={() => setIsVisible(true)}>
-                    <FontAwesomeIcon icon={faTrash} />
+                    <FaTrash />
                 </Button>
                 {isVisible && (
                     <Popover anchor={anchorRef.current} onClose={() => setIsVisible(false)}>

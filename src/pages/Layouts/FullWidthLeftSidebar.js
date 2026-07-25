@@ -1,16 +1,13 @@
 import {Card, Button} from 'react-bootstrap';
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faHome, faTableColumns, faGear, faComment, faWebAwesome } from '@fortawesome/free-solid-svg-icons';
+import { FaHome, FaColumns, FaCog, FaComment, FaCrown } from "react-icons/fa";
 import { Layout } from '../../layouts';
 import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
 const MenuItems = [
-    { itemKey: 'dashboard', text: 'Dashboard', icon: <FontAwesomeIcon icon={faHome} />, url: '/' },
+    { itemKey: 'dashboard', text: 'Dashboard', icon: <FaHome />, url: '/' },
     { 
         itemKey: 'layouts', 
         text: 'Layouts', 
-        icon: <FontAwesomeIcon icon={faTableColumns} />,
+        icon: <FaColumns />,
         url: '/layouts',
         items: [
             { itemKey: 'about', text: 'About', url: '/about' },
@@ -31,9 +28,9 @@ const MenuItems = [
             },
         ] 
     },
-    { itemKey: 'settings', text: 'Settings', icon: <FontAwesomeIcon icon={faGear} />, url: '/settings' },
-    { itemKey: 'feedback', text: 'Feedback', icon: <FontAwesomeIcon icon={faComment} />, url: '/feedback' },
-    ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FontAwesomeIcon icon={faWebAwesome} />, url: '/free-vs-pro' }] : []),
+    { itemKey: 'settings', text: 'Settings', icon: <FaCog />, url: '/settings' },
+    { itemKey: 'feedback', text: 'Feedback', icon: <FaComment />, url: '/feedback' },
+    ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FaCrown />, url: '/free-vs-pro' }] : []),
 ];
 const FullWidthLeftSidebar = () => {
     const sidebar = (

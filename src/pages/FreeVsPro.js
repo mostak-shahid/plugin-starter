@@ -1,8 +1,6 @@
 import {Table} from 'react-bootstrap';
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faCheckCircle, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
+
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { Layout } from '../layouts';
 import {HorizontalMultiLevelNavbar, VerticalMultiLevelNavbar} from '../components/Menu/Menu';
 import BreadcrumbControl from '../components/BreadcrumbControl/BreadcrumbControl';
@@ -34,18 +32,18 @@ const FreeVsPro = () => {
                 <tbody>
                     <tr>
                         <td>Semi Design design draft.fig</td>
-                        <td><FontAwesomeIcon icon={faCircleXmark} /></td>
-                        <td><FontAwesomeIcon icon={faCheckCircle} /></td>
+                        <td><FaTimesCircle /></td>
+                        <td><FaCheckCircle /></td>
                     </tr>
                     <tr>
                         <td>Semi Design design draft.fig</td>
-                        <td><FontAwesomeIcon icon={faCircleXmark} /></td>
-                        <td><FontAwesomeIcon icon={faCheckCircle} /></td>
+                        <td><FaTimesCircle /></td>
+                        <td><FaCheckCircle /></td>
                     </tr>
                     <tr>
                         <td>Semi Design design draft.fig</td>
-                        <td><FontAwesomeIcon icon={faCircleXmark} /></td>
-                        <td><FontAwesomeIcon icon={faCheckCircle} /></td>
+                        <td><FaTimesCircle /></td>
+                        <td><FaCheckCircle /></td>
                     </tr>
                 </tbody>
             </Table>

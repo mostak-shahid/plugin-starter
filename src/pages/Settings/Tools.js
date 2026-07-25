@@ -3,9 +3,8 @@ import { useState, useEffect } from '@wordpress/element';
 import { useOutletContext } from 'react-router-dom';
 import { Row, Col, Form, Button} from 'react-bootstrap';
 import { Popover } from '@wordpress/components';
-import apiFetch from '@wordpress/api-fetch'; // Added missing apiFetch import
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSync, faTrash } from '@fortawesome/free-solid-svg-icons';
+import apiFetch from '@wordpress/api-fetch'; 
+import { FaSync, FaTrash } from "react-icons/fa";
 import ToastControl from "../../components/ToastControl/ToastControl";
 
 const Tools = () => {
@@ -207,8 +206,8 @@ const Tools = () => {
                             disabled={processingLog}
                         >
                             {processingLog
-                                ? <FontAwesomeIcon icon={faSync} className='fa-spin' />
-                                : <FontAwesomeIcon icon={faTrash} />
+                                ? <FaSync className='fa-spin' />
+                                : <FaTrash />
                             }
                             <span className='ms-2'>
                                 {processingLog ? __("Deleting...", "plugin-starter") : __("Delete All", "plugin-starter")}
@@ -272,8 +271,8 @@ const Tools = () => {
                             disabled={processingReset}
                         >
                             {processingReset
-                                ? <FontAwesomeIcon icon={faSync} className='fa-spin' />
-                                : <FontAwesomeIcon icon={faTrash} />
+                                ? <FaSync className='fa-spin' />
+                                : <FaTrash />
                             }
                             <span className='ms-2'>
                                 {processingReset ? __("Resetting...", "plugin-starter") : __("Reset All", "plugin-starter")}

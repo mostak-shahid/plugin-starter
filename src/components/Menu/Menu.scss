@@ -1,6 +1,9 @@
 .plugin-starter-navbar {
     &.plugin-starter-horizontal-navbar {
-        /* Horizontal Navbar specific styles can go here */
+        .nav-link {
+            display: flex;
+            align-items: center;
+        }
         .multi-level-dropdown {
             position: relative;
         }

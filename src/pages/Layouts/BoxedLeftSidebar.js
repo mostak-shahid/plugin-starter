@@ -1,11 +1,8 @@
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import {Card, Button, Nav, Badge} from 'react-bootstrap';
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faHome, faTableColumns, faGear, faComment, faWebAwesome, faHeadphones, faCircleQuestion, faUser, faStar } from '@fortawesome/free-solid-svg-icons';
 
+import { FaHome, FaColumns, FaCog, FaComment, FaCrown, FaHeadphones, FaQuestionCircle, FaUserCircle, FaStar } from "react-icons/fa";
 import { Layout } from '../../layouts';
 import {VerticalMultiLevelNavbar} from '../../components/Menu/Menu';
 import menuItems from '../../data/menu.json';
@@ -33,16 +30,16 @@ const BoxedLeftSidebar = () => {
 
     // Icon mapping
     const iconMap = {
-        'page': <FontAwesomeIcon icon={faHome} />,
-        'layouts': <FontAwesomeIcon icon={faTableColumns} />,
-        'basic-inputs': <FontAwesomeIcon icon={faGear} />,
-        'array-inputs': <FontAwesomeIcon icon={faWebAwesome} />,
-        'import-export': <FontAwesomeIcon icon={faWebAwesome} />,
-        'more': <FontAwesomeIcon icon={faWebAwesome} />,
-        'tools': <FontAwesomeIcon icon={faHome} />,
-        'feedback': <FontAwesomeIcon icon={faComment} />,
-        'support': <FontAwesomeIcon icon={faHeadphones} />,
-        'help': <FontAwesomeIcon icon={faCircleQuestion} />,
+        'page': <FaHome />,
+        'layouts': <FaColumns />,
+        'basic-inputs': <FaCog />,
+        'array-inputs': <FaCrown />,
+        'import-export': <FaCrown />,
+        'more': <FaCrown />,
+        'tools': <FaHome />,
+        'feedback': <FaComment />,
+        'support': <FaHeadphones />,
+        'help': <FaQuestionCircle />,
     };
 
     // Get menu data from menu.js
@@ -51,7 +48,7 @@ const BoxedLeftSidebar = () => {
     // Add icons to menu items
     const menuItemsWithIcons = menuData.map(item => ({
         ...item,
-        icon: iconMap[item.itemKey] || <FontAwesomeIcon icon={faGear} />
+        icon: iconMap[item.itemKey] || <FaCog />
     }));
 
     const sidebar = (
@@ -65,19 +62,19 @@ const BoxedLeftSidebar = () => {
                 footerContent={(
                     <Nav className="flex-column">
                         <Nav.Link href="https://wordpress.org/support/plugin/plugin-starter/" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
-                            <FontAwesomeIcon icon={faHeadphones} />
+                            <FaHeadphones />
                             {__("VIP Priority Support", "plugin-starter")} 
                         </Nav.Link>
                         <Nav.Link href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
-                            <FontAwesomeIcon icon={faCircleQuestion} />
+                            <FaQuestionCircle />
                             {__("Help Center", "plugin-starter")}
                         </Nav.Link>
                         <Nav.Link href="https://www.facebook.com/mospressbd" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
-                            <FontAwesomeIcon icon={faUser} />
+                            <FaUserCircle />
                             {__("Community", "plugin-starter")}
                         </Nav.Link>
                         <Nav.Link href="https://wordpress.org/support/plugin/plugin-starter/reviews/" target='_blank' className="d-flex align-items-center gap-2" style={{paddingLeft: 16}}>
-                            <FontAwesomeIcon icon={faStar} />
+                            <FaStar />
                             {__("Rate Us", "plugin-starter")}
                         </Nav.Link>
                     </Nav>

@@ -2,8 +2,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { GRADIENTS, COLORS } from '../../lib/Constants'
 import { ColorIndicator, ColorPalette, GradientPicker, Popover, TabPanel, } from '@wordpress/components';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { FaCheckCircle, FaRegCopy } from "react-icons/fa";
 
 import './ColorPickerControl.css';
 
@@ -91,9 +90,9 @@ export default function ColorPickerControl({
                 </span>
                 
                 {isCopied ? (
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-success" />
+                    <FaCheckCircle className="text-success" />
                 ) : (
-                    <FontAwesomeIcon icon={faCopy} role="button" onClick={handleCopy} style={{ cursor: 'pointer' }} />
+                    <FaRegCopy role="button" onClick={handleCopy} style={{ cursor: 'pointer' }} />
                 )}
                 
                 <input type="hidden" name={colorPickerName} value={value} />

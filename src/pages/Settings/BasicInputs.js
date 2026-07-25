@@ -1,8 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { useOutletContext } from 'react-router-dom';
 import {Row, Col, Form, FloatingLabel, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FaQuestionCircle } from "react-icons/fa";
 const BasicInputs = () => {
    const { settings, settingsDetails, settingsLoading, handleChange } = useOutletContext();
 
@@ -25,7 +24,7 @@ const BasicInputs = () => {
                                             {settingsDetails?.inputs?.basic_inputs?.text?.title}
                                             {settingsDetails?.inputs?.basic_inputs?.text?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.inputs.basic_inputs.text.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle}/>
+                                                    <FaQuestionCircle/>
                                                 </OverlayTrigger>                                            
                                             }
                                         </h6>

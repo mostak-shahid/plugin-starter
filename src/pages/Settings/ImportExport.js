@@ -3,10 +3,8 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from '@wordpress/api-fetch';
 import { useOutletContext } from 'react-router-dom';
 import {Row, Col, Button, Form} from 'react-bootstrap';
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faDownload, faUpload, faArrowUpFromBracket, faSync, faTrash, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { FaDownload, FaUpload, FaSync, FaTrash, FaEyeSlash, FaEye } from "react-icons/fa";
+
 import ToastControl from '../../components/ToastControl/ToastControl';
 
 const ImportExport = () => {
@@ -145,8 +143,8 @@ const ImportExport = () => {
                             >
                                 
                                 {processingExport
-                                    ? <FontAwesomeIcon icon={faSync} className='fa-spin' /> 
-                                    : <FontAwesomeIcon icon={faUpload} />     
+                                    ? <FaSync className='fa-spin' /> 
+                                    : <FaUpload />     
                                 }
                                 <span className='ms-2'>{processingExport?__( "Exporting...", "plugin-starter" ):__( "Export Settings", "plugin-starter" )}</span>        
                             </Button>
@@ -183,8 +181,8 @@ const ImportExport = () => {
                                                 disabled={processingImport}
                                             >                                                
                                                 {processingImport
-                                                    ? <FontAwesomeIcon icon={faSync} className='fa-spin' /> 
-                                                    : <FontAwesomeIcon icon={faDownload} />     
+                                                    ? <FaSync className='fa-spin' /> 
+                                                    : <FaDownload />     
                                                 }
                                                 <span className='ms-2'>{processingImport?__( "Importing...", "plugin-starter" ):__( "Import Settings", "plugin-starter" )}</span>        
                                             </Button>
@@ -193,7 +191,7 @@ const ImportExport = () => {
                                                 onClick={() => setShowContent(!showContent)}
                                                 disabled={processingImport}
                                             >
-                                                { showContent?<FontAwesomeIcon icon={faEyeSlash} />:<FontAwesomeIcon icon={faEye} />} 
+                                                { showContent?<FaEyeSlash />:<FaEye />} 
                                                 <span className='ms-2'>
                                                     { showContent?__('Hide Data', 'plugin-starter'):__('Show Data', 'plugin-starter')}
                                                 </span>
@@ -203,7 +201,7 @@ const ImportExport = () => {
                                                 onClick={handleRemoveFile}
                                                 disabled={processingImport}
                                             >
-                                                <FontAwesomeIcon icon={faTrash} /> 
+                                                <FaTrash /> 
                                                 <span className='ms-2'>{__('Remove File', 'plugin-starter')}</span>
                                             </Button>
 
@@ -215,8 +213,8 @@ const ImportExport = () => {
                                             onClick={handleButtonClick}
                                         >                                     
                                             {processingImport
-                                                ? <FontAwesomeIcon icon={faSync} className='fa-spin' /> 
-                                                : <FontAwesomeIcon icon={faDownload} />     
+                                                ? <FaSync className='fa-spin' /> 
+                                                : <FaDownload />     
                                             }
                                             <span className='ms-2'>{__( "Select JSON File", "plugin-starter" )}</span>
                                         </Button>

@@ -5,8 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Alert, Button, Container, Row, Col, Badge, Modal, Form, FloatingLabel } from 'react-bootstrap';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faStar, faGear, faTableColumns, faWebAwesome, faSun, faMoon, faComment, faBell, faMagnifyingGlass, faClose, faHeadphones, faQuestion, faUser, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FaHome, FaStar, FaCog, FaColumns, FaCrown, FaRegSun, FaRegMoon, FaComment, FaBell, FaSearch, FaHeadphones, FaQuestionCircle, FaUserCircle, FaSpinner } from "react-icons/fa";
 
 import { useSettingsBodyHeight } from './lib/Helpers';
 import { Logo } from './lib/Illustrations';
@@ -223,11 +222,11 @@ export default function App() {
     const settingsMenuData = getMenu({ baseMenu: menuItems, proItems, remoteItems });
 
     const HorizontalMenuItems = [
-        { itemKey: 'dashboard', text: 'Dashboard', icon: <FontAwesomeIcon icon={faHome} />, url: '/' },
+        { itemKey: 'dashboard', text: 'Dashboard', icon: <FaHome />, url: '/' },
         {
             itemKey: 'layouts',
             text: 'Layouts',
-            icon: <FontAwesomeIcon icon={faTableColumns} />,
+            icon: <FaColumns />,
             url: '/layouts',
             items: [
                 { itemKey: 'about', text: 'About', url: '/about' },
@@ -253,15 +252,15 @@ export default function App() {
         {
             itemKey: 'settings',
             text: 'Settings',
-            icon: <FontAwesomeIcon icon={faGear} />,
+            icon: <FaCog />,
             url: '/settings',
             className: `${currentPath.startsWith('/settings/') ? 'current' : ''}`.trim(),
             // items: hasHiddenMenues?settingsMenuData:[] // <-- Bind the dynamic Settings menu items here!
             ...(hasHiddenMenues ? { items: settingsMenuData } : {}) // <-- Submenu only below 991px
             // ...(hasHiddenMenues && [{items: settingsMenuData}] )
         },
-        { itemKey: 'feedback', text: 'Feedback', icon: <FontAwesomeIcon icon={faComment} />, url: '/feedback' },
-        ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FontAwesomeIcon icon={faWebAwesome} />, url: '/free-vs-pro' }] : []),
+        { itemKey: 'feedback', text: 'Feedback', icon: <FaComment />, url: '/feedback' },
+        ...(!plugin_starter_ajax_obj?.isPro ? [{ itemKey: 'free-vs-pro', text: 'Free vs Pro', icon: <FaCrown />, url: '/free-vs-pro' }] : []),
     ];
 
 
@@ -346,7 +345,7 @@ export default function App() {
                                 aria-label={__("Seach", 'plugin-starter')}
                                 onClick={modalShow}
                             >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                <FaSearch />
                             </Button>
                             <Button
                                 className='d-none d-lg-inline-block'
@@ -355,7 +354,7 @@ export default function App() {
                                 aria-label="Mode"
                                 onClick={switchingMode}
                             >
-                                {darkmode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
+                                {darkmode ? <FaRegSun /> : <FaRegMoon />}
                             </Button>
                             <Button
                                 className='d-inline-block d-lg-none'
@@ -364,7 +363,7 @@ export default function App() {
                                 aria-label={__("VIP Priority Support", 'plugin-starter')}
                                 onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/', '_blank')}
                             >
-                                <FontAwesomeIcon icon={faHeadphones} />
+                                <FaHeadphones />
                             </Button>
                             <Button
                                 className='d-inline-block d-lg-none'
@@ -373,7 +372,7 @@ export default function App() {
                                 aria-label={__("Help Center", 'plugin-starter')}
                                 onClick={() => window.open('https://mostak-shahid.github.io/plugins/plugin-starter.html', '_blank')}
                             >
-                                <FontAwesomeIcon icon={faQuestion} />
+                                <FaQuestionCircle />
                             </Button>
                             <Button
                                 className='d-inline-block d-lg-none'
@@ -382,7 +381,7 @@ export default function App() {
                                 aria-label={__("Community", 'plugin-starter')}
                                 onClick={() => window.open('https://www.facebook.com/mospressbd', '_blank')}
                             >
-                                <FontAwesomeIcon icon={faUser} />
+                                <FaUserCircle />
                             </Button>
 
                             <Button
@@ -392,7 +391,7 @@ export default function App() {
                                 aria-label={__("Help Center", 'plugin-starter')}
                                 onClick={() => window.open('https://wordpress.org/support/plugin/plugin-starter/reviews/', '_blank')}
                             >
-                                <FontAwesomeIcon icon={faStar} />
+                                <FaStar />
                             </Button>
                             {plugin_starter_ajax_obj?.isPro &&
                                 <div className="position-relative">
@@ -402,7 +401,7 @@ export default function App() {
                                         size="sm"
                                         onClick={() => setNewsVisible(true)} aria-label="News"
                                     >
-                                        <FontAwesomeIcon icon={faBell} />
+                                        <FaBell />
                                     </Button>
                                     {newsCount > 0 && (
                                         <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
@@ -421,7 +420,7 @@ export default function App() {
                                 aria-label={__("Seach", 'plugin-starter')}
                                 onClick={modalShow}
                             >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                <FaSearch />
                             </Button>
                             <Button
                                 variant="outline-secondary"
@@ -429,7 +428,7 @@ export default function App() {
                                 aria-label="Mode"
                                 onClick={switchingMode}
                             >
-                                {darkmode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
+                                {darkmode ? <FaRegSun /> : <FaRegMoon />}
                             </Button>
                             {plugin_starter_ajax_obj?.isPro &&
                                 <div className="position-relative">
@@ -438,7 +437,7 @@ export default function App() {
                                         size="sm"
                                         onClick={() => setNewsVisible(true)} aria-label="News"
                                     >
-                                        <FontAwesomeIcon icon={faBell} />
+                                        <FaBell />
                                     </Button>
                                     {newsCount > 0 && (
                                         <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
@@ -531,7 +530,7 @@ export default function App() {
                         <Form.Control type="search" placeholder={__('Search Settings', 'plugin-starter')} value={search} onChange={(e) => setSearch(e.target.value)} />
                     </FloatingLabel>
                     {
-                        searching && <div className="text-center border rounded-2 mt-2 p-3"><FontAwesomeIcon icon={faSpinner} className='fa-spin-pulse' /></div>
+                        searching && <div className="text-center border rounded-2 mt-2 p-3"><FaSpinner className='fa-spin-pulse' /></div>
                     }
                     {searchResult.length ?
                         <div className='search-results border rounded-2 mt-2'>

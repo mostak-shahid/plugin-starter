@@ -4,10 +4,8 @@ import { useEffect, useState } from '@wordpress/element';
 // import uploadMedia from '../../assets/images/uploadMedia.svg';
 import {Button} from 'react-bootstrap';
 
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faCloudArrowUp, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+
+import { FaCloudUploadAlt, FaTimesCircle } from "react-icons/fa";
 
 import './MediaUploader.css';
 export default function MediaUploader({ 
@@ -81,9 +79,8 @@ export default function MediaUploader({
                                 className="uploaded-image w-100 img-fluid" 
                                 src={media?.sizes?.thumbnail?.url? media.sizes.thumbnail.url:media.url} onClick={runUploader} 
                             />
-                            <FontAwesomeIcon 
+                            <FaTimesCircle 
                                 className="remove-image-icon position-absolute text-danger" 
-                                icon={faCircleXmark} 
                                 onClick={removeImage} 
                             />
                         </div> : 
@@ -94,7 +91,7 @@ export default function MediaUploader({
                             <div className="no-media-wrap text-center">
                                 <div className="img-wrap">
                                     {/* <img className="uploaded-image" src={uploadMedia} /> */}
-                                    <FontAwesomeIcon className="uploaded-image-icon" icon={faCloudArrowUp} />
+                                    <FaCloudUploadAlt className="uploaded-image-icon" />
                                 </div>  
                                 <div className="text-wrap">
                                     <span className="title">{__("Upload Media", "plugin-starter")}</span>

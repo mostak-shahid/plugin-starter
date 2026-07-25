@@ -4,10 +4,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {Form, Button} from 'react-bootstrap';
 
-// Import the FontAwesomeIcon component
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Import the specific solid home icon
-import { faArrowsUpDownLeftRight, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { FaArrowsAlt, FaTimesCircle } from "react-icons/fa";
 // import "./RepeatableField.css";
 const ITEM_TYPE = "REPEATABLE_ITEM";
 
@@ -162,10 +159,10 @@ const DraggableAccordionItem = ({ name, index, section, moveSection, updateField
                         onClick={handleDeleteClick}
                         className="remove-btn"
                     >
-                        <FontAwesomeIcon icon={faCircleXmark} />
+                        <FaTimesCircle />
                     </span>
                     <span className="drag-handle">
-                        <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
+                        <FaArrowsAlt />
                     </span>
                 </div>
             </div>
