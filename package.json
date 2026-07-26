@@ -16,6 +16,7 @@
     "postinstall": "composer install"
   },
   "devDependencies": {
+    "@4c/tsconfig": "^0.4.1",
     "@wordpress/scripts": "^33.0.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
